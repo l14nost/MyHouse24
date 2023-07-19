@@ -47,7 +47,4 @@ public class Apartment {
     @OneToMany(mappedBy = "apartment")
     private List<Receipt> receipt = new ArrayList<>();
 
-
-
-
 }
