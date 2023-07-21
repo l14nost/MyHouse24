@@ -33,6 +33,7 @@ public class MastersApplication {
     @Column(length = 50, nullable = false)
     private Master master;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = false)
     private MastersApplicationStatus mastersApplicationStatus;
 

@@ -24,7 +24,7 @@ public class Service {
     private String name;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private Boolean isActive;
 
     @ManyToOne
     private Unit unit;

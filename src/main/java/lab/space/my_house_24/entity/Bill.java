@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +30,10 @@ public class Bill {
     private BillStatus status;
 
     @Column(nullable = false)
-    private double totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(nullable = false)
-    private boolean draft;
+    private Boolean draft;
 
     @ManyToOne
     private Apartment apartment;

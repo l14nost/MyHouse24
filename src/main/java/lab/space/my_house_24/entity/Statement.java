@@ -26,10 +26,10 @@ public class Statement {
     private String comment;
 
     @Column(nullable = false)
-    private boolean type;
+    private Boolean type;
 
     @Column(nullable = false)
-    private boolean held;
+    private Boolean held;
 
     @Column(nullable = false)
     private Instant date;

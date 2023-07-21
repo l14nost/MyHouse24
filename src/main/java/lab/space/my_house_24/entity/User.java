@@ -57,7 +57,7 @@ public class User {
     private Instant date;
 
     @Column(nullable = false)
-    private boolean duty;
+    private Boolean duty;
 
     @OneToMany(mappedBy = "user")
     private List<Apartment> apartmentList = new ArrayList<>();

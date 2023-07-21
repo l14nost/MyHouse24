@@ -30,7 +30,7 @@ public class MeterReading {
     private Long number;
 
     @Column(nullable = false)
-    private double count;
+    private Long count;
 
     @Column(nullable = false)
     private Instant date;
