@@ -1,10 +1,36 @@
+server:
+  servlet:
+    context-path: /admin
+  port: 8080
+
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+  application:
+    name: My_House_24
   datasource:
     url: 'jdbc:mysql://${MYSQL_HOST:localhost}:3306/my_house_24'
     username: 'user'
     password: 'user'
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    username: test.in.odessa@gmail.com
+    password: sggcjhmrombnkscg
+    port: 587
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+    protocol: smtp
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database: mysql
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
