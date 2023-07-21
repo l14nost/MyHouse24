@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "service_bill")
 @Data
@@ -18,10 +20,10 @@ public class ServiceBill {
     private Long id;
 
     @Column(nullable = false)
-    private double count;
+    private Long count;
 
     @Column(nullable = false)
-    private  double totalPrice;
+    private BigDecimal totalPrice;
 
     @ManyToOne
     private Bill bill;

@@ -39,6 +39,7 @@ public class Staff {
     @Column(name = "status", length = 50, nullable = false)
     private UserStatus staffStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = false)
     private Role role;
 

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "price_rate")
 @Data
@@ -18,7 +20,7 @@ public class PriceRate {
     private Long id;
 
     @Column(nullable = false)
-    private double price;
+    private BigDecimal price;
 
     @ManyToOne
     private Rate rate;

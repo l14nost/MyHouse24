@@ -21,7 +21,7 @@ public class Photo {
     private String image;
 
     @Column(nullable = false)
-    private boolean type;
+    private Boolean type;
 
     @ManyToOne
     private About about;

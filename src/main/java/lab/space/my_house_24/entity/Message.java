@@ -27,7 +27,7 @@ public class Message {
     private String description;
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private Boolean isActive;
 
     @ManyToMany
     @JoinTable(

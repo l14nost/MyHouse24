@@ -36,7 +36,7 @@ public class MainPage {
     private String slide3;
 
     @Column(nullable = false)
-    private boolean links;
+    private Boolean links;
 
     @OneToOne
     private Seo seo;
