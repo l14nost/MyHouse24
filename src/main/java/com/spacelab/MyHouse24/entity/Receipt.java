@@ -21,7 +21,6 @@ public class Receipt {
     private String number;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50,nullable = false)
     private ReceiptStatus status;
 
     @Column(nullable = false)

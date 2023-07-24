@@ -29,7 +29,6 @@ public class Application {
     private String comment;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = false)
     private Master master;
 
     @Column(length = 50, nullable = false)

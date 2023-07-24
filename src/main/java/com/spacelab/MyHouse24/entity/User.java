@@ -40,8 +40,7 @@ public class User {
     private String telegram;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50,nullable = false)
-    private UserStatus userStatus;
+    private UserStatus status;
 
     @Column(length = 1000,nullable = false)
     private String notes;

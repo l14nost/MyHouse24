@@ -35,8 +35,7 @@ public class Staff {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",length = 50,nullable = false)
-    private StaffStatus staffStatus;
+    private StaffStatus status;
 
     @Column(length = 50,nullable = false)
     private Role role;

@@ -23,7 +23,7 @@ public class SecurityLevel {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50,nullable = false)
+
     private Page page;
 
     @ManyToMany

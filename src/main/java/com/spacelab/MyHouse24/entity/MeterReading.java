@@ -20,8 +20,7 @@ public class MeterReading {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = false)
-    private MeterReadingStatus meterReadingStatus;
+    private MeterReadingStatus status;
 
     @Column(nullable = false)
     private Long number;

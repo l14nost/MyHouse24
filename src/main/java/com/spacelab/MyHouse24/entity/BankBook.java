@@ -18,8 +18,7 @@ public class BankBook {
     private String number;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 50,nullable = false)
-    private BankBookStatus bankBookStatus;
+    private BankBookStatus status;
 
     @OneToOne
     private Apartment apartment;
