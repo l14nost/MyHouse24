@@ -50,32 +50,15 @@
         const imageName = pathParts[pathParts.length - 1];
 
         if (imageName === 'logo-mini.svg'){
-            logoImg.src = '/admin/assets/images/pages/logo.svg';
+            logoImg.src = '/assets/images/pages/logo.svg';
         }
         else if (imageName === 'logo.svg'){
-            logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
+            logoImg.src = '/assets/images/pages/logo-mini.svg';
         }
 
     }
 
 </script>
-<script type="text/javascript">
-    function getCurrentURLWithoutParams() {
-
-        var currentURL = window.location.href;
-        if (currentURL.indexOf('?') === -1) {
-            return currentURL;
-        }
-        return currentURL.split('?')[0];
-    }
-
-    function changeLang(lang) {
-        var urlWithoutParams = getCurrentURLWithoutParams();
-        var newURL = urlWithoutParams + '?lang=' + lang;
-        window.location.replace(newURL);
-    }
-</script>
-
 
 
 
