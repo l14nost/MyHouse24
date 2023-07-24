@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">My House 24</title>
+    <th:block th:replace="~{/admin/fragments/style}"></th:block>
+</head>
+
+<body class="  ">
+<div id="loading">
+    <div class="loader simple-loader animate__animated animate__fadeOut d-none">
+        <div class="loader-body"></div>
+    </div>
+</div>
+<th:block th:replace="~{/admin/fragments/left-sidebar}"></th:block>
+
+<main class="main-content">
+
+    <th:block th:replace="~{/admin/fragments/header}"></th:block>
+
+    <div class="conatiner-fluid content-inner mt-n5 py-0">
+        <div class="row">
+            <th:block layout:fragment="content"></th:block>
+        </div>
+    </div>
+
+    <th:block th:replace="~{/admin/fragments/footer}"></th:block>
+
+    <th:block th:replace="~{/admin/fragments/logout-modal}"></th:block>
+
+
+    <th:block layout:fragment="extra-modals"></th:block>
+</main>
+
+
+
+
+<th:block th:replace="~{/admin/fragments/script}"></th:block>
+
+
+<th:block layout:fragment="extra-script"></th:block>
+
+</body>
+</html>
+

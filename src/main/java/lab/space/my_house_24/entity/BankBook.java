@@ -1,14 +1,10 @@
-package lab.space.my_house_24.entity;
+package com.spacelab.MyHouse24.entity;
 
+import com.spacelab.MyHouse24.enums.BankBookStatus;
 import jakarta.persistence.*;
-import lab.space.my_house_24.enums.BankBookStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Table(name = "bank_book")
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,14 +14,13 @@ public class BankBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20,nullable = false)
     private String number;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 50, nullable = false)
+    @Column(name = "status", length = 50,nullable = false)
     private BankBookStatus bankBookStatus;
 
     @OneToOne
     private Apartment apartment;
-
 }

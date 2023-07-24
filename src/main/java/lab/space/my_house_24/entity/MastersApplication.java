@@ -30,7 +30,6 @@ public class MastersApplication {
     private String comment;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = false)
     private Master master;
 
     @Enumerated(EnumType.STRING)
