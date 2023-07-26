@@ -1,7 +1,7 @@
-package com.spacelab.MyHouse24.entity;
+package lab.space.my_house_24.entity;
 
-import com.spacelab.MyHouse24.enums.Page;
 import jakarta.persistence.*;
+import lab.space.my_house_24.enums.Page;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

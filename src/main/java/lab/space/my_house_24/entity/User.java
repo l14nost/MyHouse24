@@ -1,7 +1,7 @@
-package com.spacelab.MyHouse24.entity;
+package lab.space.my_house_24.entity;
 
-import com.spacelab.MyHouse24.enums.UserStatus;
 import jakarta.persistence.*;
+import lab.space.my_house_24.enums.UserStatus;
 import lombok.*;
 
 import java.time.Instant;
@@ -53,7 +53,7 @@ public class User {
     private Instant date;
 
     @Column(nullable = false)
-    private boolean duty;
+    private Boolean duty;
 
     @OneToMany(mappedBy = "user")
     private List<Apartment> apartmentList = new ArrayList<>();
@@ -62,6 +62,6 @@ public class User {
     private List<Statement> statementList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Application> applicationList = new ArrayList<>();
+    private List<MastersApplication> applicationList = new ArrayList<>();
 
 }
