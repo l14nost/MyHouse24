@@ -2,13 +2,17 @@ package lab.space.my_house_24.entity;
 
 import jakarta.persistence.*;
 import lab.space.my_house_24.enums.UserStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "user")
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,35 +22,35 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 25, nullable = false)
     private String firstname;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 25, nullable = false)
     private String lastname;
 
-    @Column(length = 55,nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 100,nullable = false)
+    @Column(length = 100, nullable = false)
     private String email;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String number;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String viber;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String telegram;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50,nullable = false)
+    @Column(length = 50, nullable = false)
     private UserStatus userStatus;
 
-    @Column(length = 1000,nullable = false)
+    @Column(length = 1000, nullable = false)
     private String notes;
 
-    @Column(length = 150,nullable = false)
+    @Column(length = 150, nullable = false)
     private String filename;
 
     @Column(nullable = false)

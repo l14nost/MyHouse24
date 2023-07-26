@@ -16,7 +16,7 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/css/**", "/img/**", "/js/**","/files/**").permitAll()
+                        .requestMatchers("/assets/css/**", "/assets/img/**", "/assets/js/**", "/assets/images/**", "/files/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -24,6 +24,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
+                .rememberMe((rememberMe) -> rememberMe.alwaysRemember(true))
                 .logout(form -> form
                         .logoutSuccessUrl("/login?logout")
                         .deleteCookies("JSESSIONID")
