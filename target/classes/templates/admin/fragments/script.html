@@ -59,23 +59,6 @@
     }
 
 </script>
-<script type="text/javascript">
-    function getCurrentURLWithoutParams() {
-
-        var currentURL = window.location.href;
-        if (currentURL.indexOf('?') === -1) {
-            return currentURL;
-        }
-        return currentURL.split('?')[0];
-    }
-
-    function changeLang(lang) {
-        var urlWithoutParams = getCurrentURLWithoutParams();
-        var newURL = urlWithoutParams + '?lang=' + lang;
-        window.location.replace(newURL);
-    }
-</script>
-
 
 
 

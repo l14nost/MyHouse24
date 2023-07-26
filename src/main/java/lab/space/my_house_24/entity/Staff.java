@@ -1,8 +1,8 @@
-package com.spacelab.MyHouse24.entity;
+package lab.space.my_house_24.entity;
 
-import com.spacelab.MyHouse24.enums.Role;
-import com.spacelab.MyHouse24.enums.StaffStatus;
 import jakarta.persistence.*;
+import lab.space.my_house_24.enums.Role;
+import lab.space.my_house_24.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class Staff {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private StaffStatus status;
+    private UserStatus status;
 
     @Column(length = 50,nullable = false)
     private Role role;
@@ -56,5 +56,5 @@ public class Staff {
     private List<House> houseList = new ArrayList<>();
 
     @OneToMany(mappedBy = "staff")
-    private List<Application> applicationList = new ArrayList<>();
+    private List<MastersApplication> applicationList = new ArrayList<>();
 }

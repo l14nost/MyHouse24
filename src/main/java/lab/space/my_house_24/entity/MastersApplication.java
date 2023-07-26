@@ -1,6 +1,7 @@
 package lab.space.my_house_24.entity;
 
 import jakarta.persistence.*;
+
 import lab.space.my_house_24.enums.Master;
 import lab.space.my_house_24.enums.MastersApplicationStatus;
 import lombok.AllArgsConstructor;

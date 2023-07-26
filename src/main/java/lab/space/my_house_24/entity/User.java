@@ -1,7 +1,9 @@
-package com.spacelab.MyHouse24.entity;
+package lab.space.my_house_24.entity;
 
-import com.spacelab.MyHouse24.enums.UserStatus;
+
 import jakarta.persistence.*;
+import lab.space.my_house_24.enums.MastersApplicationStatus;
+import lab.space.my_house_24.enums.UserStatus;
 import lombok.*;
 
 import java.time.Instant;
@@ -61,6 +63,6 @@ public class User {
     private List<Statement> statementList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Application> applicationList = new ArrayList<>();
+    private List<MastersApplication> applicationList = new ArrayList<>();
 
 }
