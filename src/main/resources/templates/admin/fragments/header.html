@@ -43,7 +43,7 @@
       </i>
     </div>
     <div class="input-group search-input">
-      <h3>Admin Panel</h3>
+      <h3 th:text = "#{header.title}"></h3>
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon">
@@ -63,8 +63,8 @@
             <div class="m-0 border-0 shadow-none card">
               <div class="p-0 ">
                 <ul class="p-0 list-group list-group-flush">
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img th:src="@{/assets/images/Flag/flag-02.png}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;">UA</a></li>
-                  <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img th:src="@{/assets/images/Flag/flag-01.png}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;">EN</a></li>
+                  <li class="iq-sub-card list-group-item" onclick="changeLang('uk')"><a class="p-0" href="#"><img th:src="@{/assets/images/Flag/flag-02.png}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;">UA</a></li>
+                  <li class="iq-sub-card list-group-item" onclick="changeLang('en')"><a class="p-0" href="#"><img th:src="@{/assets/images/Flag/flag-01.png}" alt="img-flaf" class="img-fluid me-2" style="width: 15px;height: 15px;min-width: 15px;">EN</a></li>
                 </ul>
               </div>
             </div>
