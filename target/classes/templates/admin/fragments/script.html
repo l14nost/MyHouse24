@@ -70,12 +70,26 @@
     }
 
     function changeLang(lang) {
+        localStorage.setItem("lang",lang);
         var urlWithoutParams = getCurrentURLWithoutParams();
         var newURL = urlWithoutParams + '?lang=' + lang;
         window.location.replace(newURL);
     }
-</script>
 
+    function changeLogoLang(){
+        var lang = localStorage.getItem("lang");
+
+        const logoImg = document.getElementById('langImg');
+
+        if (lang === 'en'){
+            logoImg.src = '/admin/assets/images/Flag/flag001.png';
+        }
+        else if (lang === 'uk'){
+            logoImg.src = '/admin/assets/images/Flag/flag002.png';
+        }
+    }
+    changeLogoLang();
+</script>
 
 
 
