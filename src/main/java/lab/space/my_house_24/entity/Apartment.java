@@ -21,10 +21,10 @@ public class Apartment {
     private Long id;
 
     @Column(nullable = false)
-    private Integer number;
+    private int number;
 
     @Column(nullable = false)
-    private Integer area;
+    private int area;
 
     @ManyToOne
     @JoinColumn(name = "house_id")
