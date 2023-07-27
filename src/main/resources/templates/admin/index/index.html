@@ -427,7 +427,7 @@
             </div>
             <div class="card-body">
                 <div style="display: flex; justify-content: right">
-                    <button type="button" class="btn btn-light" style="height: 40px">Clear</button>
+                    <button type="button" class="btn btn-light" style="height: 40px" th:text="#{table.clear}"></button>
                 </div>
                         <table class="table table-striped table-hover table-bordered" style="margin-top: 15px">
                         <thead>
@@ -545,17 +545,17 @@
                         </tr></tbody>
                     </table>
                 <div style="display: flex; justify-content: space-between">
-                    <div>
-                        Showing 1 to 10 of 57 entries
+                    <div th:text="#{table.show.info.Showing} + ' 1 ' + #{table.show.info.to} + ' 10 ' + #{table.show.info.of}+' 57 '+#{table.show.info.entries}">
+
                     </div>
                     <div>
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item"><a class="page-link" href="#"><</a></li>
                                 <li class="page-item"><a class="page-link" href="#">1</a></li>
                                 <li class="page-item active"><a class="page-link" href="#">2</a></li>
                                 <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                <li class="page-item"><a class="page-link" href="#">></a></li>
                             </ul>
                         </nav>
                     </div>
@@ -644,6 +644,15 @@
                 <div class="new-user-info">
                     <form>
                         <div class="row">
+                            <div class="profile-img-edit position-relative">
+                                <img src="/admin/assets/images/Flag/flag-01.png" alt="profile-pic" class="theme-color-default-img profile-pic rounded avatar-100">
+                                <div class="upload-icone bg-primary">
+                                    <input class="custom-file-upload" type="file" accept="image/*">
+                                    <svg class="upload-button icon-14" width="14" viewBox="0 0 24 24">
+                                        <path fill="#ffffff" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z"></path>
+                                    </svg>
+                                </div>
+                            </div>
                             <div class="form-group col-md-6">
                                 <label class="form-label" for="fname">First Name:</label>
                                 <input type="text" class="form-control" id="fname" placeholder="First Name">
@@ -707,13 +716,18 @@
                                 <label class="form-label" for="uname">User Name:</label>
                                 <input type="text" class="form-control" id="uname" placeholder="User Name">
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <label class="form-label" for="pass">Password:</label>
+                                <div class="input-group">
                                 <input type="password" class="form-control" id="pass" placeholder="Password">
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="form-label" for="rpass">Repeat Password:</label>
-                                <input type="password" class="form-control" id="rpass" placeholder="Repeat Password ">
+                                    <button class="btn btn-gray" type="button" onclick="passwordVisibility()">
+                                        <svg class="icon-20" width="15" fill="white" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></svg>
+                                    </button>
+                                    <button class="btn btn-primary" type="button" onclick="generatePassword()">
+                                        Generate
+                                    </button>
+
+                                </div>
                             </div>
                         </div>
                         <div class="form-check form-check-inline">
@@ -944,10 +958,32 @@
 
 </th:block>
 <th:block layout:fragment="extra-script">
+    <script>
+        function passwordVisibility() {
+            var getPassword = document.getElementById("pass");
+            if (getPassword.type === "password") {
+                getPassword.type = "text";
+            } else {
+                getPassword.type = "password";
+            }
+        }
+
+        function generatePassword() {
+            var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$`~%^&*(*)ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var passwordLength = 8;
+            var password = "";
+
+            for (var i = 0; i <= passwordLength; i++) {
+                var randomNumber = Math.floor(Math.random() * chars.length);
+                password += chars.substring(randomNumber, randomNumber +1);
+            }
+            document.getElementById("pass").value = password;
+
+        }
+    </script>
 
     <script>
         var options = {
-            debug: 'info',
             modules: {
                 toolbar: true
             },

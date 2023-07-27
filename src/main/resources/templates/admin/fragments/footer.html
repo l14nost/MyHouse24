@@ -1,9 +1,13 @@
 
   <footer class="footer">
-    <div class="footer-body">
-        Developed by AVADA-MEDIA. Based on the control system "My House 24".
-          <div class="right-panel">
-              API documentation available <a href="/doc">by link</a>.
+    <div class="footer-body" >
+        <div th:text = "#{footer.left}">
+        </div>
+          <div class="right-panel d-flex" >
+              <div th:text = "#{footer.right}">
+
+              </div>
+               <a href="/doc" th:text="#{footer.link}" style="margin-left: 4px"></a>.
           </div>
     </div>
   </footer>
