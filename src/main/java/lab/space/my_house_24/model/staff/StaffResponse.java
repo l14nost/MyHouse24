@@ -6,8 +6,11 @@ import lombok.Builder;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public record StaffResponse(
+        Long id,
         String email,
-        String name,
+        String fullName,
+        String firstname,
+        String lastname,
         String status,
         String role,
         String phone

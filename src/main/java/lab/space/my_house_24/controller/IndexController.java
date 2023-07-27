@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class IndexController {
     private final StaffService service;
+
     @GetMapping("/index")
-    public String indexPage(){
+    public String indexPage() {
         System.out.println(service.getAllStaffDto());
-        return "admin/index/index";
+        return "/admin/template-pages";
     }
 
     @GetMapping("/login-index")
-    public String loginIndexPage(){
-        return "admin/index/login-index";
+    public String loginIndexPage() {
+        return "/admin/template-login";
     }
 }
