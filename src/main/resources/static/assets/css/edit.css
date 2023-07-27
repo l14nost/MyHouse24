@@ -1,6 +1,6 @@
-body{
-    --sidebar-width: 19.0rem;
-}
+/*body{*/
+/*    --sidebar-width: 19.0rem;*/
+/*}*/
 
 .custom-file-upload{
     position: absolute;
@@ -11,3 +11,8 @@ body{
     opacity: 0;
     cursor: pointer;
 }
+
+.item-name{
+    font-size: 13px;
+}
+

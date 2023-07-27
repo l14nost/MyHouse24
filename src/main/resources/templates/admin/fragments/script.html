@@ -39,24 +39,36 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
 <script>
-    function changeLogo(){
-        const logoImg = document.getElementById('logoImg');
 
-        const  imageUrl = logoImg.src;
+    const targetElement = document.getElementById('sidebar');
+    const logoImg = document.getElementById('logoImg');
 
-        const pathParts = imageUrl.split('/');
+    const observer = new MutationObserver((mutationsList) => {
 
+        for (const mutation of mutationsList) {
 
-        const imageName = pathParts[pathParts.length - 1];
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
 
-        if (imageName === 'logo-mini.svg'){
-            logoImg.src = '/admin/assets/images/pages/logo.svg';
+                const newClass = targetElement.className;
+                console.log(newClass.indexOf('sidebar-mini'));
+                if (newClass.indexOf('sidebar-mini') === 68 || newClass.indexOf('sidebar-mini') === 78){
+                    logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
+                }
+                else if (newClass.indexOf('sidebar-mini') === -1){
+                    logoImg.src = '/admin/assets/images/pages/logo.svg';
+                }
+
+            }
         }
-        else if (imageName === 'logo.svg'){
-            logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
-        }
+    });
 
-    }
+
+    const config = { attributes: true };
+
+
+    observer.observe(targetElement, config);
+
+
 
 </script>
 <script type="text/javascript">

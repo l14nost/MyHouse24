@@ -5,6 +5,7 @@ import lab.space.my_house_24.enums.UserStatus;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class User {
     @Column(length = 25,nullable = false)
     private String lastname;
 
+    @Column(length = 25,nullable = false)
+    private String surname;
+
     @Column(length = 55,nullable = false)
     private String password;
 
@@ -40,7 +44,7 @@ public class User {
     private String telegram;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50,nullable = false)
+    @Column(length = 50,nullable = false, name = "status")
     private UserStatus userStatus;
 
     @Column(length = 1000,nullable = false)
@@ -51,6 +55,9 @@ public class User {
 
     @Column(nullable = false)
     private Instant date;
+
+    @Column(nullable = false)
+    private Instant addDate;
 
     @Column(nullable = false)
     private Boolean duty;
