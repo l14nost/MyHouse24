@@ -4,7 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record UserMainPageRequest(
-        Integer page
+        Integer page,
+        Integer size
 ) {
 
 }

@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserResponse> getAllUserDto(UserMainPageRequest userMainPageRequest) {
         UserSpecification userSpecification = UserSpecification.builder().userMainPageRequest(userMainPageRequest).build();
-        return userRepository.findAll(userSpecification, PageRequest.of(userMainPageRequest.page(),5)).map(UserMapper::entityToDto);
+        return userRepository.findAll(userSpecification, PageRequest.of(userMainPageRequest.page(), userMainPageRequest.size())).map(UserMapper::entityToDto);
     }
 
 }
