@@ -5,6 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
+    <th:block layout:fragment="extra-style">
+        <style>
+            .btn.btn-success.disabled {
+                pointer-events: none;
+                opacity: 1;
+            }
+        </style>
+    </th:block>
+
 </head>
 <th:block layout:fragment="content">
     <div class="col-sm-12">
@@ -27,16 +36,31 @@
         </div>
     </div>
     <div class="col-sm-12">
+        <div style="display: flex; justify-content: right; margin-bottom: 30px">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success disabled" th:text = "#{users.choose.button}"></button>
+                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.1}"></a></li>
+                    <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.2}"></a></li>
+                    <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.3}"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
         <div class="card" style="min-height: 400px">
             <div class="card-header">
 
                 <div style="display: flex; justify-content: right">
-                    <button type="button" class="btn btn-light" style="height: 40px" th:text="#{table.clear}" onclick="clearFilters()"></button>
+                    <button type="button" class="btn btn-light" style="height: 40px; display: flex"  onclick="clearFilters()"><h7 th:text="#{table.clear}"></h7><svg style="margin: auto; margin-left: 5px" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/></svg></button>
                 </div>
             </div>
             <div class="card-body table-responsive" >
 
-                <table class="table table-striped table-hover table-bordered" style="margin-top: 15px; max-width: 100%; min-width: 1400px">
+                <table class="table table-striped" style="margin-top: 15px; max-width: 100%; min-width: 1400px">
                     <thead>
                     <tr>
                         <th th:text="#{users.table.id}" style="min-width: 10px"></th>
@@ -111,9 +135,7 @@
                     <div style="display: flex; margin-right: 10px" >
                         <nav aria-label="Page navigation example" id = "userPagination">
                         </nav>
-                        <div class="dataTables_length" id="tableLength" style="margin-left: 10px; max-width: 90px">
 
-                        </div>
                     </div>
                 </div>
             </div>
@@ -160,28 +182,27 @@
     <script>
 
         function clearFilters(){
-            getAllUser(0,5);
+            getAllUser(0);
         }
 
 
 
 
         $(document).ready(function (){
-            getAllUser(0,5);
+            getAllUser(0);
 
         });
-        function changePage(page,size,event){
+        function changePage(page,event){
             event.preventDefault();
-            getAllUser(page,size);
+            getAllUser(page);
 
         }
 
-        function getAllUser(page,size) {
+        function getAllUser(page) {
 
             let pageIndex = page;
             let userMainPageRequest = {
-                page: pageIndex,
-                size: size
+                page: pageIndex
             }
             $.ajax({
                 method: "POST",
@@ -196,33 +217,25 @@
                         userPagination.innerHTML = "";
                         const table = document.getElementById("userTable");
                         table.innerHTML = "";
-                        const tableLength = document.getElementById("tableLength");
-                        tableLength.innerHTML = "";
                         if (userResponse.content.length === 0) {
                             const container = document.getElementById("userEmptyTable");
                             container.style.display = "flex";
                             const container1 = document.getElementById("tableInfo");
                             container1.style.display = "none";
-                            // const newH3 = document.createElement("p");
-                            // newH3.innerHTML = "No data..."
-                            // newH3.style.display = "flex"
-                            // newH3.style.justifyContent = "center"
-                            // container.appendChild(newH3);
                         } else {
                             $.each(userResponse.content, function (index, user) {
-                                console.log(user.houses);
-                                console.log(index);
                                 const container = document.getElementById("userTable");
                                 const newTr = document.createElement("tr");
-                                newTr.innerHTML = " <td>" + user.id + "</td>\n" +
-                                    "          <td>" + user.fullName + "</td>\n" +
-                                    "          <td>" + user.number + "</td>\n" +
-                                    "          <td>" + user.email + "</td>\n" +
-                                    "          <td id='userHouse" + index + "'></td>\n" +
-                                    "          <td id='userApartment" + index + "'></td>\n" +
-                                    "          <td>" + user.addDate + "</td>\n" +
-                                    "          <td>" + user.status + "</td>\n" +
-                                    "          <td>" + user.duty + "</td>\n" +
+                                newTr.style.cursor = "pointer";
+                                newTr.innerHTML = " <td onclick='userCard("+user.id+")'>" + user.id + "</td>\n" +
+                                    "          <td onclick='userCard("+user.id+")'>" + user.fullName + "</td>\n" +
+                                    "          <td onclick='userCard("+user.id+")'>" + user.number + "</td>\n" +
+                                    "          <td onclick='userCard("+user.id+")'>" + user.email + "</td>\n" +
+                                    "          <td id='userHouse" + index + "' onclick='userCard("+user.id+")'></td>\n" +
+                                    "          <td id='userApartment" + index + "' onclick='userCard("+user.id+")'></td>\n" +
+                                    "          <td onclick='userCard("+user.id+")'>" + user.addDate + "</td>\n" +
+                                    "          <td onclick='userCard("+user.id+")'>" + user.status + "</td>\n" +
+                                    "          <td onclick='userCard("+user.id+")'>" + user.duty + "</td>\n" +
                                     "          <td style=\"\" >\n" +
                                     " <a class=\"btn btn-sm btn-icon text-gray\" data-bs-toggle=\"tooltip\" href=\"#\" aria-label=\"Message\" data-bs-original-title=\"Message\" onclick='userMessage(" + user.id + ")'>\n" +
                                     "                        <span class=\"btn-inner\">\n" +
@@ -274,7 +287,7 @@
                             })
 
                             if (userResponse.totalPages >= 2 && userResponse.totalPages<7) {
-                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+size+','+'event'+")'><</a></li>\n";
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'><</a></li>\n";
                                 var containerPagination = document.getElementById("userPagination");
                                 const newUl = document.createElement("ul");
                                 newUl.id = "userPaginationList";
@@ -282,43 +295,43 @@
                                 for (var i = 0; i < userResponse.totalPages; i++) {
                                     var currentNum = i + 1;
 
-                                    addElements += "<li class=\"page-item " + checkCurrentPage(currentNum) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+i+','+size+','+'event'+")'>" + currentNum + "</a></li>\n"
+                                    addElements += "<li class=\"page-item " + checkCurrentPage(currentNum) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+i+','+'event'+")'>" + currentNum + "</a></li>\n"
                                 }
-                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+size+','+'event'+")'>></a></li>\n"
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>></a></li>\n"
                                 newUl.innerHTML = addElements
                                 containerPagination.appendChild(newUl);
                             }
                             else if (userResponse.totalPages>=7) {
-                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+size+','+'event'+")'><</a></li>\n";
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'><</a></li>\n";
                                 var containerPagination = document.getElementById("userPagination");
                                 const newUl = document.createElement("ul");
                                 newUl.id = "userPaginationList";
                                 newUl.classList.add("pagination");
-                                addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+size+','+'event'+")'> 1 </a></li>\n"
+                                addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+'event'+")'> 1 </a></li>\n"
                                 if (page-2<0){
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+size+','+'event'+")'> 2 </a></li>\n"
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(3) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(2,"+size+','+'event'+")'> 3 </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+'event'+")'> 2 </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(3) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(2,"+'event'+")'> 3 </a></li>\n"
                                 }
                                 if(page-2>0) {
-                                    addElements += "<li><p style='margin-top: 15px'> ... </p></li>\n"
+                                    addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\">...</a></li>\n"
                                 }
                                 if (page-2>=0 && page+3<=userResponse.totalPages){
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(page) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page-1) +','+size+','+'event'+")'> "+(page) +" </a></li>\n"
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page) +','+size+','+'event'+")'> "+(page+1) +" </a></li>\n"
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page+1) +','+size+','+'event'+")'> "+(page+2) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page-1) +','+'event'+")'> "+(page) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page) +','+'event'+")'> "+(page+1) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page+1) +','+'event'+")'> "+(page+2) +" </a></li>\n"
 
                                 }
 
                                 if (page+2<userResponse.totalPages) {
-                                    addElements += "<li><p style='margin-top: 15px'> ... </p></li>\n"
+                                    addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\"'>...</a></li>\n"
                                 }
                                 if (page+3>userResponse.totalPages) {
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages-2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 3)+','+size+','+'event'+")'> "+ (userResponse.totalPages-2) +" </a></li>\n"
-                                    addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages-1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 2)+','+size+','+'event'+")'> "+ (userResponse.totalPages-1) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages-2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 3)+','+'event'+")'> "+ (userResponse.totalPages-2) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages-1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 2)+','+'event'+")'> "+ (userResponse.totalPages-1) +" </a></li>\n"
                                 }
 
-                                addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 1)+','+size+','+'event'+")'> "+ userResponse.totalPages +" </a></li>\n"
-                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+size+','+'event'+")'>></a></li>\n"
+                                addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 1)+','+'event'+")'> "+ userResponse.totalPages +" </a></li>\n"
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>></a></li>\n"
                                 newUl.innerHTML = addElements
                                 containerPagination.appendChild(newUl);
                             }
@@ -329,33 +342,13 @@
 
 
 
-                                const newX = userResponse.number * Number(size) + 1;
-                                const newY = userResponse.content.length + userResponse.number * Number(size);
+                                const newX = userResponse.number * 10 + 1;
+                                const newY = userResponse.content.length + userResponse.number * 10;
                                 const newZ = userResponse.totalElements;
                                 const updatedText = textContent.replace(digitsArray[0], newX).replace(digitsArray[1], newY).replace(digitsArray[2], newZ);
                                 tableInfoDiv.textContent = updatedText;
                             }
-                            if (userResponse.totalPages >= 2){
 
-
-                                var containerSize = document.getElementById("tableLength");
-                                var newSelect = document.createElement("select");
-                                newSelect.id = "sizeTable"
-                                newSelect.classList.add("form-select");
-                                newSelect.classList.add("form-select-sm");
-                                newSelect.style.height = "35px";
-                                newSelect.innerHTML = "<option value=\"1\" "+ checkSelectedSize(1) +">1</option>\n" +
-                                    "                                <option value=\"10\" "+ checkSelectedSize(10) +">10</option>\n" +
-                                    "                                <option value=\"25\" "+ checkSelectedSize(25) +">25</option>\n" +
-                                    "                                <option value=\"50\" "+ checkSelectedSize(50) +">50</option>\n" +
-                                    "                                <option value=\"100\" "+ checkSelectedSize(100) +">100</option>";
-                                newSelect.addEventListener("change", function() {
-                                    const selectedSize = this.value;
-                                    console.log(selectedSize);
-                                    getAllUser(0, selectedSize);
-                                });
-                                containerSize.appendChild(newSelect);
-                            }
 
                             function checkCurrentPage(currentNum) {
                                 if (currentNum - 1 === parseInt(page)) {
@@ -375,12 +368,7 @@
                                     return "disabled";
                                 } else return "";
                             }
-                            function checkSelectedSize(optionSize){
-                                if (optionSize === size){
-                                    return "selected"
-                                }
-                                return "";
-                            }
+
 
 
                         }
@@ -388,6 +376,12 @@
 
                     }
                 )
+        }
+        function userCard(id){
+            window.location.href = "/admin/user-card/"+id;
+        }
+        function userDelete(id){
+            window.location.href = "/admin/index";
         }
         $(window).on('beforeunload', function() {
             localStorage.removeItem('userPage');

@@ -16,3 +16,22 @@
     font-size: 13px;
 }
 
+
+.table {
+    --bs-table-color: #000000;
+    --bs-table-bg: transparent;
+    --bs-table-border-color: #eee;
+    --bs-table-accent-bg: transparent;
+    --bs-table-striped-color: #000000;
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.03);
+    --bs-table-active-color: #8A92A6;
+    --bs-table-active-bg: rgba(138, 146, 166, 0.1);
+    --bs-table-hover-color: #8A92A6;
+    --bs-table-hover-bg: rgba(138, 146, 166, 0.075);
+    width: 100%;
+    margin-bottom: 1rem;
+    color: var(--bs-table-color);
+    vertical-align: center;
+    border-color: var(--bs-table-border-color);
+}
+
