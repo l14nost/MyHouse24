@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Users</title>
+    <title th:text="#{left.sidebar.apartment.owner}"></title>
     <th:block layout:fragment="extra-style">
         <style>
             .btn.btn-success.disabled {
@@ -60,7 +60,7 @@
             </div>
             <div class="card-body table-responsive" >
 
-                <table class="table table-striped" style="margin-top: 15px; max-width: 100%; min-width: 1400px">
+                <table class="table table-striped table-bordered" style="margin-top: 15px; max-width: 100%; min-width: 1400px">
                     <thead>
                     <tr>
                         <th th:text="#{users.table.id}" style="min-width: 10px"></th>

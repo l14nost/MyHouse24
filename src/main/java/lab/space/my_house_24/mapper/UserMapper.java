@@ -1,14 +1,12 @@
 package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Apartment;
-import lab.space.my_house_24.entity.House;
 import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForUserTable;
-import lab.space.my_house_24.model.house.HouseResponseForUserPage;
 import lab.space.my_house_24.model.house.HouseResponseForUserTable;
+import lab.space.my_house_24.model.user.UserCardResponse;
 import lab.space.my_house_24.model.user.UserResponse;
 
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class UserMapper {
 
-    public  static UserResponse entityToDto(User user){
+    public  static UserResponse entityToMainPageDto(User user){
         List<ApartmentResponseForUserTable> apartments = new ArrayList<>();
         List<HouseResponseForUserTable> houses = new ArrayList<>();
         if (user.getApartmentList()!=null){
@@ -36,6 +34,25 @@ public class UserMapper {
                 .apartments(apartments)
                 .houses(houses)
                 .addDate(user.getAddDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .build();
+
+        return userResponse;
+    }
+
+
+    public  static UserCardResponse entityToCardDto(User user){
+        UserCardResponse userResponse = UserCardResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .lastname(user.getLastname())
+                .firstname(user.getFirstname())
+                .surname(user.getSurname())
+                .status(user.getUserStatus())
+                .number(user.getNumber())
+                .filename(user.getFilename())
+                .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .viber(user.getViber())
+                .telegram(user.getTelegram())
                 .build();
 
         return userResponse;
