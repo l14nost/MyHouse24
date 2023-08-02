@@ -314,7 +314,9 @@
     </div>
     <div class="col text-end">
         <button onclick="getAllRoles()" type="button" class="btn btn-light">Cancel</button>
-        <button onclick="updateRoles()" type="button" class="btn btn-success" style="margin-left: 15px; margin-right: 50px">Accept</button>
+        <button onclick="updateRoles()" type="button" class="btn btn-success"
+                style="margin-left: 15px; margin-right: 50px">Accept
+        </button>
     </div>
 
 
@@ -329,6 +331,7 @@
 
 <th:block layout:fragment="extra-script">
     <script>
+
         $(document).ready(function () {
             getAllRoles();
         });
@@ -577,12 +580,15 @@
                     $('.invalid-feedback').remove();
                 }
             }).done(function () {
+                showToast('success');
                 getAllRoles();
             }).fail(function (response) {
+                showToast('error');
                 console.error(response);
             })
 
         }
+
 
     </script>
 
