@@ -12,6 +12,8 @@ public record PageResponse(
         @NotNull
         Boolean bills,
         @NotNull
+        Boolean bankBooks,
+        @NotNull
         Boolean apartments,
         @NotNull
         Boolean apartmentsOwner,

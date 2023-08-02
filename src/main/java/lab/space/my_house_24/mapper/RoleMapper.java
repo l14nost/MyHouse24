@@ -74,6 +74,11 @@ public interface RoleMapper {
                                 .stream()
                                 .anyMatch(securityLevels -> securityLevels.getPage() == Page.BILLS)
                 )
+                .bankBooks(
+                        role.getSecurityLevelList()
+                                .stream()
+                                .anyMatch(securityLevels -> securityLevels.getPage() == Page.BANK_BOOKS)
+                )
                 .apartments(
                         role.getSecurityLevelList()
                                 .stream()
@@ -149,13 +154,16 @@ public interface RoleMapper {
             list.add(securityLevelService.getSecurityLevelByPage(Page.ROLES));
         }
         if (pageResponse.apartmentsOwner()) {
-            list.add(securityLevelService.getSecurityLevelByPage(Page.APARTMENTS));
+            list.add(securityLevelService.getSecurityLevelByPage(Page.APARTMENTS_OWNERS));
         }
         if (pageResponse.settingsPage()) {
             list.add(securityLevelService.getSecurityLevelByPage(Page.SETTINGS_PAGE));
         }
         if (pageResponse.bills()) {
             list.add(securityLevelService.getSecurityLevelByPage(Page.BILLS));
+        }
+        if (pageResponse.bankBooks()) {
+            list.add(securityLevelService.getSecurityLevelByPage(Page.BANK_BOOKS));
         }
         if (pageResponse.cashBox()) {
             list.add(securityLevelService.getSecurityLevelByPage(Page.CASH_BOX));
