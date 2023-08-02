@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Locale;
 
 @RequiredArgsConstructor
-public enum Role {
+public enum JobTitle {
     DIRECTOR("Director", "Директор"),
     MANAGER("Manager", "Менеджер"),
     ACCOUNTANT("Accountant", "Бухгалтер"),

@@ -23,6 +23,7 @@ public interface StaffService {
     ResponseEntity<?> updateStaff(StaffUpdateRequest staffUpdateRequest);
 
     void saveStaff(StaffSaveRequest staffSaveRequest);
+    void saveStaff(Staff staff);
 
     ResponseEntity<?> deleteStaff(Long id);
 

@@ -2,12 +2,13 @@ package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Staff;
-import lab.space.my_house_24.enums.Role;
+import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.mapper.StaffMapper;
 import lab.space.my_house_24.model.staff.StaffResponse;
 import lab.space.my_house_24.model.staff.StaffSaveRequest;
 import lab.space.my_house_24.model.staff.StaffUpdateRequest;
 import lab.space.my_house_24.repository.StaffRepository;
+import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.service.StaffService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class StaffServiceImpl implements StaffService, UserDetailsService {
+
     private final StaffRepository staffRepository;
+    private final RoleService roleService;
 
     @Override
     public Staff getStaffById(Long id) {
@@ -61,7 +64,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
         log.info("Try to search main Director");
         return getAllStaff()
                 .stream()
-                .filter((staffList) -> staffList.getRole() == Role.DIRECTOR)
+                .filter((staffList) -> staffList.getRole().getJobTitle() == JobTitle.DIRECTOR)
                 .min(Comparator.comparing(Staff::getId))
                 .orElseThrow(() -> new EntityNotFoundException("Staff with role Director not found"));
     }
@@ -90,17 +93,19 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                 staffRepository.save(
                         StaffMapper.saveStaff(
                                 staffUpdateRequest,
-                                getStaffById(staffUpdateRequest.id())
+                                getStaffById(staffUpdateRequest.id()),
+                                roleService
                         )
                 );
                 log.info("Success update Staff by id " + staffUpdateRequest.id());
                 return ResponseEntity.ok().build();
             } else if (director.getId() == staffUpdateRequest.id().longValue()
-                    && director.getRole().equals(staffUpdateRequest.role())) {
+                    && director.getRole().getJobTitle().equals(staffUpdateRequest.jobTitle())) {
                 staffRepository.save(
                         StaffMapper.saveStaff(
                                 staffUpdateRequest,
-                                getStaffById(staffUpdateRequest.id())
+                                getStaffById(staffUpdateRequest.id()),
+                                roleService
                         )
                 );
                 log.warn("Success update Main Director. id ->" + staffUpdateRequest.id());
@@ -121,7 +126,15 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public void saveStaff(StaffSaveRequest staffSaveRequest) {
         log.info("Try to save Staff");
         staffRepository.save(
-                StaffMapper.saveStaff(staffSaveRequest));
+                StaffMapper.saveStaff(staffSaveRequest, roleService));
+        log.info("Success save Staff");
+    }
+
+    @Override
+    public void saveStaff(Staff staff) {
+        log.info("Try to save Staff");
+        staffRepository.save(staff);
+        log.info("Success save Staff");
     }
 
     @Override
@@ -130,7 +143,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
             Staff director = getMainDirector();
             log.info("Try to delete Staff with id " + id);
             if (director.getId() == id.longValue()
-                    && director.getRole().equals(Role.DIRECTOR)) {
+                    && director.getRole().getJobTitle().equals(JobTitle.DIRECTOR)) {
                 log.warn("Attempt to remove the Main Director with id " + id);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Director cannot be removed");

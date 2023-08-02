@@ -1,7 +1,6 @@
 package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Apartment;
-import lab.space.my_house_24.entity.House;
 import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.model.user.UserResponse;
 
@@ -27,9 +26,9 @@ public class UserMapper {
         UserResponse userResponse = UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .duty(user.isDuty())
+                .duty(user.getDuty())
                 .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
-                .status(user.getStatus())
+                .status(user.getUserStatus())
                 .number(user.getNumber())
                 .filename(user.getFilename())
                 .apartmentIds(apartmentIds)

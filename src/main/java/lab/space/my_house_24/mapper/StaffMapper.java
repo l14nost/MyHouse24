@@ -4,6 +4,7 @@ import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.model.staff.StaffResponse;
 import lab.space.my_house_24.model.staff.StaffSaveRequest;
 import lab.space.my_house_24.model.staff.StaffUpdateRequest;
+import lab.space.my_house_24.service.RoleService;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public interface StaffMapper {
@@ -11,7 +12,7 @@ public interface StaffMapper {
         return StaffResponse.builder()
                 .fullName(staff.getFirstname() + " " + staff.getLastname())
                 .email(staff.getEmail())
-                .role(staff.getRole().getRole(LocaleContextHolder.getLocale()))
+                .role(staff.getRole().getJobTitle().getRole(LocaleContextHolder.getLocale()))
                 .status(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
                 .build();
     }
@@ -21,27 +22,27 @@ public interface StaffMapper {
                 .firstname(staff.getFirstname())
                 .lastname(staff.getLastname())
                 .email(staff.getEmail())
-                .role(staff.getRole().getRole(LocaleContextHolder.getLocale()))
+                .role(staff.getRole().getJobTitle().getRole(LocaleContextHolder.getLocale()))
                 .status(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
                 .build();
     }
 
-    static Staff saveStaff(StaffSaveRequest staffSaveRequest) {
+    static Staff saveStaff(StaffSaveRequest staffSaveRequest, RoleService roleService) {
         return Staff.builder()
                 .firstname(staffSaveRequest.firstname())
                 .lastname(staffSaveRequest.lastname())
                 .email(staffSaveRequest.email())
-                .role(staffSaveRequest.role())
+                .role(roleService.getRoleByJobTitle(staffSaveRequest.jobTitle()))
                 .staffStatus(staffSaveRequest.userStatus())
                 .build();
     }
 
-    static Staff saveStaff(StaffUpdateRequest staffUpdateRequest, Staff staff) {
+    static Staff saveStaff(StaffUpdateRequest staffUpdateRequest, Staff staff, RoleService roleService) {
         return staff
                 .setFirstname(staffUpdateRequest.firstname())
                 .setLastname(staffUpdateRequest.lastname())
                 .setEmail(staffUpdateRequest.email())
-                .setRole(staffUpdateRequest.role())
+                .setRole(roleService.getRoleByJobTitle(staffUpdateRequest.jobTitle()))
                 .setStaffStatus(staffUpdateRequest.userStatus());
     }
 }

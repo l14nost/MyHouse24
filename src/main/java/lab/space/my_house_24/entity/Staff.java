@@ -1,7 +1,6 @@
 package lab.space.my_house_24.entity;
 
 import jakarta.persistence.*;
-import lab.space.my_house_24.enums.Role;
 import lab.space.my_house_24.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,12 +43,8 @@ public class Staff implements UserDetails {
     @Column(name = "status", length = 50, nullable = false)
     private UserStatus staffStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = false)
+    @ManyToOne
     private Role role;
-
-    @ManyToMany(mappedBy = "staffList")
-    private List<SecurityLevel> securityLevelList = new ArrayList<>();
 
     @OneToMany(mappedBy = "staff")
     private List<Statement> statementList = new ArrayList<>();

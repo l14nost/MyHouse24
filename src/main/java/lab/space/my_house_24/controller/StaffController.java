@@ -22,7 +22,7 @@ public class StaffController {
 
     @GetMapping({"/", ""})
     public String showLogin() {
-        return "/admin/pages/staff/staff";
+        return "admin/pages/staff/staff";
     }
 
     @GetMapping("/get-all-staff")
