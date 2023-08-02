@@ -18,7 +18,7 @@ public record UserCardResponse(Long id,
 
                                String email,
 
-                               UserStatus status,
+                               String status,
 
                                String filename) {
 }

@@ -21,6 +21,10 @@ spring:
       mail.smtp.starttls.enable: true
       mail.smtp.starttls.required: true
     protocol: smtp
+  security:
+    user:
+      name: user
+      password: user
 
   jpa:
     hibernate:

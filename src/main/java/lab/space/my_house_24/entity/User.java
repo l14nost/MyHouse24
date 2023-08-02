@@ -28,7 +28,7 @@ public class User {
     @Column(length = 25,nullable = false)
     private String surname;
 
-    @Column(length = 55,nullable = false)
+    @Column(length = 500,nullable = false)
     private String password;
 
     @Column(length = 100,nullable = false)
@@ -47,7 +47,7 @@ public class User {
     @Column(length = 50,nullable = false, name = "status")
     private UserStatus userStatus;
 
-    @Column(length = 1000,nullable = false)
+    @Column(length = 1000)
     private String notes;
 
     @Column(length = 150,nullable = false)

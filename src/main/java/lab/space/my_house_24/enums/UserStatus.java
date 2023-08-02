@@ -1,7 +1,6 @@
 package lab.space.my_house_24.enums;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Locale;
 
@@ -13,8 +12,7 @@ public enum UserStatus {
     private final String nameEn;
     private final String nameUk;
 
-    public String getUserStatus() {
-        Locale locale = LocaleContextHolder.getLocale();
+    public String getUserStatus(Locale locale) {
         if (locale.getLanguage().equalsIgnoreCase("uk")) {
             return nameUk;
         }

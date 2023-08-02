@@ -6,6 +6,7 @@ import lab.space.my_house_24.model.apartment.ApartmentResponseForUserTable;
 import lab.space.my_house_24.model.house.HouseResponseForUserTable;
 import lab.space.my_house_24.model.user.UserCardResponse;
 import lab.space.my_house_24.model.user.UserResponse;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class UserMapper {
                 .lastname(user.getLastname())
                 .firstname(user.getFirstname())
                 .surname(user.getSurname())
-                .status(user.getUserStatus())
+                .status(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale()))
                 .number(user.getNumber())
                 .filename(user.getFilename())
                 .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())

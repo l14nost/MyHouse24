@@ -43,7 +43,7 @@
                     <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.1}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/add-user}" th:text = "#{users.choose.button.1}"></a></li>
                     <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.2}"></a></li>
                     <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.3}"></a></li>
                 </ul>
@@ -158,20 +158,23 @@
 
 
 </th:block>
+<th:block layout:fragment="extra-alert">
+    <div id="liveAlertPlaceholder" style="right: 0; position: fixed; bottom: 0"></div>
+</th:block>
 <th:block layout:fragment="extra-modals">
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmDeleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                    <h5 class="modal-title" id="confirmDeleteUserLabel">Delete Apartment Owner</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Modal body text goes here.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success">Understood</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" onclick="userDelete()">Yes</button>
                 </div>
             </div>
         </div>
@@ -180,6 +183,7 @@
 </th:block>
 <th:block layout:fragment="extra-script">
     <script>
+
 
         function clearFilters(){
             getAllUser(0);
@@ -251,7 +255,7 @@
                                     "                                            </svg>\n" +
                                     "                                        </span>\n" +
                                     "               </a>" +
-                                    "<a class=\"btn btn-sm btn-icon text-danger\" data-bs-toggle=\"tooltip\" href=\"#\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" onclick='userDelete(" + user.id + ")'>\n" +
+                                    "<a class=\"btn btn-sm btn-icon text-danger delete-user\" data-bs-toggle=\"tooltip\" href=\"#\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" data-target=\"#confirmDeleteUser\" data-id=\" "+ user.id +" \">\n" +
                                     "                                        <span class=\"btn-inner\">\n" +
                                     "                                            <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
                                     "                                                <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
@@ -380,13 +384,57 @@
         function userCard(id){
             window.location.href = "/admin/user-card/"+id;
         }
-        function userDelete(id){
-            window.location.href = "/admin/index";
+        function userEdit(id){
+            window.location.href = "/admin/edit-user/"+id;
         }
+
         $(window).on('beforeunload', function() {
             localStorage.removeItem('userPage');
         });
 
+    </script>
+    <script>
+        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+        const appendAlert = (message, type) => {
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('')
+
+            alertPlaceholder.append(wrapper)
+            setTimeout(() => {
+                wrapper.remove();
+            }, 5000);
+        }
+        let userId;
+        $(document).on('click', '.delete-user', function (event) {
+            event.preventDefault();
+            userId = $(this).data('id');
+            $('#confirmDeleteUser').modal('show');
+        });
+        function userDelete(){
+            $.ajax({
+                method: "DELETE",
+                url: "/admin/delete-user/"+userId,
+                contentType: 'application/json'
+            }).done(
+                function (){
+                    $('#confirmDeleteUser').modal('hide');
+                    userId = undefined;
+                    getAllUser(0);
+                    appendAlert('Success delete apartment owner', 'success');
+                }
+            ).fail(
+                function (response){
+                    $('#confirmDeleteUser').modal('hide');
+                    userId = undefined;
+                    appendAlert('Something went wrong ', 'danger');
+                }
+            )
+        }
     </script>
 </th:block>
 </html>
