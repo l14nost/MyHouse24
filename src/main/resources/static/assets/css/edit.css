@@ -44,3 +44,6 @@
     border-color: var(--bs-table-border-color);
 }
 
+.link-row tbody tr {
+    cursor: pointer;
+}

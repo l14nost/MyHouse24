@@ -576,8 +576,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(roleUpdateRequest),
                 beforeSend: function () {
-                    $('.is-invalid').removeClass('is-invalid');
-                    $('.invalid-feedback').remove();
+                    clearErrorMessages();
                 }
             }).done(function () {
                 showToast('success');

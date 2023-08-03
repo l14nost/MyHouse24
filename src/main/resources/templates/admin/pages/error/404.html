@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>My House 24 | Login</title>
+
+    <link rel="shortcut icon" th:href="@{/assets/images/pages/favicon.png}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/core/libs.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/hope-ui.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/custom.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/dark.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/customizer.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/rtl.min.css}"/>
+
+    <style class="fslightbox-styles">
+
+        @keyframes fslightbox-fade-in {
+            from {
+                opacity: .65
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes fslightbox-fade-out {
+            from {
+                opacity: .35
+            }
+            to {
+                opacity: 0
+            }
+        }
+
+        @keyframes fslightbox-fade-in-strong {
+            from {
+                opacity: .3
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes fslightbox-fade-out-strong {
+            from {
+                opacity: 1
+            }
+            to {
+                opacity: 0
+            }
+        }
+
+        .fslightbox-container * {
+            box-sizing: border-box
+        }
+
+        .fslightbox-slide-number-container .fslightbox-flex-centered {
+            height: 100%
+        }
+
+        .fslightbox-toolbar-button:hover .fslightbox-svg-path {
+            fill: #fff
+        }
+
+        .fslightbox-slide-btn-container:hover .fslightbox-svg-path {
+            fill: #f1f1f1
+        }
+
+        .fslightbox-loader div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 54px;
+            height: 54px;
+            margin: 6px;
+            border: 5px solid;
+            border-color: #999 transparent transparent transparent;
+            border-radius: 50%;
+            animation: fslightbox-loader 1.2s cubic-bezier(.5, 0, .5, 1) infinite
+        }
+
+        .fslightbox-loader div:nth-child(1) {
+            animation-delay: -.45s
+        }
+
+        .fslightbox-loader div:nth-child(2) {
+            animation-delay: -.3s
+        }
+
+        .fslightbox-loader div:nth-child(3) {
+            animation-delay: -.15s
+        }
+
+        @keyframes fslightbox-loader {
+            0% {
+                transform: rotate(0)
+            }
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+    </style>
+</head>
+
+    <body class=" " data-bs-spy="scroll" data-bs-target="#elements-section" data-bs-offset="0" tabindex="0">
+    <!-- loader Start -->
+    <div id="loading">
+        <div class="loader simple-loader animate__animated animate__fadeOut d-none">
+            <div class="loader-body"></div>
+        </div>
+    </div>
+    <!-- loader END -->
+
+    <div class="wrapper">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+
+        <div class="gradient">
+            <div class="container">
+                <img th:src="@{/assets/images/404.png}" class="img-fluid mb-4 w-50" alt="">
+                <h2 class="mb-0 mt-4 text-white" th:text="#{err.notFound.title}"></h2>
+                <p class="mt-2 text-white" th:text="#{err.notFound.description}"></p>
+                <a class="btn bg-white text-primary d-inline-flex align-items-center" href="/admin/staff" th:text="#{err.notFound.button}"></a>
+            </div>
+            <div class="box">
+                <div class="c xl-circle">
+                    <div class="c lg-circle">
+                        <div class="c md-circle">
+                            <div class="c sm-circle">
+                                <div class="c xs-circle">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <svg id="SvgjsSvg1001" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1"
+         style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;">
+        <defs id="SvgjsDefs1002"></defs>
+        <polyline id="SvgjsPolyline1003" points="0,0"></polyline>
+        <path id="SvgjsPath1004" d="M0 0 "></path>
+    </svg>
+    <script src="chrome-extension://idnnbdplmphpflfnlkomgpfbpcgelopg/inpage.js" id="xverse-wallet-provider"></script>
+    </body>
+
+</html>
