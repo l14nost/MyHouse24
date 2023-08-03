@@ -6,9 +6,9 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 public enum UserStatus {
-    ACTIVE("Active", "Активный"),
-    NEW("New", "Новый"),
-    DISABLED("Disabled", "Отключен");
+    ACTIVE("Active", "Активний"),
+    NEW("New", "Новий"),
+    DISABLED("Disabled", "Відключений");
     private final String nameEn;
     private final String nameUk;
 

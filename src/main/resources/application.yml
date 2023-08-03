@@ -21,6 +21,10 @@ spring:
       mail.smtp.starttls.enable: true
       mail.smtp.starttls.required: true
     protocol: smtp
+  security:
+    user:
+      name: user
+      password: user
 
   jpa:
     hibernate:
@@ -34,3 +38,6 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 50MB
+
+upload:
+  path: "C:/Users/Amir Banov/IdeaProjects/MyHouse24/files"

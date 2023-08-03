@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text = "#{user.edit.title}"></title>
+    <th:block layout:fragment="extra-style">
+        <style>
+
+            .photo {
+                width: 160px;
+                height: 160px;
+                overflow: hidden;
+                border-radius: 50%;
+                margin: 10px;
+                z-index: 1;
+            }
+
+            .personPhoto {
+                width: auto;
+                height: 100%;
+                margin: 0 auto;
+                z-index: 1;
+            }
+        </style>
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+            <div class="header-title">
+                <h4 class="card-title" th:text="${user.lastname()}+' '+${user.firstname()}"></h4>
+            </div>
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/users}" th:text = "#{left.sidebar.apartment.owner}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${user.lastname()}+' '+${user.firstname()}"></li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form id="userEdit" th:object="${user}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="profile-img-edit photo">
+                                        <img class="personPhoto" alt="user-card img" th:src="${'/admin/files/'+user.filename()}" id="avatar">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.image}"></label>
+                                    <input type="file" class="form-control form-control-lg" id="img" aria-label="Large file input example" name="img" accept=".jpg, .png, .jpeg">
+                                    <script>
+                                        img.onchange = evt => {
+                                            const [file] = img.files
+                                            if (file) {
+                                                avatar.src = URL.createObjectURL(file)
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.last.name}"></label>
+                                    <input type="text" class="form-control" id="lastname"  name="lastname" th:field="*{lastname}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.first.name}"></label>
+                                    <input type="text" class="form-control" id="firstname"  name="firstname" th:field="*{firstname}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.surname}"></label>
+                                    <input type="text" class="form-control" id="surname"  name="surname" th:field="*{surname}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.date}"></label>
+                                    <div class="input-group" id="dateResponse">
+                                        <input class="form-control" type="date"  name="date" id="date" th:field="*{date}">
+                                    </div>
+                                </div>
+                                <h4 th:text="#{user.add.contact.data}"></h4>
+                                <div class="form-group" style="margin-top: 10px">
+                                    <label class="form-label" th:text="#{user.add.number}"></label>
+                                    <input type="number" class="form-control" id="number"  name="number" th:field="*{number}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Telegram</label>
+                                    <input type="number" class="form-control" id="telegram"  name="telegram" th:field="*{telegram}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Viber</label>
+                                    <input type="number" class="form-control" id="viber" name="viber" th:field="*{viber}">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.email}"></label>
+                                    <input type="text" class="form-control" id="email"  name="email" th:field="*{email}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" th:text="#{user.add.status}"></label>
+                                <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status">
+                                    <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}" th:text="${status.getUserStatus(#locale)}"  th:value="${status.name()}" th:selected="${user.status().equals(status)}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">ID</label>
+                                <input type="text" class="form-control" id="id" name="id" disabled="" th:placeholder="${user.id()}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" th:text = "#{user.add.notes}"></label>
+                                <textarea class="form-control" aria-label="With textarea" name="notes" rows="16" id="notes" th:field="*{notes}"></textarea>
+                            </div>
+                            <h4 th:text="#{user.add.contact.data}"></h4>
+                            <div class="form-group" style="margin-top: 10px">
+                                <label class="form-label" th:text="#{user.add.password}"></label>
+                                <div class="input-group" id="passwordResponse">
+                                    <input type="password" class="form-control pass" id="password" name="password">
+                                    <button class="btn btn-gray" type="button" onclick="passwordVisibility()">
+                                        <svg class="icon-20" width="15" fill="white" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></svg>
+                                    </button>
+                                    <button class="btn btn-primary" type="button" onclick="generatePassword()">
+                                        Generate
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" th:text="#{user.add.confirm.password}"></label>
+                                <input type="password" class="form-control pass" id="confirmPassword"  name="confirmPassword">
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center">
+                            <button onclick="editUser()" type="button" class="btn btn-success" th:text="#{user.add.save}" style="width: 50%" ></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-modals">
+</th:block>
+<th:block layout:fragment="extra-script">
+
+    <script>
+        function passwordVisibility() {
+            var getPassword = document.getElementById("password");
+            var confirmPassword = document.getElementById("confirmPassword");
+            if (getPassword.type === "password") {
+                getPassword.type = "text";
+                confirmPassword.type = "text";
+            } else {
+                getPassword.type = "password";
+                confirmPassword.type = "password";
+            }
+        }
+
+        function generatePassword() {
+            var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$`~%^&*(*)ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var passwordLength = 8;
+            var password = "";
+
+            for (var i = 0; i <= passwordLength; i++) {
+                var randomNumber = Math.floor(Math.random() * chars.length);
+                password += chars.substring(randomNumber, randomNumber +1);
+            }
+            document.getElementById("password").value = password;
+            document.getElementById("confirmPassword").value = password;
+
+        }
+    </script>
+    <script>
+        function editUser(){
+            var form = document.getElementById("userEdit");
+            var formData = new FormData(form);
+            $.ajax({
+                method:"PUT",
+                url: "/admin/edit-user/"+[[${user.id()}]],
+                contentType: false,
+                processData: false,
+                data:formData
+            }).done(
+                function (response){
+                    window.location.href = "/admin/users";
+                }
+            ).fail(
+                function(response){
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        if (keys === 'password'){
+                            validResponse("#"+keys,values,"#passwordResponse");
+                        }
+                        else {
+                            validResponse("#" + keys, values);
+                        }
+                    }
+                }
+            )
+        }
+        function validResponse(divId, message,afterDiv) {
+
+            $(divId).addClass('is-invalid');
+
+            if (afterDiv) {
+                $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
+            } else {
+                $(divId).after('<div class="invalid-feedback">' + message + '</div>');
+            }
+        }
+    </script>
+</th:block>
+</html>

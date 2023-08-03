@@ -12,6 +12,28 @@
 <!--    </style>-->
 </head>
 <th:block layout:fragment="content">
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="header-title">
+                        <h4 class="card-title">Apartment Owners</h4>
+                    </div>
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/admin/index">Main</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Apartment Owners</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="col-sm-12">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
@@ -545,7 +567,7 @@
                         </tr></tbody>
                     </table>
                 <div style="display: flex; justify-content: space-between">
-                    <div th:text="#{table.show.info.Showing} + ' 1 ' + #{table.show.info.to} + ' 10 ' + #{table.show.info.of}+' 57 '+#{table.show.info.entries}">
+                    <div th:text="#{table.show.info.Showing} + ' 1 ' + '-' + ' 10 ' + #{table.show.info.of}+' 57 '+#{table.show.info.entries}">
 
                     </div>
                     <div>
@@ -861,8 +883,9 @@
                         </svg>
                     </button>
                 </div>
-                <label>Basic</label>
+
                 <div class="input-group">
+                    <label>Basic</label>
                     <input class="form-control date_flatpicker" type="text" placeholder="Select Date..">
                     <button class="input-group-text input-button pointer-event"  disabled>
                         <svg width="24"  class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

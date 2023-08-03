@@ -2,25 +2,27 @@ package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Apartment;
 import lab.space.my_house_24.entity.User;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForUserTable;
+import lab.space.my_house_24.model.house.HouseResponseForUserTable;
+import lab.space.my_house_24.model.user.UserCardResponse;
+import lab.space.my_house_24.model.user.UserEditResponse;
 import lab.space.my_house_24.model.user.UserResponse;
+import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class UserMapper {
 
-    public  static UserResponse entityToDto(User user){
-        List<Long> apartmentIds = new ArrayList<>();
-        List<Integer> numbers = new ArrayList<>();
-        List<Long> houseIds = new ArrayList<>();
-        List<String> names = new ArrayList<>();
+    public  static UserResponse entityToMainPageDto(User user){
+        List<ApartmentResponseForUserTable> apartments = new ArrayList<>();
+        List<HouseResponseForUserTable> houses = new ArrayList<>();
         if (user.getApartmentList()!=null){
             for (Apartment apartment : user.getApartmentList() ){
-                apartmentIds.add(apartment.getId());
-                numbers.add(apartment.getNumber());
-                houseIds.add(apartment.getHouse().getId());
-                names.add(apartment.getHouse().getName());
+                apartments.add(ApartmentResponseForUserTable.builder().id(apartment.getId()).number(apartment.getNumber()).build());
+                houses.add(HouseResponseForUserTable.builder().name(apartment.getHouse().getName()).id(apartment.getHouse().getId()).build());
             }
         }
         UserResponse userResponse = UserResponse.builder()
@@ -28,13 +30,50 @@ public class UserMapper {
                 .email(user.getEmail())
                 .duty(user.getDuty())
                 .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
+                .status(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                .number(user.getNumber())
+                .filename(user.getFilename())
+                .apartments(apartments)
+                .houses(houses)
+                .addDate(user.getAddDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .build();
+
+        return userResponse;
+    }
+
+
+    public  static UserCardResponse entityToCardDto(User user){
+        UserCardResponse userResponse = UserCardResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .lastname(user.getLastname())
+                .firstname(user.getFirstname())
+                .surname(user.getSurname())
+                .status(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                .number(user.getNumber())
+                .filename(user.getFilename())
+                .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .viber(user.getViber())
+                .telegram(user.getTelegram())
+                .build();
+
+        return userResponse;
+    }
+
+    public  static UserEditResponse entityToEditDto(User user){
+        UserEditResponse userResponse = UserEditResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .lastname(user.getLastname())
+                .firstname(user.getFirstname())
+                .surname(user.getSurname())
                 .status(user.getUserStatus())
                 .number(user.getNumber())
                 .filename(user.getFilename())
-                .apartmentIds(apartmentIds)
-                .apartmentNumbers(numbers)
-                .houseIds(houseIds)
-                .houseNames(names)
+                .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .viber(user.getViber())
+                .telegram(user.getTelegram())
+                .notes(user.getNotes())
                 .build();
 
         return userResponse;
