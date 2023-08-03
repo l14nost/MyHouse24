@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserValidator {
     private final UserRepository userRepository;
-    public void uniqueEmail(String email, int id, BindingResult result, String object){
+    public void uniqueEmail(String email, Long id, BindingResult result, String object){
         Locale locale = LocaleContextHolder.getLocale();
         String emailResponse;
         if (locale.toLanguageTag().equals("uk")) emailResponse = "Користувач із цією поштою вже існує";
@@ -37,15 +37,37 @@ public class UserValidator {
     }
 
     public void ageValid(LocalDate date, BindingResult result,String object){
+        Locale locale = LocaleContextHolder.getLocale();
+        String ageResponse;
+        if (locale.toLanguageTag().equals("uk")) ageResponse = "Дата народження не може бути у майбутньому";
+        else ageResponse = "The date of birth cannot be in future";
         if (date.isAfter(LocalDate.now())){
-            result.addError(new FieldError(object, "date", "The date of birth cannot be in future"));
+            result.addError(new FieldError(object, "date", ageResponse));
         }
     }
 
     public void passwordMatch(String password, String confirmPassword, BindingResult result, String object){
+        Locale locale = LocaleContextHolder.getLocale();
+        String passwordResponse;
+        String passwordLengthResponse;
+        if (locale.toLanguageTag().equals("uk")) {
+            passwordResponse = "Паролі не співпадають";
+            passwordLengthResponse = "Розмір має бути більше ніж 4";
+        }
+        else{
+            passwordResponse = "Passwords don't match";
+            passwordLengthResponse = "Size must be more than 4";
+        }
         if (!password.equals(confirmPassword)){
-            result.addError(new FieldError(object, "password", "Password don't match"));
+            result.addError(new FieldError(object, "password", passwordResponse));
+            result.addError(new FieldError(object, "confirmPassword", passwordResponse));
 
+        }
+        else {
+            if (password.length()<4){
+                result.addError(new FieldError(object, "password", passwordLengthResponse));
+                result.addError(new FieldError(object, "confirmPassword", passwordLengthResponse));
+            }
         }
     }
 

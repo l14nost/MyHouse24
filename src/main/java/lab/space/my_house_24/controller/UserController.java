@@ -3,6 +3,8 @@ package lab.space.my_house_24.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lab.space.my_house_24.model.user.UserEditRequest;
+import lab.space.my_house_24.model.user.UserEditResponse;
 import lab.space.my_house_24.model.user.UserMainPageRequest;
 import lab.space.my_house_24.model.user.UserAddRequest;
 import lab.space.my_house_24.service.impl.HouseServiceImpl;
@@ -64,12 +66,39 @@ public class UserController {
             userValidator.passwordMatch(userAddRequest.password(), userAddRequest.confirmPassword(), result, "UserAddRequest");
         }
         if (userAddRequest.email()!=null) {
-            userValidator.uniqueEmail(userAddRequest.email(), 0, result, "UserAddRequest");
+            userValidator.uniqueEmail(userAddRequest.email(), 0L, result, "UserAddRequest");
         }
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
         userService.save(userAddRequest);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+    @GetMapping("/edit-user/{id}")
+    public String editUser(@PathVariable Long id,Model model){
+        UserEditResponse userEditResponse = userService.findByIdEdit(id);
+        model.addAttribute("user", userEditResponse);
+        return "admin/pages/users/user-edit";
+    }
+    @PutMapping("/edit-user/{id}")
+    public ResponseEntity editUserPut(@PathVariable Long id, @ModelAttribute @Valid UserEditRequest userEditRequest, BindingResult result){
+        if (userEditRequest.date()!=null) {
+            userValidator.ageValid(userEditRequest.date(), result, "UserAddRequest");
+        }
+        if (!userEditRequest.password().isEmpty() && !userEditRequest.confirmPassword().isEmpty()) {
+            userValidator.passwordMatch(userEditRequest.password(), userEditRequest.confirmPassword(), result, "UserEditRequest");
+        }
+        if (userEditRequest.email()!=null) {
+            userValidator.uniqueEmail(userEditRequest.email(), id, result, "UserAddRequest");
+        }
+        if (result.hasErrors()){
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
+        }
+        userService.update(userEditRequest, id);
         return ResponseEntity.ok().build();
     }
 }

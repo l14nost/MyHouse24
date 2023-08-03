@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title th:text = "#{user.add.title}"></title>
+    <title th:text = "#{user.edit.title}"></title>
     <th:block layout:fragment="extra-style">
         <style>
 
@@ -33,14 +33,14 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
             <div class="header-title">
-                <h4 class="card-title" th:text = "#{user.add.title}"></h4>
+                <h4 class="card-title" th:text="${user.lastname()}+' '+${user.firstname()}"></h4>
             </div>
             <div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/users}" th:text = "#{left.sidebar.apartment.owner}"></a></li>
-                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{user.add.title}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="${user.lastname()}+' '+${user.firstname()}"></li>
                     </ol>
                 </nav>
             </div>
@@ -51,13 +51,13 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
-                <form id="userAdd">
+                <form id="userEdit" th:object="${user}">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="profile-img-edit photo">
-                                        <img class="personPhoto" alt="user-card img" th:src="@{/assets/images/default.jpg}" id="avatar">
+                                        <img class="personPhoto" alt="user-card img" th:src="${'/admin/files/'+user.filename()}" id="avatar">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -74,38 +74,38 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{user.add.last.name}"></label>
-                                    <input type="text" class="form-control" id="lastname"  name="lastname">
+                                    <input type="text" class="form-control" id="lastname"  name="lastname" th:field="*{lastname}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{user.add.first.name}"></label>
-                                    <input type="text" class="form-control" id="firstname"  name="firstname">
+                                    <input type="text" class="form-control" id="firstname"  name="firstname" th:field="*{firstname}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{user.add.surname}"></label>
-                                    <input type="text" class="form-control" id="surname"  name="surname">
+                                    <input type="text" class="form-control" id="surname"  name="surname" th:field="*{surname}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{user.add.date}"></label>
                                     <div class="input-group" id="dateResponse">
-                                        <input class="form-control" type="date"  name="date" id="date">
+                                        <input class="form-control" type="date"  name="date" id="date" th:field="*{date}">
                                     </div>
                                 </div>
                                 <h4 th:text="#{user.add.contact.data}"></h4>
                                 <div class="form-group" style="margin-top: 10px">
                                     <label class="form-label" th:text="#{user.add.number}"></label>
-                                    <input type="number" class="form-control" id="number"  name="number">
+                                    <input type="number" class="form-control" id="number"  name="number" th:field="*{number}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Telegram</label>
-                                    <input type="number" class="form-control" id="telegram"  name="telegram">
+                                    <input type="number" class="form-control" id="telegram"  name="telegram" th:field="*{telegram}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Viber</label>
-                                    <input type="number" class="form-control" id="viber" name="viber">
+                                    <input type="number" class="form-control" id="viber" name="viber" th:field="*{viber}">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{user.add.email}"></label>
-                                    <input type="text" class="form-control" id="email"  name="email">
+                                    <input type="text" class="form-control" id="email"  name="email" th:field="*{email}">
                                 </div>
                             </div>
                         </div>
@@ -113,16 +113,16 @@
                             <div class="form-group">
                                 <label class="form-label" th:text="#{user.add.status}"></label>
                                 <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status">
-                                    <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}" th:text="${status.getUserStatus(#locale)}"  th:value="${status.name()}"></option>
+                                    <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}" th:text="${status.getUserStatus(#locale)}"  th:value="${status.name()}" th:selected="${user.status().equals(status)}"></option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">ID</label>
-                                <input type="text" class="form-control" id="id" name="id" disabled="">
+                                <input type="text" class="form-control" id="id" name="id" disabled="" th:placeholder="${user.id()}">
                             </div>
                             <div class="form-group">
                                 <label class="form-label" th:text = "#{user.add.notes}"></label>
-                                <textarea class="form-control" aria-label="With textarea" name="notes" rows="16" id="notes"></textarea>
+                                <textarea class="form-control" aria-label="With textarea" name="notes" rows="16" id="notes" th:field="*{notes}"></textarea>
                             </div>
                             <h4 th:text="#{user.add.contact.data}"></h4>
                             <div class="form-group" style="margin-top: 10px">
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                         <div style="display: flex; justify-content: center">
-                            <button onclick="saveUser()" type="button" class="btn btn-success" th:text="#{user.add.save}" style="width: 50%" ></button>
+                            <button onclick="editUser()" type="button" class="btn btn-success" th:text="#{user.add.save}" style="width: 50%" ></button>
                         </div>
                     </div>
                 </form>
@@ -170,6 +170,7 @@
 <th:block layout:fragment="extra-modals">
 </th:block>
 <th:block layout:fragment="extra-script">
+
     <script>
         function passwordVisibility() {
             var getPassword = document.getElementById("password");
@@ -198,12 +199,12 @@
         }
     </script>
     <script>
-        function saveUser(){
-            var form = document.getElementById("userAdd");
+        function editUser(){
+            var form = document.getElementById("userEdit");
             var formData = new FormData(form);
             $.ajax({
-                method:"POST",
-                url: "/admin/add-user",
+                method:"PUT",
+                url: "/admin/edit-user/"+[[${user.id()}]],
                 contentType: false,
                 processData: false,
                 data:formData
@@ -232,6 +233,7 @@
         function validResponse(divId, message,afterDiv) {
 
             $(divId).addClass('is-invalid');
+
             if (afterDiv) {
                 $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
             } else {

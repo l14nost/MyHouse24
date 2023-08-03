@@ -5,6 +5,7 @@ import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForUserTable;
 import lab.space.my_house_24.model.house.HouseResponseForUserTable;
 import lab.space.my_house_24.model.user.UserCardResponse;
+import lab.space.my_house_24.model.user.UserEditResponse;
 import lab.space.my_house_24.model.user.UserResponse;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -29,7 +30,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .duty(user.getDuty())
                 .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
-                .status(user.getUserStatus())
+                .status(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale()))
                 .number(user.getNumber())
                 .filename(user.getFilename())
                 .apartments(apartments)
@@ -54,6 +55,25 @@ public class UserMapper {
                 .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
                 .viber(user.getViber())
                 .telegram(user.getTelegram())
+                .build();
+
+        return userResponse;
+    }
+
+    public  static UserEditResponse entityToEditDto(User user){
+        UserEditResponse userResponse = UserEditResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .lastname(user.getLastname())
+                .firstname(user.getFirstname())
+                .surname(user.getSurname())
+                .status(user.getUserStatus())
+                .number(user.getNumber())
+                .filename(user.getFilename())
+                .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .viber(user.getViber())
+                .telegram(user.getTelegram())
+                .notes(user.getNotes())
                 .build();
 
         return userResponse;

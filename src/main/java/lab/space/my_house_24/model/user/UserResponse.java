@@ -23,7 +23,7 @@ public record UserResponse(
 
         List<ApartmentResponseForUserTable> apartments,
 
-        UserStatus status,
+        String status,
 
         Boolean duty,
 

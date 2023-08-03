@@ -3,14 +3,12 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.mapper.UserMapper;
-import lab.space.my_house_24.model.user.UserCardResponse;
-import lab.space.my_house_24.model.user.UserMainPageRequest;
-import lab.space.my_house_24.model.user.UserAddRequest;
-import lab.space.my_house_24.model.user.UserResponse;
+import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.repository.UserRepository;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.specification.UserSpecification;
 import lab.space.my_house_24.util.FileHandler;
+import lab.space.my_house_24.util.CustomMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +22,7 @@ import java.time.ZoneId;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final CustomMailSender customMailSender;
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findUserByEmail(email).orElseThrow(()-> new EntityNotFoundException("User by email "+email+" is not found"));
@@ -41,11 +40,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEditResponse findByIdEdit(Long id) {
+        return UserMapper.entityToEditDto(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User by id "+id+" is not found")));
+    }
+
+    @Override
     public void deleteById(Long id) {
         User user = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("User by id "+id+" is not found"));
         FileHandler.deleteFile(user.getFilename());
         userRepository.deleteById(id);
 
+    }
+
+    @Override
+    public User findEntityById(Long id) {
+        return userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("User by id "+id+" is not found"));
     }
 
     @Override
@@ -67,6 +76,38 @@ public class UserServiceImpl implements UserService {
                 .duty(false)
                 .build();
         userRepository.save(user);
+    }
+
+    @Override
+    public void update(UserEditRequest userEditRequest,Long id) {
+        boolean changePassword = false;
+        User user = findEntityById(id);
+        String filenameDelete = user.getFilename();
+
+        user.setDate(userEditRequest.date().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        user.setFirstname(userEditRequest.firstname());
+        user.setLastname(userEditRequest.lastname());
+        user.setSurname(userEditRequest.surname());
+        user.setNumber(userEditRequest.number());
+        user.setEmail(userEditRequest.email());
+        user.setTelegram(userEditRequest.telegram());
+        user.setViber(userEditRequest.viber());
+        user.setNotes(userEditRequest.notes());
+        user.setUserStatus(userEditRequest.status());
+        if (!userEditRequest.img().isEmpty()) {
+            user.setFilename(FileHandler.saveFile(userEditRequest.img()));
+            FileHandler.deleteFile(filenameDelete);
+        }
+        if (userEditRequest.password()!=null){
+            user.setPassword(new BCryptPasswordEncoder().encode(userEditRequest.password()));
+            changePassword = true;
+        }
+        userRepository.save(user);
+        if (changePassword) {
+            String textForSend = "Dear " + user.getLastname() + " " + user.getFirstname() + ", your password has been changed!\n" +
+                    "For detail information contact our support team";
+//            customMailSender.send(user.getEmail(), textForSend, "Password Change Notification");
+        }
     }
 
 
