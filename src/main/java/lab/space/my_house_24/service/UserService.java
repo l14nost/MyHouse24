@@ -19,4 +19,6 @@ public interface UserService {
     void save(UserAddRequest userAddRequest);
 
     void update(UserEditRequest userEditRequest,Long id);
+
+    void inviteUser(UserInviteRequest userInviteRequest);
 }

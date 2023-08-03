@@ -30,12 +30,10 @@
 <th:block layout:fragment="content">
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-            <div class="header-title">
-                <h4 class="card-title" th:text = "#{user.add.title}"></h4>
-            </div>
-            <div>
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{user.add.title}"></h4>
+                </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
@@ -44,7 +42,7 @@
                     </ol>
                 </nav>
             </div>
-        </div>
+            <div class="card-body px-0">
             </div>
         </div>
     </div>
@@ -142,7 +140,7 @@
                                 <input type="password" class="form-control pass" id="confirmPassword"  name="confirmPassword">
                             </div>
                         </div>
-                        <div style="display: flex; justify-content: center">
+                        <div style="display: flex; justify-content: center;  margin-bottom: 10px">
                             <button onclick="saveUser()" type="button" class="btn btn-success" th:text="#{user.add.save}" style="width: 50%" ></button>
                         </div>
                     </div>

@@ -106,9 +106,15 @@ public class UserServiceImpl implements UserService {
         if (changePassword) {
             String textForSend = "Dear " + user.getLastname() + " " + user.getFirstname() + ", your password has been changed!\n" +
                     "For detail information contact our support team";
-//            customMailSender.send(user.getEmail(), textForSend, "Password Change Notification");
+            customMailSender.send(user.getEmail(), textForSend, "Password Change Notification");
         }
     }
 
 
+    public void inviteUser(UserInviteRequest userInviteRequest) {
+        String textForSend = "Dear friend,\n" +
+                "We cordially invite you to join us.\n" +
+                "We will be glad to see you in our application!";
+        customMailSender.send(userInviteRequest.email(),textForSend,"Invite");
+    }
 }

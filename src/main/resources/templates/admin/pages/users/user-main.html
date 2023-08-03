@@ -18,12 +18,10 @@
 <th:block layout:fragment="content">
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-            <div class="header-title">
-                <h4 class="card-title" th:text = "#{left.sidebar.apartment.owner}"></h4>
-            </div>
-            <div>
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{left.sidebar.apartment.owner}"></h4>
+                </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
@@ -31,7 +29,7 @@
                     </ol>
                 </nav>
             </div>
-        </div>
+            <div class="card-body px-0">
             </div>
         </div>
     </div>
@@ -45,20 +43,20 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" th:href="@{/add-user}" th:text = "#{users.choose.button.1}"></a></li>
                     <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.2}"></a></li>
-                    <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.3}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/invite-user}" th:text = "#{users.choose.button.3}"></a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="col-sm-12">
-        <div class="card" style="min-height: 400px">
+        <div class="card">
             <div class="card-header">
 
                 <div style="display: flex; justify-content: right">
                     <button type="button" class="btn btn-light" style="height: 40px; display: flex"  onclick="clearFilters()"><h7 th:text="#{table.clear}"></h7><svg style="margin: auto; margin-left: 5px" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/></svg></button>
                 </div>
             </div>
-            <div class="card-body table-responsive" >
+            <div class="table-responsive" >
 
                 <table class="table table-striped table-bordered" style="margin-top: 15px; max-width: 100%; min-width: 1400px">
                     <thead>
@@ -125,22 +123,24 @@
 
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer pt-0 pb-0" style="margin-top: 15px">
                 <div style="display: none; justify-content: center; min-height: 100px" id="userEmptyTable" >
                     <p style="display: flex; justify-content: center" th:text = "#{table.empty}"></p>
                 </div>
                 <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
-                    <div id="tableInfoShowing" th:text="  #{table.show.info.Showing} + ' 1 ' + '-' + ' 2 ' + #{table.show.info.of}+' 3 '+#{table.show.info.entries}">
+                        <div id="tableInfoShowing" th:text="  #{table.show.info.Showing} + ' 1 ' + '-' + ' 2 ' + #{table.show.info.of}+' 3 '+#{table.show.info.entries}">
 
-                    </div>
-                    <div style="display: flex; margin-right: 10px" >
-                        <nav aria-label="Page navigation example" id = "userPagination">
-                        </nav>
+                        </div>
+                        <div style="display: flex; margin-right: 10px" >
+                            <nav aria-label="Page navigation example" id = "userPagination">
+                            </nav>
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
 
