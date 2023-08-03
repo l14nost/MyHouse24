@@ -44,6 +44,16 @@
     border-color: var(--bs-table-border-color);
 }
 
+.text-bg-success-toast {
+    color: #ffffff !important;
+    background-color: RGBA(26, 160, 83, var(--bs-bg-opacity, 0.8)) !important;
+}
+.text-bg-warning-toast {
+    color: #ffffff !important;
+    background-color: RGBA(241, 106, 27, var(--bs-bg-opacity, 0.8)) !important;
+}
+
+
 .link-row tbody tr {
     cursor: pointer;
 }
