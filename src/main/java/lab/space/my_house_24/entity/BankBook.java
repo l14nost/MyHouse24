@@ -27,5 +27,4 @@ public class BankBook {
 
     @OneToOne
     private Apartment apartment;
-
 }

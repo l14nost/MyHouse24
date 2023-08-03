@@ -1,14 +1,17 @@
 package lab.space.my_house_24.entity;
 
 import jakarta.persistence.*;
-import lab.space.my_house_24.enums.Role;
 import lab.space.my_house_24.enums.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -17,7 +20,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Staff {
+@Accessors(chain = true)
+public class Staff implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,19 +36,15 @@ public class Staff {
     @Column(length = 25, nullable = false)
     private String lastname;
 
-    @Column(length = 55, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50, nullable = false)
     private UserStatus staffStatus;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = false)
+    @ManyToOne
     private Role role;
-
-    @ManyToMany(mappedBy = "staffList")
-    private List<SecurityLevel> securityLevelList = new ArrayList<>();
 
     @OneToMany(mappedBy = "staff")
     private List<Statement> statementList = new ArrayList<>();
@@ -58,6 +58,35 @@ public class Staff {
     private List<House> houseList = new ArrayList<>();
 
     @OneToMany(mappedBy = "staff")
-    private List<MastersApplication> mastersApplicationList = new ArrayList<>();
+    private List<MastersApplication> applicationList = new ArrayList<>();
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

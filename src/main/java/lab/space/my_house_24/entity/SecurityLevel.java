@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class SecurityLevel {
 
     @Id
@@ -26,12 +27,7 @@ public class SecurityLevel {
     @Column(length = 50, nullable = false)
     private Page page;
 
-    @ManyToMany
-    @JoinTable(
-            name = "security_level_staff",
-            joinColumns = @JoinColumn(name = "security_level_id"),
-            inverseJoinColumns = @JoinColumn(name = "staff_id")
-    )
-    private List<Staff> staffList = new ArrayList<>();
+    @ManyToMany(mappedBy = "securityLevelList")
+    private List<Role> role;
 
 }

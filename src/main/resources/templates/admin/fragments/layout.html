@@ -2,13 +2,13 @@
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">My House 24</title>
-    <th:block th:replace="~{/admin/fragments/style}"></th:block>
+    <th:block th:insert="~{/admin/fragments/style}"></th:block>
 </head>
 
 <body class="  ">
@@ -20,6 +20,7 @@
 <th:block th:replace="~{/admin/fragments/left-sidebar}"></th:block>
 
 <main class="main-content">
+    <th:block th:replace="~{/admin/fragments/toast}"></th:block>
 
     <th:block th:replace="~{/admin/fragments/header}"></th:block>
 
@@ -37,11 +38,7 @@
     <th:block layout:fragment="extra-modals"></th:block>
 </main>
 
-
-
-
 <th:block th:replace="~{/admin/fragments/script}"></th:block>
-
 
 <th:block layout:fragment="extra-script"></th:block>
 

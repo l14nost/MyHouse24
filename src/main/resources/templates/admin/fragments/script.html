@@ -9,7 +9,7 @@
 
 <!-- mapchart Script -->
 <script th:src="@{/assets/js/charts/vectore-chart.js}"></script>
-<script th:src="@{/assets/js/charts/dashboard.js}" ></script>
+<script th:src="@{/assets/js/charts/dashboard.js}"></script>
 
 <!-- fslightbox Script -->
 <script th:src="@{/assets/js/plugins/fslightbox.js}"></script>
@@ -39,27 +39,24 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
 <script>
-    function changeLogo(){
+    function changeLogo() {
         const logoImg = document.getElementById('logoImg');
 
-        const  imageUrl = logoImg.src;
+        const imageUrl = logoImg.src;
 
         const pathParts = imageUrl.split('/');
 
 
         const imageName = pathParts[pathParts.length - 1];
 
-        if (imageName === 'logo-mini.svg'){
+        if (imageName === 'logo-mini.svg') {
             logoImg.src = '/admin/assets/images/pages/logo.svg';
-        }
-        else if (imageName === 'logo.svg'){
+        } else if (imageName === 'logo.svg') {
             logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
         }
 
     }
 
-</script>
-<script type="text/javascript">
     function getCurrentURLWithoutParams() {
 
         var currentURL = window.location.href;
@@ -70,12 +67,43 @@
     }
 
     function changeLang(lang) {
+        localStorage.setItem("lang", lang);
         var urlWithoutParams = getCurrentURLWithoutParams();
         var newURL = urlWithoutParams + '?lang=' + lang;
         window.location.replace(newURL);
     }
-</script>
 
+    function changeLogoLang() {
+        var lang = localStorage.getItem("lang");
+
+        const logoImg = document.getElementById('langImg');
+
+        if (lang === 'en') {
+            logoImg.src = '/admin/assets/images/Flag/flag001.png';
+        } else if (lang === 'uk') {
+            logoImg.src = '/admin/assets/images/Flag/flag002.png';
+        }
+    }
+
+    changeLogoLang();
+
+    const toastSuccess = bootstrap.Toast.getOrCreateInstance(document.getElementById('successUpdateRole'));
+    const toastError = bootstrap.Toast.getOrCreateInstance(document.getElementById('errorUpdateRole'));
+
+    function showToast(toast) {
+        switch (toast) {
+            case "success":
+                toastSuccess.show();
+                break;
+            case "error":
+                toastError.show();
+                break;
+            default:
+                console.log("Unknown Toast");
+        }
+    }
+
+</script>
 
 
 

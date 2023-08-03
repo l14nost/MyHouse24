@@ -28,7 +28,10 @@ public class User {
     @Column(length = 25, nullable = false)
     private String lastname;
 
-    @Column(length = 55, nullable = false)
+    @Column(length = 25, nullable = false)
+    private String surname;
+
+    @Column(length = 100, nullable = false)
     private String password;
 
     @Column(length = 100, nullable = false)
@@ -66,6 +69,6 @@ public class User {
     private List<Statement> statementList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<MastersApplication> mastersApplicationList = new ArrayList<>();
+    private List<MastersApplication> applicationList = new ArrayList<>();
 
 }
