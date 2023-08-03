@@ -5,7 +5,6 @@ import lab.space.my_house_24.enums.UserStatus;
 import lombok.*;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class User {
     @Column(length = 25,nullable = false)
     private String surname;
 
-    @Column(length = 500,nullable = false)
+    @Column(length = 100,nullable = false)
     private String password;
 
     @Column(length = 100,nullable = false)
