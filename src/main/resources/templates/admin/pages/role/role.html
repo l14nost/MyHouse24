@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title>Template</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title">Roles</h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">System settings</li>
+                        <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  table-hover table-bordered table-md" style="max-width: 100%">
+                    <thead>
+                    <tr>
+                        <th>Roles</th>
+                        <th>Statistics</th>
+                        <th>Cash box</th>
+                        <th>Bills</th>
+                        <th>Bank books</th>
+                        <th>Apartments</th>
+                        <th>Apartments owners</th>
+                        <th>Houses</th>
+                        <th>Messages</th>
+                        <th>Masters applications</th>
+                        <th>Meter reading</th>
+                        <th>Settings page</th>
+                        <th>Services</th>
+                        <th>Rates</th>
+                        <th>Staff</th>
+                        <th>Roles</th>
+                        <th>Requisites</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Director</td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck1" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input" id="customCheck2" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck3" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck4" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck5" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck6" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck7" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck8" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck9" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck10" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck11" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck12" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck13" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck14" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck15" checked="" disabled>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="customCheck16" checked="" disabled>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Accountant</td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantStatistics">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantCashBox">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantBills">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantBankBooks">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantApartments">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantApartmentsOwner">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantHouses">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantMessages">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantMastersApplications">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantMeterReading">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantSettingsPage">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantServices">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantRates">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantStaff">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantRoles">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="accountantRequisites">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Manager</td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerStatistics">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerCashBox">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerBills">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerBankBooks">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerApartments">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerApartmentsOwner">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerHouses">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerMessages">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerMastersApplications">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerMeterReading">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerSettingsPage">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerServices">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerRates">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerStaff">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerRoles">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="managerRequisites">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Electrician</td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianStatistics">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianCashBox">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianBills">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianBankBooks">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianApartments">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianApartmentsOwner">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianHouses">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianMessages">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianMastersApplications">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianMeterReading">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianSettingsPage">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianServices">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianRates">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianStaff">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianRoles">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="electricianRequisites">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Plumber</td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberStatistics">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberCashBox">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberBills">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberBankBooks">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberApartments">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberApartmentsOwner">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberHouses">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberMessages">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberMastersApplications">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberMeterReading">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberSettingsPage">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberServices">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberRates">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberStaff">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberRoles">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input " id="plumberRequisites">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col text-end">
+        <button onclick="getAllRoles()" type="button" class="btn btn-light">Cancel</button>
+        <button onclick="updateRoles()" type="button" class="btn btn-success"
+                style="margin-left: 15px; margin-right: 50px">Accept
+        </button>
+    </div>
+
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+    <script>
+
+        $(document).ready(function () {
+            getAllRoles();
+        });
+
+        function getAllRoles() {
+            $.ajax({
+                method: "GET",
+                url: "/admin/role/get-all-roles",
+                dataType: 'json',
+                contentType: 'application/json',
+            }).done(function (roleResponse) {
+
+                $('#accountantStatistics').prop('checked', roleResponse?.accountant.statistics);
+                $('#accountantCashBox').prop('checked', roleResponse?.accountant.cashBox);
+                $('#accountantBills').prop('checked', roleResponse?.accountant.bills);
+                $('#accountantBankBooks').prop('checked', roleResponse?.accountant.bankBooks);
+                $('#accountantApartments').prop('checked', roleResponse?.accountant.apartments);
+                $('#accountantApartmentsOwner').prop('checked', roleResponse?.accountant.apartmentsOwner);
+                $('#accountantHouses').prop('checked', roleResponse?.accountant.houses);
+                $('#accountantMessages').prop('checked', roleResponse?.accountant.messages);
+                $('#accountantMastersApplications').prop('checked', roleResponse?.accountant.mastersApplications);
+                $('#accountantMeterReading').prop('checked', roleResponse?.accountant.meterReading);
+                $('#accountantSettingsPage').prop('checked', roleResponse?.accountant.settingsPage);
+                $('#accountantServices').prop('checked', roleResponse?.accountant.services);
+                $('#accountantRates').prop('checked', roleResponse?.accountant.rates);
+                $('#accountantStaff').prop('checked', roleResponse?.accountant.staff);
+                $('#accountantRoles').prop('checked', roleResponse?.accountant.roles);
+                $('#accountantRequisites').prop('checked', roleResponse?.accountant.requisites);
+
+                $('#electricianStatistics').prop('checked', roleResponse?.electrician.statistics);
+                $('#electricianCashBox').prop('checked', roleResponse?.electrician.cashBox);
+                $('#electricianBills').prop('checked', roleResponse?.electrician.bills);
+                $('#electricianBankBooks').prop('checked', roleResponse?.electrician.bankBooks);
+                $('#electricianApartments').prop('checked', roleResponse?.electrician.apartments);
+                $('#electricianApartmentsOwner').prop('checked', roleResponse?.electrician.apartmentsOwner);
+                $('#electricianHouses').prop('checked', roleResponse?.electrician.houses);
+                $('#electricianMessages').prop('checked', roleResponse?.electrician.messages);
+                $('#electricianMastersApplications').prop('checked', roleResponse?.electrician.mastersApplications);
+                $('#electricianMeterReading').prop('checked', roleResponse?.electrician.meterReading);
+                $('#electricianSettingsPage').prop('checked', roleResponse?.electrician.settingsPage);
+                $('#electricianServices').prop('checked', roleResponse?.electrician.services);
+                $('#electricianRates').prop('checked', roleResponse?.electrician.rates);
+                $('#electricianStaff').prop('checked', roleResponse?.electrician.staff);
+                $('#electricianRoles').prop('checked', roleResponse?.electrician.roles);
+                $('#electricianRequisites').prop('checked', roleResponse?.electrician.requisites);
+
+                $('#managerStatistics').prop('checked', roleResponse?.manager.statistics);
+                $('#managerCashBox').prop('checked', roleResponse?.manager.cashBox);
+                $('#managerBills').prop('checked', roleResponse?.manager.bills);
+                $('#managerBankBooks').prop('checked', roleResponse?.manager.bankBooks);
+                $('#managerApartments').prop('checked', roleResponse?.manager.apartments);
+                $('#managerApartmentsOwner').prop('checked', roleResponse?.manager.apartmentsOwner);
+                $('#managerHouses').prop('checked', roleResponse?.manager.houses);
+                $('#managerMessages').prop('checked', roleResponse?.manager.messages);
+                $('#managerMastersApplications').prop('checked', roleResponse?.manager.mastersApplications);
+                $('#managerMeterReading').prop('checked', roleResponse?.manager.meterReading);
+                $('#managerSettingsPage').prop('checked', roleResponse?.manager.settingsPage);
+                $('#managerServices').prop('checked', roleResponse?.manager.services);
+                $('#managerRates').prop('checked', roleResponse?.manager.rates);
+                $('#managerStaff').prop('checked', roleResponse?.manager.staff);
+                $('#managerRoles').prop('checked', roleResponse?.manager.roles);
+                $('#managerRequisites').prop('checked', roleResponse?.manager.requisites);
+
+                $('#plumberStatistics').prop('checked', roleResponse?.plumber.statistics);
+                $('#plumberCashBox').prop('checked', roleResponse?.plumber.cashBox);
+                $('#plumberBills').prop('checked', roleResponse?.plumber.bills);
+                $('#plumberBankBooks').prop('checked', roleResponse?.plumber.bankBooks);
+                $('#plumberApartments').prop('checked', roleResponse?.plumber.apartments);
+                $('#plumberApartmentsOwner').prop('checked', roleResponse?.plumber.apartmentsOwner);
+                $('#plumberHouses').prop('checked', roleResponse?.plumber.houses);
+                $('#plumberMessages').prop('checked', roleResponse?.plumber.messages);
+                $('#plumberMastersApplications').prop('checked', roleResponse?.plumber.mastersApplications);
+                $('#plumberMeterReading').prop('checked', roleResponse?.plumber.meterReading);
+                $('#plumberSettingsPage').prop('checked', roleResponse?.plumber.settingsPage);
+                $('#plumberServices').prop('checked', roleResponse?.plumber.services);
+                $('#plumberRates').prop('checked', roleResponse?.plumber.rates);
+                $('#plumberStaff').prop('checked', roleResponse?.plumber.staff);
+                $('#plumberRoles').prop('checked', roleResponse?.plumber.roles);
+                $('#plumberRequisites').prop('checked', roleResponse?.plumber.requisites);
+            });
+        }
+
+        function updateRoles() {
+            let roleUpdateRequest = {
+                manager: undefined,
+                accountant: undefined,
+                electrician: undefined,
+                plumber: undefined,
+            }
+
+            let manager = {
+                statistics: undefined,
+                cashBox: undefined,
+                bills: undefined,
+                bankBooks: undefined,
+                apartments: undefined,
+                apartmentsOwner: undefined,
+                houses: undefined,
+                messages: undefined,
+                mastersApplications: undefined,
+                meterReading: undefined,
+                settingsPage: undefined,
+                services: undefined,
+                rates: undefined,
+                staff: undefined,
+                roles: undefined,
+                requisites: undefined
+            }
+
+            let accountant = {
+                statistics: undefined,
+                cashBox: undefined,
+                bills: undefined,
+                bankBooks: undefined,
+                apartments: undefined,
+                apartmentsOwner: undefined,
+                houses: undefined,
+                messages: undefined,
+                mastersApplications: undefined,
+                meterReading: undefined,
+                settingsPage: undefined,
+                services: undefined,
+                rates: undefined,
+                staff: undefined,
+                roles: undefined,
+                requisites: undefined
+            }
+
+            let electrician = {
+                statistics: undefined,
+                cashBox: undefined,
+                bills: undefined,
+                bankBooks: undefined,
+                apartments: undefined,
+                apartmentsOwner: undefined,
+                houses: undefined,
+                messages: undefined,
+                mastersApplications: undefined,
+                meterReading: undefined,
+                settingsPage: undefined,
+                services: undefined,
+                rates: undefined,
+                staff: undefined,
+                roles: undefined,
+                requisites: undefined
+            }
+
+            let plumber = {
+                statistics: undefined,
+                cashBox: undefined,
+                bills: undefined,
+                bankBooks: undefined,
+                apartments: undefined,
+                apartmentsOwner: undefined,
+                houses: undefined,
+                messages: undefined,
+                mastersApplications: undefined,
+                meterReading: undefined,
+                settingsPage: undefined,
+                services: undefined,
+                rates: undefined,
+                staff: undefined,
+                roles: undefined,
+                requisites: undefined
+            }
+            roleUpdateRequest.manager = manager;
+            roleUpdateRequest.accountant = accountant;
+            roleUpdateRequest.electrician = electrician;
+            roleUpdateRequest.plumber = plumber;
+
+            roleUpdateRequest.manager.statistics = $('#managerStatistics').prop('checked');
+            roleUpdateRequest.manager.cashBox = $('#managerCashBox').prop('checked');
+            roleUpdateRequest.manager.bills = $('#managerBills').prop('checked');
+            roleUpdateRequest.manager.bankBooks = $('#managerBankBooks').prop('checked');
+            roleUpdateRequest.manager.apartments = $('#managerApartments').prop('checked');
+            roleUpdateRequest.manager.apartmentsOwner = $('#managerApartmentsOwner').prop('checked');
+            roleUpdateRequest.manager.houses = $('#managerHouses').prop('checked');
+            roleUpdateRequest.manager.messages = $('#managerMessages').prop('checked');
+            roleUpdateRequest.manager.mastersApplications = $('#managerMastersApplications').prop('checked');
+            roleUpdateRequest.manager.meterReading = $('#managerMeterReading').prop('checked');
+            roleUpdateRequest.manager.settingsPage = $('#managerSettingsPage').prop('checked');
+            roleUpdateRequest.manager.services = $('#managerServices').prop('checked');
+            roleUpdateRequest.manager.rates = $('#managerRates').prop('checked');
+            roleUpdateRequest.manager.staff = $('#managerStaff').prop('checked');
+            roleUpdateRequest.manager.roles = $('#managerRoles').prop('checked');
+            roleUpdateRequest.manager.requisites = $('#managerRequisites').prop('checked');
+
+            roleUpdateRequest.accountant.statistics = $('#accountantStatistics').prop('checked');
+            roleUpdateRequest.accountant.cashBox = $('#accountantCashBox').prop('checked');
+            roleUpdateRequest.accountant.bills = $('#accountantBills').prop('checked');
+            roleUpdateRequest.accountant.bankBooks = $('#accountantBankBooks').prop('checked');
+            roleUpdateRequest.accountant.apartments = $('#accountantApartments').prop('checked');
+            roleUpdateRequest.accountant.apartmentsOwner = $('#accountantApartmentsOwner').prop('checked');
+            roleUpdateRequest.accountant.houses = $('#accountantHouses').prop('checked');
+            roleUpdateRequest.accountant.messages = $('#accountantMessages').prop('checked');
+            roleUpdateRequest.accountant.mastersApplications = $('#accountantMastersApplications').prop('checked');
+            roleUpdateRequest.accountant.meterReading = $('#accountantMeterReading').prop('checked');
+            roleUpdateRequest.accountant.settingsPage = $('#accountantSettingsPage').prop('checked');
+            roleUpdateRequest.accountant.services = $('#accountantServices').prop('checked');
+            roleUpdateRequest.accountant.rates = $('#accountantRates').prop('checked');
+            roleUpdateRequest.accountant.staff = $('#accountantStaff').prop('checked');
+            roleUpdateRequest.accountant.roles = $('#accountantRoles').prop('checked');
+            roleUpdateRequest.accountant.requisites = $('#accountantRequisites').prop('checked');
+
+            roleUpdateRequest.electrician.statistics = $('#electricianStatistics').prop('checked');
+            roleUpdateRequest.electrician.cashBox = $('#electricianCashBox').prop('checked');
+            roleUpdateRequest.electrician.bills = $('#electricianBills').prop('checked');
+            roleUpdateRequest.electrician.bankBooks = $('#electricianBankBooks').prop('checked');
+            roleUpdateRequest.electrician.apartments = $('#electricianApartments').prop('checked');
+            roleUpdateRequest.electrician.apartmentsOwner = $('#electricianApartmentsOwner').prop('checked');
+            roleUpdateRequest.electrician.houses = $('#electricianHouses').prop('checked');
+            roleUpdateRequest.electrician.messages = $('#electricianMessages').prop('checked');
+            roleUpdateRequest.electrician.mastersApplications = $('#electricianMastersApplications').prop('checked');
+            roleUpdateRequest.electrician.meterReading = $('#electricianMeterReading').prop('checked');
+            roleUpdateRequest.electrician.settingsPage = $('#electricianSettingsPage').prop('checked');
+            roleUpdateRequest.electrician.services = $('#electricianServices').prop('checked');
+            roleUpdateRequest.electrician.rates = $('#electricianRates').prop('checked');
+            roleUpdateRequest.electrician.staff = $('#electricianStaff').prop('checked');
+            roleUpdateRequest.electrician.roles = $('#electricianRoles').prop('checked');
+            roleUpdateRequest.electrician.requisites = $('#electricianRequisites').prop('checked');
+
+            roleUpdateRequest.plumber.statistics = $('#plumberStatistics').prop('checked');
+            roleUpdateRequest.plumber.cashBox = $('#plumberCashBox').prop('checked');
+            roleUpdateRequest.plumber.bills = $('#plumberBills').prop('checked');
+            roleUpdateRequest.plumber.bankBooks = $('#plumberBankBooks').prop('checked');
+            roleUpdateRequest.plumber.apartments = $('#plumberApartments').prop('checked');
+            roleUpdateRequest.plumber.apartmentsOwner = $('#plumberApartmentsOwner').prop('checked');
+            roleUpdateRequest.plumber.houses = $('#plumberHouses').prop('checked');
+            roleUpdateRequest.plumber.messages = $('#plumberMessages').prop('checked');
+            roleUpdateRequest.plumber.mastersApplications = $('#plumberMastersApplications').prop('checked');
+            roleUpdateRequest.plumber.meterReading = $('#plumberMeterReading').prop('checked');
+            roleUpdateRequest.plumber.settingsPage = $('#plumberSettingsPage').prop('checked');
+            roleUpdateRequest.plumber.services = $('#plumberServices').prop('checked');
+            roleUpdateRequest.plumber.rates = $('#plumberRates').prop('checked');
+            roleUpdateRequest.plumber.staff = $('#plumberStaff').prop('checked');
+            roleUpdateRequest.plumber.roles = $('#plumberRoles').prop('checked');
+            roleUpdateRequest.plumber.requisites = $('#plumberRequisites').prop('checked');
+
+            $.ajax({
+                method: 'PUT',
+                url: '/admin/role/update-all-roles',
+                contentType: 'application/json',
+                data: JSON.stringify(roleUpdateRequest),
+                beforeSend: function () {
+                    $('.is-invalid').removeClass('is-invalid');
+                    $('.invalid-feedback').remove();
+                }
+            }).done(function () {
+                showToast('success');
+                getAllRoles();
+            }).fail(function (response) {
+                showToast('error');
+                console.error(response);
+            })
+
+        }
+
+
+    </script>
+
+
+</th:block>
+
+</html>

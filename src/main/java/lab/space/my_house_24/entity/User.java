@@ -5,7 +5,6 @@ import lab.space.my_house_24.enums.UserStatus;
 import lombok.*;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

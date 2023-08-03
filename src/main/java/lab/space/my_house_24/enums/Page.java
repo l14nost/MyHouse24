@@ -11,7 +11,7 @@ public enum Page {
     BILLS("Bills", "Квитанція на сплату"),
     BANK_BOOKS("Bank books", "Особовий рахунок"),
     APARTMENTS("Apartments", "Квартири"),
-    USERS("Apartments owners", "Власники квартир"),
+    APARTMENTS_OWNERS("Apartments owners", "Власники квартир"),
     HOUSES("Houses", "Будинки"),
     MESSAGES("Messages", "Повідомлення"),
     MASTERS_APPLICATIONS("Masters applications", "Заявка виклику майстра"),
@@ -20,7 +20,7 @@ public enum Page {
     SERVICES("Services", "Послуги"),
     RATES("Rates", "Тарифи"),
     STAFF("Staff", "Користувачі"),
-    Roles("Roles", "Ролі"),
+    ROLES("Roles", "Ролі"),
     REQUISITES("Requisites", "Платіжні реквізити");
     private final String nameEn;
     private final String nameUk;
