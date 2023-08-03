@@ -12,6 +12,15 @@
     cursor: pointer;
 }
 
+.card {
+    --bs-card-spacer-y: 0.3rem;
+}
+
+.table-md > :not(caption) > * > * {
+    padding: 0.4rem 0.5rem;
+}
+
+
 .item-name{
     font-size: 13px;
 }

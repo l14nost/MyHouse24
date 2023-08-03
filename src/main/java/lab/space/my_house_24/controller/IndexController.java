@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
     private final StaffService service;
 
-    @GetMapping("/index")
+    @GetMapping({"/", ""})
     public String indexPage() {
         System.out.println(service.getAllStaffDto());
         return "/admin/template-pages";
