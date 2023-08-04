@@ -8,13 +8,34 @@
 
 <th:block layout:fragment="content">
 
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text="#{staff.breadcrumb.staff}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{staff.breadcrumb.staff}"></li>
+                        <li class="breadcrumb-item active" aria-current="page"
+                            th:text="#{staff.card.breadcrumb.staff}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
     <div class="col-sm-12">
         <div class="card">
             <div class="table-responsive">
                 <table class="table  table-hover table-bordered table-md mb-0" style="margin-top: 15px;max-width: 100%">
                     <thead>
                     <div class="text-end">
-                        <button onclick="editStaff()" type="button" class="btn btn-primary" th:text="#{staff.card.button.edit}"
+                        <button onclick="editStaff()" type="button" class="btn btn-primary"
+                                th:text="#{staff.card.button.edit}"
                                 style="margin-top: 15px; margin-right: 15px"></button>
                     </div>
 
@@ -73,7 +94,7 @@
                 method: "GET",
                 url: "/admin/staff/get-staff-card-dto/" + id,
                 dataType: 'json'
-            }).done(function (staffResponse){
+            }).done(function (staffResponse) {
                 console.log(staffResponse)
                 $("#full-name").text(staffResponse?.fullName);
                 $("#phone").text((staffResponse?.phone ? staffResponse?.phone : '-'));
