@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.mapper.StaffMapper;
+import lab.space.my_house_24.model.staff.StaffEditResponse;
 import lab.space.my_house_24.model.staff.StaffResponse;
 import lab.space.my_house_24.model.staff.StaffSaveRequest;
 import lab.space.my_house_24.model.staff.StaffUpdateRequest;
@@ -41,15 +42,15 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public StaffResponse getStaffByIdWithSimpleDto(Long id) {
-        log.info("Try convert to Simple Dto Staff by id " + id);
-        return StaffMapper.toSimpleDto(getStaffById(id));
+    public StaffResponse getStaffByIdWithCardDto(Long id) {
+        log.info("Try convert to Card Dto Staff by id " + id);
+        return StaffMapper.toCarDto(getStaffById(id));
     }
 
     @Override
-    public StaffResponse getStaffByIdWithDto(Long id) {
-        log.info("Try convert to Dto Staff by id " + id);
-        return StaffMapper.toDto(getStaffById(id));
+    public StaffEditResponse getStaffByIdWithEditDto(Long id) {
+        log.info("Try convert to Edit Dto Staff by id " + id);
+        return StaffMapper.toEditDto(getStaffById(id));
     }
 
     @Override
@@ -100,7 +101,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                 log.info("Success update Staff by id " + staffUpdateRequest.id());
                 return ResponseEntity.ok().build();
             } else if (director.getId() == staffUpdateRequest.id().longValue()
-                    && director.getRole().getJobTitle().equals(staffUpdateRequest.jobTitle())) {
+                    && director.getRole().getJobTitle().equals(staffUpdateRequest.role())) {
                 staffRepository.save(
                         StaffMapper.saveStaff(
                                 staffUpdateRequest,

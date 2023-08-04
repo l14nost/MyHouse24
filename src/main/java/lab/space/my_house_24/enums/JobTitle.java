@@ -14,7 +14,7 @@ public enum JobTitle {
     private final String nameEn;
     private final String nameUk;
 
-    public String getRole(Locale locale) {
+    public String getJobTitle(Locale locale) {
         if (locale.getLanguage().equalsIgnoreCase("uk")) {
             return nameUk;
         }

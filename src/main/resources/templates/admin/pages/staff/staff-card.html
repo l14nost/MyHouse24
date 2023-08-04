@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title>Template</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  table-hover table-bordered table-md mb-0" style="margin-top: 15px;max-width: 100%">
+                    <thead>
+                    <div class="text-end">
+                        <button onclick="editStaff()" type="button" class="btn btn-primary" th:text="#{staff.card.button.edit}"
+                                style="margin-top: 15px; margin-right: 15px"></button>
+                    </div>
+
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="#{staff.card.table.staff}" class="col-3"></td>
+                        <td id="full-name"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{staff.card.table.role}"></td>
+                        <td id="role"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{staff.card.table.phone}"></td>
+                        <td id="phone"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{staff.card.table.email}"></td>
+                        <td id="email"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{staff.card.table.status}"></td>
+                        <td id="status"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+
+        let staffId;
+
+        $(document).ready(function () {
+            staffId = new URL(window.location.href).pathname.split("-").pop()
+            getStaffDTO(staffId)
+            console.log(staffId);
+        });
+
+
+        function getStaffDTO(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/staff/get-staff-card-dto/" + id,
+                dataType: 'json'
+            }).done(function (staffResponse){
+                console.log(staffResponse)
+                $("#full-name").text(staffResponse?.fullName);
+                $("#phone").text((staffResponse?.phone ? staffResponse?.phone : '-'));
+                $("#email").text(staffResponse?.email);
+                $("#role").text(staffResponse?.role);
+                $("#status").text(staffResponse?.status);
+            });
+        }
+
+        function editStaff() {
+            window.location.href = '/admin/staff/' + staffId;
+        }
+    </script>
+
+</th:block>
+
+</html>

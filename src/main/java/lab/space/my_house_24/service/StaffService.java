@@ -1,6 +1,7 @@
 package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.model.staff.StaffEditResponse;
 import lab.space.my_house_24.model.staff.StaffResponse;
 import lab.space.my_house_24.model.staff.StaffSaveRequest;
 import lab.space.my_house_24.model.staff.StaffUpdateRequest;
@@ -10,10 +11,13 @@ import java.util.List;
 
 public interface StaffService {
     Staff getStaffById(Long id);
-    StaffResponse getStaffByIdWithSimpleDto(Long id);
-    StaffResponse getStaffByIdWithDto(Long id);
+
+    StaffResponse getStaffByIdWithCardDto(Long id);
+
+    StaffEditResponse getStaffByIdWithEditDto(Long id);
 
     Staff getStaffByEmail(String email);
+
     Staff getMainDirector();
 
     List<Staff> getAllStaff();
@@ -23,6 +27,7 @@ public interface StaffService {
     ResponseEntity<?> updateStaff(StaffUpdateRequest staffUpdateRequest);
 
     void saveStaff(StaffSaveRequest staffSaveRequest);
+
     void saveStaff(Staff staff);
 
     ResponseEntity<?> deleteStaff(Long id);

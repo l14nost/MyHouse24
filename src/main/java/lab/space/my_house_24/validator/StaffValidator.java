@@ -11,21 +11,6 @@ import org.springframework.validation.FieldError;
 public class StaffValidator {
     private final StaffRepository staffRepository;
 
-    public void isFirstAndLastNameUniqueValidation(String firstname, String lastname, BindingResult bindingResult) {
-        if (staffRepository.existsByFirstname(firstname) && staffRepository.existsByLastname(lastname)) {
-            bindingResult.addError(new FieldError("StaffSaveRequest", "first and last name", "A user with the same first and last name already exists"));
-        }
-    }
-
-    public void isFirstAndLastNameUniqueValidationWithId(Long id, String firstname, String lastname, BindingResult bindingResult) {
-        if (staffRepository.existsByFirstname(firstname)
-                && staffRepository.existsByLastname(lastname)
-                && !staffRepository.getReferenceById(id).getFirstname().equalsIgnoreCase(firstname)
-                && !staffRepository.getReferenceById(id).getLastname().equalsIgnoreCase(lastname)) {
-            bindingResult.addError(new FieldError("StaffUpdateRequest", "first and last name", "A user with the same first and last name already exists"));
-        }
-    }
-
     public void isEmailUniqueValidation(String email, BindingResult bindingResult) {
         if (staffRepository.existsByEmail(email)) {
             bindingResult.addError(new FieldError("StaffSaveRequest", "email", "Such email already exists"));
