@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -110,11 +111,18 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
+    @Override
     public void inviteUser(UserInviteRequest userInviteRequest) {
         String textForSend = "Dear friend,\n" +
                 "We cordially invite you to join us.\n" +
                 "We will be glad to see you in our application!";
         customMailSender.send(userInviteRequest.email(),textForSend,"Invite");
     }
+
+    @Override
+    public List<UserResponseForTable> userListForTable() {
+        return userRepository.findAll().stream().map(UserMapper::entityToDtoForTable).toList();
+    }
+
+
 }

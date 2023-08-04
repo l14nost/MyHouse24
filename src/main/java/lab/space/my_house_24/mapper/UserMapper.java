@@ -1,12 +1,15 @@
 package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Apartment;
+import lab.space.my_house_24.entity.Section;
 import lab.space.my_house_24.entity.User;
-import lab.space.my_house_24.model.apartment.ApartmentResponseForUserTable;
-import lab.space.my_house_24.model.house.HouseResponseForUserTable;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
+import lab.space.my_house_24.model.house.HouseResponseForTable;
+import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.model.user.UserCardResponse;
 import lab.space.my_house_24.model.user.UserEditResponse;
 import lab.space.my_house_24.model.user.UserResponse;
+import lab.space.my_house_24.model.user.UserResponseForTable;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.time.ZoneId;
@@ -17,12 +20,12 @@ import java.util.List;
 public class UserMapper {
 
     public  static UserResponse entityToMainPageDto(User user){
-        List<ApartmentResponseForUserTable> apartments = new ArrayList<>();
-        List<HouseResponseForUserTable> houses = new ArrayList<>();
+        List<ApartmentResponseForTable> apartments = new ArrayList<>();
+        List<HouseResponseForTable> houses = new ArrayList<>();
         if (user.getApartmentList()!=null){
             for (Apartment apartment : user.getApartmentList() ){
-                apartments.add(ApartmentResponseForUserTable.builder().id(apartment.getId()).number(apartment.getNumber()).build());
-                houses.add(HouseResponseForUserTable.builder().name(apartment.getHouse().getName()).id(apartment.getHouse().getId()).build());
+                apartments.add(ApartmentResponseForTable.builder().id(apartment.getId()).number(apartment.getNumber()).build());
+                houses.add(HouseResponseForTable.builder().name(apartment.getHouse().getName()).id(apartment.getHouse().getId()).build());
             }
         }
         UserResponse userResponse = UserResponse.builder()
@@ -77,5 +80,11 @@ public class UserMapper {
                 .build();
 
         return userResponse;
+    }
+
+
+
+    public  static UserResponseForTable entityToDtoForTable(User user){
+        return UserResponseForTable.builder().name(user.getLastname()+" "+user.getFirstname()+" "+ user.getSurname()).id(user.getId()).build();
     }
 }
