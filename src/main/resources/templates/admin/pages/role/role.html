@@ -12,12 +12,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    <h4 class="card-title">Roles</h4>
+                    <h4 class="card-title" th:text="#{role.breadcrumb.roles}"></h4>
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">System settings</li>
-                        <li class="breadcrumb-item active" aria-current="page">Roles</li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{role.breadcrumb.roles}"></li>
                     </ol>
                 </nav>
             </div>
@@ -29,31 +29,31 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="table-responsive">
-                <table class="table  table-hover table-bordered table-md" style="max-width: 100%">
+                <table class="table  table-hover table-bordered table-md mb-0" style="max-width: 100%">
                     <thead>
                     <tr>
-                        <th>Roles</th>
-                        <th>Statistics</th>
-                        <th>Cash box</th>
-                        <th>Bills</th>
-                        <th>Bank books</th>
-                        <th>Apartments</th>
-                        <th>Apartments owners</th>
-                        <th>Houses</th>
-                        <th>Messages</th>
-                        <th>Masters applications</th>
-                        <th>Meter reading</th>
-                        <th>Settings page</th>
-                        <th>Services</th>
-                        <th>Rates</th>
-                        <th>Staff</th>
-                        <th>Roles</th>
-                        <th>Requisites</th>
+                        <th th:text="#{role.table.role}"></th>
+                        <th th:text="#{role.table.statistics}"></th>
+                        <th th:text="#{role.table.cash_box}"></th>
+                        <th th:text="#{role.table.bills}"></th>
+                        <th th:text="#{role.table.bank_book}"></th>
+                        <th th:text="#{role.table.apartments}"></th>
+                        <th th:text="#{role.table.apartments_owners}"></th>
+                        <th th:text="#{role.table.houses}"></th>
+                        <th th:text="#{role.table.messages}"></th>
+                        <th th:text="#{role.table.masters_applications}"></th>
+                        <th th:text="#{role.table.meter_reading}"></th>
+                        <th th:text="#{role.table.settings_page}"></th>
+                        <th th:text="#{role.table.services}"></th>
+                        <th th:text="#{role.table.rates}"></th>
+                        <th th:text="#{role.table.staff}"></th>
+                        <th th:text="#{role.table.roles}"></th>
+                        <th th:text="#{role.table.requisites}"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Director</td>
+                        <td th:text="#{role.table.director}"></td>
                         <td class="text-center">
                             <input type="checkbox" class="form-check-input " id="customCheck1" checked="" disabled>
                         </td>
@@ -104,7 +104,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Accountant</td>
+                        <td th:text="#{role.table.accountant}"></td>
                         <td class="text-center">
                             <input type="checkbox" class="form-check-input " id="accountantStatistics">
                         </td>
@@ -155,7 +155,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Manager</td>
+                        <td  th:text="#{role.table.manager}"></td>
                         <td class="text-center">
                             <input type="checkbox" class="form-check-input " id="managerStatistics">
                         </td>
@@ -206,7 +206,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Electrician</td>
+                        <td th:text="#{role.table.electrician}"></td>
                         <td class="text-center">
                             <input type="checkbox" class="form-check-input " id="electricianStatistics">
                         </td>
@@ -257,7 +257,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Plumber</td>
+                        <td th:text="#{role.table.plumber}"></td>
                         <td class="text-center">
                             <input type="checkbox" class="form-check-input " id="plumberStatistics">
                         </td>
@@ -313,9 +313,9 @@
         </div>
     </div>
     <div class="col text-end">
-        <button onclick="getAllRoles()" type="button" class="btn btn-light">Cancel</button>
+        <button onclick="getAllRoles()" type="button" class="btn btn-light"><th:block th:text="#{global.button.cancel}"></th:block></button>
         <button onclick="updateRoles()" type="button" class="btn btn-success"
-                style="margin-left: 15px; margin-right: 50px">Accept
+                style="margin-left: 15px; margin-right: 50px" ><th:block th:text="#{global.button.accept}"></th:block>
         </button>
     </div>
 

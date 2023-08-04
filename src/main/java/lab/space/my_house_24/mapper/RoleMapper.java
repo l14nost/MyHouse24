@@ -7,14 +7,28 @@ import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.Page;
 import lab.space.my_house_24.model.role.PageResponse;
 import lab.space.my_house_24.model.role.RoleResponse;
+import lab.space.my_house_24.model.role.RoleSimpleResponse;
 import lab.space.my_house_24.service.SecurityLevelService;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface RoleMapper {
 
-    static RoleResponse toSimpleDto(List<Role> roles) {
+    static List<RoleSimpleResponse> toSimpleDtoList(List<Role> roles){
+        return roles.stream().map(RoleMapper::toSimpleDto).collect(Collectors.toList());
+    }
+
+    static RoleSimpleResponse toSimpleDto(Role roles) {
+        return RoleSimpleResponse.builder()
+                .id(roles.getId())
+                .jobTitle(roles.getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
+                .build();
+    }
+
+    static RoleResponse toDto(List<Role> roles) {
         return RoleResponse
                 .builder()
                 .accountant(

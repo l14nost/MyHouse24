@@ -7,13 +7,13 @@ import lombok.Builder;
 @Builder
 public record RoleUpdateRequest(
 
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         PageResponse manager,
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         PageResponse accountant,
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         PageResponse electrician,
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         PageResponse plumber
 ) {
 }

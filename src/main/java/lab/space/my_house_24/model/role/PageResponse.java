@@ -5,37 +5,37 @@ import lombok.Builder;
 
 @Builder
 public record PageResponse(
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean statistics,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean cashBox,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean bills,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean bankBooks,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean apartments,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean apartmentsOwner,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean houses,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean messages,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean mastersApplications,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean meterReading,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean settingsPage,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean services,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean rates,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean staff,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean roles,
-        @NotNull
+        @NotNull(message = "{not.blank.message}")
         Boolean requisites
 ) {
 }

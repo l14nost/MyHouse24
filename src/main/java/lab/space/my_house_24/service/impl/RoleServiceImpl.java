@@ -6,6 +6,7 @@ import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.mapper.RoleMapper;
 import lab.space.my_house_24.model.role.PageResponse;
 import lab.space.my_house_24.model.role.RoleResponse;
+import lab.space.my_house_24.model.role.RoleSimpleResponse;
 import lab.space.my_house_24.model.role.RoleUpdateRequest;
 import lab.space.my_house_24.repository.RoleRepository;
 import lab.space.my_house_24.service.RoleService;
@@ -28,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
     private final SecurityLevelService securityLevelService;
 
     @Override
-    public Role getRoleByJobTitle(JobTitle jobTitle) throws EntityNotFoundException{
+    public Role getRoleByJobTitle(JobTitle jobTitle) throws EntityNotFoundException {
         log.info("Try to search Staff by JobTitle " + jobTitle);
         return roleRepository.findByJobTitle(jobTitle)
                 .orElseThrow(() -> new EntityNotFoundException("Role not found by JobTitle " + jobTitle));
@@ -41,9 +42,15 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public List<RoleSimpleResponse> getAllRoleSimpleDto() {
+        log.info("Try to convert Roles in Dto");
+        return RoleMapper.toSimpleDtoList(getAllRole());
+    }
+
+    @Override
     public RoleResponse getAllRoleDto() {
         log.info("Try to convert Roles in Dto");
-        return RoleMapper.toSimpleDto(getAllRole());
+        return RoleMapper.toDto(getAllRole());
     }
 
     @Override
@@ -54,7 +61,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void updateRole(PageResponse pageResponse, JobTitle jobTitle) throws EntityNotFoundException{
+    public void updateRole(PageResponse pageResponse, JobTitle jobTitle) throws EntityNotFoundException {
         log.info("Try to update Role");
         roleRepository.save(RoleMapper.toRole(pageResponse, getRoleByJobTitle(jobTitle), securityLevelService));
         log.info("Success update Role");
@@ -70,7 +77,7 @@ public class RoleServiceImpl implements RoleService {
             updateRole(roleUpdateRequest.plumber(), JobTitle.PLUMBER);
             log.info("Success update Roles");
             return ResponseEntity.ok().build();
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             log.error("Error update Roles");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
