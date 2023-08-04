@@ -43,4 +43,7 @@
     color: #ffffff !important;
     background-color: RGBA(241, 106, 27, var(--bs-bg-opacity, 0.8)) !important;
 }
+.nav .sidebar-toggle {
+    background: var(--bs-success);
+}
 

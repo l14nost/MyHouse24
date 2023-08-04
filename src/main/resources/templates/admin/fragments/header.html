@@ -2,38 +2,8 @@
     <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
         <div class="container-fluid navbar-inner">
             <a href="../../dashboard/index.html" class="navbar-brand">
-                <!--Logo start-->
-                <!--logo End-->
 
-                <!--Logo start-->
-                <div class="logo-main">
-                    <div class="logo-normal">
-                        <!--          <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-                        <!--            <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"></rect>-->
-                        <!--            <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"></rect>-->
-                        <!--            <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"></rect>-->
-                        <!--            <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"></rect>-->
-                        <!--          </svg>-->
-                        <img th:src="@{/assets/images/pages/logo.svg}" class="img-responsive" alt=""
-                             style="width: 60%;">
-
-                    </div>
-                    <div class="logo-mini">
-                        <!--          <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-                        <!--            <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor"></rect>-->
-                        <!--            <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor"></rect>-->
-                        <!--            <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor"></rect>-->
-                        <!--            <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor"></rect>-->
-                        <!--          </svg>-->
-                        <img th:src="@{/assets/images/pages/logo-mini.svg}" class="img-responsive" alt=""
-                             style="width: 60%;">
-
-                    </div>
-                </div>
-                <!--logo End-->
-
-
-                <h4 class="logo-title">Hope UI</h4>
+                <h3 th:text="#{header.title}"></h3>
             </a>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
@@ -61,8 +31,6 @@
                         <a href="#" class="search-toggle nav-link" id="dropdownMenuButton2" data-bs-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">
                             <div id="langDiv">
-<!--                                <img th:src="@{/assets/images/Flag/flag001.png}" class="img-fluid rounded-circle" alt="user"-->
-<!--                                 style="height: 30px; min-width: 30px; width: 30px;" id="langImg">-->
                             </div>
                             <span class="bg-primary"></span>
                         </a>
