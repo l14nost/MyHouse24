@@ -38,4 +38,11 @@ public class ApartmentController {
         return ResponseEntity.ok().build();
 
     }
+
+
+    @GetMapping("/apartment-card/{id}")
+    public String apartmentCard(@PathVariable Long id, Model model){
+        model.addAttribute("apartment", apartmentService.findByIdForCard(id));
+        return "admin/pages/apartment/apartment-card";
+    }
 }

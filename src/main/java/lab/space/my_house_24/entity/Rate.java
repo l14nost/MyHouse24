@@ -32,4 +32,7 @@ public class Rate {
     @OneToMany(mappedBy = "rate")
     private List<PriceRate> priceRateList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "rate")
+    private List<Apartment> apartmentList = new ArrayList<>();
+
 }

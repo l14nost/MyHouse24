@@ -24,8 +24,8 @@ public class UserMapper {
         List<HouseResponseForTable> houses = new ArrayList<>();
         if (user.getApartmentList()!=null){
             for (Apartment apartment : user.getApartmentList() ){
-                apartments.add(ApartmentResponseForTable.builder().id(apartment.getId()).number(apartment.getNumber()).build());
-                houses.add(HouseResponseForTable.builder().name(apartment.getHouse().getName()).id(apartment.getHouse().getId()).build());
+                apartments.add(ApartmentMapper.entityToDtoForTable(apartment));
+                houses.add(HouseMapper.entityToDtoForTable(apartment.getHouse()));
             }
         }
         UserResponse userResponse = UserResponse.builder()

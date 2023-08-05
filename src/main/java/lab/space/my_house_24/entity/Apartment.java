@@ -42,6 +42,14 @@ public class Apartment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "rate_id",nullable = false)
+    private Rate rate;
+
+    @OneToOne
+    @JoinColumn(name = "bank_book_id",nullable = false)
+    private BankBook bankBook;
+
     @ManyToMany(mappedBy = "apartmentList")
     private List<Message> messageList = new ArrayList<>();
 
