@@ -31,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponse> getAllUserDto(UserMainPageRequest userMainPageRequest) {
+
         UserSpecification userSpecification = UserSpecification.builder().userMainPageRequest(userMainPageRequest).build();
         return userRepository.findAll(userSpecification, PageRequest.of(userMainPageRequest.page(),10)).map(UserMapper::entityToMainPageDto);
     }
@@ -99,7 +100,7 @@ public class UserServiceImpl implements UserService {
             user.setFilename(FileHandler.saveFile(userEditRequest.img()));
             FileHandler.deleteFile(filenameDelete);
         }
-        if (userEditRequest.password()!=null){
+        if (!userEditRequest.password().isEmpty()){
             user.setPassword(new BCryptPasswordEncoder().encode(userEditRequest.password()));
             changePassword = true;
         }

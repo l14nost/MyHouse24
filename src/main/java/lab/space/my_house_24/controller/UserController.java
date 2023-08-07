@@ -30,6 +30,7 @@ public class UserController {
 
     @PostMapping("/get-all-users")
     public ResponseEntity getAllUserSpecification(@RequestBody UserMainPageRequest userMainPageRequest){
+        System.out.println(userMainPageRequest.toString());
         return ResponseEntity.ok(userService.getAllUserDto(userMainPageRequest));
     }
 

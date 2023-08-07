@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div style="display: flex; justify-content: center; margin-bottom: 10px">
-                            <button onclick="inviteUser()" type="button" class="btn btn-success" th:text="#{user.invite.send}" style="width: 50%" ></button>
+                            <button onclick="inviteUser()" type="button" class="btn btn-success" th:text="#{user.invite.send}" style="width: 50%" id="inviteButton"></button>
                         </div>
                     </div>
                 </form>
@@ -87,7 +87,7 @@
             formData.forEach((value, key) => {
                 jsonData[key] = value;
             });
-
+            console.log(jsonData);
             $.ajax({
                 method:"POST",
                 url: "/admin/invite-user",
@@ -95,12 +95,16 @@
                 data: JSON.stringify(jsonData),
             }).done(
                 function (response){
+                    clearValidMessages()
                     showToast('success');
+                    document.getElementById("inviteButton").disabled = true;
+                    setTimeout(function() {
+                        document.getElementById("inviteButton").disabled = false;
+                    }, 5500);
                 }
             ).fail(
                 function(response){
-                    $('.is-invalid').removeClass('is-invalid');
-                    $('.invalid-feedback').remove();
+                    clearValidMessages()
                     let errors = response.responseJSON;
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
@@ -110,15 +114,6 @@
                     }
                 }
             )
-        }
-        function validResponse(divId, message,afterDiv) {
-
-            $(divId).addClass('is-invalid');
-            if (afterDiv) {
-                $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
-            } else {
-                $(divId).after('<div class="invalid-feedback">' + message + '</div>');
-            }
         }
     </script>
 </th:block>
