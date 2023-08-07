@@ -8,8 +8,8 @@ import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.StaffValidator;
-import lab.space.my_house_24.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,6 @@ import java.util.List;
 public class StaffController {
     private final StaffService staffService;
     private final StaffValidator staffValidator;
-    private final UserValidator userValidator;
     private final RoleService roleService;
 
     @GetMapping({"/", ""})
@@ -74,12 +73,12 @@ public class StaffController {
     @PostMapping("/save-staff")
     public ResponseEntity<?> saveStaff(@Valid @RequestBody StaffSaveRequest staffSaveRequest,
                                        BindingResult bindingResult) {
-        staffValidator.isEmailUniqueValidation(staffSaveRequest.email(), bindingResult);
-        userValidator.passwordMatch(
+        staffValidator.isEmailUniqueValidation(staffSaveRequest.email(), bindingResult,
+                "StaffSaveRequest", LocaleContextHolder.getLocale());
+        staffValidator.passwordEqualsValidation(
                 staffSaveRequest.password(),
-                staffSaveRequest.confirmPassword(),
-                bindingResult,
-                "StaffSaveRequest"
+                staffSaveRequest.confirmPassword(), bindingResult,
+                "StaffSaveRequest", LocaleContextHolder.getLocale()
         );
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
@@ -93,13 +92,13 @@ public class StaffController {
     public ResponseEntity<?> updateStaffById(@Valid @RequestBody StaffUpdateRequest staffUpdateRequest,
                                              BindingResult bindingResult) {
         staffValidator.isEmailUniqueValidationWithId(staffUpdateRequest.id(),
-                staffUpdateRequest.email(), bindingResult);
-        if (!staffUpdateRequest.password().equals("")){
-            userValidator.passwordMatch(
+                staffUpdateRequest.email(), bindingResult,
+                "StaffUpdateRequest", LocaleContextHolder.getLocale());
+        if (!staffUpdateRequest.password().equals("")) {
+            staffValidator.passwordEqualsValidation(
                     staffUpdateRequest.password(),
-                    staffUpdateRequest.confirmPassword(),
-                    bindingResult,
-                    "StaffUpdateRequest"
+                    staffUpdateRequest.confirmPassword(), bindingResult,
+                    "StaffUpdateRequest", LocaleContextHolder.getLocale()
             );
         }
         if (bindingResult.hasErrors()) {

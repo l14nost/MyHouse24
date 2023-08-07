@@ -8,29 +8,32 @@ import lombok.Builder;
 
 @Builder
 public record StaffUpdateRequest(
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         @Min(1)
         Long id,
-        @NotBlank(message = "Must be specified")
-        @Size(max = 25, message = "Must be no more than {max} symbols")
+        @NotBlank(message = "{not.blank.message}")
+        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z][а-яєіїґёa-z]*$", message = "{pattern.name.message}")
+        @Size(max = 25, message = "{size.less.message}" + " {max}")
         String firstname,
-        @NotBlank(message = "Must be specified")
-        @Size(max = 25, message = "Must be no more than {max} symbols")
+        @NotBlank(message = "{not.blank.message}")
+        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z][а-яєіїґёa-z]*$", message = "{pattern.name.message}")
+        @Size(max = 25, message = "{size.less.message}" + " {max}")
         String lastname,
         @NotBlank(message = "{not.blank.message}")
         @Pattern(regexp = "^[0-9]*$", message = "{pattern.number.message}")
-        @Size(max = 20, min = 10, message = "{size.between.message}" + " 10 && 20")
+        @Size(max = 20, min = 10, message = "{size.between.message}" + " {min} && {max}")
         String phone,
-        @NotBlank(message = "Must be specified")
-        @Size(max = 100, message = "Must be no more than {max} symbols")
+        @NotBlank(message = "{not.blank.message}")
+        @Size(max = 100, message = "{size.less.message} " + " {max}")
+        @Email(regexp = "^[A-Za-z0-9._%+-]+@.+\\.\\w{2,3}$", message = "{pattern.email.message}")
         String email,
-        @Size(max = 100, message = "Must be no more than {max} symbols")
+        @Size(max = 100, message = "{size.less.message} " + " {max}")
         String password,
-        @Size(max = 100, message = "Must be no more than {max} symbols")
+        @Size(max = 100, message = "{size.less.message} " + " {max}")
         String confirmPassword,
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         JobTitle role,
-        @NotNull(message = "Must be specified")
+        @NotNull(message = "{not.blank.message}")
         UserStatus status
 ) {
 }
