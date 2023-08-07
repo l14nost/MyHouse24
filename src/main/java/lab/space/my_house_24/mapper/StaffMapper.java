@@ -63,7 +63,7 @@ public interface StaffMapper {
                 .setRole(roleService.getRoleByJobTitle(staffUpdateRequest.role()))
                 .setStaffStatus(staffUpdateRequest.status());
 
-        if (staffUpdateRequest.password() != null) {
+        if (staffUpdateRequest.password() != null && !staffUpdateRequest.password().equals("")) {
             staff.setPassword(new BCryptPasswordEncoder().encode(staffUpdateRequest.password()));
         }
         return staff;

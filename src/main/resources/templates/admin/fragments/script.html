@@ -121,7 +121,43 @@
         }
     }
 
-    function clearErrorMessages() {
+    function passwordVisibility() {
+        var getPassword = document.getElementById("password");
+        var confirmPassword = document.getElementById("confirmPassword");
+        if (getPassword.type === "password") {
+            getPassword.type = "text";
+            confirmPassword.type = "text";
+        } else {
+            getPassword.type = "password";
+            confirmPassword.type = "password";
+        }
+    }
+
+    function generatePassword() {
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$`~%^&*(*)ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var passwordLength = 8;
+        var password = "";
+
+        for (var i = 0; i <= passwordLength; i++) {
+            var randomNumber = Math.floor(Math.random() * chars.length);
+            password += chars.substring(randomNumber, randomNumber + 1);
+        }
+        document.getElementById("password").value = password;
+        document.getElementById("confirmPassword").value = password;
+
+    }
+
+    function validResponse(divId, message, afterDiv) {
+
+        $(divId).addClass('is-invalid');
+        if (afterDiv) {
+            $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
+        } else {
+            $(divId).after('<div class="invalid-feedback">' + message + '</div>');
+        }
+    }
+
+    function clearValidMessages() {
         $('.is-invalid').removeClass('is-invalid');
         $('.invalid-feedback').remove();
     }

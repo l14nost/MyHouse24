@@ -57,3 +57,7 @@
 .link-row tbody tr {
     cursor: pointer;
 }
+
+.btn.disabled{
+    border-color: transparent;
+}

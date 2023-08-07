@@ -576,7 +576,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(roleUpdateRequest),
                 beforeSend: function () {
-                    clearErrorMessages();
+                    clearValidMessages();
                 }
             }).done(function () {
                 showToast('success');

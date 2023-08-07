@@ -94,12 +94,14 @@ public class StaffController {
                                              BindingResult bindingResult) {
         staffValidator.isEmailUniqueValidationWithId(staffUpdateRequest.id(),
                 staffUpdateRequest.email(), bindingResult);
-        userValidator.passwordMatch(
-                staffUpdateRequest.password(),
-                staffUpdateRequest.confirmPassword(),
-                bindingResult,
-                "StaffUpdateRequest"
-        );
+        if (!staffUpdateRequest.password().equals("")){
+            userValidator.passwordMatch(
+                    staffUpdateRequest.password(),
+                    staffUpdateRequest.confirmPassword(),
+                    bindingResult,
+                    "StaffUpdateRequest"
+            );
+        }
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
