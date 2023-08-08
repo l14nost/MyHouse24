@@ -41,3 +41,7 @@ spring:
 
 upload:
   path: "C:/Users/Amir Banov/IdeaProjects/MyHouse24/files"
+
+app:
+  jwt:
+    secret: SV9ET04nVF9LTk9XX1RIRV9TRUNSRVRfVE9LRU4=

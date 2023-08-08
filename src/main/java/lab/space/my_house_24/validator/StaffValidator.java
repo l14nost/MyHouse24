@@ -1,6 +1,11 @@
 package lab.space.my_house_24.validator;
 
+import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.enums.UserStatus;
+import lab.space.my_house_24.model.staff.InviteRequest;
+import lab.space.my_house_24.model.staff.StaffUpdateRequest;
 import lab.space.my_house_24.repository.StaffRepository;
+import lab.space.my_house_24.service.StaffService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -12,6 +17,45 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class StaffValidator {
     private final StaffRepository staffRepository;
+    private final StaffService staffService;
+
+    public void isStaffMainDirectorValidation(StaffUpdateRequest staffUpdateRequest, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            Staff director = staffService.getMainDirector();
+            String directorResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                directorResponse = "Змінювати це поле заборонено";
+            } else {
+                directorResponse = "Changing this field is not allowed";
+            }
+            if (director.getId() == staffUpdateRequest.id().longValue()
+                    && !director.getRole().getJobTitle().equals(staffUpdateRequest.role())
+            ) {
+                bindingResult.addError(new FieldError(object, "role", directorResponse));
+            }
+            if (director.getId() == staffUpdateRequest.id().longValue()
+                    && !director.getStaffStatus().equals(staffUpdateRequest.status())
+            ) {
+                bindingResult.addError(new FieldError(object, "status", directorResponse));
+            }
+        }
+
+    }
+
+    public void isStaffActivateValidation(InviteRequest inviteRequest, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            Staff staff = staffService.getStaffByEmail(staffService.loadUserByToken(inviteRequest.token()).getUsername());
+            String activateResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                activateResponse = "Користувач вже є активним";
+            } else {
+                activateResponse = "User is already active";
+            }
+            if (staff.getStaffStatus() != UserStatus.NEW) {
+                bindingResult.addError(new FieldError(object, "Activate staff", activateResponse));
+            }
+        }
+    }
 
     public void isEmailUniqueValidation(String email, BindingResult bindingResult, String object, Locale locale) {
         if (!bindingResult.hasErrors()) {

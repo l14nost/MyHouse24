@@ -79,13 +79,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="row status">
+                <div class="row">
                     <div class="col-6">
                         <div class="form-group">
                             <label class="form-label" th:text="#{staff.save.inp.role}"></label>
-                            <select id="role" class="mb-1 form-select form-select" aria-label=".form-select-lg example">
-                                <option th:each="role:${T(lab.space.my_house_24.enums.JobTitle).values()}"
-                                        th:text="${role.getJobTitle(#locale)}" th:value="${role.name()}"></option>
+                            <select id="role" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6" id="status-col" hidden>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{staff.save.inp.status}"></label>
+                            <select id="status" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
                             </select>
                         </div>
                     </div>
@@ -117,38 +124,30 @@
         $(document).ready(function () {
             typeReq = false;
             if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                document.getElementById('status-col').removeAttribute('hidden');
                 staffId = new URL(window.location.href).pathname.split("/").pop()
                 typeReq = true;
                 getStaffDTO(staffId);
+                getStatus();
             }
+
             console.log(staffId);
         });
 
 
         function getStaffDTO(id) {
-            const statusDiv = `
-                <div class="col-6">
-                    <div class="form-group">
-                        <label class="form-label" th:text="#{staff.save.inp.status}"></label>
-                        <select id="status" class="mb-1 form-select form-select"
-                                aria-label=".form-select-lg example">
-                            <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}"
-                                    th:text="${status.getUserStatus(#locale)}" th:value="${status.name()}"></option>
-                        </select>
-                    </div>
-                </div>`;
-            $(statusDiv).appendTo('.row')
             $.ajax({
                 method: "GET",
                 url: "/admin/staff/get-staff-edit-dto/" + id,
                 dataType: 'json'
             }).done(function (staffResponse) {
+                console.log(staffResponse)
                 $("#firstname").val(staffResponse?.firstname);
                 $("#lastname").val(staffResponse?.lastname);
                 $("#phone").val(staffResponse?.phone);
                 $("#email").val(staffResponse?.email);
-                $("#role").val(staffResponse?.role);
-                $("#status").val(staffResponse?.status);
+                $("#role").append('<option selected value="' + staffResponse?.role?.name + '">' + staffResponse?.role?.value + '</option>');
+                $("#status").append('<option selected value="' + staffResponse?.status?.name + '">' + staffResponse?.status?.value + '</option>');
             });
         }
 
@@ -175,7 +174,9 @@
             staffRequest.password = $("#password").val();
             staffRequest.confirmPassword = $("#confirmPassword").val();
             staffRequest.role = $("#role").val();
-            staffRequest.status = $("#status").val();
+            if ($("#status").val() !==''){
+                staffRequest.status = $("#status").val();
+            }
             console.log(staffRequest)
             console.log(staffRequest)
             $.ajax({
@@ -197,11 +198,55 @@
                 if (errors.email) validResponse($('#email'), errors.email);
                 if (errors.password) validResponse($('#password'), errors.password, 'div.input-group');
                 if (errors.confirmPassword) validResponse($('#confirmPassword'), errors.confirmPassword);
-                if (errors.role) validResponse($('#role'), errors.role);
-                if (errors.status) validResponse($('#status'), errors.status);
+                if (errors.role) validResponse($('#role'), errors.role, 'div');
+                if (errors.status) validResponse($('#status'), errors.status, 'div');
 
             })
         }
+
+        function getStatus(){
+            $('#status').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/staff/get-all-status',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
+        $('#role').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/staff/get-all-job-title',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
 
     </script>
 

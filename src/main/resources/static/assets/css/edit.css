@@ -61,3 +61,9 @@
 .btn.disabled{
     border-color: transparent;
 }
+
+.select2-container--bootstrap-5 .select2-selection {
+    min-height: 42px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #eee;
+}

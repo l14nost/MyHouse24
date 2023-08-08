@@ -32,6 +32,7 @@
 <!-- Flatpickr Script -->
 <script th:src="@{/assets/vendor/flatpickr/dist/flatpickr.min.js}"></script>
 <script th:src="@{/assets/js/plugins/flatpickr.js}" defer></script>
+<script th:src="@{/assets/js/select2/select2.full.min.js}"></script>
 
 <script th:src="@{/assets/js/plugins/prism.mini.js}"></script>
 
@@ -67,7 +68,6 @@
     observer.observe(targetElement, config);
 
 
-
 </script>
 <script>
 
@@ -99,8 +99,6 @@
             logoImg.src = '/admin/assets/images/Flag/flag002.png';
         }
     }
-
-
 
     changeLogoLang();
 

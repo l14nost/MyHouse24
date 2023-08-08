@@ -1,15 +1,16 @@
 package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
-import lab.space.my_house_24.model.staff.StaffResponse;
-import lab.space.my_house_24.model.staff.StaffSaveRequest;
-import lab.space.my_house_24.model.staff.StaffUpdateRequest;
+import lab.space.my_house_24.model.enums_response.JobTitleResponse;
+import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.staff.*;
 import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.StaffValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -49,9 +50,25 @@ public class StaffController {
     }
 
 
-    @GetMapping("/get-all-staff")
-    public ResponseEntity<List<StaffResponse>> getAllStaff() {
-        return ResponseEntity.ok(staffService.getAllStaffDto());
+    @PostMapping("/get-all-staff")
+    public ResponseEntity<Page<StaffResponse>> getAllStaff(@RequestBody StaffRequest staffRequest) {
+        return ResponseEntity.ok(staffService.getAllStaffDto(staffRequest));
+    }
+
+    @GetMapping("/get-all-job-title")
+    public ResponseEntity<List<JobTitleResponse>> getAllJobTitle() {
+        return ResponseEntity.ok(staffService.getAllJobTitle());
+    }
+
+    @GetMapping("/get-all-status")
+    public ResponseEntity<List<StatusResponse>> getAllStatus() {
+        return ResponseEntity.ok(staffService.getAllStatus());
+    }
+
+    @PostMapping("/send-invite")
+    public ResponseEntity<?> sendInvite(@RequestBody InviteRequest inviteRequest) {
+        staffService.sendInvite(inviteRequest);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/get-staff-edit-dto/{id}")
@@ -94,6 +111,10 @@ public class StaffController {
         staffValidator.isEmailUniqueValidationWithId(staffUpdateRequest.id(),
                 staffUpdateRequest.email(), bindingResult,
                 "StaffUpdateRequest", LocaleContextHolder.getLocale());
+        staffValidator.isStaffMainDirectorValidation(
+                staffUpdateRequest, bindingResult,
+                "StaffUpdateRequest", LocaleContextHolder.getLocale()
+        );
         if (!staffUpdateRequest.password().equals("")) {
             staffValidator.passwordEqualsValidation(
                     staffUpdateRequest.password(),

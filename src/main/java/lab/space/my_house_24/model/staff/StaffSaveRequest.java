@@ -3,7 +3,6 @@ package lab.space.my_house_24.model.staff;
 
 import jakarta.validation.constraints.*;
 import lab.space.my_house_24.enums.JobTitle;
-import lab.space.my_house_24.enums.UserStatus;
 import lombok.Builder;
 
 @Builder
@@ -35,8 +34,6 @@ public record StaffSaveRequest(
         @Size(min = 4,message = "{size.greater.message} " + "{min}")
         String confirmPassword,
         @NotNull(message = "{not.blank.message}")
-        JobTitle role,
-        @NotNull(message = "{not.blank.message}")
-        UserStatus status
+        JobTitle role
 ) {
 }

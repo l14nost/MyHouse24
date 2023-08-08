@@ -34,7 +34,7 @@
         <div class="card">
             <div class="card-header d-flex">
                 <div class="col text-end">
-                    <button onclick="getAllStaff()" type="button" class="btn btn-light" style="height: 40px"
+                    <button onclick="clearInput()" type="button" class="btn btn-light" style="height: 40px"
                             th:text="#{staff.button.clear}"></button>
                 </div>
             </div>
@@ -53,28 +53,23 @@
                     </tr>
                     <tr id="search">
                         <td>
-                            <input class="form-control" type="text" name="id">
+                            <input class="form-control" type="text" id="id">
                         </td>
                         <td>
-                            <input class="form-control" type="text" name="fullName">
+                            <input class="form-control" type="text" id="fullName">
                         </td>
                         <td>
-                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example"
-                                    name="role">
-                                <option selected=""></option>
-                                <option th:each="role:${roles}" th:text="${role.jobTitle}"></option>
+                            <select id="role" class="mb-1 form-select" aria-label=".form-select-lg example" style="width: 160px; height: 40px">
+                                <option value=""></option>
                             </select>
                         </td>
                         <td>
-                            <input class="form-control" type="text" name="phone">
+                            <input class="form-control" type="text" id="phone">
                         </td>
-                        <td><input class="form-control" type="text" name="email"></td>
+                        <td><input class="form-control" type="text" id="email"></td>
                         <td>
-                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example"
-                                    name="status">
-                                <option selected=""></option>
-                                <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}"
-                                        th:text="${status.getUserStatus(#locale)}" th:value="${status.name()}"></option>
+                            <select id="status" class="mb-1 form-select" aria-label=".form-select-lg example" style="width: 160px; height: 40px">
+                                <option value=""></option>
                             </select>
                         </td>
                         <td>
@@ -88,20 +83,6 @@
             </div>
             <div class="card-footer">
                 <div class="row" style="display: flex; justify-content: space-between">
-                    <div th:text="#{table.show.info.Showing} + ' 1 ' + #{table.show.info.to} + ' 10 ' + #{table.show.info.of}+' 57 '+#{table.show.info.entries}">
-
-                    </div>
-                    <div>
-                        <nav aria-label="Page navigation example">
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#"><</a></li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">></a></li>
-                            </ul>
-                        </nav>
-                    </div>
                 </div>
             </div>
         </div>
@@ -141,19 +122,35 @@
     <script>
 
         let staffId;
+        let staffRequest ={};
+        staffRequest.pageIndex = 0;
+        let filterTimeout;
+        let inviteRequest ={};
 
         $(document).ready(function () {
             getAllStaff();
-
             $(document.body).on("click", "tr", function (e) {
                 if (!($(e.target).attr("data-actions") === "data-actions") && !$(e.target).is("svg") && !$(e.target).is("a") && !$(e.target).is("path")) {
                     const href = $(this).data('href');
                     if (href) {
-                        console.log(e)
                         window.location.href = href;
                     }
                 }
 
+                $('#id, #fullName, #phone, #email').on('input', function () {
+                    clearTimeout(filterTimeout);
+                    filterTimeout = setTimeout(function () {
+                        updateStaffRequestAndSend();
+                    }, 1000);
+                });
+
+                $('#status').on('select2:select', function () {
+                    updateStaffRequestAndSend();
+                });
+
+                $('#role').on('select2:select', function () {
+                    updateStaffRequestAndSend();
+                });
             });
 
 
@@ -166,15 +163,16 @@
 
         function getAllStaff() {
             $.ajax({
-                method: "GET",
+                method: "POST",
                 url: "/admin/staff/get-all-staff",
                 dataType: 'json',
-                contentType: 'application/json'
+                contentType: 'application/json',
+                data: JSON.stringify(staffRequest)
             }).done(function (staffResponse) {
                 console.info(staffResponse)
-                const TABLE_BODY = createTable('#staff-table', 10, 1, 1);
-                $.each(staffResponse, function (index, staff) {
-                    const $reload = '<a class="btn btn-sm btn-icon text-dark" data-bs-toggle="tooltip" aria-label="Reload page" data-bs-original-title="Reload page" data-status="' + staff.status + '" onclick="sendInvite(' + staff.id + ')">' +
+                const TABLE_BODY = createTable('#staff-table', staffResponse?.totalElements, staffResponse?.totalPages , staffRequest?.pageIndex);
+                $.each(staffResponse?.content, function (index, staff) {
+                    const $reload = '<a class="btn btn-sm btn-icon text-dark" data-bs-toggle="tooltip" aria-label="Reload page" data-bs-original-title="Reload page" data-status="' + staff.status.value + '" onclick="sendInvite(\'' + staff.email + '\')">' +
                         '<span class="btn-inner">' +
                         '<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">' +
                         '<path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg>' +
@@ -201,19 +199,32 @@
                     $(TABLE_BODY).append(
                         '<tr  data-href="/admin/staff/card-' + staff.id + '" data-key="' + staff.id + '">' +
                         '    <td>' + staff.id + '</td>' +
-                        '    <td>' + (staff?.fullName ? staff?.fullName : '-') + '</td>' +
-                        '    <td>' + (staff?.role ? staff?.role : '-') + '</td>' +
-                        '    <td>' + (staff?.phone ? staff?.phone : '—') + '</td>' +
-                        '    <td>' + (staff?.email ? staff?.email : '—') + '</td>' +
-                        '    <td>' + (staff?.status ? staff?.status : '—') + '</td>' +
+                        '    <td>' + staff?.fullName + '</td>' +
+                        '    <td>' + staff?.role.value + '</td>' +
+                        '    <td>' + staff?.phone + '</td>' +
+                        '    <td>' + staff?.email + '</td>' +
+                        '    <td class="h5 status-cell"><span class="badge" data-status="' + staff.status.name + '">' + staff?.status.value + '</span></td>' +
                         '    <td data-actions="data-actions">' + $reload + $edit + $deleteBtn + '</td>' +
                         '</tr>'
                     );
-
                 });
+
+                document.querySelectorAll('.status-cell').forEach(function (cell){
+                    let badge = cell.querySelector('.badge');
+                    if (badge.getAttribute('data-status') === 'ACTIVE') {
+                        badge.classList.add("rounded-pill", "bg-success");
+                    }
+                    if (badge.getAttribute('data-status') === 'NEW') {
+                        badge.classList.add("rounded-pill", "bg-warning");
+                    }
+                    if (badge.getAttribute('data-status') === 'DISABLED') {
+                        badge.classList.add("rounded-pill", "bg-danger");
+                    }
+                });
+
+
                 document.querySelectorAll("a.btn.btn-sm.btn-icon.text-danger").forEach(function (button) {
                     let idValue = button.getAttribute("data-id");
-                    console.log(idValue);
                     if (idValue === "1") {
                         button.classList.add('disabled');
                     }
@@ -221,7 +232,6 @@
 
                 document.querySelectorAll("a.btn.btn-sm.btn-icon.text-dark").forEach(function (button) {
                     let statusValue = button.getAttribute("data-status");
-                    console.log(statusValue);
                     if (statusValue !== 'New' && statusValue !== 'Новий') {
                         button.classList.add('disabled');
                     }
@@ -263,13 +273,11 @@
                 pagesCount = Number(pagesCount);
                 pageIndex = Number(pageIndex) + 1;
                 itemsCount = Number(itemsCount);
-
                 if (itemsCount > 0) {
                     $(TABLE_PAGINATION_ROW).append(
-                        $($(colDiv).addClass('pagination-info').addClass('text-white'))
-                            .append('#{table.show.info.Showing} I X-Y of entries Z'
+                        $($(colDiv).addClass('pagination-info').addClass('text-black'))
+                            .append('[(${#messages.msg('staff.table.footer.shown')})] X-Y [(${#messages.msg('staff.table.footer.of')})] Z [(${#messages.msg('staff.table.footer.records')})]'
                                 .replace('X', ((pageIndex - 1) * 10 + 1))
-                                .replace('I', (pageIndex))
                                 .replace('Y', Math.min(pageIndex * 10, itemsCount))
                                 .replace('Z', itemsCount))
                     );
@@ -360,6 +368,18 @@
 
         }
 
+        $(document).on('click', 'a.page-link', function () {
+            const pageBtn = $(this);
+            if ($(pageBtn).parent('li.page-item').hasClass('prev')) {
+                staffRequest.pageIndex = --staffRequest.pageIndex;
+            } else if ($(pageBtn).parent('li.page-item').hasClass('next')) {
+                staffRequest.pageIndex = ++staffRequest.pageIndex;
+            } else {
+                staffRequest.pageIndex = Number($(pageBtn).text()) - 1;
+            }
+            getAllStaff();
+        });
+
         function staffDelete() {
             $.ajax({
                 method: "DELETE",
@@ -378,8 +398,89 @@
             })
         }
 
-        function sendInvite(id) {
-            console.log(id);
+
+        function clearInput(){
+            $('#search td select').val('').trigger('change');
+            $('#search td select option').remove();
+            $('#search input').val('');
+            updateStaffRequestAndSend();
+            showToast('success')
+        }
+
+        function sendInvite(email) {
+            inviteRequest.email = email;
+            console.log(email);
+            $.ajax({
+                method: "POST",
+                url: "/admin/staff/send-invite",
+                contentType: 'application/json',
+                data: JSON.stringify(inviteRequest)
+            }).done(function () {
+                inviteRequest = undefined;
+                showToast('success');
+            }).fail(function (response) {
+                console.log(response);
+                showToast('error');
+                inviteRequest = undefined;
+            })
+        }
+
+
+        $('#status').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/staff/get-all-status',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+
+        $('#role').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/staff/get-all-job-title',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+        function updateStaffRequestAndSend() {
+            staffRequest.idQuery = $('#id').val();
+            staffRequest.staffQuery = $('#fullName').val();
+            staffRequest.phoneQuery = $('#phone').val();
+            staffRequest.emailQuery = $('#email').val();
+            if ($('#status').val()!==''){
+                staffRequest.statusQuery = $('#status').val();
+            }
+            if ($('#role').val()!==''){
+                staffRequest.jobTitleQuery = $('#role').val();
+            }
+            staffRequest.pageIndex = 0;
+            getAllStaff();
         }
     </script>
 

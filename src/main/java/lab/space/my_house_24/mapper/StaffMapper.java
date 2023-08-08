@@ -1,13 +1,15 @@
 package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Staff;
-import lab.space.my_house_24.model.staff.StaffEditResponse;
-import lab.space.my_house_24.model.staff.StaffResponse;
-import lab.space.my_house_24.model.staff.StaffSaveRequest;
-import lab.space.my_house_24.model.staff.StaffUpdateRequest;
+import lab.space.my_house_24.enums.UserStatus;
+import lab.space.my_house_24.model.enums_response.JobTitleResponse;
+import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.staff.*;
 import lab.space.my_house_24.service.RoleService;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import static java.util.Objects.nonNull;
 
 public interface StaffMapper {
     static StaffResponse toSimpleDto(Staff staff) {
@@ -16,8 +18,18 @@ public interface StaffMapper {
                 .fullName(staff.getFirstname() + " " + staff.getLastname())
                 .phone(staff.getPhone())
                 .email(staff.getEmail())
-                .role(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
-                .status(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                .role(JobTitleResponse
+                        .builder()
+                        .name(staff.getRole().getJobTitle().name())
+                        .value(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
+                        .build()
+                )
+                .status(StatusResponse
+                        .builder()
+                        .name(staff.getStaffStatus().name())
+                        .value(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                        .build()
+                )
                 .build();
     }
 
@@ -26,8 +38,18 @@ public interface StaffMapper {
                 .fullName(staff.getFirstname() + " " + staff.getLastname())
                 .phone(staff.getPhone())
                 .email(staff.getEmail())
-                .role(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
-                .status(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                .role(JobTitleResponse
+                        .builder()
+                        .name(staff.getRole().getJobTitle().name())
+                        .value(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
+                        .build()
+                )
+                .status(StatusResponse
+                        .builder()
+                        .name(staff.getStaffStatus().name())
+                        .value(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                        .build()
+                )
                 .build();
     }
 
@@ -37,8 +59,18 @@ public interface StaffMapper {
                 .lastname(staff.getLastname())
                 .phone(staff.getPhone())
                 .email(staff.getEmail())
-                .role(staff.getRole().getJobTitle())
-                .status(staff.getStaffStatus())
+                .role(JobTitleResponse
+                        .builder()
+                        .name(staff.getRole().getJobTitle().name())
+                        .value(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
+                        .build()
+                )
+                .status(StatusResponse
+                        .builder()
+                        .name(staff.getStaffStatus().name())
+                        .value(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                        .build()
+                )
                 .build();
     }
 
@@ -50,7 +82,7 @@ public interface StaffMapper {
                 .email(staffSaveRequest.email())
                 .password(new BCryptPasswordEncoder().encode(staffSaveRequest.password()))
                 .role(roleService.getRoleByJobTitle(staffSaveRequest.role()))
-                .staffStatus(staffSaveRequest.status())
+                .staffStatus(UserStatus.NEW)
                 .build();
     }
 
@@ -63,9 +95,16 @@ public interface StaffMapper {
                 .setRole(roleService.getRoleByJobTitle(staffUpdateRequest.role()))
                 .setStaffStatus(staffUpdateRequest.status());
 
-        if (staffUpdateRequest.password() != null && !staffUpdateRequest.password().equals("")) {
+        if (nonNull(staffUpdateRequest.password()) && !staffUpdateRequest.password().equals("") && !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(),staff.getPassword()) ) {
             staff.setPassword(new BCryptPasswordEncoder().encode(staffUpdateRequest.password()));
         }
         return staff;
+    }
+
+    static Staff activateStaff(InviteRequest inviteRequest, Staff staff) {
+        return staff
+                .setPassword(new BCryptPasswordEncoder().encode(inviteRequest.password()))
+                .setTokenUsage(true)
+                .setStaffStatus(UserStatus.ACTIVE);
     }
 }
