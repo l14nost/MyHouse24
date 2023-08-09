@@ -81,7 +81,8 @@
                         <th th:text="#{apartment.balance}" ></th>
                         <th style="min-width: 100px"></th>
                     </tr>
-                    <tr id="searchUserTable">
+                    <tr id="searchApartmentTable">
+                        <form id="filter">
                         <td>
                             <input class="form-control" type="text" name="number" style="width: 70px;">
                         </td>
@@ -89,7 +90,7 @@
                             <option selected=""></option>
                             <option th:each="house:${houseList}" th:text="${house.name()}"></option>
                         </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" >
+                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
                             <option selected=""></option>
                             <option th:each="section:${sectionList}" th:text="${section.name()}"></option>
                         </select></td>
@@ -97,15 +98,16 @@
                             <option selected=""></option>
                             <option th:each="floor:${floorList}" th:text="${floor.name()}"></option>
                         </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner">
+                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner" style="width: 150px">
                             <option selected=""></option>
-                            <option th:each="owner:${ownerList}" th:text="${owner.name()}"></option>
+<!--                            <option th:each="owner:${ownerList}" th:name="${owner.name()}"></option>-->
                         </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="balance" >
+                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="balance" id="balance" >
                             <option selected=""></option>
-                            <option th:text="#{apartment.debt}"></option>
-                            <option th:text="#{apartment.no.debt}"></option>
+                            <option th:text="#{apartment.debt}" value="true"></option>
+                            <option th:text="#{apartment.no.debt}" value="false"></option>
                         </select></td>
+                        </form>
                         <td>
                         </td>
                     </tr>
@@ -177,47 +179,137 @@
 
 
         function clearFilters(){
-            getAllApartment(0);
+            $('#searchApartmentTable input').val('');
+            $('#searchApartmentTable select').val(null).trigger("change");
+            var formData = new FormData();
+            formData.append("page", "0");
+            getAllApartment(formData);
+        }
+
+        var filterData = new FormData(document.getElementById("filter"));
+        function filter() {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            filterData = formData;
+            formData.append("page", "0");
+            getAllApartment(formData);
         }
 
 
 
 
-        $(document).ready(function (){
+        document.addEventListener("click", function () {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            for (var pair of formData.entries()){
+                if (filterData.get(pair[0])!==pair[1]){
+                    filter();
+                }
+            }
+
+        });
+
+        function select2(lang){
             var defaultSelect = " ";
+            console.log(lang);
             $("#floor").select2({
+                language: lang,
                 placeholder: defaultSelect,
                 minimumResultsForSearch: Infinity
             });
             $("#house").select2({
+                language: lang,
                 placeholder: defaultSelect,
                 minimumResultsForSearch: 0
             });
             $("#owner").select2({
-                placeholder: defaultSelect,
-                minimumResultsForSearch: 2
+                language: lang,
+                ajax: {
+                    url: "/admin/get-users/apartment-table",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data.totalPages);
+                        console.log(params.page);
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.name,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
-            getAllApartment(0);
+            $("#section").select2({
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+            $("#floor").select2({
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+            $("#balance").select2({
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+        }
+
+
+        $(document).ready(function (){
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", "0");
+            getAllApartment(formData);
 
         });
         function changePage(page,event){
             event.preventDefault();
-            getAllApartment(page);
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", page);
+            getAllApartment(formData);
 
         }
 
-        function getAllApartment(page) {
+        function getAllApartment(formData) {
 
-            let pageIndex = page;
-            let userMainPageRequest = {
-                page: pageIndex
-            }
+            let page = parseInt(formData.get("page"));
+
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
             $.ajax({
                 method: "POST",
                 url: "/admin/get-all-apartments",
                 dataType: 'json',
                 contentType: 'application/json',
-                data: JSON.stringify(userMainPageRequest)
+                data: JSON.stringify(jsonData)
             })
                 .done(
                     function (apartmentResponse) {
@@ -231,6 +323,10 @@
                             const container1 = document.getElementById("tableInfo");
                             container1.style.display = "none";
                         } else {
+                            const container2 = document.getElementById("emptyTable");
+                            container2.style.display = "none";
+                            const container3 = document.getElementById("tableInfo");
+                            container3.style.display = "flex";
                             $.each(apartmentResponse.content, function (index, apartment) {
                                 const container = document.getElementById("table");
                                 const newTr = document.createElement("tr");

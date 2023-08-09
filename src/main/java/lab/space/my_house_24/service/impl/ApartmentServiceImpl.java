@@ -21,6 +21,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public Page<ApartmentResponse> findAllForMainPage(ApartmentRequestForMainPage apartmentRequestForMainPage) {
+
          return apartmentRepository.findAll(ApartmentSpecification.builder().apartmentRequestForMainPage(apartmentRequestForMainPage).build(), PageRequest.of(apartmentRequestForMainPage.page(),10)).map(ApartmentMapper::entityToDtoForMainPage);
     }
     @Override

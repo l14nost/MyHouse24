@@ -29,6 +29,7 @@ public class ApartmentController {
 
     @PostMapping("/get-all-apartments")
     public ResponseEntity allApartment(@RequestBody ApartmentRequestForMainPage apartmentRequestForMainPage){
+        System.out.println(apartmentRequestForMainPage.toString());
         return ResponseEntity.ok().body(apartmentService.findAllForMainPage(apartmentRequestForMainPage));
     }
 

@@ -223,7 +223,7 @@ be a descendant of the grid when it is being dragged.
 
 .fc-time-grid-event.fc-short .fc-time span {
   display: none;
-  /* don't display the full time text... */
+  /* don't display the full time name... */
 }
 
 .fc-time-grid-event.fc-short .fc-time:before {
@@ -238,7 +238,7 @@ be a descendant of the grid when it is being dragged.
 
 .fc-time-grid-event.fc-short .fc-title {
   font-size: 0.85em;
-  /* make the title text the same size as the time */
+  /* make the title name the same size as the time */
   padding: 0;
   /* undo padding from above */
 }

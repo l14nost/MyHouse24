@@ -7,11 +7,13 @@ import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.repository.UserRepository;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.specification.UserSpecification;
+import lab.space.my_house_24.specification.UserSpecificationForTable;
 import lab.space.my_house_24.util.FileHandler;
 import lab.space.my_house_24.util.CustomMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -123,6 +125,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseForTable> userListForTable() {
         return userRepository.findAll().stream().map(UserMapper::entityToDtoForTable).toList();
+    }
+
+
+    public Page<UserResponseForTable> userResponseForTables(Integer page, String search){
+        UserSpecificationForTable userSpecificationForTable = UserSpecificationForTable.builder().search(search).build();
+        return userRepository.findAll(userSpecificationForTable, PageRequest.of(page,5)).map(UserMapper::entityToDtoForTable);
     }
 
 

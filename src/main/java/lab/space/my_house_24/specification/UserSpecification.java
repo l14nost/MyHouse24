@@ -47,7 +47,7 @@ public class UserSpecification implements Specification<User> {
         if (userMainPageRequest.house()!=null&&!userMainPageRequest.house().isEmpty()){
             Join<User, Apartment> apartmentJoin = root.join("apartmentList", JoinType.INNER);
             Join<Apartment, House> houseJoin = apartmentJoin.join("house", JoinType.INNER);
-            predicates.add(criteriaBuilder.like(houseJoin.get("name"),"%"+userMainPageRequest.house()+"%"));
+            predicates.add(criteriaBuilder.like(houseJoin.get("text"),"%"+userMainPageRequest.house()+"%"));
         }
 
         if (userMainPageRequest.apartmentNumber()!=null){

@@ -7,11 +7,14 @@ import lab.space.my_house_24.service.impl.UserServiceImpl;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +33,6 @@ public class UserController {
 
     @PostMapping("/get-all-users")
     public ResponseEntity getAllUserSpecification(@RequestBody UserMainPageRequest userMainPageRequest){
-        System.out.println(userMainPageRequest.toString());
         return ResponseEntity.ok(userService.getAllUserDto(userMainPageRequest));
     }
 
@@ -110,5 +112,12 @@ public class UserController {
         }
         userService.inviteUser(userInviteRequest);
         return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/get-users/apartment-table")
+    @ResponseBody
+    public Page<UserResponseForTable> userForApartmentTable(@RequestParam Integer page, @RequestParam String search){
+        return userService.userResponseForTables(page,search);
     }
 }
