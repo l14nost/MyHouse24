@@ -47,6 +47,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
 
     @Override
     public void sendInvite(InviteRequest inviteRequest) {
+        log.info("Try to send invite by email " + inviteRequest.email());
         Staff staff = getStaffByEmail(inviteRequest.email());
         String token = jwtService.generateToken(staff);
         staff.setToken(token);
@@ -57,6 +58,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
 
     @Override
     public void sendUpdatePasswordWarning(String email, Locale locale) {
+        log.info("Try to send update pass warn by email " + email);
         String text;
         String subject;
         if (locale.toLanguageTag().equals("uk")) {
@@ -97,6 +99,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
 
     @Override
     public List<EnumResponse> getAllJobTitle() {
+        log.info("Try to get all jobTitle");
         return Arrays.stream(JobTitle.values())
                 .map(jobTitle -> EnumResponse.builder()
                         .name(jobTitle.name())
@@ -107,6 +110,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
 
     @Override
     public List<EnumResponse> getAllStatus() {
+        log.info("Try to get all status");
         return Arrays.stream(UserStatus.values())
                 .map(status -> EnumResponse.builder()
                         .name(status.name())
@@ -260,6 +264,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByToken(String token) throws JWTVerificationException {
+        log.info("Try to search by token");
         String email = jwtService.extractUsername(token);
         return loadUserByUsername(email);
     }
