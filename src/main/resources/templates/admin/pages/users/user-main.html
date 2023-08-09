@@ -360,26 +360,29 @@
                             })
 
                             if (userResponse.totalPages >= 2 && userResponse.totalPages<7) {
-                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'><</a></li>\n";
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'>❮</a></li>\n";
                                 var containerPagination = document.getElementById("pagination");
                                 const newUl = document.createElement("ul");
                                 newUl.id = "userPaginationList";
                                 newUl.classList.add("pagination");
+                                newUl.classList.add("pagination-sm");
+                                newUl.classList.add("mb-0");
                                 for (var i = 0; i < userResponse.totalPages; i++) {
                                     var currentNum = i + 1;
 
                                     addElements += "<li class=\"page-item " + checkCurrentPage(currentNum) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+i+','+'event'+")'>" + currentNum + "</a></li>\n"
                                 }
-                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>></a></li>\n"
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>❯</a></li>\n"
                                 newUl.innerHTML = addElements
                                 containerPagination.appendChild(newUl);
                             }
                             else if (userResponse.totalPages>=7) {
-                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'><</a></li>\n";
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'>❮</a></li>\n";
                                 var containerPagination = document.getElementById("pagination");
                                 const newUl = document.createElement("ul");
                                 newUl.id = "userPaginationList";
                                 newUl.classList.add("pagination");
+                                newUl.classList.add("pagination-sm mb-0");
                                 addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+'event'+")'> 1 </a></li>\n"
                                 if (page-2<0){
                                     addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+'event'+")'> 2 </a></li>\n"
@@ -404,7 +407,7 @@
                                 }
 
                                 addElements+="<li class=\"page-item " + checkCurrentPage(userResponse.totalPages) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(userResponse.totalPages - 1)+','+'event'+")'> "+ userResponse.totalPages +" </a></li>\n"
-                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>></a></li>\n"
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>❯</a></li>\n"
                                 newUl.innerHTML = addElements
                                 containerPagination.appendChild(newUl);
                             }
