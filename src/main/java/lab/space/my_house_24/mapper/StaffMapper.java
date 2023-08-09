@@ -2,8 +2,7 @@ package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.enums.UserStatus;
-import lab.space.my_house_24.model.enums_response.JobTitleResponse;
-import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
 import lab.space.my_house_24.service.RoleService;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,13 +17,13 @@ public interface StaffMapper {
                 .fullName(staff.getFirstname() + " " + staff.getLastname())
                 .phone(staff.getPhone())
                 .email(staff.getEmail())
-                .role(JobTitleResponse
+                .role(EnumResponse
                         .builder()
                         .name(staff.getRole().getJobTitle().name())
                         .value(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
                         .build()
                 )
-                .status(StatusResponse
+                .status(EnumResponse
                         .builder()
                         .name(staff.getStaffStatus().name())
                         .value(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
@@ -38,13 +37,13 @@ public interface StaffMapper {
                 .fullName(staff.getFirstname() + " " + staff.getLastname())
                 .phone(staff.getPhone())
                 .email(staff.getEmail())
-                .role(JobTitleResponse
+                .role(EnumResponse
                         .builder()
                         .name(staff.getRole().getJobTitle().name())
                         .value(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
                         .build()
                 )
-                .status(StatusResponse
+                .status(EnumResponse
                         .builder()
                         .name(staff.getStaffStatus().name())
                         .value(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))
@@ -59,13 +58,13 @@ public interface StaffMapper {
                 .lastname(staff.getLastname())
                 .phone(staff.getPhone())
                 .email(staff.getEmail())
-                .role(JobTitleResponse
+                .role(EnumResponse
                         .builder()
                         .name(staff.getRole().getJobTitle().name())
                         .value(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
                         .build()
                 )
-                .status(StatusResponse
+                .status(EnumResponse
                         .builder()
                         .name(staff.getStaffStatus().name())
                         .value(staff.getStaffStatus().getUserStatus(LocaleContextHolder.getLocale()))

@@ -1,8 +1,7 @@
 package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.Staff;
-import lab.space.my_house_24.model.enums_response.JobTitleResponse;
-import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +24,9 @@ public interface StaffService {
 
     Staff getStaffByEmail(String email);
 
-    List<JobTitleResponse> getAllJobTitle();
+    List<EnumResponse> getAllJobTitle();
 
-    List<StatusResponse> getAllStatus();
+    List<EnumResponse> getAllStatus();
 
     Staff getMainDirector();
 
