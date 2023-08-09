@@ -59,7 +59,7 @@
                     </tr>
                     <tr>
                         <td th:text="#{staff.card.table.status}"></td>
-                        <td class="h5"><span id="status" class="badge text-white"></span></td>
+                        <td class="h5" id="status"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -100,25 +100,9 @@
                 $("#phone").text(staffResponse?.phone);
                 $("#email").text(staffResponse?.email);
                 $("#role").text(staffResponse?.role.value);
-                $("#status").text(staffResponse?.status.value);
-                addBadgeStatus(staffResponse?.status.name);
+                $("#status").html(addBadgeUserStatus(staffResponse?.status));
             });
-        }
 
-        function addBadgeStatus(status){
-            switch (status) {
-                case "ACTIVE":
-                    $(".badge").addClass("rounded-pill bg-success");
-                    break;
-                case "NEW":
-                    $(".badge").addClass("rounded-pill bg-warning");
-                    break;
-                case "DISABLED":
-                    $(".badge").addClass("rounded-pill bg-danger");
-                    break;
-                default:
-                    console.log("Unknown status");
-            }
         }
 
         function editStaff() {

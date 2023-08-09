@@ -203,25 +203,11 @@
                         '    <td>' + staff?.role.value + '</td>' +
                         '    <td>' + staff?.phone + '</td>' +
                         '    <td>' + staff?.email + '</td>' +
-                        '    <td class="h5 status-cell"><span class="badge" data-status="' + staff.status.name + '">' + staff?.status.value + '</span></td>' +
+                        '    <td class="h5 status-cell">' + addBadgeUserStatus(staff?.status) + '</td>' +
                         '    <td data-actions="data-actions">' + $reload + $edit + $deleteBtn + '</td>' +
                         '</tr>'
                     );
                 });
-
-                document.querySelectorAll('.status-cell').forEach(function (cell){
-                    let badge = cell.querySelector('.badge');
-                    if (badge.getAttribute('data-status') === 'ACTIVE') {
-                        badge.classList.add("rounded-pill", "bg-success");
-                    }
-                    if (badge.getAttribute('data-status') === 'NEW') {
-                        badge.classList.add("rounded-pill", "bg-warning");
-                    }
-                    if (badge.getAttribute('data-status') === 'DISABLED') {
-                        badge.classList.add("rounded-pill", "bg-danger");
-                    }
-                });
-
 
                 document.querySelectorAll("a.btn.btn-sm.btn-icon.text-danger").forEach(function (button) {
                     let idValue = button.getAttribute("data-id");

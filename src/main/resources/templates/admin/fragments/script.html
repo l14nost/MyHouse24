@@ -173,6 +173,32 @@
     }
 
 
+    function addBadgeUserStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'ACTIVE') badgeClasses += ' bg-success';
+        if (status?.name === 'NEW') badgeClasses += ' bg-warning';
+        if (status?.name === 'DISABLED') badgeClasses += ' bg-danger';
+
+        let badge = '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+        return badge;
+
+        // document.querySelectorAll('.status-cell').forEach(function (cell){
+        //     let badge = cell.querySelector('.badge');
+        //     if (badge.getAttribute('data-status') === 'ACTIVE') {
+        //         badge.classList.add("rounded-pill", "bg-success");
+        //     }
+        //     if (badge.getAttribute('data-status') === 'NEW') {
+        //         badge.classList.add("rounded-pill", "bg-warning");
+        //     }
+        //     if (badge.getAttribute('data-status') === 'DISABLED') {
+        //         badge.classList.add("rounded-pill", "bg-danger");
+        //     }
+        // });
+    }
+
 
 </script>
 
