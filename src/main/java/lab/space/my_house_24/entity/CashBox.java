@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 
 @Entity
-@Table(name = "statement")
+@Table(name = "cash_box")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Statement {
+public class CashBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

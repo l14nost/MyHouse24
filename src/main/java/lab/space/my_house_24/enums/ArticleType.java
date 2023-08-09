@@ -5,13 +5,13 @@ import lombok.RequiredArgsConstructor;
 import java.util.Locale;
 
 @RequiredArgsConstructor
-public enum BankBookStatus {
-    ACTIVE("Active", "Активний"),
-    INACTIVE("Inactive", "Неактивний");
+public enum ArticleType {
+    INCOME("Income", "Приход"),
+    EXPENSE("Expense", "Витрата");
     private final String nameEn;
     private final String nameUk;
 
-    public String getBankBookStatus(Locale locale) {
+    public String getArticleType(Locale locale) {
         if (locale.getLanguage().equalsIgnoreCase("uk")) {
             return nameUk;
         }

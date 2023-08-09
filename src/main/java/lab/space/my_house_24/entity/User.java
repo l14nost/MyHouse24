@@ -2,7 +2,10 @@ package lab.space.my_house_24.entity;
 
 import jakarta.persistence.*;
 import lab.space.my_house_24.enums.UserStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -65,7 +68,7 @@ public class User {
     private List<Apartment> apartmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Statement> statementList = new ArrayList<>();
+    private List<CashBox> cashBoxList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<MastersApplication> applicationList = new ArrayList<>();

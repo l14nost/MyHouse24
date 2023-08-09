@@ -56,7 +56,7 @@ public class Staff implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "staff")
-    private List<Statement> statementList = new ArrayList<>();
+    private List<CashBox> cashBoxList = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
