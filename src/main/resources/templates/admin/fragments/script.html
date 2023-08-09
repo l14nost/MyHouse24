@@ -185,12 +185,24 @@
         let badgeClasses = 'badge rounded-pill';
         let badgeText = status?.value;
 
+
         if (status?.name === 'ACTIVE') badgeClasses += ' bg-success';
         if (status?.name === 'NEW') badgeClasses += ' bg-warning';
         if (status?.name === 'DISABLED') badgeClasses += ' bg-danger';
 
-        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+        let badge = '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+        return badge;
     }
+
+    function handleScreenWidthChange() {
+        const screenWidth = window.innerWidth;
+        if (screenWidth<1200){
+            const sidebar = document.getElementById("sidebar");
+            sidebar.classList.add("sidebar-mini");
+        }
+    }
+    window.addEventListener("resize", handleScreenWidthChange);
+    handleScreenWidthChange();
 
 
 </script>

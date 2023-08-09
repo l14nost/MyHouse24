@@ -17,4 +17,9 @@ public class SectionServiceImpl implements SectionService {
     public List<SectionResponseForTable> sectionListForTable() {
         return sectionRepository.findAll().stream().map(SectionMapper::entityToDtoForTable).toList();
     }
+
+
+    public List<SectionResponseForTable> sectionByHouse(Long id){
+        return sectionRepository.findAllByHouse_Id(id).stream().map(SectionMapper::entityToDtoForTable).toList();
+    }
 }
