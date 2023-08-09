@@ -88,7 +88,7 @@
                         </td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
                             <option selected=""></option>
-                            <option th:each="house:${houseList}" th:text="${house.name()}"></option>
+                            <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}"></option>
                         </select></td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
                             <option selected=""></option>
@@ -100,7 +100,6 @@
                         </select></td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner" style="width: 150px">
                             <option selected=""></option>
-<!--                            <option th:each="owner:${ownerList}" th:name="${owner.name()}"></option>-->
                         </select></td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="balance" id="balance" >
                             <option selected=""></option>
@@ -234,8 +233,6 @@
                     },
                     processResults: function (data, params) {
                         params.page = params.page || 0;
-                        console.log(data.totalPages);
-                        console.log(params.page);
                         var mappedResults = data.content.map(function(item) {
                             return {
                                 id: item.name,

@@ -27,19 +27,18 @@ public class ApartmentSpecification implements Specification<Apartment> {
         }
         if (apartmentRequestForMainPage.house()!=null&&!apartmentRequestForMainPage.house().isEmpty()){
             Join<Apartment, House> houseJoin = root.join("house", JoinType.INNER);
-            predicates.add(criteriaBuilder.like(houseJoin.get("text"),"%"+apartmentRequestForMainPage.house()+"%"));
+            predicates.add(criteriaBuilder.like(houseJoin.get("name"),"%"+apartmentRequestForMainPage.house()+"%"));
         }
         if (apartmentRequestForMainPage.section()!=null&&!apartmentRequestForMainPage.section().isEmpty()){
             Join<Apartment, Section> sectionJoin = root.join("section", JoinType.INNER);
-            predicates.add(criteriaBuilder.like(sectionJoin.get("text"),"%"+apartmentRequestForMainPage.section()+"%"));
+            predicates.add(criteriaBuilder.like(sectionJoin.get("name"),"%"+apartmentRequestForMainPage.section()+"%"));
         }
         if (apartmentRequestForMainPage.floor()!=null&&!apartmentRequestForMainPage.floor().isEmpty()){
             Join<Apartment, Floor> sectionJoin = root.join("floor", JoinType.INNER);
-            predicates.add(criteriaBuilder.like(sectionJoin.get("text"),"%"+apartmentRequestForMainPage.floor()+"%"));
+            predicates.add(criteriaBuilder.like(sectionJoin.get("name"),"%"+apartmentRequestForMainPage.floor()+"%"));
         }
         if (apartmentRequestForMainPage.owner()!=null&&!apartmentRequestForMainPage.owner().isEmpty()){
             String[] ownerFullName = apartmentRequestForMainPage.owner().split(" ");
-            System.out.println(Arrays.toString(ownerFullName));
             Join<Apartment, User> userJoin = root.join("user", JoinType.INNER);
             predicates.add(criteriaBuilder.and(
                     criteriaBuilder.like(userJoin.get("firstname"),"%"+ownerFullName[1]+"%"),
