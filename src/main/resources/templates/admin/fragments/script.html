@@ -9,6 +9,7 @@
 
 <!-- mapchart Script -->
 <script th:src="@{/assets/js/charts/vectore-chart.js}"></script>
+
 <script th:src="@{/assets/js/charts/dashboard.js}"></script>
 
 <!-- fslightbox Script -->
@@ -31,15 +32,21 @@
 
 <!-- Flatpickr Script -->
 <script th:src="@{/assets/vendor/flatpickr/dist/flatpickr.min.js}"></script>
+
 <script th:src="@{/assets/js/plugins/flatpickr.js}" defer></script>
+
 <script th:src="@{/assets/js/select2/select2.full.min.js}"></script>
+
+<script th:src="@{/assets/js/select2/uk.js}"></script>
+
+<script th:src="@{/assets/js/quil/quil.js}"></script>
+
+<script th:src="@{/assets/js/quil/quill-image-resize.js}"></script>
+
+<script th:src="@{/assets/js/flatpickr/flatpickr.js}"></script>
 
 <script th:src="@{/assets/js/plugins/prism.mini.js}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/i18n/uk.js"></script>
 
 <script>
 
@@ -182,21 +189,7 @@
         if (status?.name === 'NEW') badgeClasses += ' bg-warning';
         if (status?.name === 'DISABLED') badgeClasses += ' bg-danger';
 
-        let badge = '<span class="' + badgeClasses + '">' + badgeText + '</span>';
-        return badge;
-
-        // document.querySelectorAll('.status-cell').forEach(function (cell){
-        //     let badge = cell.querySelector('.badge');
-        //     if (badge.getAttribute('data-status') === 'ACTIVE') {
-        //         badge.classList.add("rounded-pill", "bg-success");
-        //     }
-        //     if (badge.getAttribute('data-status') === 'NEW') {
-        //         badge.classList.add("rounded-pill", "bg-warning");
-        //     }
-        //     if (badge.getAttribute('data-status') === 'DISABLED') {
-        //         badge.classList.add("rounded-pill", "bg-danger");
-        //     }
-        // });
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
 
 
