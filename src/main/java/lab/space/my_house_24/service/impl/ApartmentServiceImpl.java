@@ -18,11 +18,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
     private final ApartmentRepository apartmentRepository;
+    private final HouseServiceImpl houseService;
 
     @Override
     public Page<ApartmentResponse> findAllForMainPage(ApartmentRequestForMainPage apartmentRequestForMainPage) {
+        if (apartmentRequestForMainPage.house()!=null && !apartmentRequestForMainPage.house().isEmpty()) {
+            ApartmentRequestForMainPage apartmentRequestForMainPage1 = ApartmentRequestForMainPage.builder()
+                    .page(apartmentRequestForMainPage.page())
+                    .balance(apartmentRequestForMainPage.balance())
+                    .floor(apartmentRequestForMainPage.floor())
+                    .house(houseService.findById(Long.parseLong(apartmentRequestForMainPage.house())).getName())
+                    .owner(apartmentRequestForMainPage.owner())
+                    .section(apartmentRequestForMainPage.section())
+                    .number(apartmentRequestForMainPage.number())
+                    .build();
+            return apartmentRepository.findAll(ApartmentSpecification.builder().apartmentRequestForMainPage(apartmentRequestForMainPage1).build(), PageRequest.of(apartmentRequestForMainPage.page(), 10)).map(ApartmentMapper::entityToDtoForMainPage);
+        }
 
-         return apartmentRepository.findAll(ApartmentSpecification.builder().apartmentRequestForMainPage(apartmentRequestForMainPage).build(), PageRequest.of(apartmentRequestForMainPage.page(),10)).map(ApartmentMapper::entityToDtoForMainPage);
+        else return apartmentRepository.findAll(ApartmentSpecification.builder().apartmentRequestForMainPage(apartmentRequestForMainPage).build(), PageRequest.of(apartmentRequestForMainPage.page(), 10)).map(ApartmentMapper::entityToDtoForMainPage);
     }
     @Override
     public void deleteApartment(Long id) {

@@ -72,11 +72,11 @@
                         </select></td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
                             <option selected=""></option>
-                            <option th:each="section:${sectionList}" th:text="${section.name()}"></option>
+<!--                            <option th:each="section:${sectionList}" th:text="${section.name()}"></option>-->
                         </select></td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="floor" id="floor">
                             <option selected=""></option>
-                            <option th:each="floor:${floorList}" th:text="${floor.name()}"></option>
+<!--                            <option th:each="floor:${floorList}" th:text="${floor.name()}"></option>-->
                         </select></td>
                         <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner" style="width: 150px">
                             <option selected=""></option>
@@ -188,6 +188,25 @@
 
         });
 
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("filter");
+
+            const selectElements = form.querySelectorAll("select");
+
+            function handleSelectChange() {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            }
+            selectElements.forEach(function(select) {
+                select.addEventListener("change", handleSelectChange);
+            });
+        });
+
+
         function select2(lang){
             var defaultSelect = " ";
             console.log(lang);
@@ -233,18 +252,79 @@
                 },
                 placeholder: defaultSelect
             });
-            $("#section").select2({
-                theme: 'bootstrap-5',
-                language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: Infinity
-            });
             $("#floor").select2({
                 theme: 'bootstrap-5',
                 language: lang,
                 placeholder: defaultSelect,
                 minimumResultsForSearch: Infinity
             });
+            $("#section").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+            $("#house").on("change", function (){
+                var idHouse = this.value;
+                        $("#section").select2({
+                            theme: 'bootstrap-5',
+                            language: lang,
+                            ajax: {
+                                url: "/admin/get-section/"+idHouse,
+                                data: function (param) {
+                                    return {
+                                        search: param.term || "",
+                                        page: param.page || 0
+                                    }
+                                },
+                                processResults: function (data, params) {
+                                    params.page = params.page || 0;
+                                    var mappedResults = data.map(function(item) {
+                                        return {
+                                            id: item.name,
+                                            text: item.name
+                                        };
+                                    });
+                                    return {
+                                        results: mappedResults,
+                                    }
+                                },
+                                cache: true
+                            },
+                            placeholder: defaultSelect,
+                            minimumResultsForSearch: Infinity
+                        });
+                $("#floor").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-floor/"+idHouse,
+                        data: function (param) {
+                            return {
+                                search: param.term || "",
+                                page: param.page || 0
+                            }
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.name,
+                                    text: item.name
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: Infinity
+                });
+
+
+            })
             $("#balance").select2({
                 theme: 'bootstrap-5',
                 language: lang,
@@ -255,6 +335,38 @@
 
 
         $(document).ready(function (){
+            $('#house').on('select2:select', function () {
+                    var formData = new FormData(form);
+                    for (var pair of formData.entries()){
+                        if (filterData.get(pair[0])!==pair[1]){
+                            filter();
+                        }
+                    }
+            });
+            $('#floor').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#section').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#balance').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
             $.ajax({
                 url: "/admin/get-locale"
             })
