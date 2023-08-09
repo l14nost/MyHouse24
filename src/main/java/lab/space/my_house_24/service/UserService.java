@@ -2,8 +2,11 @@ package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.User;
 
+import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.user.*;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface UserService {
     User getUserByEmail(String email);
@@ -19,4 +22,8 @@ public interface UserService {
     void save(UserAddRequest userAddRequest);
 
     void update(UserEditRequest userEditRequest,Long id);
+
+    void inviteUser(UserInviteRequest userInviteRequest);
+
+    List<UserResponseForTable> userListForTable();
 }

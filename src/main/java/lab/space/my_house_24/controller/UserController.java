@@ -1,25 +1,20 @@
 package lab.space.my_house_24.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import lab.space.my_house_24.model.user.UserEditRequest;
-import lab.space.my_house_24.model.user.UserEditResponse;
-import lab.space.my_house_24.model.user.UserMainPageRequest;
-import lab.space.my_house_24.model.user.UserAddRequest;
+import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.service.impl.HouseServiceImpl;
 import lab.space.my_house_24.service.impl.UserServiceImpl;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Locale;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,7 +26,7 @@ public class UserController {
 
     @GetMapping("/users")
     public String userMainPage(Model model){
-        model.addAttribute("houseList", houseService.houseListForUserPage());
+        model.addAttribute("houseList", houseService.houseListForTable());
         return "admin/pages/users/user-main";
     }
 
@@ -100,5 +95,29 @@ public class UserController {
         }
         userService.update(userEditRequest, id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/invite-user")
+    public String inviteUser(){
+        return "admin/pages/users/user-invite";
+    }
+
+    @PostMapping("/invite-user")
+    public ResponseEntity inviteUser(@RequestBody @Valid UserInviteRequest userInviteRequest, BindingResult result){
+        if (userInviteRequest.email()!=null) {
+            userValidator.uniqueEmail(userInviteRequest.email(), 0L, result, "UserInviteRequest");
+        }
+        if (result.hasErrors()){
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
+        }
+        userService.inviteUser(userInviteRequest);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/get-users/apartment-table")
+    @ResponseBody
+    public Page<UserResponseForTable> userForApartmentTable(@RequestParam Integer page, @RequestParam String search){
+        return userService.userResponseForTables(page,search);
     }
 }

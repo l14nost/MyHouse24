@@ -30,12 +30,10 @@
 <th:block layout:fragment="content">
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-            <div class="header-title">
-                <h4 class="card-title" th:text = "#{user.add.title}"></h4>
-            </div>
-            <div>
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{user.add.title}"></h4>
+                </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
@@ -44,7 +42,7 @@
                     </ol>
                 </nav>
             </div>
-        </div>
+            <div class="card-body px-0">
             </div>
         </div>
     </div>
@@ -142,7 +140,7 @@
                                 <input type="password" class="form-control pass" id="confirmPassword"  name="confirmPassword">
                             </div>
                         </div>
-                        <div style="display: flex; justify-content: center">
+                        <div style="display: flex; justify-content: center;  margin-bottom: 10px">
                             <button onclick="saveUser()" type="button" class="btn btn-success" th:text="#{user.add.save}" style="width: 50%" ></button>
                         </div>
                     </div>
@@ -171,33 +169,6 @@
 </th:block>
 <th:block layout:fragment="extra-script">
     <script>
-        function passwordVisibility() {
-            var getPassword = document.getElementById("password");
-            var confirmPassword = document.getElementById("confirmPassword");
-            if (getPassword.type === "password") {
-                getPassword.type = "text";
-                confirmPassword.type = "text";
-            } else {
-                getPassword.type = "password";
-                confirmPassword.type = "password";
-            }
-        }
-
-        function generatePassword() {
-            var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$`~%^&*(*)ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var passwordLength = 8;
-            var password = "";
-
-            for (var i = 0; i <= passwordLength; i++) {
-                var randomNumber = Math.floor(Math.random() * chars.length);
-                password += chars.substring(randomNumber, randomNumber +1);
-            }
-            document.getElementById("password").value = password;
-            document.getElementById("confirmPassword").value = password;
-
-        }
-    </script>
-    <script>
         function saveUser(){
             var form = document.getElementById("userAdd");
             var formData = new FormData(form);
@@ -213,8 +184,7 @@
                 }
             ).fail(
                 function(response){
-                    $('.is-invalid').removeClass('is-invalid');
-                    $('.invalid-feedback').remove();
+                    clearValidMessages();
                     let errors = response.responseJSON;
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
@@ -228,15 +198,6 @@
                     }
                 }
             )
-        }
-        function validResponse(divId, message,afterDiv) {
-
-            $(divId).addClass('is-invalid');
-            if (afterDiv) {
-                $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
-            } else {
-                $(divId).after('<div class="invalid-feedback">' + message + '</div>');
-            }
         }
     </script>
 </th:block>

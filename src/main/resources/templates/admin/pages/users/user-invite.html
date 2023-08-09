@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text = "#{user.add.title}"></title>
+    <th:block layout:fragment="extra-style">
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{user.invite.title}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/users}" th:text = "#{left.sidebar.apartment.owner}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{user.invite.title}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{user.invite}"></h4>
+                    <hr>
+                </div>
+            </div>
+            <div class="card-body">
+                <form id="userInvite">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.number}"></label>
+                                    <input type="number" class="form-control" id="number"  name="number">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{user.add.email}"></label>
+                                    <input type="text" class="form-control" id="email"  name="email">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center; margin-bottom: 10px">
+                            <button onclick="inviteUser()" type="button" class="btn btn-success" th:text="#{user.invite.send}" style="width: 50%" id="inviteButton"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-modals">
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script>
+        function inviteUser(){
+            var form = document.getElementById("userInvite");
+            var formData = new FormData(form);
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            console.log(jsonData);
+            $.ajax({
+                method:"POST",
+                url: "/admin/invite-user",
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData),
+            }).done(
+                function (response){
+                    clearValidMessages()
+                    showToast('success');
+                    document.getElementById("inviteButton").disabled = true;
+                    setTimeout(function() {
+                        document.getElementById("inviteButton").disabled = false;
+                    }, 5500);
+                }
+            ).fail(
+                function(response){
+                    clearValidMessages()
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        validResponse("#" + keys, values);
+
+                    }
+                }
+            )
+        }
+    </script>
+</th:block>
+</html>

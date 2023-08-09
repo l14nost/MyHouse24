@@ -339,7 +339,7 @@ temporary rendered events).
   content: "";
   position: absolute;
   z-index: 1;
-  /* same z-index as fc-bg, behind text */
+  /* same z-index as fc-bg, behind name */
   /* overcome the borders */
   top: -1px;
   right: -1px;
@@ -995,7 +995,7 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
     border-bottom-width: 1px !important;
   }
 
-  /* indicate the event continues via "..." text */
+  /* indicate the event continues via "..." name */
   .fc-time-grid .fc-event.fc-not-end:after {
     content: "...";
   }
@@ -1005,13 +1005,13 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
     border-top-width: 1px !important;
   }
 
-  /* indicate the event is a continuation via "..." text */
+  /* indicate the event is a continuation via "..." name */
   .fc-time-grid .fc-event.fc-not-start:before {
     content: "...";
   }
 
   /* time */
-  /* undo a previous declaration and let the time text span to a second line */
+  /* undo a previous declaration and let the time name span to a second line */
   .fc-time-grid .fc-event .fc-time {
     white-space: normal !important;
   }

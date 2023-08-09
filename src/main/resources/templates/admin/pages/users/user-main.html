@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/admin/fragments/layout}">
+      layout:decorate="~{/admin/fragments/layout}" style="width: auto">
 
 <head>
     <meta charset="UTF-8">
@@ -11,6 +11,27 @@
                 pointer-events: none;
                 opacity: 1;
             }
+
+            .select2-container .select2-selection--single {
+                height: 40px;
+            }
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 100%;
+                position: absolute;
+                top: 1px;
+                right: 1px;
+                width: 20px;
+            }
+            .select2-container .select2-selection--single .select2-selection__rendered {
+                display: flex;
+                padding-left: 8px;
+                padding-right: 20px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                height: 100%;
+                align-items: center;
+            }
         </style>
     </th:block>
 
@@ -18,12 +39,10 @@
 <th:block layout:fragment="content">
     <div class="col-sm-12">
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
-            <div class="header-title">
-                <h4 class="card-title" th:text = "#{left.sidebar.apartment.owner}"></h4>
-            </div>
-            <div>
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{left.sidebar.apartment.owner}"></h4>
+                </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
@@ -31,7 +50,7 @@
                     </ol>
                 </nav>
             </div>
-        </div>
+            <div class="card-body px-0">
             </div>
         </div>
     </div>
@@ -45,25 +64,24 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" th:href="@{/add-user}" th:text = "#{users.choose.button.1}"></a></li>
                     <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.2}"></a></li>
-                    <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.3}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/invite-user}" th:text = "#{users.choose.button.3}"></a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="col-sm-12">
-        <div class="card" style="min-height: 400px">
+        <div class="card">
             <div class="card-header">
 
                 <div style="display: flex; justify-content: right">
                     <button type="button" class="btn btn-light" style="height: 40px; display: flex"  onclick="clearFilters()"><h7 th:text="#{table.clear}"></h7><svg style="margin: auto; margin-left: 5px" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/></svg></button>
                 </div>
             </div>
-            <div class="card-body table-responsive" >
-
-                <table class="table table-striped table-bordered" style="margin-top: 15px; max-width: 100%; min-width: 1400px">
+            <div class="table-responsive" style="max-width: 100%">
+                <table class="table table-striped table-bordered" style="margin-top: 15px">
                     <thead>
                     <tr>
-                        <th th:text="#{users.table.id}" style="min-width: 10px"></th>
+                        <th style="min-width: 10px">#</th>
                         <th th:text="#{users.table.full.name}" style="min-width: 150px"></th>
                         <th th:text="#{users.table.number}"></th>
                         <th th:text="#{users.table.email}" ></th>
@@ -75,27 +93,28 @@
                         <th style="min-width: 100px"></th>
                     </tr>
                     <tr id="searchUserTable">
-                        <td  >
-                            <input class="form-control" type="text" name="id">
+                        <form id="filter">
+                        <td>
+                            <input class="form-control" type="text" name="id" id="id" style="width: 70px;">
                         </td>
-                        <td >
-                            <input class="form-control" type="text" name="fullName">
+                        <td>
+                            <input class="form-control" type="text" name="fullName" >
                         </td>
-                        <td >
-                            <input class="form-control" type="text" name="number">
+                        <td>
+                            <input class="form-control" type="text" name="number" style="width: 100px">
                         </td>
-                        <td ><input class="form-control" type="text" name="email"></td>
-                        <td ><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" >
-                            <option selected=""></option>
-                            <option th:each="house:${houseList}" th:text="${house.name()}"></option>
+                        <td><input class="form-control" type="text" name="email"></td>
+                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="house" name="house" style="width: 100px">
+                            <option value=""></option>
+                            <option th:each="house:${houseList}" th:text="${house.name()}" th:value="${house.name()}"></option>
                         </select></td>
 
-                        <td >
+                        <td>
                             <input class="form-control" type="text" name="apartmentNumber">
                         </td>
-                        <td >
+                        <td>
                             <div class="input-group">
-                                <input class="form-control date_flatpicker" type="text"  data-id="range" name="addDate" aria-describedby="datePicker">
+                                <input class="form-control flatpickr_humandate" type="text"  data-id="range" name="addDate" aria-describedby="datePicker">
                                 <span class="input-group-text" id="datePicker">
                                     <svg class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -103,44 +122,47 @@
                                 </span>
                             </div>
                         </td>
-                        <td >
-                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status">
-                                <option selected=""></option>
+                        <td>
+                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status" style="width: 80px">
+                                <option value=""></option>
                                 <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}" th:text="${status.getUserStatus(#locale)}"  th:value="${status.name()}"></option>
                             </select>
                         </td>
-                        <td >
-                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="duty">
-                                <option selected=""></option>
+                        <td>
+                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="duty" name="duty" style="width: 80px">
+                                <option value=""></option>
                                 <option th:text="#{users.table.duty.yes}" value="true"></option>
                                 <option th:text="#{users.table.duty.no}" value="false"></option>
                             </select>
                         </td>
+                        </form>
                         <td >
 
                         </td>
                     </tr>
                     </thead>
-                    <tbody id="userTable" style="min-height: 55px">
+                    <tbody id="table" style="min-height: 55px">
 
                     </tbody>
                 </table>
-                <div style="display: none; justify-content: center; min-height: 100px" id="userEmptyTable" >
+            </div>
+            <div class="card-footer pt-0 pb-0" style="margin-top: 15px">
+                <div style="display: none; justify-content: center; min-height: 100px" id="emptyTable" >
                     <p style="display: flex; justify-content: center" th:text = "#{table.empty}"></p>
                 </div>
                 <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
-                    <div id="tableInfoShowing" th:text="  #{table.show.info.Showing} + ' 1 ' + '-' + ' 2 ' + #{table.show.info.of}+' 3 '+#{table.show.info.entries}">
+                        <div id="tableInfoShowing" th:text="  #{table.show.info.Showing} + ' 1 ' + '-' + ' 2 ' + #{table.show.info.of}+' 3 '+#{table.show.info.entries}">
 
-                    </div>
-                    <div style="display: flex; margin-right: 10px" >
-                        <nav aria-label="Page navigation example" id = "userPagination">
-                        </nav>
+                        </div>
+                        <div style="display: flex; margin-right: 10px" >
+                            <nav aria-label="Page navigation example" id = "pagination">
+                            </nav>
 
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
 
@@ -170,7 +192,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Modal body text goes here.</p>
+                    <p>Are you sure you want to delete apartment owner?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
@@ -185,50 +207,113 @@
     <script>
 
 
+
+
         function clearFilters(){
-            getAllUser(0);
+            $('#searchUserTable input').val('');
+            $('#searchUserTable select').val(null).trigger("change");
+            var formData = new FormData();
+            formData.append("page", "0");
+            getAllUser(formData);
+        }
+        var filterData = new FormData(document.getElementById("filter"));
+        function filter() {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            filterData = formData;
+            formData.append("page", "0");
+            getAllUser(formData);
         }
 
 
 
 
+        document.addEventListener("click", function () {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            for (var pair of formData.entries()){
+                if (filterData.get(pair[0])!==pair[1]){
+                    filter();
+                }
+            }
+
+        });
+
+        function select2(lang){
+            var defaultSelect = " ";
+            $("#status").select2({
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+            $("#house").select2({
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 0
+            });
+            $("#duty").select2({
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+        }
+
         $(document).ready(function (){
-            getAllUser(0);
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", "0");
+            getAllUser(formData);
 
         });
         function changePage(page,event){
             event.preventDefault();
-            getAllUser(page);
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", page);
+            getAllUser(formData);
 
         }
 
-        function getAllUser(page) {
+        function getAllUser(formData) {
+            let page = parseInt(formData.get("page"));
 
-            let pageIndex = page;
-            let userMainPageRequest = {
-                page: pageIndex
-            }
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
             $.ajax({
                 method: "POST",
                 url: "/admin/get-all-users",
                 dataType: 'json',
                 contentType: 'application/json',
-                data: JSON.stringify(userMainPageRequest)
+                data: JSON.stringify(jsonData)
             })
                 .done(
                     function (userResponse) {
-                        const userPagination = document.getElementById("userPagination");
+                        const userPagination = document.getElementById("pagination");
                         userPagination.innerHTML = "";
-                        const table = document.getElementById("userTable");
+                        const table = document.getElementById("table");
                         table.innerHTML = "";
                         if (userResponse.content.length === 0) {
-                            const container = document.getElementById("userEmptyTable");
+                            const container = document.getElementById("emptyTable");
                             container.style.display = "flex";
                             const container1 = document.getElementById("tableInfo");
                             container1.style.display = "none";
                         } else {
+                            const container2 = document.getElementById("emptyTable");
+                            container2.style.display = "none";
+                            const container3 = document.getElementById("tableInfo");
+                            container3.style.display = "flex";
                             $.each(userResponse.content, function (index, user) {
-                                const container = document.getElementById("userTable");
+                                const container = document.getElementById("table");
                                 const newTr = document.createElement("tr");
                                 newTr.style.cursor = "pointer";
                                 newTr.innerHTML = " <td onclick='userCard("+user.id+")'>" + user.id + "</td>\n" +
@@ -292,7 +377,7 @@
 
                             if (userResponse.totalPages >= 2 && userResponse.totalPages<7) {
                                 let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'><</a></li>\n";
-                                var containerPagination = document.getElementById("userPagination");
+                                var containerPagination = document.getElementById("pagination");
                                 const newUl = document.createElement("ul");
                                 newUl.id = "userPaginationList";
                                 newUl.classList.add("pagination");
@@ -307,7 +392,7 @@
                             }
                             else if (userResponse.totalPages>=7) {
                                 let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'><</a></li>\n";
-                                var containerPagination = document.getElementById("userPagination");
+                                var containerPagination = document.getElementById("pagination");
                                 const newUl = document.createElement("ul");
                                 newUl.id = "userPaginationList";
                                 newUl.classList.add("pagination");
@@ -417,7 +502,6 @@
                     $('#confirmDeleteUser').modal('hide');
                     showToast('error');
                     userId = undefined;
-                    appendAlert('Something went wrong ', 'danger');
                 }
             )
         }

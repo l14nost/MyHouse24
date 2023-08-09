@@ -1,11 +1,9 @@
 package lab.space.my_house_24.model.user;
 
-import lab.space.my_house_24.enums.UserStatus;
-import lab.space.my_house_24.model.apartment.ApartmentResponseForUserTable;
-import lab.space.my_house_24.model.house.HouseResponseForUserTable;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
+import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lombok.Builder;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,10 +16,10 @@ public record UserResponse(
 
         String email,
 
-        List<HouseResponseForUserTable> houses,
+        List<HouseResponseForTable> houses,
 
 
-        List<ApartmentResponseForUserTable> apartments,
+        List<ApartmentResponseForTable> apartments,
 
         String status,
 

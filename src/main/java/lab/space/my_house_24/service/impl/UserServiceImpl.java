@@ -7,16 +7,19 @@ import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.repository.UserRepository;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.specification.UserSpecification;
+import lab.space.my_house_24.specification.UserSpecificationForTable;
 import lab.space.my_house_24.util.FileHandler;
 import lab.space.my_house_24.util.CustomMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponse> getAllUserDto(UserMainPageRequest userMainPageRequest) {
+
         UserSpecification userSpecification = UserSpecification.builder().userMainPageRequest(userMainPageRequest).build();
         return userRepository.findAll(userSpecification, PageRequest.of(userMainPageRequest.page(),10)).map(UserMapper::entityToMainPageDto);
     }
@@ -98,7 +102,7 @@ public class UserServiceImpl implements UserService {
             user.setFilename(FileHandler.saveFile(userEditRequest.img()));
             FileHandler.deleteFile(filenameDelete);
         }
-        if (userEditRequest.password()!=null){
+        if (!userEditRequest.password().isEmpty()){
             user.setPassword(new BCryptPasswordEncoder().encode(userEditRequest.password()));
             changePassword = true;
         }
@@ -106,8 +110,27 @@ public class UserServiceImpl implements UserService {
         if (changePassword) {
             String textForSend = "Dear " + user.getLastname() + " " + user.getFirstname() + ", your password has been changed!\n" +
                     "For detail information contact our support team";
-//            customMailSender.send(user.getEmail(), textForSend, "Password Change Notification");
+            customMailSender.send(user.getEmail(), textForSend, "Password Change Notification");
         }
+    }
+
+    @Override
+    public void inviteUser(UserInviteRequest userInviteRequest) {
+        String textForSend = "Dear friend,\n" +
+                "We cordially invite you to join us.\n" +
+                "We will be glad to see you in our application!";
+        customMailSender.send(userInviteRequest.email(),textForSend,"Invite");
+    }
+
+    @Override
+    public List<UserResponseForTable> userListForTable() {
+        return userRepository.findAll().stream().map(UserMapper::entityToDtoForTable).toList();
+    }
+
+
+    public Page<UserResponseForTable> userResponseForTables(Integer page, String search){
+        UserSpecificationForTable userSpecificationForTable = UserSpecificationForTable.builder().search(search).build();
+        return userRepository.findAll(userSpecificationForTable, PageRequest.of(page,5)).map(UserMapper::entityToDtoForTable);
     }
 
 
