@@ -6,8 +6,7 @@ import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.mapper.StaffMapper;
-import lab.space.my_house_24.model.enums_response.JobTitleResponse;
-import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
 import lab.space.my_house_24.repository.StaffRepository;
 import lab.space.my_house_24.service.JwtService;
@@ -44,7 +43,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final StaffSpecification staffSpecification;
     private final CustomMailSender customMailSender;
     private final JwtService jwtService;
-    private String url = "http://localhost:7575/admin/auth/activate-staff/";
+    private final String url = "http://localhost:7575/admin/auth/activate-staff/";
 
     @Override
     public void sendInvite(InviteRequest inviteRequest) {
@@ -97,9 +96,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public List<JobTitleResponse> getAllJobTitle() {
+    public List<EnumResponse> getAllJobTitle() {
         return Arrays.stream(JobTitle.values())
-                .map(jobTitle -> JobTitleResponse.builder()
+                .map(jobTitle -> EnumResponse.builder()
                         .name(jobTitle.name())
                         .value(jobTitle.getJobTitle(LocaleContextHolder.getLocale()))
                         .build())
@@ -107,9 +106,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public List<StatusResponse> getAllStatus() {
+    public List<EnumResponse> getAllStatus() {
         return Arrays.stream(UserStatus.values())
-                .map(status -> StatusResponse.builder()
+                .map(status -> EnumResponse.builder()
                         .name(status.name())
                         .value(status.getUserStatus(LocaleContextHolder.getLocale()))
                         .build())

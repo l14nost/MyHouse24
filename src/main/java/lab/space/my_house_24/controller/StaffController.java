@@ -1,8 +1,7 @@
 package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
-import lab.space.my_house_24.model.enums_response.JobTitleResponse;
-import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
 import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.service.StaffService;
@@ -56,12 +55,12 @@ public class StaffController {
     }
 
     @GetMapping("/get-all-job-title")
-    public ResponseEntity<List<JobTitleResponse>> getAllJobTitle() {
+    public ResponseEntity<List<EnumResponse>> getAllJobTitle() {
         return ResponseEntity.ok(staffService.getAllJobTitle());
     }
 
     @GetMapping("/get-all-status")
-    public ResponseEntity<List<StatusResponse>> getAllStatus() {
+    public ResponseEntity<List<EnumResponse>> getAllStatus() {
         return ResponseEntity.ok(staffService.getAllStatus());
     }
 
