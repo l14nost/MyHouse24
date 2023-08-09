@@ -1,7 +1,7 @@
 package lab.space.my_house_24.model.user;
 
 import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
-import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lombok.Builder;
 
@@ -22,7 +22,7 @@ public record UserResponse(
 
         List<ApartmentResponseForTable> apartments,
 
-        StatusResponse status,
+        EnumResponse status,
 
         Boolean duty,
 

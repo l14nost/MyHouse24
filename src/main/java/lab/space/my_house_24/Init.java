@@ -132,6 +132,7 @@ public class Init implements CommandLineRunner {
                             .setPassword("$2a$12$ltMYSFmijVGzBuDXVxVRh.s2Z82aVhyuW4X1Jm9QP.tq0JAPys30K")
                             .setFirstname("Admin")
                             .setLastname("Admin")
+                            .setPhone("123123123")
                             .setStaffStatus(UserStatus.ACTIVE)
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
             );

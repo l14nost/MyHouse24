@@ -4,7 +4,7 @@ import lab.space.my_house_24.entity.Apartment;
 import lab.space.my_house_24.entity.Section;
 import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
-import lab.space.my_house_24.model.enums_response.StatusResponse;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.model.user.UserCardResponse;
@@ -34,7 +34,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .duty(user.getDuty())
                 .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
-                .status(StatusResponse.builder().value(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale())).name(user.getUserStatus().name()).build())
+                .status(EnumResponse.builder().value(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale())).name(user.getUserStatus().name()).build())
                 .number(user.getNumber())
                 .filename(user.getFilename())
                 .apartments(apartments)
