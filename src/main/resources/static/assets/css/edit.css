@@ -172,4 +172,14 @@
     border-color: #3a57e8!important;
 }
 
+.btn-delete{
+    --bs-btn-border-color: #be3221 !important;
+}
+
+.btn-delete:hover{
+    border-color: #be3221 !important;
+    background-color: #dadada;
+}
+
+
 
