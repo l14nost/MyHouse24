@@ -27,7 +27,7 @@
     </div>
 
     <div class="col-12 text-end" style="padding-bottom: 30px">
-        <a href="/admin/staff/add" type="button" class="btn btn-success" th:text="#{staff.button.add}"></a>
+        <a th:href="@{/staff/add}" type="button" class="btn btn-success" th:text="#{staff.button.add}"></a>
     </div>
 
     <div class="col-sm-12">
@@ -215,7 +215,7 @@
                     $(TABLE_BODY).append(
                         '<tr>' +
                         '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
-                        'No data...' +
+                        '[(${#messages.msg('table.empty')})]' +
                         '    </td>' +
                         '</tr>'
                     );

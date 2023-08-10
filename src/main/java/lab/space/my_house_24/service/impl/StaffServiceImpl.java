@@ -5,6 +5,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.UserStatus;
+import lab.space.my_house_24.mapper.EnumMapper;
 import lab.space.my_house_24.mapper.StaffMapper;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
@@ -101,10 +102,11 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public List<EnumResponse> getAllJobTitle() {
         log.info("Try to get all jobTitle");
         return Arrays.stream(JobTitle.values())
-                .map(jobTitle -> EnumResponse.builder()
-                        .name(jobTitle.name())
-                        .value(jobTitle.getJobTitle(LocaleContextHolder.getLocale()))
-                        .build())
+                .map(jobTitle -> EnumMapper.toSimpleDto(
+                                jobTitle.name(),
+                                jobTitle.getJobTitle(LocaleContextHolder.getLocale())
+                        )
+                )
                 .collect(Collectors.toList());
     }
 
@@ -112,10 +114,10 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public List<EnumResponse> getAllStatus() {
         log.info("Try to get all status");
         return Arrays.stream(UserStatus.values())
-                .map(status -> EnumResponse.builder()
-                        .name(status.name())
-                        .value(status.getUserStatus(LocaleContextHolder.getLocale()))
-                        .build())
+                .map(status -> EnumMapper.toSimpleDto(
+                        status.name(),
+                        status.getUserStatus(LocaleContextHolder.getLocale())
+                ))
                 .collect(Collectors.toList());
     }
 
@@ -151,9 +153,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
             Staff director = getMainDirector();
             Staff staff = getStaffById(staffUpdateRequest.id());
             if (director.getId() != staffUpdateRequest.id().longValue()) {
-                if (    nonNull(staffUpdateRequest.password()) &&
+                if (nonNull(staffUpdateRequest.password()) &&
                         !staffUpdateRequest.password().equals("") &&
-                        !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(),staff.getPassword()) ) {
+                        !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())) {
                     sendUpdatePasswordWarning(
                             staff.getEmail(),
                             LocaleContextHolder.getLocale()
@@ -171,9 +173,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                 return ResponseEntity.ok().build();
             } else if (director.getId() == staffUpdateRequest.id().longValue()
                     && director.getRole().getJobTitle().equals(staffUpdateRequest.role())) {
-                if (    nonNull(staffUpdateRequest.password()) &&
+                if (nonNull(staffUpdateRequest.password()) &&
                         !staffUpdateRequest.password().equals("") &&
-                        !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(),staff.getPassword()) ) {
+                        !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())) {
                     sendUpdatePasswordWarning(
                             staff.getEmail(),
                             LocaleContextHolder.getLocale()
