@@ -38,7 +38,7 @@
     --bs-table-hover-color: #8A92A6;
     --bs-table-hover-bg: rgba(138, 146, 166, 0.075);
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
     color: var(--bs-table-color);
     vertical-align: center;
     border-color: var(--bs-table-border-color);
