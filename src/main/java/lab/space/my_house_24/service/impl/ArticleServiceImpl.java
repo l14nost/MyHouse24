@@ -36,7 +36,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article getArticleById(Long id) throws EntityNotFoundException {
-        log.info("Try to search by id" + id);
+        log.info("Try to search Article by id" + id);
         return articleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Article not found by id " + id));
     }
