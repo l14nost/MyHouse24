@@ -12,7 +12,43 @@ public interface ErrorMapper {
                 .stream()
                 .collect(
                         Collectors.toMap(
-                                FieldError::getField, FieldError::getDefaultMessage, (error1, error2) -> error1
+                                FieldError::getField, FieldError::getDefaultMessage,
+                                (error1, error2) -> {
+                                    if (
+                                            bindingResult.getFieldErrors()
+                                                    .stream()
+                                                    .anyMatch(error -> error.getDefaultMessage().equals(error1)
+                                                            && error.getCode().equals("NotBlank"))
+                                    ) {
+                                        return bindingResult.getFieldErrors()
+                                                .stream()
+                                                .filter(error -> error.getDefaultMessage().equals(error1)
+                                                        && error.getCode().equals("NotBlank"))
+                                                .findFirst()
+                                                .get()
+                                                .getDefaultMessage();
+                                    } else if (
+                                            !bindingResult.getFieldErrors()
+                                                    .stream()
+                                                    .anyMatch(error -> error.getDefaultMessage().equals(error2)
+                                                            && error.getCode().equals("NotBlank"))
+                                                    &&
+                                                    bindingResult.getFieldErrors()
+                                                            .stream()
+                                                            .anyMatch(error -> error.getDefaultMessage().equals(error1)
+                                                                    && error.getCode().equals("Size"))
+                                    ) {
+                                        return bindingResult.getFieldErrors()
+                                                .stream()
+                                                .filter(error -> error.getDefaultMessage().equals(error1)
+                                                        && error.getCode().equals("Size"))
+                                                .findFirst()
+                                                .get()
+                                                .getDefaultMessage();
+                                    } else {
+                                        return error2;
+                                    }
+                                }
                         )
                 );
     }
