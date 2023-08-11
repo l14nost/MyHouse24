@@ -2,9 +2,7 @@ package lab.space.my_house_24.model.settingsPage.mainPage;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lab.space.my_house_24.model.settingsPage.banner.BannerRequest;
 import lab.space.my_house_24.validator.annotation.FileExtension;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;

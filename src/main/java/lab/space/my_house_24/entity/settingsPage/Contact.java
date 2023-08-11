@@ -26,7 +26,7 @@ public class Contact {
     @Column(length = 100, nullable = false)
     private String url;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 1000, nullable = false)
     private String codeMap;
 
     @Column(length = 100, nullable = false)
@@ -44,7 +44,7 @@ public class Contact {
     @Column(length = 100, nullable = false)
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Seo seo;
 
 }

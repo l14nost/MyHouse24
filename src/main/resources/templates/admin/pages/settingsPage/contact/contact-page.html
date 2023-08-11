@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}" style="width: auto">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{left.sidebar.apartment.owner}"></title>
+    <th:block layout:fragment="extra-style">
+        <style>
+            .main-page-slide{
+                width: 350px;
+                height: 270px;
+            }
+        </style>
+
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{global.breadcrumb.edit.page}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{global.breadcrumb.edit.page}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+
+                <div style="display: flex; justify-content: space-between">
+                    <h3 th:text="#{settings.page.contact.page}"></h3>
+                    <button type="button" class="btn btn-light" style="height: 40px; display: flex"  ><h7 th:text="#{settings.page.button.update}"></h7></button>
+                </div>
+                <hr class="hr-horizontal">
+            </div>
+            <div class="card-body">
+                <form id="contactPage">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h3 th:text="#{settings.page.contact.page.contact.info}"></h3>
+                                    <hr class="hr-horizontal">
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
+                                        <input type="text" class="form-control" id="title"  name="title" th:value="${contactPage.title()}">
+                                    </div>
+                                    <div class="form-group" >
+                                        <label class="form-label" th:text="#{settings.page.main.page.brief.description}"></label>
+                                        <div id="description-div"><div id="description" style="height: 178px;"></div></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.contact.page.url}"></label>
+                                        <input type="text" class="form-control" id="url"  name="url" th:value="${contactPage.url()}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h3 th:text="#{settings.page.contact.page.contact}"></h3>
+                                    <hr class="hr-horizontal">
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{users.table.full.name}"></label>
+                                        <input type="text" class="form-control" id="fullName"  name="fullName" th:value="${contactPage.fullName()}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.contact.page.location}"></label>
+                                        <input type="text" class="form-control" id="location"  name="location" th:value="${contactPage.location()}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.contact.page.address}"></label>
+                                        <input type="text" class="form-control" id="address"  name="address" th:value="${contactPage.address()}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{users.table.number}"></label>
+                                        <input type="text" class="form-control" id="number"  name="number" th:value="${contactPage.number()}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{users.table.email}"></label>
+                                        <input type="text" class="form-control" id="email"  name="email" th:value="${contactPage.email()}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <h3 th:text="#{settings.page.contact.page.map}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="form-group" >
+                                    <label class="form-label" th:text="#{settings.page.contact.page.code.map}"></label>
+                                    <textarea id="codeMap" class="form-control" rows="6" name="codeMap" th:text="${contactPage.codeMap()}"></textarea>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <h3>SEO</h3>
+                                <hr class="hr-horizontal">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
+                                    <input type="text" class="form-control" id="seoTitle"  name="seoTitle" th:value="${contactPage.seoTitle()}">
+                                </div>
+                                <div class="form-group" >
+                                    <label class="form-label" th:text="#{settings.page.main.page.description}"></label>
+                                    <textarea id="seoDescription" class="form-control" rows="6" name="seoDescription" th:text="${contactPage.seoDescription()}"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.key.words}"></label>
+                                    <textarea id="seoKeyWords" class="form-control" rows="6" name="seoKeyWords" th:text="${contactPage.seoKeyWords()}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center;  margin-bottom: 10px">
+                            <button onclick="cancelMainPage()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px" ></button>
+                            <button onclick="saveMainPage()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px" ></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-alert">
+    <div id="liveAlertPlaceholder" style="right: 0; position: fixed; bottom: 0"></div>
+</th:block>
+<th:block layout:fragment="extra-modals">
+    <div class="modal fade" id="confirmDeleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteUserLabel">Delete Apartment Owner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete apartment owner?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" onclick="userDelete()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script th:inline="javascript">
+
+        var options = {
+            modules: {
+                toolbar: true
+            },
+            theme: 'snow'
+        };
+        var editor = new Quill('#description', options);
+        editor.root.innerHTML = /*[[${contactPage.description()}]]*/;
+
+        function saveMainPage(){
+            var form = document.getElementById("contactPage");
+            var formData = new FormData(form);
+            formData.append("description", editor.root.innerHTML)
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            $.ajax({
+                url: "/admin/site-contact-page-save",
+                method: "PUT",
+                contentType: "application/json",
+                data:JSON.stringify(jsonData)
+            })
+                .done(function (response){
+                    clearValidMessages();
+                    showToast("success");
+                })
+                .fail( function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    console.log(errors);
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        validResponse("#" + keys, values);
+
+                    }
+                })
+        }
+        function cancelMainPage(){
+            window.location.href = "/admin/site-contact-page"
+        }
+
+
+
+    </script>
+</th:block>
+</html>

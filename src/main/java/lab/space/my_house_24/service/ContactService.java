@@ -7,7 +7,7 @@ import lab.space.my_house_24.model.settingsPage.contact.ContactResponse;
 public interface ContactService {
     Contact findById(Long id);
 
-    ContactResponse findByIdDto(Long id);
+    ContactResponse findByIdResponse(Long id);
 
-    void update(ContactRequest contectRequest);
+    void update(ContactRequest contactRequest);
 }
