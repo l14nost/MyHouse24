@@ -114,7 +114,7 @@
 
             articleRequest.id = articleId;
             articleRequest.name = $("#title").val();
-            articleRequest.type = $("#type").val();
+            if ($("#type").val() !== '') articleRequest.type = $("#type").val();
             console.log(articleRequest)
             $.ajax({
                 method: typeReq ? 'PUT' : "POST",
@@ -129,8 +129,8 @@
             }).fail(function (response) {
                 const errors = response.responseJSON;
                 console.log(response);
-                if (errors.firstname) validResponse($('#title'), errors.name);
-                if (errors.status) validResponse($('#type'), errors.type, 'div');
+                if (errors.name) validResponse($('#title'), errors.name);
+                if (errors.type) validResponse($('#type'), errors.type, 'div');
 
             })
         }

@@ -24,6 +24,7 @@ public class Init implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("################## START OF INITIALIZATION ##################");
         log.info("Try to find securityLevel");
         if (securityLevelService.getAllSecurityLevel().isEmpty()) {
             log.warn("Create custom SecurityLevel");
@@ -137,6 +138,7 @@ public class Init implements CommandLineRunner {
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
             );
         } else log.info("Staff found");
+        log.info("################## FINISH OF INITIALIZATION ##################");
     }
 
 }

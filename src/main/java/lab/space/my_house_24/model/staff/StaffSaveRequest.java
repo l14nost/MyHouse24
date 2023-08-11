@@ -25,14 +25,6 @@ public record StaffSaveRequest(
         @Size(max = 100, message = "{size.less.message} " + " {max}")
         @Email(regexp = "^[A-Za-z0-9._%+-]+@.+\\.\\w{2,3}$", message = "{pattern.email.message}")
         String email,
-        @NotBlank(message = "{not.blank.message}")
-        @Size(max = 100, message = "{size.less.message} " + " {max}")
-        @Size(min = 4,message = "{size.greater.message} " + "{min}")
-        String password,
-        @NotBlank(message = "{not.blank.message}")
-        @Size(max = 100, message = "{size.less.message} " + " {max}")
-        @Size(min = 4,message = "{size.greater.message} " + "{min}")
-        String confirmPassword,
         @NotNull(message = "{not.blank.message}")
         JobTitle role
 ) {

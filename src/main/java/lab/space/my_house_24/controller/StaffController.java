@@ -87,11 +87,6 @@ public class StaffController {
                                        BindingResult bindingResult) {
         staffValidator.isEmailUniqueValidation(staffSaveRequest.email(), bindingResult,
                 "StaffSaveRequest", LocaleContextHolder.getLocale());
-        staffValidator.passwordEqualsValidation(
-                staffSaveRequest.password(),
-                staffSaveRequest.confirmPassword(), bindingResult,
-                "StaffSaveRequest", LocaleContextHolder.getLocale()
-        );
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
