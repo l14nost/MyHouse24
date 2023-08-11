@@ -75,12 +75,12 @@
         $(document).ready(function () {
             typeReq = false;
             if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                $("#breadcrumb").append(addBreadcrumbTitle('[(${#messages.msg('global.breadcrumb.editing')})]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
                 articleId = new URL(window.location.href).pathname.split("-").pop()
                 typeReq = true;
                 getArticleDTO(articleId);
             }else {
-                $("#breadcrumb").append(addBreadcrumbTitle('[(${#messages.msg('global.breadcrumb.save')})]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
             }
 
 
