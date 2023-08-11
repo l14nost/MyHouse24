@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="form-group" >
                                     <label class="form-label" th:text="#{settings.page.main.page.brief.description}"></label>
-                                    <div id="description-div"><div id="description-container" style="height: 150px;"></div></div>
+                                    <div id="description-div"><div id="description" style="height: 150px;"></div></div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-check form-check-inline">
@@ -143,11 +143,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
-                                        <input type="text" class="form-control"  name="blockTitle" id="blockTitle1" th:value="${block.title()}">
+                                        <input type="text" class="form-control"  name="blockTitle" th:id="${'blockTitle'+(blockStat.index+1)}" th:value="${block.title()}">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" th:text="#{settings.page.main.page.brief.description}"></label>
-                                        <div><div th:id="${'blockDescription'+(blockStat.index+1)}"></div></div>
+                                        <div th:id="${'blockDescriptionDiv'+(blockStat.index+1)}"><div th:id="${'blockDescription'+(blockStat.index+1)}" style="height: 70px;"></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -219,13 +219,14 @@
 </th:block>
 <th:block layout:fragment="extra-script">
     <script th:inline="javascript">
+
         var options = {
             modules: {
                 toolbar: true
             },
             theme: 'snow'
         };
-        var editor = new Quill('#description-container', options);
+        var editor = new Quill('#description', options);
         editor.root.innerHTML = /*[[${mainPage.description()}]]*/;
 
 
@@ -270,10 +271,74 @@
                 data:formData
             })
                 .done(function (response){
+                    clearValidMessages();
                     showToast("success");
                 })
-                .fail(function (response){
-                    console.log(response);
+                .fail( function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    console.log(errors);
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+
+                        if (keys === 'block[0]'){
+                            validResponse("#block1",values);
+                        }
+                        if (keys === 'block[1]'){
+                            validResponse("#block2",values);
+                        }
+                        if (keys === 'block[2]'){
+                            validResponse("#block3",values);
+                        }
+                        if (keys === 'block[3]'){
+                            validResponse("#block4",values);
+                        }
+                        if (keys === 'block[4]'){
+                            validResponse("#block5",values);
+                        }
+                        if (keys === 'block[5]'){
+                            validResponse("#block6",values);
+                        }
+                        if (keys === 'blockTitle[0]'){
+                            validResponse("#blockTitle1",values);
+                        }
+                        if (keys === 'blockTitle[1]'){
+                            validResponse("#blockTitle2",values);
+                        }
+                        if (keys === 'blockTitle[2]'){
+                            validResponse("#blockTitle3",values);
+                        }
+                        if (keys === 'blockTitle[3]'){
+                            validResponse("#blockTitle4",values);
+                        }
+                        if (keys === 'blockTitle[4]'){
+                            validResponse("#blockTitle5",values);
+                        }
+                        if (keys === 'blockTitle[5]'){
+                            validResponse("#blockTitle6",values);
+                        }
+                        if (keys === 'blockDescription[0]'){
+                            validResponse("#blockDescription1",values);
+                        }
+                        if (keys === 'blockDescription[1]'){
+                            validResponse("#blockDescription2",values);
+                        }
+                        if (keys === 'blockDescription[2]'){
+                            validResponse("#blockDescription3",values);
+                        }
+                        if (keys === 'blockDescription[3]'){
+                            validResponse("#blockDescription4",values);
+                        }
+                        if (keys === 'blockDescription[4]'){
+                            validResponse("#blockDescription5",values);
+                        }
+                        if (keys === 'blockDescription[5]'){
+                            validResponse("#blockDescription6",values);
+                        }
+                        validResponse("#" + keys, values);
+
+                    }
                 })
         }
         function cancelMainPage(){
