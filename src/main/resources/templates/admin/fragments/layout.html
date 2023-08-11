@@ -2,12 +2,12 @@
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">My House 24</title>
+    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE" th:text="#{layout.title}"></title>
     <th:block th:replace="~{/admin/fragments/style}"></th:block>
     <th:block layout:fragment="extra-style"></th:block>
 </head>
