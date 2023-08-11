@@ -4,6 +4,7 @@ import lab.space.my_house_24.entity.Apartment;
 import lab.space.my_house_24.entity.BankBook;
 import lab.space.my_house_24.model.apartment.ApartmentResponse;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForCard;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForEdit;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
 import lab.space.my_house_24.model.bankBook.BankBookResponseForTable;
 
@@ -49,5 +50,17 @@ public class ApartmentMapper {
                 .owner(UserMapper.entityToDtoForTable(apartment.getUser()))
                 .number(apartment.getNumber())
                 .build();
+    }
+
+    public static ApartmentResponseForEdit entityToDtoForEdit(Apartment apartment){
+        return ApartmentResponseForEdit.builder().number(apartment.getNumber())
+                .section(SectionMapper.entityToDtoForTable(apartment.getSection()))
+                .rate(RateMapper.entityToDtoForTable(apartment.getRate()))
+                .bankBook(BankBookMapper.entityToDtoForTable(apartment.getBankBook()))
+                .house(HouseMapper.entityToDtoForTable(apartment.getHouse()))
+                .floor(FloorMapper.entityToDtoForTable(apartment.getFloor()))
+                .area(apartment.getArea())
+                .owner(UserMapper.entityToDtoForTable(apartment.getUser())).build();
+
     }
 }

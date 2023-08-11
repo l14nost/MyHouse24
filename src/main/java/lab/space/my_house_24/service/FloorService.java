@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FloorService {
     List<FloorResponseForTable> floorListForTable();
+    List<FloorResponseForTable> floorByHouse(Long houseId);
 }

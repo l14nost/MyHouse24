@@ -1,12 +1,13 @@
 package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.mapper.ApartmentMapper;
-import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
-import lab.space.my_house_24.model.apartment.ApartmentResponse;
-import lab.space.my_house_24.model.apartment.ApartmentResponseForCard;
+import lab.space.my_house_24.model.apartment.*;
 import lab.space.my_house_24.repository.ApartmentRepository;
 import lab.space.my_house_24.service.ApartmentService;
+import lab.space.my_house_24.service.BankBookService;
+import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.specification.ApartmentSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
     private final ApartmentRepository apartmentRepository;
-    private final HouseServiceImpl houseService;
+    private final HouseService houseService;
+    private final BankBookService bankBookService;
 
     @Override
     public Page<ApartmentResponse> findAllForMainPage(ApartmentRequestForMainPage apartmentRequestForMainPage) {
@@ -45,5 +47,53 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentResponseForCard findByIdForCard(Long id) {
         return ApartmentMapper.entityToDtoForCard(apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found")));
+    }
+
+    @Override
+    public void saveApartment(ApartmentAddRequest apartmentAddRequest) {
+        Apartment apartment = Apartment.builder()
+                .number(apartmentAddRequest.number())
+                .area(apartmentAddRequest.area())
+                .rate(Rate.builder().id(apartmentAddRequest.rate()).build())
+                .section(Section.builder().id(apartmentAddRequest.section()).build())
+                .floor(Floor.builder().id(apartmentAddRequest.floor()).build())
+                .house(House.builder().id(apartmentAddRequest.house()).build())
+                .bankBook(BankBook.builder().id(apartmentAddRequest.bankBook()).build())
+                .user(User.builder().id(apartmentAddRequest.owner()).build())
+                .build();
+        apartmentRepository.save(apartment);
+    }
+
+    @Override
+    public ApartmentResponseForEdit findByIdApartment(Long id) {
+        return ApartmentMapper.entityToDtoForEdit(apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found")));
+    }
+
+    @Override
+    public void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest) {
+        Long idChangeBankBook = null;
+        Apartment apartment = findById(id);
+        if (!apartment.getBankBook().getId().equals(apartmentAddRequest.bankBook())){
+            idChangeBankBook = apartment.getBankBook().getId();
+        }
+        apartment.setArea(apartmentAddRequest.area());
+        apartment.setHouse(House.builder().id(apartmentAddRequest.house()).build());
+        apartment.setNumber(apartmentAddRequest.number());
+        apartment.setUser(User.builder().id(apartmentAddRequest.owner()).build());
+        apartment.setRate(Rate.builder().id(apartmentAddRequest.rate()).build());
+        apartment.setFloor(Floor.builder().id(apartmentAddRequest.floor()).build());
+        BankBook bankBook = bankBookService.findById(apartmentAddRequest.bankBook());
+        bankBook.setApartment(apartment);
+        apartment.setBankBook(bankBook);
+        apartment.setSection(Section.builder().id(apartmentAddRequest.section()).build());
+        apartmentRepository.save(apartment);
+        if (idChangeBankBook!=null){
+            bankBookService.setBankBookApartmentIdNull(idChangeBankBook);
+        }
+    }
+
+    @Override
+    public Apartment findById(Long id) {
+        return apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found"));
     }
 }

@@ -210,12 +210,6 @@
         function select2(lang){
             var defaultSelect = " ";
             console.log(lang);
-            $("#floor").select2({
-                theme: 'bootstrap-5',
-                language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: Infinity
-            });
             $("#house").select2({
                 theme: 'bootstrap-5',
                 language: lang,
@@ -562,6 +556,10 @@
         function apartmentEdit(id){
             window.location.href = "/admin/edit-apartment/"+id;
         }
+        function apartmentAdd(){
+            window.location.href = "/admin/add-apartment";
+        }
+
 
 
     </script>

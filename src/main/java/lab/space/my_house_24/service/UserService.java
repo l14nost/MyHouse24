@@ -26,4 +26,5 @@ public interface UserService {
     void inviteUser(UserInviteRequest userInviteRequest);
 
     List<UserResponseForTable> userListForTable();
+    Page<UserResponseForTable> userResponseForTables(Integer page, String search);
 }

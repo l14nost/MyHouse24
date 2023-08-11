@@ -53,7 +53,7 @@ public class UserMapper {
                 .lastname(user.getLastname())
                 .firstname(user.getFirstname())
                 .surname(user.getSurname())
-                .status(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale()))
+                .status(EnumMapper.toSimpleDto(user.getUserStatus().name(), user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale())))
                 .number(user.getNumber())
                 .filename(user.getFilename())
                 .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())

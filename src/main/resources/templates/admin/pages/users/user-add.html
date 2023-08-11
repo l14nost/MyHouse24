@@ -110,7 +110,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" th:text="#{user.add.status}"></label>
-                                <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status">
+                                <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status">
+                                    <option selected = ""></option>
                                     <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}" th:text="${status.getUserStatus(#locale)}"  th:value="${status.name()}"></option>
                                 </select>
                             </div>
@@ -140,8 +141,9 @@
                                 <input type="password" class="form-control pass" id="confirmPassword"  name="confirmPassword">
                             </div>
                         </div>
-                        <div style="display: flex; justify-content: center;  margin-bottom: 10px">
-                            <button onclick="saveUser()" type="button" class="btn btn-success" th:text="#{user.add.save}" style="width: 50%" ></button>
+                        <div style="display: flex; justify-content: right;  margin-bottom: 10px">
+                            <button onclick="cancelUser()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 105px" ></button>
+                            <button onclick="saveUser()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 100px; margin-left: 10px" ></button>
                         </div>
                     </div>
                 </form>
@@ -169,6 +171,29 @@
 </th:block>
 <th:block layout:fragment="extra-script">
     <script>
+        function select2(lang) {
+            var defaultSelect = " ";
+            $("#status").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+        }
+        $(document).ready(function (){
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+
+        });
+        function cancelUser(){
+            window.location.href = "/admin/users";
+        }
         function saveUser(){
             var form = document.getElementById("userAdd");
             var formData = new FormData(form);

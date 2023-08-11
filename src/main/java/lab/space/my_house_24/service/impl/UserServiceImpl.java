@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(UserMapper::entityToDtoForTable).toList();
     }
 
-
+    @Override
     public Page<UserResponseForTable> userResponseForTables(Integer page, String search){
         UserSpecificationForTable userSpecificationForTable = UserSpecificationForTable.builder().search(search).build();
         return userRepository.findAll(userSpecificationForTable, PageRequest.of(page,5)).map(UserMapper::entityToDtoForTable);

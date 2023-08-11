@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text = "#{user.add.title}"></title>
+    <th:block layout:fragment="extra-style">
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{apartment.add.title}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/apartments}" th:text = "#{left.sidebar.apartments}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{apartment.add.title}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form id="apartmentAdd" style="margin-top: 10px">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{apartment.add.number}"></label>
+                                    <input type="number" class="form-control" id="number"  name="number" th:value="${apartment.number()}" >
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{apartment.add.area}"></label>
+                                    <input type="number" class="form-control" id="area"  name="area"  th:value="${apartment.area()}">
+                                </div>
+                                <div class="form-group" id="houseResponse">
+                                    <label class="form-label" th:text="#{apartment.add.house}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                                        <option selected=""></option>
+                                        <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}" th:selected="${house.id() == apartment.house().id()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="sectionResponse">
+                                    <label class="form-label" th:text="#{apartment.add.section}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
+                                        <option selected=""></option>
+                                        <option selected="selected" th:value="${apartment.section().id()}" th:text="${apartment.section().name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="floorResponse">
+                                    <label class="form-label" th:text="#{apartment.add.floor}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="floor" id="floor">
+                                        <option selected=""></option>
+                                        <option selected="selected" th:value="${apartment.floor().id()}" th:text="${apartment.floor().name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="ownerResponse">
+                                    <label class="form-label" th:text="#{apartment.add.owner}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner">
+                                        <option selected=""></option>
+                                        <option selected="selected" th:value="${apartment.owner().id()}" th:text="${apartment.owner().name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="rateResponse">
+                                    <label class="form-label" th:text="#{apartment.add.rate}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="rate" id="rate">
+                                        <option selected=""></option>
+                                        <option th:each="rate:${rateList}" th:text="${rate.name()}" th:value = "${rate.id()}" th:selected="${rate.id() == apartment.rate().id()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label" th:text = "#{apartment.add.bank.book}"></label>
+                                <input type="text" class="form-control" id="bankBook"  name="bankBook" th:value = "${apartment.bankBook().number()}" >
+                                <div style="margin-top: 10px">
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" style=" width: 160px">
+                                        <option selected=""></option>
+                                        <option th:each="bankBook:${bankBookList}" th:text="${bankBook.number()}" th:value = "${bankBook.number()}" th:selected="${bankBook.id() == apartment.bankBook().id()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: right;  margin-bottom: 10px; margin-right: 20px">
+                            <button onclick="cancelApartment()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px"></button>
+                            <button onclick="editApartment()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px"></button>
+<!--                            <button onclick="editAndAddApartment()" type="button" class="btn btn-success" th:text="#{global.button.save.and.add}" style="width: 250px; margin-left: 10px"></button>-->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-modals">
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script>
+        function checkSelected(id){
+            if (id === [[${apartment.owner().id()}]]){
+                return true;
+            }
+            else return false;
+        }
+        function select2(lang){
+            var defaultSelect = " ";
+            $("#house").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7
+            });
+            $("#owner").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                ajax: {
+                    url: "/admin/get-users/apartment-table",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name,
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect,
+            });
+
+            $("#floor").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7
+            });
+            $("#section").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7
+            });
+            $("#bankBookSelect").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7,
+                allowClear: true
+            });
+            $("#house").on("change", function (){
+                $('#floor').val(null).trigger("change");
+                $('#section').val(null).trigger("change");
+                var idHouse = this.value;
+                $("#section").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-section/"+idHouse,
+                        data: function (param) {
+                            return {
+                                search: param.term || "",
+                                page: param.page || 0
+                            }
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7
+                });
+                $("#floor").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-floor/"+idHouse,
+                        data: function (param) {
+                            return {
+                                search: param.term || "",
+                                page: param.page || 0
+                            }
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7
+                });
+
+
+            })
+            $("#rate").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+        }
+
+        $(document).ready(function (){
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+            $("#bankBookSelect").on("change", function (){
+                var bankBook = document.getElementById("bankBook");
+                bankBook.value = this.value;
+            })
+            $("#owner").val([[${apartment.owner().id()}]]).trigger("change");
+
+        });
+
+
+
+
+
+
+        function cancelApartment(){
+            window.location.href = "/admin/apartments";
+        }
+
+
+        function editApartment(){
+            var form = document.getElementById("apartmentAdd");
+            var formData = new FormData(form);
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            console.log(jsonData);
+            $.ajax({
+                method:"POST",
+                url: "/admin/edit-apartment/"+[[${id}]],
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            }).done(
+                function (response){
+                    window.location.href = "/admin/apartments";
+                }
+            ).fail(
+                function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        if (keys === 'floor'){
+                            validResponse("#"+keys,values,"#floorResponse");
+                        }
+                        if (keys === 'house'){
+                            validResponse("#"+keys,values,"#houseResponse");
+                        }
+                        if (keys === 'section'){
+                            validResponse("#"+keys,values,"#sectionResponse");
+                        }
+                        if (keys === 'owner'){
+                            validResponse("#"+keys,values,"#ownerResponse");
+                        }
+                        if (keys === 'rate'){
+                            validResponse("#"+keys,values,"#rateResponse");
+                        }
+                        if (keys === 'number' || keys === 'area' || keys==='bankBook') {
+                            validResponse("#" + keys, values);
+                        }
+                    }
+                }
+            )
+        }
+
+
+        function saveAndAddApartment(){
+            var form = document.getElementById("apartmentAdd");
+            var formData = new FormData(form);
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            console.log(jsonData);
+            $.ajax({
+                method:"POST",
+                url: "/admin/add-apartment-save",
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            }).done(
+                function (response){
+                    showToast("success");
+                    var number = document.getElementById("number");
+                    var numberValue = parseFloat(number.value);
+                    number.value = numberValue + 1;
+                }
+            ).fail(
+                function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        if (keys === 'floor'){
+                            validResponse("#"+keys,values,"#floorResponse");
+                        }
+                        if (keys === 'house'){
+                            validResponse("#"+keys,values,"#houseResponse");
+                        }
+                        if (keys === 'section'){
+                            validResponse("#"+keys,values,"#sectionResponse");
+                        }
+                        if (keys === 'owner'){
+                            validResponse("#"+keys,values,"#ownerResponse");
+                        }
+                        if (keys === 'rate'){
+                            validResponse("#"+keys,values,"#rateResponse");
+                        }
+                        if (keys === 'number' || keys === 'area' || keys==='bankBook') {
+                            validResponse("#" + keys, values);
+                        }
+                    }
+                }
+            )
+        }
+    </script>
+</th:block>
+</html>

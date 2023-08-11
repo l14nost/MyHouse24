@@ -21,7 +21,7 @@ public class HouseServiceImpl implements HouseService {
     public List<HouseResponseForTable> houseListForTable() {
         return houseRepository.findAll().stream().map(HouseMapper::entityToDtoForTable).toList();
     }
-
+    @Override
     public House findById(Long id){
         return houseRepository.findById(id).orElseThrow(()->new EntityNotFoundException("House by id "+id+" is not found"));
     }

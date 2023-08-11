@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SectionService {
     List<SectionResponseForTable> sectionListForTable();
+    List<SectionResponseForTable> sectionByHouse(Long id);
 }

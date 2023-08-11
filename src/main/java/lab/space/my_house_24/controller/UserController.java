@@ -2,6 +2,8 @@ package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.user.*;
+import lab.space.my_house_24.service.HouseService;
+import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.service.impl.HouseServiceImpl;
 import lab.space.my_house_24.service.impl.UserServiceImpl;
 import lab.space.my_house_24.util.ErrorMapper;
@@ -20,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
-    private final HouseServiceImpl houseService;
+    private final UserService userService;
+    private final HouseService houseService;
     private final UserValidator userValidator;
 
     @GetMapping("/users")
@@ -39,6 +41,7 @@ public class UserController {
     @GetMapping("/user-card/{id}")
     public String userCard(@PathVariable Long id, Model model){
         model.addAttribute("user", userService.findById(id));
+        model.addAttribute("id", id);
         return "admin/pages/users/user-card";
     }
 
@@ -112,6 +115,11 @@ public class UserController {
         }
         userService.inviteUser(userInviteRequest);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/get-user-by-id/{id}")
+    public ResponseEntity findUserById(@PathVariable Long id){
+        return ResponseEntity.ok(userService.findById(id));
     }
 
 

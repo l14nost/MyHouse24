@@ -55,47 +55,47 @@
                     <tbody id="userTable" style="min-height: 55px">
                         <tr>
                             <td><b th:text="#{user.card.status}"></b></td>
-                            <td th:text="${user.status()}"></td>
+                            <td id="userStatus" class="h5"></td>
                         </tr>
                         <tr>
                             <td><b>ID</b></td>
-                            <td th:text="${user.id()}"></td>
+                            <td id="id"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.lastname}"></b></td>
-                            <td th:text="${user.lastname()}"></td>
+                            <td id="lastname"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.firstname}"></b></td>
-                            <td th:text="${user.firstname()}"></td>
+                            <td id="firstname"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.surname}"></b></td>
-                            <td th:text="${user.surname()}"></td>
+                            <td id="surname"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.date}"></b></td>
-                            <td th:text="${user.date()}"></td>
+                            <td id="date"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.notes}"></b></td>
-                            <td th:text="${user.notes()}"></td>
+                            <td  id="notes"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.number}"></b></td>
-                            <td th:text="${user.number()}"></td>
+                            <td  id="number"></td>
                         </tr>
                         <tr>
                             <td><b>Viber</b></td>
-                            <td th:text="${user.viber()}"></td>
+                            <td id="viber"></td>
                         </tr>
                         <tr>
                             <td><b>Telegram</b></td>
-                            <td th:text="${user.telegram()}"></td>
+                            <td id="telegram"></td>
                         </tr>
                         <tr>
                             <td><b th:text="#{user.card.email}"></b></td>
-                            <td th:text="${user.email()}"></td>
+                            <td id="email"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -122,6 +122,26 @@
 <th:block layout:fragment="extra-modals">
 </th:block>
 <th:block layout:fragment="extra-script">
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "/admin/get-user-by-id/"+[[${id}]]
+        })
+            .done(function (response){
+                $("#userStatus").html(addBadgeUserStatus(response.status));
+                $("#id").text(response.id);
+                $("#firstname").text(response.firstname);
+                $("#lastname").text(response.lastname);
+                $("#surname").text(response.surname);
+                $("#date").text(response.date);
+                $("#notes").text(response.notes);
+                $("#number").text(response.number);
+                $("#viber").text(response.viber);
+                $("#telegram").text(response.telegram);
+                $("#email").text(response.email);
 
+            })
+    });
+</script>
 </th:block>
 </html>

@@ -1,8 +1,7 @@
 package lab.space.my_house_24.service;
 
-import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
-import lab.space.my_house_24.model.apartment.ApartmentResponse;
-import lab.space.my_house_24.model.apartment.ApartmentResponseForCard;
+import lab.space.my_house_24.entity.Apartment;
+import lab.space.my_house_24.model.apartment.*;
 import lab.space.my_house_24.model.floor.FloorResponseForTable;
 import org.springframework.data.domain.Page;
 
@@ -15,4 +14,10 @@ public interface ApartmentService {
     ApartmentResponseForCard findByIdForCard(Long id);
 
 
+    void saveApartment(ApartmentAddRequest apartmentAddRequest);
+
+    ApartmentResponseForEdit findByIdApartment(Long id);
+
+    void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest);
+    Apartment findById(Long id);
 }

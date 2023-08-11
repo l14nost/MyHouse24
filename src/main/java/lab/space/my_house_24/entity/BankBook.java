@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "bank_book")
 @Data
@@ -25,6 +27,6 @@ public class BankBook {
     @Column(name = "status", length = 50, nullable = false)
     private BankBookStatus bankBookStatus;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Apartment apartment;
 }

@@ -19,7 +19,7 @@ public class FloorServiceImpl implements FloorService {
     public List<FloorResponseForTable> floorListForTable() {
         return floorRepository.findAll().stream().map(FloorMapper::entityToDtoForTable).toList();
     }
-
+    @Override
     public List<FloorResponseForTable> floorByHouse(Long houseId) {
         return floorRepository.findAllByHouse_Id(houseId).stream().map(FloorMapper::entityToDtoForTable).toList();
     }
