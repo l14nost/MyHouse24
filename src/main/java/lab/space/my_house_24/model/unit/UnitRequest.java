@@ -9,7 +9,7 @@ import lombok.Builder;
 public record UnitRequest(
         Long id,
         @NotBlank(message = "{not.blank.message}")
-        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z][а-яєіїґёa-z]*$", message = "{pattern.name.message}")
+        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z].*$", message = "{pattern.name.capital_letter.message}")
         @Size(max = 40, message = "{size.less.message}" + " {max}")
         String name
 ) {

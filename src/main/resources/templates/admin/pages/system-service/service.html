@@ -7,9 +7,6 @@
 </head>
 
 <th:block layout:fragment="content">
-    <input type="text" class="form-control" id="service-title" th:value="#{service.service.title}" hidden>
-    <input type="text" class="form-control" id="service-unit" th:value="#{service.service.unit}" hidden>
-    <input type="text" class="form-control" id="service-checkbox" th:value="#{service.service.checkbox}" hidden>
 
     <div class="col-12">
         <div class="card">
@@ -112,18 +109,11 @@
         let loadUnit = 0;
         let loadService = 0;
         let serviceSelectCount = 0;
+        let unitSelectCount = 0;
         let unitId;
         let serviceId;
         let unitRowContent = $('#unit-content');
         let serviceRowContent = $('#service-content');
-        let translate = {
-            serviceTitle: undefined,
-            serviceUnit: undefined,
-            serviceCheckbox: undefined
-        };
-        translate.serviceTitle = $('#service-title').val();
-        translate.serviceUnit = $('#service-unit').val();
-        translate.serviceCheckbox = $('#service-checkbox').val();
 
         $(document).ready(function () {
             getAllUnit();
@@ -153,7 +143,9 @@
                 unitRowContent.empty();
                 $.each(unitResponse, function (index, unit) {
                     unitRowContent.append(addRowUnits(unit));
+                    unitSelectCount = unit?.id;
                 })
+                unitSelectCount++;
                 if (loadUnit>0) {
                     showToast('success');
                 }
@@ -176,7 +168,7 @@
                     selectUnit(service?.id,service?.unit);
                     serviceSelectCount = service?.id;
                 })
-                serviceSelectCount +=serviceSelectCount;
+                serviceSelectCount++;
                 if (loadService>0) {
                     showToast('success');
                 }
@@ -191,7 +183,7 @@
             let row = '<div class="row py-2">\n' +
                 '                            <div class="col-7">\n' +
                 '                                <div class="form-group">\n' +
-                '                                    <label for="unit-name-' + unit.id + '" class="form-label">' + translate.serviceUnit + '</label>\n' +
+                '                                    <label for="unit-name-' + unit.id + '" class="form-label">[[#{service.service.unit}]]</label>\n' +
                 '                                          <input type="text" class="form-control" id="unit-id-' + unit.id + '" value="' + unit.id + '" hidden>\n' +
                 '                                          <div class="input-group" id="unit">\n' +
                 '                                          <input type="text" class="form-control" id="unit-name-' + unit.id + '" value="' + unit.name + '">\n' +
@@ -224,21 +216,21 @@
 
             let row = '<div class="row pb-3">\n' +
                 '                            <div class="col-8">\n' +
-                '                                <div class="row">\n' +
+                '                                <div class="row" id="service-row-' + service.id + '">\n' +
                 '                                    <div class="col-6">\n' +
                 '                                        <div class="form-group">\n' +
-                '                                            <label for="service-name-' + service.id + '" class="form-label">' + translate.serviceTitle + '</label>\n' +
+                '                                            <label for="service-name-' + service.id + '" class="form-label">[[#{service.service.title}]]</label>\n' +
                 '                                          <input type="text" class="form-control" id="service-id-' + service.id + '" value="' + service.id + '" hidden>\n' +
                 '                                            <input type="text" class="form-control" id="service-name-' + service.id + '" value="' + service.name + '">\n' +
                 '                                        </div>\n' +
                 '                                        <div class="form-check form-check-inline">\n' +
                 '                                            <input type="checkbox" class="form-check-input" id="service-check-' + service.id + '" ' + (service.isActiv ? 'checked' : '') + '>\n' +
-                '                                            <label class="form-check-label pl-2" for="service-check-' + service.id + '">' + translate.serviceCheckbox + '</label>\n' +
+                '                                            <label class="form-check-label pl-2" for="service-check-' + service.id + '">[[#{service.service.checkbox}]]</label>\n' +
                 '                                        </div>\n' +
                 '                                    </div>\n' +
                 '                                    <div class="col-6">\n' +
                 '                                        <div class="form-group">\n' +
-                '                                            <label class="form-label">' + translate.serviceUnit + '</label>\n' +
+                '                                            <label class="form-label">[[#{service.service.unit}]]</label>\n' +
                 '                                            <div class="input-group" id="serviceUnit-' + service.id + '">\n' +
                 '                                                <select id="service-unit-' + service.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
                 '                                                    <option value=""></option>\n' +
@@ -272,9 +264,9 @@
             let emptyRow = '<div class="row py-2">\n' +
                 '    <div class="col-7">\n' +
                 '        <div class="form-group">\n' +
-                '            <label class="form-label">' + translate.serviceUnit + '</label>\n' +
+                '            <label class="form-label">[[#{service.service.unit}]]</label>\n' +
                 '            <div class="input-group" id="unit">\n' +
-                '            <input type="text" class="form-control" id="unit-name-new">\n' +
+                '            <input type="text" class="form-control" id="unit-name-' + unitSelectCount + '">\n' +
                 '                <button class="btn btn-sm btn-icon text-danger btn-delete remove-row"\n' +
                 '                    type="button" aria-label="Remove Row">\n' +
                 '                    <span class="btn-inner">\n' +
@@ -297,6 +289,7 @@
                 '</div>';
 
             unitRowContent.append(emptyRow);
+            unitSelectCount++;
         }
 
         function addEmptyRowService() {
@@ -305,17 +298,17 @@
                 '        <div class="row">\n' +
                 '            <div class="col-6">\n' +
                 '                <div class="form-group">\n' +
-                '                    <label for="service-name-' + serviceSelectCount + '" class="form-label">' + translate.serviceTitle + '</label>\n' +
+                '                    <label for="service-name-' + serviceSelectCount + '" class="form-label">[[#{service.service.title}]]</label>\n' +
                 '                    <input type="text" class="form-control" id="service-name-' + serviceSelectCount + '">\n' +
                 '                </div>\n' +
                 '                <div class="form-check form-check-inline">\n' +
                 '                    <input type="checkbox" class="form-check-input" id="service-check-' + serviceSelectCount + '">\n' +
-                '                    <label class="form-check-label pl-2" for="service-check-' + serviceSelectCount + '">' + translate.serviceCheckbox + '</label>\n' +
+                '                    <label class="form-check-label pl-2" for="service-check-' + serviceSelectCount + '">[[#{service.service.checkbox}]]</label>\n' +
                 '                </div>\n' +
                 '            </div>\n' +
                 '            <div class="col-6">\n' +
                 '                <div class="form-group">\n' +
-                '                    <label class="form-label">' + translate.serviceUnit + '</label>\n' +
+                '                    <label class="form-label">[[#{service.service.unit}]]</label>\n' +
                 '                    <div class="input-group" id="serviceUnit-' + serviceSelectCount + '">\n' +
                 '                        <select id="service-unit-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
                 '                            <option value=""></option>\n' +
@@ -354,10 +347,12 @@
             $.ajax({
                 method: "DELETE",
                 url: serviceId ? "/admin/system-service/delete-service/" + serviceId : "/admin/system-service/delete-unit/" + unitId,
-                contentType: 'application/json'
+                contentType: 'application/json',
+                beforeSend : function (){
+                    clearValidMessages();
+                }
             }).done(function () {
                 $('#confirmDelete').modal('hide');
-
                 if (serviceId > 0){
                     getAllService();
                 }
@@ -371,6 +366,14 @@
                 console.log(response);
                 $('#confirmDelete').modal('hide');
                 showToast('error');
+                if (unitId){
+                    console.log(unitId)
+                    if (response) validResponse($('#unit-name-' + unitId), response.responseText, 'div');
+                }
+                if (serviceId){
+                    console.log(serviceId)
+                    if (response) validResponse($('#service-row-' + serviceId), response.responseText);
+                }
                 serviceId = undefined;
                 unitId = undefined;
             })
@@ -382,13 +385,21 @@
             $('.row.py-2').each(function() {
                 let id = $(this).find('.form-control[id^="unit-id-"]').val();
                 let name = $(this).find('.form-control[id^="unit-name-"]').val();
+                unitData.push({
+                    id: id || null,
+                    name: name || null
+                });
+            });
+            return unitData;
+        }
 
-                if (id || name) {
-                    unitData.push({
-                        id: id || null,
-                        name: name || ''
-                    });
-                }
+        function collectUnitDataResponse() {
+            let unitData = [];
+            $('.row.py-2').each(function() {
+                let name = $(this).find('.form-control[id^="unit-name-"]');
+                unitData.push({
+                    name: name || null,
+                });
             });
             return unitData;
         }
@@ -401,21 +412,31 @@
                 let isActiv = $(this).find('.form-check-input[id^="service-check-"]').prop('checked');
                 let unit = $(this).find('.form-select[id^="service-unit-"]').val();
 
-                if (id || name) {
                     unitData.push({
                         id: id || null,
-                        name: name || '',
+                        name: name || null,
                         isActiv: isActiv || false,
                         unitId: unit || null
                     });
-                }
+            });
+            return unitData;
+        }
+
+        function collectServiceDataResponse() {
+            let unitData = [];
+            $('.col-8').each(function() {
+                let name = $(this).find('.form-control[id^="service-name-"]');
+                let unit = $(this).find('.form-select[id^="service-unit-"]');
+                unitData.push({
+                    name: name || null,
+                    unitId: unit || null
+                });
             });
             return unitData;
         }
 
         function saveUnits() {
             let unitRequestList = collectUnitData();
-
             let data = {
                 unitRequestList: unitRequestList
             };
@@ -426,38 +447,68 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){
-                    console.log(data)
+                    clearValidMessages();
                 }
             }).done(function () {
                 getAllUnit();
                 showToast('success');
             }).fail(function (response) {
+                data={
+                    errorData:  collectUnitDataResponse()
+                }
+                const errors = response.responseJSON;
                 console.log(response);
-                showToast('error');
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        const index = parseInt(key.match(/unitRequestList\[(\d+)\]\.(\w+)/)[1]);
+                        const col = key.split('.').pop();
+                        const value = errors[key];
+                        console.log(index)
+                        if (col === 'name') validResponse($('#' + data?.errorData[index]?.name[0]?.id), value, 'div');
+
+                    }
+                }
+                if (response?.status !== 400){
+                    showToast('error');
+                }
             });
         }
 
         function saveService() {
             let serviceRequestList = collectServiceData();
-
             let data = {
                 serviceRequestList: serviceRequestList
             };
-
             $.ajax({
                 method: "POST",
                 url: "/admin/system-service/save-services",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){
-                    console.log(data)
+                    clearValidMessages();
                 }
             }).done(function () {
                 getAllService();
                 showToast('success');
             }).fail(function (response) {
+                data={
+                    errorData:  collectServiceDataResponse()
+                }
+                const errors = response.responseJSON;
                 console.log(response);
-                showToast('error');
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        const index = parseInt(key.match(/serviceRequestList\[(\d+)\]\.(\w+)/)[1]);
+                        const col = key.split('.').pop();
+                        const value = errors[key];
+                        if (col === 'name') validResponse($('#' + data?.errorData[index]?.name[0]?.id), value);
+                        if (col === 'unitId') validResponse($('#' + data?.errorData[index]?.unitId[0]?.id), value,'div');
+
+                    }
+                }
+                if (response?.status !== 400){
+                    showToast('error');
+                }
             });
         }
 

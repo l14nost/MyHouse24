@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "unit")
 @Data
@@ -22,4 +25,6 @@ public class Unit {
     @Column(length = 20, nullable = false)
     private String name;
 
+    @OneToMany(mappedBy = "unit", fetch = FetchType.LAZY)
+    private List<Service> serviceList = new ArrayList<>();
 }
