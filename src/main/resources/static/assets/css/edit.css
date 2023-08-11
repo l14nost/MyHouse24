@@ -181,3 +181,15 @@
 }
 
 
+.hr-horizontal {
+    background: transparent;
+    border: 0;
+    height: 3px;
+    margin: 0.5rem 0;
+    background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(rgba(0, 0, 0, 0.4)), to(transparent));
+    background-image: -webkit-linear-gradient(left, transparent, rgba(0, 0, 0, 0.4), transparent);
+    background-image: -o-linear-gradient(left, transparent, rgba(0, 0, 0, 0.4), transparent);
+    background-image: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4), transparent);
+}
+
+

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}" style="width: auto">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{left.sidebar.apartment.owner}"></title>
+    <th:block layout:fragment="extra-style">
+        <style>
+            .main-page-slide{
+                width: 350px;
+                height: 270px;
+            }
+        </style>
+
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{global.breadcrumb.edit.page}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{global.breadcrumb.edit.page}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+
+                <div style="display: flex; justify-content: space-between">
+                    <h3 th:text="#{settings.page.main.page}"></h3>
+                    <button type="button" class="btn btn-light" style="height: 40px; display: flex"  onclick="clearFilters()"><h7 th:text="#{settings.page.button.update}"></h7></button>
+                </div>
+                <hr class="hr-horizontal">
+            </div>
+            <div class="card-body">
+                <form id="mainPage">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <h3 th:text="#{settings.page.main.page.carousel}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="col-md-4">
+                                    <h5><span th:text="#{settings.page.main.slide}"></span> 1</h5>
+                                    <img th:src="${'/admin/files/'+mainPage.slide1()}"  alt="" class="main-page-slide" id="slide1">
+                                    <div class="form-group mb-30">
+                                        <label class="control-label" th:text="#{settings.page.main.size}"></label>
+                                        <input type="file" class="form-control form-control-lg" name="slide1" accept=".jpg,.jpeg,.png" id="slideInput1">
+                                        <script>
+                                            slideInput1.onchange = evt => {
+                                                const [file] = slideInput1.files
+                                                if (file) {
+                                                    slide1.src = URL.createObjectURL(file)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5><span th:text="#{settings.page.main.slide}"></span> 2</h5>
+                                    <img th:src="${'/admin/files/'+mainPage.slide2()}"  alt="" class="main-page-slide" id="slide2">
+                                    <div class="form-group mb-30">
+                                        <label class="control-label" th:text="#{settings.page.main.size}"></label>
+                                        <input type="file" class="form-control form-control-lg" name="slide2"  accept=".jpg,.jpeg,.png"  id="slideInput2">
+                                        <script>
+                                            slideInput2.onchange = evt => {
+                                                const [file] = slideInput2.files
+                                                if (file) {
+                                                    slide2.src = URL.createObjectURL(file)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5><span th:text="#{settings.page.main.slide}"></span> 3</h5>
+                                    <img th:src="${'/admin/files/'+mainPage.slide3()}" alt="" class="main-page-slide" id="slide3" >
+                                    <div class="form-group mb-30">
+                                        <label class="control-label" th:text="#{settings.page.main.size}"></label>
+                                        <input type="file" class="form-control form-control-lg" name="slide3"  accept=".jpg,.jpeg,.png"  id="slideInput3">
+                                        <script>
+                                            slideInput3.onchange = evt => {
+                                                const [file] = slideInput3.files
+                                                if (file) {
+                                                    slide3.src = URL.createObjectURL(file)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <h3 th:text="#{settings.page.main.page.brief.info}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
+                                    <input type="text" class="form-control" id="title"  name="title" th:value="${mainPage.title()}">
+                                </div>
+                                <div class="form-group" >
+                                    <label class="form-label" th:text="#{settings.page.main.page.brief.description}"></label>
+                                    <div id="description-div"><div id="description-container" style="height: 150px;"></div></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" class="form-check-input" id="showLink" name="showLink" th:checked="${mainPage.showLink()}">
+                                        <label class="form-check-label pl-2" for="showLink" th:text="#{settings.page.main.page.checkbox.link}" ></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <h3 th:text="#{settings.page.main.page.next.to.us}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="col-md-4" th:each="block, blockStat:${mainPage.blocks()}">
+                                    <h5 th:text="#{settings.page.main.block} +' '+ ${(blockStat.index+1)}"> </h5>
+                                    <img th:src="${'/admin/files/'+block.block()}"  alt="" class="main-page-slide" th:id="${'block'+(blockStat.index+1)}">
+                                    <div class="form-group mb-30">
+                                        <label class="control-label" th:text="#{settings.page.main.size}"></label>
+                                        <input type="file" class="form-control form-control-lg" name="block" accept=".jpg,.jpeg,.png" th:id="${'blockInput'+(blockStat.index+1)}" onchange="handleFileChange(event)">
+                                        <script>
+                                            function handleFileChange(event) {
+                                                const input = event.target;
+                                                const file = input.files[0];
+                                                const id = input.id.slice(10);
+                                                const img = document.getElementById(`block${id}`);
+
+                                                if (file) {
+                                                    img.src = URL.createObjectURL(file);
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
+                                        <input type="text" class="form-control"  name="blockTitle" id="blockTitle1" th:value="${block.title()}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.main.page.brief.description}"></label>
+                                        <div><div th:id="${'blockDescription'+(blockStat.index+1)}"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <h3>SEO</h3>
+                                <hr class="hr-horizontal">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
+                                    <input type="text" class="form-control" id="seoTitle"  name="seoTitle" th:value="${mainPage.seoTitle()}">
+                                </div>
+                                <div class="form-group" >
+                                    <label class="form-label" th:text="#{settings.page.main.page.description}"></label>
+                                    <textarea id="seoDescription" class="form-control" rows="6" name="seoDescription" th:text="${mainPage.seoDescription()}"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.key.words}"></label>
+                                    <textarea id="seoKeyWords" class="form-control" rows="6" name="seoKeyWords" th:text="${mainPage.seoKeyWords()}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center;  margin-bottom: 10px">
+                            <button onclick="cancelMainPage()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px" ></button>
+                            <button onclick="saveMainPage()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px" ></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-alert">
+    <div id="liveAlertPlaceholder" style="right: 0; position: fixed; bottom: 0"></div>
+</th:block>
+<th:block layout:fragment="extra-modals">
+    <div class="modal fade" id="confirmDeleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteUserLabel">Delete Apartment Owner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete apartment owner?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" onclick="userDelete()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script th:inline="javascript">
+        var options = {
+            modules: {
+                toolbar: true
+            },
+            theme: 'snow'
+        };
+        var editor = new Quill('#description-container', options);
+        editor.root.innerHTML = /*[[${mainPage.description()}]]*/;
+
+
+        var optionsBlock1 = {modules: {toolbar: true}, theme: 'snow'};
+        var editorBlock1 = new Quill('#blockDescription1', optionsBlock1);
+        editorBlock1.root.innerHTML = /*[[${mainPage.blocks().get(0).description()}]]*/;
+        var optionsBlock2 = {modules: {toolbar: true}, theme: 'snow'};
+        var editorBlock2 = new Quill('#blockDescription2', optionsBlock2);
+        editorBlock2.root.innerHTML = /*[[${mainPage.blocks().get(1).description()}]]*/;
+
+        var optionsBlock3 = {modules: {toolbar: true}, theme: 'snow'};
+        var editorBlock3 = new Quill('#blockDescription3', optionsBlock3);
+        editorBlock3.root.innerHTML = /*[[${mainPage.blocks().get(2).description()}]]*/;
+
+        var optionsBlock4 = {modules: {toolbar: true}, theme: 'snow'};
+        var editorBlock4 = new Quill('#blockDescription4', optionsBlock4);
+        editorBlock4.root.innerHTML = /*[[${mainPage.blocks().get(3).description()}]]*/;
+
+        var optionsBlock5 = {modules: {toolbar: true}, theme: 'snow'};
+        var editorBlock5 = new Quill('#blockDescription5', optionsBlock5);
+        editorBlock5.root.innerHTML = /*[[${mainPage.blocks().get(4).description()}]]*/;
+
+        var optionsBlock6 = {modules: {toolbar: true}, theme: 'snow'};
+        var editorBlock6 = new Quill('#blockDescription6', optionsBlock6);
+        editorBlock6.root.innerHTML = /*[[${mainPage.blocks().get(5).description()}]]*/;
+
+        function saveMainPage(){
+            var form = document.getElementById("mainPage");
+            var formData = new FormData(form);
+            formData.append("description", editor.root.innerHTML)
+            formData.append("blockDescription", editorBlock1.root.innerHTML)
+            formData.append("blockDescription", editorBlock2.root.innerHTML)
+            formData.append("blockDescription", editorBlock3.root.innerHTML)
+            formData.append("blockDescription", editorBlock4.root.innerHTML)
+            formData.append("blockDescription", editorBlock5.root.innerHTML)
+            formData.append("blockDescription", editorBlock6.root.innerHTML)
+            $.ajax({
+                url: "/admin/site-main-page-save",
+                method: "PUT",
+                contentType: false,
+                processData: false,
+                data:formData
+            })
+                .done(function (response){
+                    showToast("success");
+                })
+                .fail(function (response){
+                    console.log(response);
+                })
+        }
+        function cancelMainPage(){
+            window.location.href = "/admin/site-main-page"
+        }
+
+
+
+    </script>
+</th:block>
+</html>

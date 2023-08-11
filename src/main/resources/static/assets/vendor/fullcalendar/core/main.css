@@ -256,7 +256,7 @@ temporary rendered events).
   position: relative;
   /* for resize handle and other inner positioning */
   display: block;
-  /* make the <a> tag block */
+  /* make the <a> tag blocks */
   font-size: 0.85em;
   line-height: 1.4;
   border-radius: 3px;

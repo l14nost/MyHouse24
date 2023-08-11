@@ -38,10 +38,10 @@ public class MainPage {
     @Column(nullable = false)
     private Boolean links;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Seo seo;
 
-    @OneToMany(mappedBy = "mainPage")
+    @OneToMany(mappedBy = "mainPage", cascade = CascadeType.ALL)
     private List<Banner> bannerList = new ArrayList<>();
 
 }
