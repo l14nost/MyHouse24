@@ -18,12 +18,12 @@ public interface ErrorMapper {
                                             bindingResult.getFieldErrors()
                                                     .stream()
                                                     .anyMatch(error -> error.getDefaultMessage().equals(error1)
-                                                            && error.getCode().equals("NotBlank"))
+                                                            && error.getCode().equals("NotBlank") || error.getCode().equals("NotNull"))
                                     ) {
                                         return bindingResult.getFieldErrors()
                                                 .stream()
                                                 .filter(error -> error.getDefaultMessage().equals(error1)
-                                                        && error.getCode().equals("NotBlank"))
+                                                        && error.getCode().equals("NotBlank") || error.getCode().equals("NotNull"))
                                                 .findFirst()
                                                 .get()
                                                 .getDefaultMessage();
@@ -31,7 +31,7 @@ public interface ErrorMapper {
                                             !bindingResult.getFieldErrors()
                                                     .stream()
                                                     .anyMatch(error -> error.getDefaultMessage().equals(error2)
-                                                            && error.getCode().equals("NotBlank"))
+                                                            && error.getCode().equals("NotBlank") || error.getCode().equals("NotNull"))
                                                     &&
                                                     bindingResult.getFieldErrors()
                                                             .stream()
