@@ -107,4 +107,10 @@ public interface StaffMapper {
                 .setTokenUsage(true)
                 .setStaffStatus(UserStatus.ACTIVE);
     }
+
+    static Staff forgotPasswordStaff(ForgotPassRequest request, Staff staff) {
+        return staff
+                .setPassword(new BCryptPasswordEncoder().encode(request.password()))
+                .setForgotTokenUsage(true);
+    }
 }

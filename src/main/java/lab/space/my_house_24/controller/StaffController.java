@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 @Controller
 @RequestMapping("staff")
 @RequiredArgsConstructor
@@ -105,7 +107,7 @@ public class StaffController {
                 staffUpdateRequest, bindingResult,
                 "StaffUpdateRequest", LocaleContextHolder.getLocale()
         );
-        if (!staffUpdateRequest.password().equals("")) {
+        if (nonNull(staffUpdateRequest.password()) && !staffUpdateRequest.password().equals("")) {
             staffValidator.passwordEqualsValidation(
                     staffUpdateRequest.password(),
                     staffUpdateRequest.confirmPassword(), bindingResult,

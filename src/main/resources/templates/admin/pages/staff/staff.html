@@ -380,12 +380,12 @@
                 contentType: 'application/json',
                 data: JSON.stringify(inviteRequest)
             }).done(function () {
-                inviteRequest = undefined;
+                inviteRequest.email = undefined;
                 showToast('success');
             }).fail(function (response) {
                 console.log(response);
                 showToast('error');
-                inviteRequest = undefined;
+                inviteRequest.email = undefined;
             })
         }
 

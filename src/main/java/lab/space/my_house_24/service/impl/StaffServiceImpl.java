@@ -44,7 +44,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final StaffSpecification staffSpecification;
     private final CustomMailSender customMailSender;
     private final JwtService jwtService;
-    private final String url = "http://localhost:7575/admin/auth/activate-staff/";
+    private final String url = "http://localhost:7575/admin/";
 
     @Override
     public void sendInvite(InviteRequest inviteRequest) {
@@ -53,8 +53,22 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
         String token = jwtService.generateToken(staff);
         staff.setToken(token);
         staff.setTokenUsage(false);
+        staff.setForgotTokenUsage(true);
         saveStaff(staff);
-        customMailSender.send(staff.getEmail(), url + token, "Activate Account");
+        customMailSender.send(staff.getEmail(), url + "auth/activate-staff/" + token, "Activate Account");
+    }
+
+
+    @Override
+    public void sendForgotPasswordUrl(String email) {
+        log.info("Try to send Forgot Pass url by email " + email);
+        Staff staff = getStaffByEmail(email);
+        String token = jwtService.generateToken(staff);
+        staff.setForgotToken(token);
+        staff.setTokenUsage(true);
+        staff.setForgotTokenUsage(false);
+        saveStaff(staff);
+        customMailSender.send(staff.getEmail(), url + "login/forgot-password/" + token, "Forgot Password");
     }
 
     @Override
@@ -231,6 +245,29 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
             log.error("Staff not found with email" + request.email());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> forgotPasswordStaff(ForgotPassRequest request) {
+        try {
+            log.info("Try to Forgot Password Staff");
+            Staff staff = getStaffByEmail(loadUserByToken(request.token()).getUsername());
+            saveStaff(
+                    StaffMapper.forgotPasswordStaff(
+                            request,
+                            staff
+                    )
+            );
+            sendUpdatePasswordWarning(
+                    staff.getEmail(),
+                    LocaleContextHolder.getLocale()
+            );
+            log.info("Success Forgot Password Staff");
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            log.error("Staff not found with email" + loadUserByToken(request.token()).getUsername());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
     }

@@ -193,20 +193,22 @@
 <!-- Library Bundle Script -->
 <script th:src="@{/assets/js/core/libs.min.js}"></script>
 <script>
+    let url = new URL(window.location.href).pathname.split("/")
     let inviteRequest = {};
-    inviteRequest.token = new URL(window.location.href).pathname.split("/").pop();
+    inviteRequest.token = url.pop();
     inviteRequest.password = undefined;
+    url = url.pop();
+    console.log(url);
     inviteRequest.confirmPassword = undefined;
 
     function savePassword() {
-
-
         inviteRequest.password = $("#password").val();
         inviteRequest.confirmPassword = $("#confirmPassword").val();
         console.log(inviteRequest)
+
         $.ajax({
             method: 'PUT' ,
-            url: '/admin/auth/update-staff',
+            url:(url!=='forgot-password') ? '/admin/auth/update-staff':'/admin/login/forgot-password-staff-change' ,
             contentType: 'application/json',
             data: JSON.stringify(inviteRequest),
             beforeSend: function () {

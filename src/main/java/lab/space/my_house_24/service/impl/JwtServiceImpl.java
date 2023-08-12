@@ -21,7 +21,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${app.jwt.secret}")
     private String JWT_SECRET;
-    private final int ACCESS_JWT_EXPIRED_TIME = 15;
+    private final int JWT_EXPIRED_TIME = 15;
 
     @Override
     public String extractUsername(String token) {
@@ -33,22 +33,25 @@ public class JwtServiceImpl implements JwtService {
         return JWT.create()
                 .withSubject(userDetails.getUsername())
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 60000L * ACCESS_JWT_EXPIRED_TIME))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60000L * JWT_EXPIRED_TIME))
                 .sign(getSignInAlgorithm());
     }
 
     @Override
-    public boolean isTokenValid(String token, UserDetails userDetails,Staff staff) {
+    public boolean isTokenValid(String token, UserDetails userDetails, Staff staff) {
         try {
             JWT.require(getSignInAlgorithm()).withSubject(userDetails.getUsername()).build().verify(token);
-            if (staff.getTokenUsage()){
-                return false;
-            } else return staff.getToken().equals(token);
+            if (staff.getToken().equals(token)) {
+                return !staff.getTokenUsage() && staff.getForgotTokenUsage();
+            }
+            return staff.getTokenUsage() && !staff.getForgotTokenUsage();
+
         } catch (JWTVerificationException e) {
             log.warn(e.getMessage());
             return false;
         }
     }
+
 
     private Algorithm getSignInAlgorithm() {
         return Algorithm.HMAC256(Base64.getDecoder().decode(JWT_SECRET));

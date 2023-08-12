@@ -13,6 +13,7 @@ import java.util.Locale;
 public interface StaffService {
 
     void sendInvite(InviteRequest inviteRequest);
+    void sendForgotPasswordUrl(String email);
 
     void sendUpdatePasswordWarning(String email, Locale locale);
 
@@ -41,6 +42,8 @@ public interface StaffService {
     void saveStaff(Staff staff);
 
     ResponseEntity<?> activateStaff(InviteRequest request);
+
+    ResponseEntity<?> forgotPasswordStaff(ForgotPassRequest request);
 
     ResponseEntity<?> deleteStaff(Long id);
 
