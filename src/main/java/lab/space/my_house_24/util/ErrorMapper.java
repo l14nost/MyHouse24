@@ -4,6 +4,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public interface ErrorMapper {
@@ -14,37 +15,19 @@ public interface ErrorMapper {
                         Collectors.toMap(
                                 FieldError::getField, FieldError::getDefaultMessage,
                                 (error1, error2) -> {
-                                    if (
-                                            bindingResult.getFieldErrors()
-                                                    .stream()
-                                                    .anyMatch(error -> error.getDefaultMessage().equals(error1)
-                                                            && error.getCode().equals("NotBlank") || error.getCode().equals("NotNull"))
-                                    ) {
-                                        return bindingResult.getFieldErrors()
-                                                .stream()
-                                                .filter(error -> error.getDefaultMessage().equals(error1)
-                                                        && error.getCode().equals("NotBlank") || error.getCode().equals("NotNull"))
-                                                .findFirst()
-                                                .get()
-                                                .getDefaultMessage();
-                                    } else if (
-                                            !bindingResult.getFieldErrors()
-                                                    .stream()
-                                                    .anyMatch(error -> error.getDefaultMessage().equals(error2)
-                                                            && error.getCode().equals("NotBlank") || error.getCode().equals("NotNull"))
-                                                    &&
-                                                    bindingResult.getFieldErrors()
-                                                            .stream()
-                                                            .anyMatch(error -> error.getDefaultMessage().equals(error1)
-                                                                    && error.getCode().equals("Size"))
-                                    ) {
-                                        return bindingResult.getFieldErrors()
-                                                .stream()
-                                                .filter(error -> error.getDefaultMessage().equals(error1)
-                                                        && error.getCode().equals("Size"))
-                                                .findFirst()
-                                                .get()
-                                                .getDefaultMessage();
+                                    if (bindingResult.getFieldErrors().stream()
+                                            .anyMatch(error -> Objects.equals(error.getDefaultMessage(), error1)
+                                                    && (Objects.equals(error.getCode(), "NotBlank") || Objects.equals(error.getCode(), "NotNull")))) {
+                                        return error1;
+                                    } else if (bindingResult.getFieldErrors()
+                                            .stream()
+                                            .noneMatch(error -> Objects.equals(error.getDefaultMessage(), error2)
+                                                    && (Objects.equals(error.getCode(), "NotBlank") || Objects.equals(error.getCode(), "NotNull")))
+                                            &&
+                                            bindingResult.getFieldErrors().stream()
+                                                    .anyMatch(error -> Objects.equals(error.getDefaultMessage(), error1)
+                                                            && Objects.equals(error.getCode(), "Size"))) {
+                                        return error1;
                                     } else {
                                         return error2;
                                     }
