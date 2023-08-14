@@ -32,4 +32,12 @@ public class BankBookServiceImpl implements BankBookService {
         bankBook.setApartment(null);
         bankBookRepository.save(bankBook);
     }
+
+    @Override
+    public void update(Long id,BankBook bankBook) {
+        BankBook bankBook1 = findById(id);
+        bankBook1.setApartment(bankBook.getApartment());
+        bankBook1.setBankBookStatus(bankBook.getBankBookStatus());
+        bankBookRepository.save(bankBook1);
+    }
 }

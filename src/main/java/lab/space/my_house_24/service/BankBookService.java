@@ -12,4 +12,6 @@ public interface BankBookService {
     List<BankBookResponseForTable> bankBookListForTable();
 
     void setBankBookApartmentIdNull(Long id);
+
+    void update(Long id,BankBook bankBook);
 }

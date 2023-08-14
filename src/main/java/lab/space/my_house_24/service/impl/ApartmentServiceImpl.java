@@ -58,9 +58,13 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .section(Section.builder().id(apartmentAddRequest.section()).build())
                 .floor(Floor.builder().id(apartmentAddRequest.floor()).build())
                 .house(House.builder().id(apartmentAddRequest.house()).build())
-                .bankBook(BankBook.builder().id(apartmentAddRequest.bankBook()).build())
                 .user(User.builder().id(apartmentAddRequest.owner()).build())
                 .build();
+        apartmentRepository.save(apartment);
+        BankBook bankBook = bankBookService.findById(apartmentAddRequest.bankBook());
+        bankBook.setApartment(apartment);
+        bankBookService.update(apartmentAddRequest.bankBook(), bankBook);
+        apartment.setBankBook(bankBook);
         apartmentRepository.save(apartment);
     }
 

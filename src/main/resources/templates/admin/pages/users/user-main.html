@@ -243,6 +243,30 @@
         }
 
         $(document).ready(function (){
+            $('#house').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#status').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#duty').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
             $.ajax({
                 url: "/admin/get-locale"
             })
