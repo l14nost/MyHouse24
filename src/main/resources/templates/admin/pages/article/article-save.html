@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title th:text="#{article.save.title}"></title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title">Payment Items</h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{article.breadcrumb.article}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <label for="title" class="form-label" th:text="#{article.save.inp.title}"></label>
+                            <input type="text" class="form-control" id="title">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{article.save.inp.type}"></label>
+                            <select id="type" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col text-end mb-3">
+                <a th:href="@{/payment-items}" type="button" class="btn btn-light" th:text="#{global.button.cancel}"></a>
+                <button onclick="saveArticle()" type="button" class="btn btn-success"
+                        style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}">
+                </button>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+        let articleId;
+        let typeReq;
+        $(document).ready(function () {
+            typeReq = false;
+            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+                articleId = new URL(window.location.href).pathname.split("-").pop()
+                typeReq = true;
+                getArticleDTO(articleId);
+            }else {
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+            }
+
+
+
+            console.log(articleId);
+        });
+
+
+        function getArticleDTO(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/payment-items/get-article-dto/" + id,
+                dataType: 'json'
+            }).done(function (articleResponse) {
+                console.log(articleResponse)
+                $("#title").val(articleResponse?.name);
+                $("#type").append('<option selected value="' + articleResponse?.type?.name + '">' + articleResponse?.type?.value + '</option>');
+            }).fail(function (){
+                window.location.href = "/admin/error";
+            });
+        }
+
+
+        function saveArticle() {
+
+            let articleRequest = {
+                id: undefined,
+                name: undefined,
+                type: undefined
+            };
+
+            articleRequest.id = articleId;
+            articleRequest.name = $("#title").val();
+            if ($("#type").val() !== '') articleRequest.type = $("#type").val();
+            console.log(articleRequest)
+            $.ajax({
+                method: typeReq ? 'PUT' : "POST",
+                url: typeReq ? '/admin/payment-items/update-article' : '/admin/payment-items/save-article',
+                contentType: 'application/json',
+                data: JSON.stringify(articleRequest),
+                beforeSend: function () {
+                    clearValidMessages();
+                }
+            }).done(function () {
+                window.location.href = "/admin/payment-items";
+            }).fail(function (response) {
+                const errors = response.responseJSON;
+                console.log(response);
+                if (errors.name) validResponse($('#title'), errors.name);
+                if (errors.type) validResponse($('#type'), errors.type, 'div');
+
+            })
+        }
+
+        $('#type').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/payment-items/all-article-type',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+    </script>
+
+</th:block>
+
+</html>

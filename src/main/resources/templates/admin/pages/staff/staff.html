@@ -3,7 +3,7 @@
       layout:decorate="~{admin/fragments/layout}">
 
 <head>
-    <title>Template</title>
+    <title th:text="#{staff.title}"></title>
 </head>
 
 <th:block layout:fragment="content">
@@ -27,7 +27,7 @@
     </div>
 
     <div class="col-12 text-end" style="padding-bottom: 30px">
-        <a href="/admin/staff/add" type="button" class="btn btn-success" th:text="#{staff.button.add}"></a>
+        <a th:href="@{/staff/add}" type="button" class="btn btn-success" th:text="#{staff.button.add}"></a>
     </div>
 
     <div class="col-sm-12">
@@ -215,7 +215,7 @@
                     $(TABLE_BODY).append(
                         '<tr>' +
                         '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
-                        'No data...' +
+                        '[[#{table.empty}]]' +
                         '    </td>' +
                         '</tr>'
                     );
@@ -240,7 +240,7 @@
                 if (itemsCount > 0) {
                     $(TABLE_PAGINATION_ROW).append(
                         $($(colDiv).addClass('pagination-info').addClass('text-black'))
-                            .append('[(${#messages.msg('staff.table.footer.shown')})] X-Y [(${#messages.msg('staff.table.footer.of')})] Z [(${#messages.msg('staff.table.footer.records')})]'
+                            .append('[[#{staff.table.footer.shown}]] X-Y [[#{staff.table.footer.of}]] Z [[#{staff.table.footer.records}]]'
                                 .replace('X', ((pageIndex - 1) * 10 + 1))
                                 .replace('Y', Math.min(pageIndex * 10, itemsCount))
                                 .replace('Z', itemsCount))
@@ -380,12 +380,12 @@
                 contentType: 'application/json',
                 data: JSON.stringify(inviteRequest)
             }).done(function () {
-                inviteRequest = undefined;
+                inviteRequest.email = undefined;
                 showToast('success');
             }).fail(function (response) {
                 console.log(response);
                 showToast('error');
-                inviteRequest = undefined;
+                inviteRequest.email = undefined;
             })
         }
 

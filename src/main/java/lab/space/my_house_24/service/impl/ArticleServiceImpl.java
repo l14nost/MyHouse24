@@ -2,19 +2,29 @@ package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Article;
+import lab.space.my_house_24.enums.ArticleType;
 import lab.space.my_house_24.mapper.ArticleMapper;
+import lab.space.my_house_24.mapper.EnumMapper;
+import lab.space.my_house_24.model.article.ArticleRequest;
 import lab.space.my_house_24.model.article.ArticleResponse;
 import lab.space.my_house_24.model.article.ArticleSaveRequest;
 import lab.space.my_house_24.model.article.ArticleUpdateRequest;
+import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.repository.ArticleRepository;
 import lab.space.my_house_24.service.ArticleService;
+import lab.space.my_house_24.specification.ArticleSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +32,11 @@ import java.util.List;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleSpecification articleSpecification;
 
     @Override
     public Article getArticleById(Long id) throws EntityNotFoundException {
-        log.info("Try to search by id" + id);
+        log.info("Try to search Article by id" + id);
         return articleRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Article not found by id " + id));
     }
@@ -42,8 +53,22 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleDto() {
-        return null;
+    public Page<ArticleResponse> getAllArticleDto(ArticleRequest request) {
+        final int DEFAULT_PAGE_SIZE = 10;
+        return articleRepository.findAll(articleSpecification.getArticleByRequest(request),
+                PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(ArticleMapper::toSimpleDto);
+    }
+
+    @Override
+    public List<EnumResponse> getAllType() {
+        log.info("Try to get All Article Types");
+        return Arrays.stream(ArticleType.values())
+                .map(type -> EnumMapper.toSimpleDto(
+                                type.name(),
+                                type.getArticleType(LocaleContextHolder.getLocale())
+                        )
+                )
+                .collect(Collectors.toList());
     }
 
     @Override

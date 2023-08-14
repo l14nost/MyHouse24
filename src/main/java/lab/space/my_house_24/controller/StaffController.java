@@ -3,7 +3,6 @@ package lab.space.my_house_24.controller;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
-import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.StaffValidator;
@@ -13,11 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 @Controller
 @RequestMapping("staff")
@@ -25,11 +25,9 @@ import java.util.List;
 public class StaffController {
     private final StaffService staffService;
     private final StaffValidator staffValidator;
-    private final RoleService roleService;
 
     @GetMapping({"/", ""})
-    public String showStaff(Model model) {
-        model.addAttribute("roles", roleService.getAllRoleSimpleDto());
+    public String showStaff() {
         return "admin/pages/staff/staff";
     }
 
@@ -91,11 +89,6 @@ public class StaffController {
                                        BindingResult bindingResult) {
         staffValidator.isEmailUniqueValidation(staffSaveRequest.email(), bindingResult,
                 "StaffSaveRequest", LocaleContextHolder.getLocale());
-        staffValidator.passwordEqualsValidation(
-                staffSaveRequest.password(),
-                staffSaveRequest.confirmPassword(), bindingResult,
-                "StaffSaveRequest", LocaleContextHolder.getLocale()
-        );
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -114,7 +107,7 @@ public class StaffController {
                 staffUpdateRequest, bindingResult,
                 "StaffUpdateRequest", LocaleContextHolder.getLocale()
         );
-        if (!staffUpdateRequest.password().equals("")) {
+        if (nonNull(staffUpdateRequest.password()) && !staffUpdateRequest.password().equals("")) {
             staffValidator.passwordEqualsValidation(
                     staffUpdateRequest.password(),
                     staffUpdateRequest.confirmPassword(), bindingResult,

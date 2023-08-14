@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +27,11 @@ public class AuthController {
 
     @GetMapping("/activate-staff/{token}")
     public String showActivateStaffPage(@PathVariable String token) {
+        UserDetails userDetails = staffService.loadUserByToken(token);
         if (!jwtService.isTokenValid(
                 token,
-                staffService.loadUserByToken(token),
-                staffService.getStaffByEmail(staffService.loadUserByToken(token).getUsername())
-        )
-        ) {
+                userDetails,
+                staffService.getStaffByEmail(userDetails.getUsername()))) {
             return "/admin/pages/staff/staff-activate-error";
         } else {
             return "/admin/pages/staff/staff-activate";

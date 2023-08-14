@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "unit")
@@ -12,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class Unit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,4 +25,6 @@ public class Unit {
     @Column(length = 20, nullable = false)
     private String name;
 
+    @OneToMany(mappedBy = "unit", fetch = FetchType.LAZY)
+    private List<Service> serviceList = new ArrayList<>();
 }

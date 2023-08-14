@@ -57,6 +57,42 @@ public class StaffValidator {
         }
     }
 
+    public void isStaffStatusValidation(String email, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            Staff staff = staffService.getStaffByEmail(email);
+            String newResponse;
+            String disabledResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                newResponse = "Користувач не активовано";
+                disabledResponse = "Користувач заблоковано";
+            } else {
+                newResponse = "User not activated";
+                disabledResponse = "User blocked";
+            }
+            if (staff.getStaffStatus() == UserStatus.NEW) {
+                bindingResult.addError(new FieldError(object, "email", newResponse));
+            }
+            if (staff.getStaffStatus() == UserStatus.DISABLED) {
+                bindingResult.addError(new FieldError(object, "email", disabledResponse));
+            }
+        }
+    }
+
+
+    public void isEmailExistValidation(String email, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            String emailResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                emailResponse = "Така електронна пошта не існує";
+            } else {
+                emailResponse = "This email does not exist";
+            }
+            if (!staffRepository.existsByEmail(email)) {
+                bindingResult.addError(new FieldError(object, "email", emailResponse));
+            }
+        }
+    }
+
     public void isEmailUniqueValidation(String email, BindingResult bindingResult, String object, Locale locale) {
         if (!bindingResult.hasErrors()) {
             String emailResponse;

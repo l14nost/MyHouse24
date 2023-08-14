@@ -45,8 +45,14 @@ public class Staff implements UserDetails {
     @Column(length = 250)
     private String token;
 
+    @Column(length = 250)
+    private String forgotToken;
+
     @Column
     private Boolean tokenUsage;
+
+    @Column
+    private Boolean forgotTokenUsage;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50, nullable = false)

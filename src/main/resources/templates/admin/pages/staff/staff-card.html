@@ -3,7 +3,7 @@
       layout:decorate="~{admin/fragments/layout}">
 
 <head>
-    <title>Template</title>
+    <title th:text="#{staff.card.title}"></title>
 </head>
 
 <th:block layout:fragment="content">
@@ -80,7 +80,7 @@
 
     <script>
 
-        let staffId;
+        let articleId;
 
         $(document).ready(function () {
             staffId = new URL(window.location.href).pathname.split("-").pop()

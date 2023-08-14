@@ -186,13 +186,26 @@
         let badgeClasses = 'badge rounded-pill';
         let badgeText = status?.value;
 
-
         if (status?.name === 'ACTIVE') badgeClasses += ' bg-success';
         if (status?.name === 'NEW') badgeClasses += ' bg-warning';
         if (status?.name === 'DISABLED') badgeClasses += ' bg-danger';
 
-        let badge = '<span class="' + badgeClasses + '">' + badgeText + '</span>';
-        return badge;
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
+    function addColorTextIncomeExpense(type){
+
+        let badgeClasses = '';
+        let badgeText = type?.value;
+
+        if (type?.name === 'INCOME') badgeClasses += 'text-success';
+        if (type?.name === 'EXPENSE') badgeClasses += 'text-danger';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
+    function addBreadcrumbTitle(title){
+        return '<li class="breadcrumb-item active" aria-current="page">' + title + '</li>';
     }
 
     function handleScreenWidthChange() {

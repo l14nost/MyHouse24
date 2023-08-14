@@ -7,6 +7,8 @@ import lab.space.my_house_24.service.RoleService;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.UUID;
+
 import static java.util.Objects.nonNull;
 
 public interface StaffMapper {
@@ -78,7 +80,7 @@ public interface StaffMapper {
                 .lastname(staffSaveRequest.lastname())
                 .phone(staffSaveRequest.phone())
                 .email(staffSaveRequest.email())
-                .password(new BCryptPasswordEncoder().encode(staffSaveRequest.password()))
+                .password(new BCryptPasswordEncoder().encode(String.valueOf(UUID.randomUUID())))
                 .role(roleService.getRoleByJobTitle(staffSaveRequest.role()))
                 .staffStatus(UserStatus.NEW)
                 .build();
@@ -104,5 +106,11 @@ public interface StaffMapper {
                 .setPassword(new BCryptPasswordEncoder().encode(inviteRequest.password()))
                 .setTokenUsage(true)
                 .setStaffStatus(UserStatus.ACTIVE);
+    }
+
+    static Staff forgotPasswordStaff(ForgotPassRequest request, Staff staff) {
+        return staff
+                .setPassword(new BCryptPasswordEncoder().encode(request.password()))
+                .setForgotTokenUsage(true);
     }
 }

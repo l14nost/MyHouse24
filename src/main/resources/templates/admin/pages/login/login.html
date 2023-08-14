@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>My House 24 | Login</title>
+    <title th:text="#{login.title}"></title>
 
     <link rel="shortcut icon" th:href="@{/assets/images/pages/favicon.png}"/>
     <link rel="stylesheet" th:href="@{/assets/css/core/libs.min.css}"/>
@@ -155,7 +155,7 @@
                                                 <label class="form-check-label" for="customCheck1">Remember
                                                     Me</label>
                                             </div>
-                                            <a href="#">Forgot Password?</a>
+                                            <a th:href="@{/login/forgot-password}">Forgot Password?</a>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center">

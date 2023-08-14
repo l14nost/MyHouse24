@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>My House 24 | Login</title>
+    <title  th:text="#{staff.activate.title}"></title>
 
     <link rel="shortcut icon" th:href="@{/assets/images/pages/favicon.png}"/>
     <link rel="stylesheet" th:href="@{/assets/css/core/libs.min.css}"/>
@@ -193,20 +193,22 @@
 <!-- Library Bundle Script -->
 <script th:src="@{/assets/js/core/libs.min.js}"></script>
 <script>
+    let url = new URL(window.location.href).pathname.split("/")
     let inviteRequest = {};
-    inviteRequest.token = new URL(window.location.href).pathname.split("/").pop();
+    inviteRequest.token = url.pop();
     inviteRequest.password = undefined;
+    url = url.pop();
+    console.log(url);
     inviteRequest.confirmPassword = undefined;
 
     function savePassword() {
-
-
         inviteRequest.password = $("#password").val();
         inviteRequest.confirmPassword = $("#confirmPassword").val();
         console.log(inviteRequest)
+
         $.ajax({
             method: 'PUT' ,
-            url: '/admin/auth/update-staff',
+            url:(url!=='forgot-password') ? '/admin/auth/update-staff':'/admin/login/forgot-password-staff-change' ,
             contentType: 'application/json',
             data: JSON.stringify(inviteRequest),
             beforeSend: function () {
@@ -220,7 +222,9 @@
             },3000);
         }).fail(function (response) {
             const errors = response.responseJSON;
-            showToast('error');
+            if (response?.status !== 400){
+                showToast('error');
+            }
             console.log(response);
             if (errors.password) validResponse($('#password'), errors.password);
             if (errors.confirmPassword) validResponse($('#confirmPassword'), errors.confirmPassword);
