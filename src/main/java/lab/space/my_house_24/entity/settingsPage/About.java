@@ -38,10 +38,10 @@ public class About {
     @OneToOne
     private Seo seo;
 
-    @OneToMany(mappedBy = "about")
+    @OneToMany(mappedBy = "about", cascade = CascadeType.ALL)
     private List<Photo> photoList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "about")
+    @OneToMany(mappedBy = "about", cascade = CascadeType.ALL)
     private List<Document> documentList = new ArrayList<>();
 
 }

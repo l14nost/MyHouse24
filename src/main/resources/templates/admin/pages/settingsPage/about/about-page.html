@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}" style="width: auto">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{left.sidebar.site.management.about}"></title>
+    <th:block layout:fragment="extra-style">
+        <style>
+            .main-page-slide{
+                width: 350px;
+                height: 270px;
+            }
+            .main-page-slide-1{
+                width: 350px;
+                height: 270px;
+            }
+            .document-about-page{
+                width: 75px;
+                height: 75px;
+            }
+        </style>
+
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{global.breadcrumb.edit.page}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{global.breadcrumb.edit.page}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+
+                <div style="display: flex; justify-content: space-between">
+                    <h3 th:text="#{settings.page.about.page}"></h3>
+                    <button type="button" class="btn btn-light" style="height: 40px; display: flex"  ><h7 th:text="#{settings.page.button.update}"></h7></button>
+                </div>
+                <hr class="hr-horizontal">
+            </div>
+            <div class="card-body">
+                <form id="aboutPage">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <h3 th:text="#{settings.page.about.page.information}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="form-label" th:text="#{settings.page.about.page.title}"></label>
+                                        <input type="text" class="form-control" id="title"  name="title" th:value="${about.title()}">
+                                    </div>
+                                    <div class="form-group" >
+                                        <label class="form-label" th:text="#{settings.page.about.page.brief.text}"></label>
+                                        <div id="description-div"><div id="description" style="height: 226px;"></div></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 th:text="#{settings.page.about.page.direct.photo}"></h5>
+                                    <div style="display: flex; justify-content: center">
+                                        <img th:src="${'/admin/files/'+about.imageDirector()}" alt="" class="main-page-slide" id="directImageSrc" style="height: 300px; width: 100%;">
+                                    </div>
+                                    <div class="form-group mb-30">
+                                        <label class="control-label" th:text="#{settings.page.about.page.size} + ' (250x310)'"></label>
+                                        <input type="file" class="form-control form-control-lg" name="directImage" accept=".jpg,.jpeg,.png" id="directImage">
+                                        <script>
+                                            directImage.onchange = evt => {
+                                                const [file] = directImage.files
+                                                if (file) {
+                                                    directImageSrc.src = URL.createObjectURL(file)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+
+                                <h3 th:text="#{settings.page.about.page.photoGallery}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="row" id="galleryContainer">
+                                    <div class="col-md-4" th:each="gallery:${about.photoList()}" th:id="${'galleryDiv'+gallery.id()}">
+                                        <img th:src="${'/admin/files/'+gallery.image()}"  alt="" class="main-page-slide" th:id="${'galleryImg'+gallery.id()}">
+                                        <div class="form-group mb-30">
+                                            <label class="control-label" th:text="#{settings.page.about.page.size} + ' (1200x1200)'"></label>
+                                            <input type="file" class="form-control form-control-lg" name="galleryList" accept=".jpg,.jpeg,.png" th:id="${'galleryInput'+gallery.id()}">
+                                            <script>
+                                                galleryInput[[${gallery.id()}]].onchange = evt => {
+                                                    const [file] = galleryInput[[${gallery.id()}]].files
+                                                    if (file) {
+                                                        galleryImg[[${gallery.id()}]].src = URL.createObjectURL(file)
+                                                    }
+                                                }
+                                            </script>
+                                            <div style="display: flex; justify-content: center">
+                                                <button type="button" class="btn btn-sm btn-icon text-danger" th:onclick ="'deleteGallery('+${gallery.id()}+')'">
+                                                <span class="btn-inner">
+                                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                        <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: center">
+                                    <button onclick="addPhoto('galleryContainer')" type="button" class="btn btn-success" th:text="#{settings.page.about.page.button.add.photo}" style="width: 150px; margin-left: 10px"></button>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <h3 th:text="#{settings.page.about.page.add.info}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.about.page.title}"></label>
+                                    <input type="text" class="form-control" id="addTitle"  name="addTitle" th:value="${about.titleAdd()}">
+                                </div>
+                                <div class="form-group" >
+                                    <label class="form-label" th:text="#{settings.page.about.page.brief.text}"></label>
+                                    <div id="add-description-div"><div id="addDescription" style="height: 178px;"></div></div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px" >
+
+                                <h3 th:text="#{settings.page.about.page.additional.photoGallery}"></h3>
+                                <hr class="hr-horizontal">
+                                <div class="row" id="addGalleryContainer">
+                                    <div class="col-md-4" th:each="gallery:${about.addPhotoList()}" th:id="${'addGalleryDiv'+gallery.id()}">
+                                        <img  th:src="${'/admin/files/'+gallery.image()}" alt="" class="main-page-slide-1" th:id="${'addGalleryImg'+gallery.id()}">
+                                        <div class="form-group mb-30">
+                                            <label class="control-label" th:text="#{settings.page.about.page.size} + ' (1200x1200)'"></label>
+                                            <input type="file" class="form-control form-control-lg" name="addGalleryList" accept=".jpg,.jpeg,.png" th:id="${'addGalleryInput'+gallery.id()}">
+
+                                            <div style="display: flex; justify-content: center">
+                                                <button type="button" class="btn btn-sm btn-icon text-danger" th:onclick ="'deleteAddGallery('+${gallery.id()}+')'">
+                                                <span class="btn-inner">
+                                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                        <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            addGalleryInput[[${gallery.id()}]].onchange = evt => {
+                                                const [file] = addGalleryInput[[${gallery.id()}]].files
+                                                if (file) {
+                                                    addGalleryImg[[${gallery.id()}]].src = URL.createObjectURL(file)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: center">
+                                    <button onclick="addPhotoForAdd()" type="button" class="btn btn-success" th:text="#{settings.page.about.page.button.add.photo}" style="width: 150px; margin-left: 10px"></button>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <h3 th:text="#{settings.page.about.page.add.info}"></h3>
+                                <hr class="hr-horizontal">
+                                <div id="documentContainer">
+                                    <div style="display: flex; margin-bottom: 10px" th:each="documentElem:${about.documentNames()}" th:id="${'documentDiv'+documentElem.id()}">
+                                        <div>
+                                            <div style="display: flex; justify-content: center">
+                                                <img th:src="@{/static/assets/images/document.png}" alt="" class="document-about-page" th:id="${'documentImg'+documentElem.id()}">
+                                            </div>
+                                            <div style="display: flex; justify-content: center;">
+                                                <h6 th:text="${documentElem.name()}" th:id="${'filename'+documentElem.id()}" style="text-align: center;max-width: 90%; word-wrap: break-word"></h6>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; align-items: center; margin-left: 10px">
+                                            <input type="file" class="form-control form-control-lg" name="documentList" accept=".doc,.docx,.pdf" th:id="${'inputDocument'+documentElem.id()}" th:onclick ="'handleFileNameChange('+${documentElem.id()}+')'">
+                                            <script>
+                                                function handleFileNameChange(id) {
+                                                    var fileInput = document.getElementById(`inputDocument${id}`);
+                                                    var listFile = document.getElementById(`filename${id}`);
+                                                    fileInput.onchange = function () {
+                                                        var files = Array.from(this.files);
+                                                        files = files.map(file => file.name);
+                                                        listFile.innerHTML = files.join('<br/>');
+                                                    }
+                                                }
+                                            </script>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-icon text-danger"   th:onclick="'deleteDocument('+${documentElem.id()}+')'">
+                                                <span class="btn-inner">
+                                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                        <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                </span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: center">
+                                    <button onclick="addDocument()" type="button" class="btn btn-success" th:text="#{settings.page.about.page.button.add.document}" style="width: 200px; margin-left: 10px"></button>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <h3>SEO</h3>
+                                <hr class="hr-horizontal">
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.title}"></label>
+                                    <input type="text" class="form-control" id="seoTitle"  name="seoTitle" th:value="${about.seoTitle()}">
+                                </div>
+                                <div class="form-group" >
+                                    <label class="form-label" th:text="#{settings.page.main.page.description}"></label>
+                                    <textarea id="seoDescription" class="form-control" rows="6" name="seoDescription" th:text="${about.seoDescription()}"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" th:text="#{settings.page.main.page.key.words}"></label>
+                                    <textarea id="seoKeyWords" class="form-control" rows="6" name="seoKeyWords" th:text="${about.seoKeyWord()}"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center;  margin-bottom: 10px">
+                            <button onclick="cancelAboutPage()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px" ></button>
+                            <button onclick="saveAboutPage()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px" ></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-alert">
+    <div id="liveAlertPlaceholder" style="right: 0; position: fixed; bottom: 0"></div>
+</th:block>
+<th:block layout:fragment="extra-modals">
+    <div class="modal fade" id="confirmDeleteUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteUserLabel">Delete Apartment Owner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete apartment owner?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" onclick="userDelete()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script th:inline="javascript">
+        var deleteIdsGallery = [];
+
+        function deleteGallery(id){
+            $(document).ready(function() {
+                $("#galleryDiv" + id).remove();
+                deleteIdsGallery.push(id);
+            });
+        }
+
+        function deleteNewGallery(id){
+            $(document).ready(function() {
+                $("#newGalleryDiv" + id).remove();
+            });
+        }
+
+
+        var deleteIdsAddGallery = [];
+
+        function deleteAddGallery(id){
+            $(document).ready(function() {
+                $("#addGalleryDiv" + id).remove();
+                deleteIdsAddGallery.push(id);
+            });
+
+        }
+        function deleteNewAddGallery(id){
+            $(document).ready(function() {
+                $("#newAddGalleryDiv" + id).remove();
+            });
+        }
+        var deleteIds = [];
+
+        function deleteDocument(id){
+            $(document).ready(function() {
+                $("#documentDiv" + id).remove();
+                deleteIds.push(id);
+            });
+        }
+        function deleteNewDocument(id){
+            $(document).ready(function() {
+                $("#newDocumentDiv" + id).remove();
+            });
+        }
+
+
+        var options = {
+            modules: {
+                toolbar: true
+            },
+            theme: 'snow'
+        };
+        var editor = new Quill('#description', options);
+        editor.root.innerHTML = /*[[${about.description()}]]*/;
+
+        var options1 = {
+            modules: {
+                toolbar: true
+            },
+            theme: 'snow'
+        };
+        var editor1 = new Quill('#addDescription', options1);
+        editor1.root.innerHTML = /*[[${about.descriptionAdd()}]]*/;
+
+        function saveAboutPage(){
+            var form = document.getElementById("aboutPage");
+            var formData = new FormData(form);
+            formData.append("description", editor.root.innerHTML);
+            formData.append("addDescription", editor.root.innerHTML);
+            formData.append("deleteGalleryList", deleteIdsGallery);
+            formData.append("deleteAddGalleryList", deleteIdsAddGallery);
+            formData.append("deleteDocumentList", deleteIds);
+            $.ajax({
+                url: "/admin/site-about-save",
+                method: "PUT",
+                contentType: false,
+                processData: false,
+                data:formData
+            })
+                .done(function (response){
+                    clearValidMessages();
+                    showToast("success");
+                    console.log(response);
+                })
+                .fail( function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    console.log(errors);
+                    var checkDoc = 0;
+                    var checkGallery = 0;
+                    var checkAddGallery = 0;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        var regex = /^documentList\[\d+\]$/;
+                        var regexGallery = /^galleryList\[\d+\]$/;
+                        var regexAddGallery = /^addGalleryList\[\d+\]$/;
+
+                        if (regexGallery.test(keys)){
+                            checkGallery++;
+                        }
+                        if (regex.test(keys)){
+                            checkDoc++;
+                        }
+                        if (regexAddGallery.test(keys)){
+                            checkAddGallery++;
+                        }
+                        if (checkDoc===1){
+                            checkDoc++;
+                            validResponse("#documentContainer", values)
+                        }
+                        if (checkGallery===1){
+                            checkGallery++;
+                            validResponse("#galleryContainer", values)
+                        }
+                        if (checkAddGallery===1){
+                            checkAddGallery++;
+                            validResponse("#addGalleryContainer", values)
+                        }
+                        validResponse("#" + keys, values);
+
+                    }
+                })
+        }
+        function cancelAboutPage(){
+            window.location.href = "/admin/site-about"
+        }
+
+        function addPhoto(div){
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    if (response === "uk"){
+                        createPhoto(div,"Рекомендований розмір:");
+                    }
+                    else {
+                        createPhoto(div,"Recommended size:");
+                    }
+                }).fail(function () {
+                createPhoto(div,"Recommended size:");
+            })
+        }
+        function createPhoto(div, lang){
+            var images = document.querySelectorAll('img[class="main-page-slide add"]');
+            let i;
+            if (images.length>0){
+                var lastImage = images[images.length - 1];
+                var idAttribute = lastImage.getAttribute("id");
+                var number = idAttribute.replace("newGalleryImg", "");
+                i = number;
+            }
+            else {
+                i = 1;
+            }
+            i++;
+            console.log(i);
+            let nameImg = null;
+            if (div === "galleryContainer"){
+                nameImg = "galleryList";
+            }
+            else nameImg = "addGallery";
+            const container = document.getElementById(div);
+            const imgDiv = document.createElement("div");
+            imgDiv.id = "newGalleryDiv"+i;
+            imgDiv.classList.add("col-md-4");
+            imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide add\" id=\"newGalleryImg"+i+"\">\n" +
+                "                                        <div class=\"form-group mb-30\">\n" +
+                "                                            <label class=\"control-label\">"+ lang +" (1200x1200)</label>\n" +
+                "                                            <input type=\"file\" class=\"form-control form-control-lg\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
+                "                                           \n" +
+                "                                            <div style=\"display: flex; justify-content: center\">\n" +
+                "                                                <button type='button' class=\"btn btn-sm btn-icon text-danger\" data-bs-toggle=\"tooltip\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" onclick='deleteNewGallery("+i+")'>\n" +
+                "                                                <span class=\"btn-inner\">\n" +
+                "                                                    <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
+                "                                                        <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                        <path d=\"M20.708 6.23975H3.75\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                        <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                    </svg>\n" +
+                "                                                </span>\n" +
+                "                                                </button>\n" +
+                "                                            </div>\n" +
+                "                                        </div>"
+            const scriptTag = document.createElement("script");
+            scriptTag.textContent = " function handleFileChange(event) {\n" +
+                "                      const input = event.target;\n" +
+                "                      const file = input.files[0];\n" +
+                "                      const id = input.id.slice(15); // Получаем идентификатор после \"galleryInput\"\n" +
+                "                      const img = document.getElementById('newGalleryImg'+id);\n" +
+                "                       console.log(id); \n" +
+                "                      if (file) {\n" +
+                "                        img.src = URL.createObjectURL(file);\n" +
+                "                      }\n" +
+                "                    }";
+
+            imgDiv.appendChild(scriptTag);
+
+            container.appendChild(imgDiv);
+        }
+
+        function addDocument(){
+            var images = document.querySelectorAll('img[class="document-about-page"]');
+            let i;
+            if (images.length>0){
+                var lastImage = images[images.length - 1];
+                var idAttribute = lastImage.getAttribute("id");
+                var number = idAttribute.replace("documentImg", "");
+                i = number;
+            }
+            else {
+                i = 1;
+            }
+            i++;
+            const container = document.getElementById("documentContainer");
+            const imgDiv = document.createElement("div");
+            imgDiv.id = "newDocumentDiv"+i;
+            imgDiv.style.display = "flex"
+            imgDiv.style.marginBottom = "10px"
+            imgDiv.innerHTML = "<div>\n" +
+                "                                            <div style=\"display: flex; justify-content: center\">\n" +
+                "                                                <img src=\"/admin/static/assets/images/document.png\" alt=\"\" class=\"document-about-page\" id=\"documentImg"+i+"\">\n" +
+                "                                            </div>\n" +
+                "                                            <div style=\"display: flex; justify-content: center;\">\n" +
+                "                                                <h6 id='filename"+i+"'></h6>\n" +
+                "                                            </div>\n" +
+                "                                        </div>\n" +
+                "                                        <div style=\"display: flex; align-items: center; margin-left: 10px\">\n" +
+                "                                            <input type=\"file\" class=\"form-control form-control-lg\" name=\"documentList\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.pdf\" id='inputDocument"+i+"'>\n" +
+                "                                        </div>" +
+                "<button type=\"button\" class=\"btn btn-sm btn-icon text-danger\"  onclick=\"deleteNewDocument("+i+")\">\n" +
+                "                                                <span class=\"btn-inner\">\n" +
+                "                                                    <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
+                "                                                        <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                        <path d=\"M20.708 6.23975H3.75\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                        <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                    </svg>\n" +
+                "                                                </span>\n" +
+                "                                        </button>";
+            const scriptTag = document.createElement("script");
+            scriptTag.textContent = "function handleFileNameChange(id) {\n" +
+                "                      console.log(id);\n" +
+                "                      var fileInput = document.getElementById(`inputDocument${id}`);\n" +
+                "                      var listFile = document.getElementById(`filename${id}`);\n" +
+                "\n" +
+                "                      fileInput.onchange = function () {\n" +
+                "                        var files = Array.from(this.files);\n" +
+                "                        files = files.map(file => file.name);\n" +
+                "                        listFile.innerHTML = files.join('<br/>');\n" +
+                "                      }\n" +
+                "                    }";
+            imgDiv.appendChild(scriptTag);
+            container.appendChild(imgDiv);
+        }
+
+
+
+        function addPhotoForAdd(){
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    if (response === "uk"){
+                        createPhotoForAdd("Рекомендований розмір:");
+                    }
+                    else {
+                        createPhotoForAdd("Recommended size:");
+                    }
+                }).fail(function () {
+                createPhotoForAdd("Recommended size:");
+            })
+        }
+        function createPhotoForAdd(lang){
+            var images = document.querySelectorAll('img[class="main-page-slide-1 add"]');
+            let i;
+            if (images.length>0){
+                var lastImage = images[images.length - 1];
+                var idAttribute = lastImage.getAttribute("id");
+                var number = idAttribute.replace("newAddGalleryImg", "");
+                i = number;
+            }
+            else {
+                i = 1;
+            }
+            i++;
+            let nameImg =  "addGalleryList";
+            const container = document.getElementById("addGalleryContainer");
+            const imgDiv = document.createElement("div");
+            imgDiv.id = "newAddGalleryDiv"+i;
+            imgDiv.classList.add("col-md-4");
+            imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide-1 add\" id=\"newAddGalleryImg" + i + "\">\n" +
+                "                                        <div class=\"form-group mb-30\">\n" +
+                "                                            <label class=\"control-label\">"+ lang +" (1200x1200)</label>\n" +
+                "                                            <input type=\"file\" class=\"form-control form-control-lg\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newAddGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
+                "                                           \n" +
+                "                                            <div style=\"display: flex; justify-content: center\">\n" +
+                "                                                <button type='button' class=\"btn btn-sm btn-icon text-danger\" data-bs-toggle=\"tooltip\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" onclick='deleteNewAddGallery("+i+")'>\n" +
+                "                                                <span class=\"btn-inner\">\n" +
+                "                                                    <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
+                "                                                        <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                        <path d=\"M20.708 6.23975H3.75\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                        <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+                "                                                    </svg>\n" +
+                "                                                </span>\n" +
+                "                                                </button>\n" +
+                "                                            </div>\n" +
+                "                                        </div>"
+            const scriptTag = document.createElement("script");
+            scriptTag.textContent = " function handleFileChange(event) {\n" +
+                "                      const input = event.target;\n" +
+                "                      const file = input.files[0];\n" +
+                "                      const id = input.id.slice(18); // Получаем идентификатор после \"addGalleryInput\"\n" +
+                "                      const img = document.getElementById('newAddGalleryImg'+id);\n" +
+                "                       console.log(id); \n" +
+                "                      if (file) {\n" +
+                "                        img.src = URL.createObjectURL(file);\n" +
+                "                      }\n" +
+                "                    }";
+
+            imgDiv.appendChild(scriptTag);
+
+            container.appendChild(imgDiv);
+        }
+
+
+
+
+
+    </script>
+</th:block>
+</html>
