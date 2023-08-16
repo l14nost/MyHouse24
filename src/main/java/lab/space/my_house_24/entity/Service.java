@@ -37,4 +37,14 @@ public class Service {
     @OneToMany(mappedBy = "service")
     private List<ServiceBill> serviceBillList = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Service{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isActive=" + isActive +
+                ", unit=" + (unit != null ? unit.getId() : "null") +
+                '}';
+    }
+
 }
