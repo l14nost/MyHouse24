@@ -23,7 +23,7 @@ public class BankBookServiceImpl implements BankBookService {
 
     @Override
     public List<BankBookResponseForTable> bankBookListForTable() {
-        return bankBookRepository.findAll().stream().map(BankBookMapper::entityToDtoForTable).toList();
+        return bankBookRepository.findAllByApartmentIsNull().stream().map(BankBookMapper::entityToDtoForTable).toList();
     }
 
     @Override

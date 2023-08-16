@@ -10,6 +10,7 @@ import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.RateService;
 import lab.space.my_house_24.service.impl.*;
 import lab.space.my_house_24.util.ErrorMapper;
+import lab.space.my_house_24.validator.ApartmentValidator;
 import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class ApartmentController {
     private final RateService rateService;
     private final BankBookService bankBookService;
     private final BankBookValidator bankBookValidator;
+    private final ApartmentValidator apartmentValidator;
 
     @GetMapping("/apartments")
     public String apartmentMain(Model model){
@@ -76,6 +78,9 @@ public class ApartmentController {
             bankBookValidator.existBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest");
             bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","add",0L);
         }
+        if (apartmentAddRequest.number()!=null && apartmentAddRequest.house()!=null){
+            apartmentValidator.checkUniqueApartmentNumber(apartmentAddRequest.number(),"add",0L,apartmentAddRequest.house(),"ApartmentAddRequest",result);
+        }
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
@@ -96,9 +101,13 @@ public class ApartmentController {
 
     @PostMapping("/edit-apartment/{id}")
     public ResponseEntity editApartment(@PathVariable Long id, @RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result){
+        System.out.println(apartmentAddRequest.toString());
         if (apartmentAddRequest.bankBook()!=null) {
             bankBookValidator.existBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest");
             bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","update",id);
+        }
+        if (apartmentAddRequest.number()!=null && apartmentAddRequest.house()!=null){
+            apartmentValidator.checkUniqueApartmentNumber(apartmentAddRequest.number(),"update",id,apartmentAddRequest.house(),"ApartmentAddRequest",result);
         }
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));

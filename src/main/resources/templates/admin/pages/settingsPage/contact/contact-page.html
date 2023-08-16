@@ -175,7 +175,7 @@
             theme: 'snow'
         };
         var editor = new Quill('#description', options);
-        editor.root.innerHTML = /*[[${contactPage.description()}]]*/;
+        editor.root.innerHTML = /*[[${contactPage.description()}]]*/'';
 
         function saveMainPage(){
             var form = document.getElementById("contactPage");

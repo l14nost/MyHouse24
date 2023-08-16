@@ -8,11 +8,11 @@
     <th:block layout:fragment="extra-style">
         <style>
             .main-page-slide{
-                width: 350px;
+                width: 100%;
                 height: 270px;
             }
             .main-page-slide-1{
-                width: 350px;
+                width: 100%;
                 height: 270px;
             }
             .document-about-page{
@@ -98,7 +98,7 @@
                                         <img th:src="${'/admin/files/'+gallery.image()}"  alt="" class="main-page-slide" th:id="${'galleryImg'+gallery.id()}">
                                         <div class="form-group mb-30">
                                             <label class="control-label" th:text="#{settings.page.about.page.size} + ' (1200x1200)'"></label>
-                                            <input type="file" class="form-control form-control-lg" name="galleryList" accept=".jpg,.jpeg,.png" th:id="${'galleryInput'+gallery.id()}">
+                                            <input type="file" class="form-control form-control-lg for-valid-img" name="galleryList" accept=".jpg,.jpeg,.png" th:id="${'galleryInput'+gallery.id()}">
                                             <script>
                                                 galleryInput[[${gallery.id()}]].onchange = evt => {
                                                     const [file] = galleryInput[[${gallery.id()}]].files
@@ -147,7 +147,7 @@
                                         <img  th:src="${'/admin/files/'+gallery.image()}" alt="" class="main-page-slide-1" th:id="${'addGalleryImg'+gallery.id()}">
                                         <div class="form-group mb-30">
                                             <label class="control-label" th:text="#{settings.page.about.page.size} + ' (1200x1200)'"></label>
-                                            <input type="file" class="form-control form-control-lg" name="addGalleryList" accept=".jpg,.jpeg,.png" th:id="${'addGalleryInput'+gallery.id()}">
+                                            <input type="file" class="form-control form-control-lg for-valid-img-add" name="addGalleryList" accept=".jpg,.jpeg,.png" th:id="${'addGalleryInput'+gallery.id()}">
 
                                             <div style="display: flex; justify-content: center">
                                                 <button type="button" class="btn btn-sm btn-icon text-danger" th:onclick ="'deleteAddGallery('+${gallery.id()}+')'">
@@ -190,7 +190,9 @@
                                             </div>
                                         </div>
                                         <div style="display: flex; align-items: center; margin-left: 10px">
-                                            <input type="file" class="form-control form-control-lg" name="documentList" accept=".doc,.docx,.pdf" th:id="${'inputDocument'+documentElem.id()}" th:onclick ="'handleFileNameChange('+${documentElem.id()}+')'">
+                                            <div>
+                                                <input type="file" class="form-control form-control-lg for-valid-doc" name="documentList" accept=".doc,.docx,.pdf" th:id="${'inputDocument'+documentElem.id()}" th:onclick ="'handleFileNameChange('+${documentElem.id()}+')'">
+                                            </div>
                                             <script>
                                                 function handleFileNameChange(id) {
                                                     var fileInput = document.getElementById(`inputDocument${id}`);
@@ -338,7 +340,7 @@
             theme: 'snow'
         };
         var editor = new Quill('#description', options);
-        editor.root.innerHTML = /*[[${about.description()}]]*/;
+        editor.root.innerHTML = /*[[${about.description()}]]*/ '';
 
         var options1 = {
             modules: {
@@ -347,7 +349,7 @@
             theme: 'snow'
         };
         var editor1 = new Quill('#addDescription', options1);
-        editor1.root.innerHTML = /*[[${about.descriptionAdd()}]]*/;
+        editor1.root.innerHTML = /*[[${about.descriptionAdd()}]]*/ '';
 
         function saveAboutPage(){
             var form = document.getElementById("aboutPage");
@@ -373,9 +375,6 @@
                     clearValidMessages();
                     let errors = response.responseJSON;
                     console.log(errors);
-                    var checkDoc = 0;
-                    var checkGallery = 0;
-                    var checkAddGallery = 0;
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
                         var values = Object.values(errors)[i];
@@ -384,25 +383,43 @@
                         var regexAddGallery = /^addGalleryList\[\d+\]$/;
 
                         if (regexGallery.test(keys)){
-                            checkGallery++;
+                            var startIndex3 = keys.indexOf("[") + 1;
+                            var endIndex3 = keys.indexOf("]");
+                            var number3 = keys.substring(startIndex3, endIndex3);
+                            var imgs3 = document.querySelectorAll('.for-valid-img');
+                            for(let i = 0; i<imgs3.length;i++){
+                                if (parseInt(number3) === i){
+                                    var id3 = imgs3[i].id;
+                                    console.log(id3);
+                                    validResponse("#"+id3, values);
+                                }
+                            }
                         }
                         if (regex.test(keys)){
-                            checkDoc++;
+                            var startIndex3 = keys.indexOf("[") + 1;
+                            var endIndex3 = keys.indexOf("]");
+                            var number3 = keys.substring(startIndex3, endIndex3);
+                            var imgs3 = document.querySelectorAll('.for-valid-doc');
+                            for(let i = 0; i<imgs3.length;i++){
+                                if (parseInt(number3) === i){
+                                    var id3 = imgs3[i].id;
+                                    console.log(id3);
+                                    validResponse("#"+id3, values);
+                                }
+                            }
                         }
                         if (regexAddGallery.test(keys)){
-                            checkAddGallery++;
-                        }
-                        if (checkDoc===1){
-                            checkDoc++;
-                            validResponse("#documentContainer", values)
-                        }
-                        if (checkGallery===1){
-                            checkGallery++;
-                            validResponse("#galleryContainer", values)
-                        }
-                        if (checkAddGallery===1){
-                            checkAddGallery++;
-                            validResponse("#addGalleryContainer", values)
+                            var startIndex3 = keys.indexOf("[") + 1;
+                            var endIndex3 = keys.indexOf("]");
+                            var number3 = keys.substring(startIndex3, endIndex3);
+                            var imgs3 = document.querySelectorAll('.for-valid-img-add');
+                            for(let i = 0; i<imgs3.length;i++){
+                                if (parseInt(number3) === i){
+                                    var id3 = imgs3[i].id;
+                                    console.log(id3);
+                                    validResponse("#"+id3, values);
+                                }
+                            }
                         }
                         validResponse("#" + keys, values);
 
@@ -454,7 +471,7 @@
             imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide add\" id=\"newGalleryImg"+i+"\">\n" +
                 "                                        <div class=\"form-group mb-30\">\n" +
                 "                                            <label class=\"control-label\">"+ lang +" (1200x1200)</label>\n" +
-                "                                            <input type=\"file\" class=\"form-control form-control-lg\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
+                "                                            <input type=\"file\" class=\"form-control form-control-lg for-valid-img\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
                 "                                           \n" +
                 "                                            <div style=\"display: flex; justify-content: center\">\n" +
                 "                                                <button type='button' class=\"btn btn-sm btn-icon text-danger\" data-bs-toggle=\"tooltip\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" onclick='deleteNewGallery("+i+")'>\n" +
@@ -512,7 +529,9 @@
                 "                                            </div>\n" +
                 "                                        </div>\n" +
                 "                                        <div style=\"display: flex; align-items: center; margin-left: 10px\">\n" +
-                "                                            <input type=\"file\" class=\"form-control form-control-lg\" name=\"documentList\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.pdf\" id='inputDocument"+i+"'>\n" +
+                "                                        <div>" +
+                "                                            <input type=\"file\" class=\"form-control form-control-lg for-valid-doc\" name=\"documentList\" onclick= \"handleFileNameChange("+i+")\" accept=\".doc,.docx,.pdf\" id='inputDocument"+i+"'>\n" +
+                "                                        </div>" +
                 "                                        </div>" +
                 "<button type=\"button\" class=\"btn btn-sm btn-icon text-danger\"  onclick=\"deleteNewDocument("+i+")\">\n" +
                 "                                                <span class=\"btn-inner\">\n" +
@@ -577,7 +596,7 @@
             imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide-1 add\" id=\"newAddGalleryImg" + i + "\">\n" +
                 "                                        <div class=\"form-group mb-30\">\n" +
                 "                                            <label class=\"control-label\">"+ lang +" (1200x1200)</label>\n" +
-                "                                            <input type=\"file\" class=\"form-control form-control-lg\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newAddGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
+                "                                            <input type=\"file\" class=\"form-control form-control-lg for-valid-img-add\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newAddGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
                 "                                           \n" +
                 "                                            <div style=\"display: flex; justify-content: center\">\n" +
                 "                                                <button type='button' class=\"btn btn-sm btn-icon text-danger\" data-bs-toggle=\"tooltip\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" onclick='deleteNewAddGallery("+i+")'>\n" +

@@ -20,10 +20,10 @@ public class ServicePage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Seo seo;
 
-    @OneToMany(mappedBy = "servicePage")
+    @OneToMany(mappedBy = "servicePage", cascade = CascadeType.ALL)
     List<Banner> bannerList = new ArrayList<>();
 
 }

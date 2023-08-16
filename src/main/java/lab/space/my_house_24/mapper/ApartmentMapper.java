@@ -53,10 +53,14 @@ public class ApartmentMapper {
     }
 
     public static ApartmentResponseForEdit entityToDtoForEdit(Apartment apartment){
+        BankBookResponseForTable bankBookResponseForTable = null;
+        if (apartment.getBankBook()!=null){
+            bankBookResponseForTable = BankBookMapper.entityToDtoForTable(apartment.getBankBook());
+        }
         return ApartmentResponseForEdit.builder().number(apartment.getNumber())
                 .section(SectionMapper.entityToDtoForTable(apartment.getSection()))
                 .rate(RateMapper.entityToDtoForTable(apartment.getRate()))
-                .bankBook(BankBookMapper.entityToDtoForTable(apartment.getBankBook()))
+                .bankBook(bankBookResponseForTable)
                 .house(HouseMapper.entityToDtoForTable(apartment.getHouse()))
                 .floor(FloorMapper.entityToDtoForTable(apartment.getFloor()))
                 .area(apartment.getArea())
