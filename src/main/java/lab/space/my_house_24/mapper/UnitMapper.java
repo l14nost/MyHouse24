@@ -13,6 +13,12 @@ public interface UnitMapper {
                 .build();
     }
 
+    static UnitResponse toDto(Unit unit) {
+        return UnitResponse.builder()
+                .name(unit.getName())
+                .build();
+    }
+
     static Unit toUnitUpdate(UnitRequest unitRequest, Unit unit) {
         return unit.setName(unitRequest.name());
     }

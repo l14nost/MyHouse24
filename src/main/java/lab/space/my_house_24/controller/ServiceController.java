@@ -46,14 +46,14 @@ public class ServiceController {
     @PostMapping("/save-services")
     public ResponseEntity<?> saveListService(@Valid @RequestBody ServiceSaveRequest serviceSaveRequest,
                                              BindingResult bindingResult) {
-        int i=0;
-        for (ServiceRequest serviceRequest : serviceSaveRequest.serviceRequestList()){
-            if (nonNull(serviceRequest.id())){
+        int i = 0;
+        for (ServiceRequest serviceRequest : serviceSaveRequest.serviceRequestList()) {
+            if (nonNull(serviceRequest.id())) {
                 serviceValidator.isNameUniqueValidationWithIdService(i, serviceRequest.id(), serviceRequest.name(),
-                        bindingResult,"ServiceSaveRequest", LocaleContextHolder.getLocale());
-            }else {
+                        bindingResult, "ServiceSaveRequest", LocaleContextHolder.getLocale());
+            } else {
                 serviceValidator.isNameUniqueValidationService(i, serviceRequest.name(),
-                        bindingResult,"ServiceSaveRequest", LocaleContextHolder.getLocale());
+                        bindingResult, "ServiceSaveRequest", LocaleContextHolder.getLocale());
             }
             i++;
         }
@@ -76,14 +76,14 @@ public class ServiceController {
     @PostMapping("/save-unit")
     public ResponseEntity<?> saveListUnit(@Valid @RequestBody UnitSaveRequest unitSaveRequest,
                                           BindingResult bindingResult) {
-        int i=0;
-        for (UnitRequest unitRequest : unitSaveRequest.unitRequestList()){
-            if (nonNull(unitRequest.id())){
+        int i = 0;
+        for (UnitRequest unitRequest : unitSaveRequest.unitRequestList()) {
+            if (nonNull(unitRequest.id())) {
                 serviceValidator.isNameUniqueValidationWithIdUnit(i, unitRequest.id(), unitRequest.name(),
-                        bindingResult,"UnitSaveRequest", LocaleContextHolder.getLocale());
-            }else {
+                        bindingResult, "UnitSaveRequest", LocaleContextHolder.getLocale());
+            } else {
                 serviceValidator.isNameUniqueValidationUnit(i, unitRequest.name(),
-                        bindingResult,"UnitSaveRequest", LocaleContextHolder.getLocale());
+                        bindingResult, "UnitSaveRequest", LocaleContextHolder.getLocale());
             }
             i++;
         }

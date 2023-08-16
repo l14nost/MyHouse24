@@ -10,6 +10,7 @@ import java.util.List;
 public interface ServiceService {
     Service getServiceById(Long id);
     List<ServiceResponse> getAllServicesDto();
+    List<ServiceResponse> getAllServicesByIsActiveDto();
 
     void saveService(Service service);
 
