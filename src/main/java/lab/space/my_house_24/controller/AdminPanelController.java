@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminPanelController {
     @GetMapping({"/", ""})
     public String redirectAdmin() {
-        return "redirect:/staff";
+        return "redirect:/statistic";
     }
 }
