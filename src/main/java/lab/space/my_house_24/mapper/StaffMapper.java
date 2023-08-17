@@ -113,4 +113,12 @@ public interface StaffMapper {
                 .setPassword(new BCryptPasswordEncoder().encode(request.password()))
                 .setForgotTokenUsage(true);
     }
+
+    static  StaffResponseForHouseCard entityToDtoForHouseCard(Staff staff){
+        return StaffResponseForHouseCard.builder()
+                .id(staff.getId())
+                .fullName(staff.getLastname()+" "+staff.getFirstname())
+                .role(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
+                .build();
+    }
 }

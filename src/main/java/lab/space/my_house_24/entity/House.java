@@ -44,10 +44,10 @@ public class House {
     @OneToMany(mappedBy = "house")
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "house")
+    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
     private List<Section> sectionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "house")
+    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
     private List<Floor> floorList = new ArrayList<>();
 
     @ManyToMany(mappedBy = "houseList")

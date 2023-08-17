@@ -135,8 +135,8 @@
 </th:block>
 <th:block layout:fragment="extra-modals">
     <div class="modal fade" id="confirmDeleteApartment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmDeleteApartmentLabel">Delete Apartment Owner</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -486,7 +486,7 @@
 
                                 }
 
-                                if (page+2<apartmentResponse.totalPages) {
+                                if (page+3<apartmentResponse.totalPages) {
                                     addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\"'>...</a></li>\n"
                                 }
                                 if (page+3>apartmentResponse.totalPages) {
@@ -579,7 +579,11 @@
                 function (){
                     $('#confirmDeleteApartment').modal('hide');
                     apartmentId = undefined;
-                    getAllApartment(0);
+                    var form = document.getElementById("filter");
+                    var formData = new FormData(form);
+                    filterData = formData;
+                    formData.append("page", "0");
+                    getAllApartment(formData);
                     showToast('success');
                 }
             ).fail(
