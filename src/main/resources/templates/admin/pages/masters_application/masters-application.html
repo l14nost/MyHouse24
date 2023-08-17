@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title>Template</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="breadcrumb-title">Master Appls</h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page">Master Appls</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-12 text-end" style="padding-bottom: 30px">
+        <a th:href="@{/master-call/add}" type="button" class="btn btn-success">Add application</a>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex">
+                <div class="col text-end">
+                    <button onclick="clearInput()" type="button" class="btn btn-light" style="height: 40px"
+                            th:text="#{staff.button.clear}"></button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered link-row" id="staff-table"
+                       style="margin-top: 15px; max-width: 100%">
+                    <thead>
+                    <tr>
+                        <th>№ application</th>
+                        <th>Time</th>
+                        <th>Type master</th>
+                        <th>Description</th>
+                        <th>Apartment</th>
+                        <th>Apartment Owner</th>
+                        <th>Phone</th>
+                        <th>Master</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    <tr id="search">
+                        <td>
+                            <input class="form-control" type="text" id="number-application-search">
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" id="time-search">
+                        </td>
+                        <td>
+                            <select id="type-master-search" class="mb-1 form-select form-select" aria-label=".form-select-lg example"
+                                    style="width: 160px; height: 40px">
+                                <option value=""></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="form-control" type="text" id="description-search">
+                        </td>
+                        <td><input class="form-control" type="text" id="apartment-search"></td>
+                        <td>
+                            <select id="apartment-owner-search" class="mb-1 form-select form-select"
+                                    aria-label=".form-select-lg example" style="width: 160px; height: 40px">
+                                <option value=""></option>
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="phone-search"></td>
+                        <td>
+                            <select id="master-search" class="mb-1 form-select form-select"
+                                    aria-label=".form-select-lg example" style="width: 160px; height: 40px">
+                                <option value=""></option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="status-search" class="mb-1 form-select form-select"
+                                    aria-label=".form-select-lg example" style="width: 160px; height: 40px">
+                                <option value=""></option>
+                            </select>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="row" style="display: flex; justify-content: space-between">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <!-- put JS here for only this page -->
+
+</th:block>
+
+</html>

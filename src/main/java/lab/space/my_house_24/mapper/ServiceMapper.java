@@ -14,6 +14,14 @@ public interface ServiceMapper {
                 .build();
     }
 
+    static ServiceResponse toDto(Service service) {
+        return ServiceResponse.builder()
+                .id(service.getId())
+                .name(service.getName())
+                .unit(UnitMapper.toDto(service.getUnit()))
+                .build();
+    }
+
     static Service toServiceUpdate(ServiceRequest serviceRequest, Service service) {
         return service
                 .setName(serviceRequest.name())

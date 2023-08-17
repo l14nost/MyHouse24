@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title th:text="#{rate.card.title}"></title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title"  id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb"  id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{rate.breadcrumb.rates}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  table-hover table-bordered table-md mb-0" style="margin-top: 15px;max-width: 100%">
+                    <thead>
+                    <div class="text-end">
+                        <button onclick="editRate()" type="button" class="btn btn-primary"
+                                style="margin-top: 15px; margin-right: 15px" th:text="#{rate.card.button.edit}"></button>
+                    </div>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-3" th:text="#{rate.card.name}"></td>
+                        <td id="rate-name"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{rate.card.description}"></td>
+                        <td id="rate-description"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{rate.card.update_at}"></td>
+                        <td id="update-at"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  table-hover table-bordered table-md my-0" id="service-table" style="margin-top: 15px;max-width: 100%">
+                    <thead>
+                    <tr>
+                        <td>#</td>
+                        <td th:text="#{rate.card.service}"></td>
+                        <td th:text="#{rate.card.unit}"></td>
+                        <td th:text="#{rate.card.price}"></td>
+                        <td th:text="#{rate.card.currency}"></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+        let rateId;
+        let tableBody = $('#service-table').find('tbody')
+
+        $(document).ready(function () {
+            rateId = new URL(window.location.href).pathname.split("-").pop();
+            getRate(rateId);
+        });
+
+        function getRate(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/rates/get-rate-card-" + id,
+                dataType: 'json'
+            }).done(function (rateResponse) {
+                console.log(rateResponse)
+                $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name);
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name));
+                $('#rate-name').html(rateResponse?.name);
+                $('#rate-description').html(rateResponse?.description);
+                $('#update-at').html(rateResponse?.date);
+                tableBody.empty();
+                $.each(rateResponse?.priceRate, function (index, priceRate) {
+                    tableBody.append(addRowService(priceRate, index + 1));
+                })
+            }).fail(function () {
+                console.log('fail');
+                showToast('error');
+            })
+        }
+
+        function addRowService(priceRate, index) {
+            const row = '<tr>\n' +
+                '                        <td>' + index + '</td>\n' +
+                '                        <td>' + priceRate?.service?.name + '</td>\n' +
+                '                        <td>' + priceRate?.service?.unit?.name + '</td>\n' +
+                '                        <td>' + priceRate?.price + '</td>\n' +
+                '                        <td>[[#{rate.save.inp.currency}]]</td>\n' +
+                '                    </tr>';
+            return row;
+        }
+
+        function editRate() {
+            window.location.href = '/admin/rates/update-' + rateId;
+        }
+    </script>
+
+</th:block>
+
+</html>

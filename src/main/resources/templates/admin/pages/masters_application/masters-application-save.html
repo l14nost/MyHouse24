@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+  <title>Template</title>
+</head>
+
+<th:block layout:fragment="content">
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+          <h4 class="card-title"  id="breadcrumb-title">Master Appl №1</h4>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb"  id="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+            <li class="breadcrumb-item active" aria-current="page">Master Appls</li>
+            <li class="breadcrumb-item active" aria-current="page">Edit/Save</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="card-body px-0">
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-3">
+      <div class="input-group">
+        <input class="form-control date_flatpicker" type="text" placeholder="Select Date..">
+        <button class="input-group-text input-button pointer-event" disabled>
+          <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="col-auto mt-2">ot</div>
+    <div class="col-3">
+      <div class="input-group">
+        <input class="form-control time_flatpicker" type="text" placeholder="Select Time..">
+        <button class="input-group-text input-button pointer-event" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 512 512">
+            <path d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+  <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+  <!-- put JS here for only this page -->
+
+</th:block>
+
+</html>
