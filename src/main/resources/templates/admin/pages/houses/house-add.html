@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text = "#{user.card.title}"></title>
+    <th:block layout:fragment="extra-style">
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="title" th:text="#{house.add.title}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/houses}" th:text = "#{left.sidebar.houses}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" id = "breadcrumb" th:text="#{house.add.title}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                    <div class="form-group" style="display: flex; justify-content: right">
+                        <div>
+                        </div>
+                    </div>
+            </div>
+            <div class="card-body">
+                <form id="houseAdd">
+                    <div class="row">
+                        <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.table.name}"></label>
+                            <input type="text" class="form-control" id="name"  name="name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.table.address}"></label>
+                            <input type="text" class="form-control" id="address"  name="address">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.add.image}+' #1. '+ #{house.add.image.size}+' (522x350)'"></label>
+                            <input type="file" class="form-control form-control-lg" id="image1" aria-label="Large file input example" name="image1" accept=".jpg, .png, .jpeg">
+                            <script>
+                                image1.onchange = evt => {
+                                    const [file] = image1.files
+                                    if (file) {
+                                        img1.src = URL.createObjectURL(file)
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.add.image}+' #2. '+ #{house.add.image.size}+' (248x160)'"></label>
+                            <input type="file" class="form-control form-control-lg" id="image2" aria-label="Large file input example" name="image2" accept=".jpg, .png, .jpeg">
+                            <script>
+                                image2.onchange = evt => {
+                                    const [file] = image2.files
+                                    if (file) {
+                                        img2.src = URL.createObjectURL(file)
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.add.image}+' #3. '+ #{house.add.image.size}+' (248x160)'"></label>
+                            <input type="file" class="form-control form-control-lg" id="image3" aria-label="Large file input example" name="image3" accept=".jpg, .png, .jpeg">
+                            <script>
+                                image3.onchange = evt => {
+                                    const [file] = image3.files
+                                    if (file) {
+                                        img3.src = URL.createObjectURL(file)
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.add.image}+' #4. '+ #{house.add.image.size}+' (248x160)'"></label>
+                            <input type="file" class="form-control form-control-lg" id="image4" aria-label="Large file input example" name="image4" accept=".jpg, .png, .jpeg">
+                            <script>
+                                image4.onchange = evt => {
+                                    const [file] = image4.files
+                                    if (file) {
+                                        img4.src = URL.createObjectURL(file)
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{house.add.image}+' #5. '+ #{house.add.image.size}+' (248x160)'"></label>
+                            <input type="file" class="form-control form-control-lg" id="image5" aria-label="Large file input example" name="image5" accept=".jpg, .png, .jpeg">
+                            <script>
+                                image5.onchange = evt => {
+                                    const [file] = image5.files
+                                    if (file) {
+                                        img5.src = URL.createObjectURL(file)
+                                    }
+                                }
+                            </script>
+                        </div>
+                    </div>
+                        <div class="col-md-4">
+                        <img th:src="@{/assets/images/default.jpg}" style="width: 100%; height: 50%" id="img1">
+                    </div>
+                        <div class="col-md-4">
+                        <div class="row" style="height: 50%; align-items: center">
+                            <div class="row" style=" height: 45%">
+                                <div class="col-md-6">
+                                    <img th:src="@{/assets/images/default.jpg}" style="width: 100%; height: 100%" id="img2">
+                                </div>
+                                <div class="col-md-6">
+                                    <img th:src="@{/assets/images/default.jpg}" style="width: 100%; height: 100%" id="img3">
+                                </div>
+                            </div>
+                            <div class="row " style=" height: 50%; padding-top: 5%">
+                                <div class="col-md-6">
+                                    <img th:src="@{/assets/images/default.jpg}" style="width: 100%; height: 100%" id="img4">
+                                </div>
+                                <div class="col-md-6">
+                                    <img th:src="@{/assets/images/default.jpg}" style="width: 100%; height: 100%" id="img5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="row" style="width: 50%">
+                        <nav>
+                            <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-section-tab" data-bs-toggle="tab" data-bs-target="#nav-section" type="button" role="tab" aria-controls="nav-section" aria-selected="true" th:text="#{house.add.section}"></button>
+                                <button class="nav-link" id="nav-floor-tab" data-bs-toggle="tab" data-bs-target="#nav-floor" type="button" role="tab" aria-controls="nav-floor" aria-selected="false" th:text="#{house.add.floor}"></button>
+                                <button class="nav-link" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users" type="button" role="tab" aria-controls="nav-users" aria-selected="false" th:text="#{house.add.user}"></button>
+                            </div>
+
+                        </nav>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-section" role="tabpanel" aria-labelledby="nav-section-tab">
+                                <div id="sectionContainer">
+                                    <div class="form-group" id="sectionDiv1">
+                                        <label class="form-label" th:text="#{house.table.name}"></label>
+                                        <div style="display: flex">
+                                            <div style="width: 100%">
+                                                <input type="text" class="form-control section for-valid-section" id="sectionName1"  name="sectionNameList">
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-icon text-danger"   onclick="deleteSection(1)">
+                                                <span class="btn-inner">
+                                                    <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                        <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: center;  margin-bottom: 10px">
+                                    <button onclick="addSection(1)" type="button" class="btn btn-success" th:text="#{house.button.add}" style="width: 150px;" ></button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-floor" role="tabpanel" aria-labelledby="nav-floor-tab">
+                                <div id="floorContainer">
+                                    <div class="form-group" id="floorDiv1">
+                                        <label class="form-label" th:text="#{house.table.name}"></label>
+                                        <div style="display: flex">
+                                            <div style="width: 100%">
+                                                <input type="text" class="form-control floor for-valid-floor" id="floorName1"  name="floorNameList">
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-icon text-danger"   onclick="deleteFloor(1)">
+                                                    <span class="btn-inner">
+                                                        <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                            <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                    </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: center;  margin-bottom: 10px">
+                                    <button onclick="addFloor()" type="button" class="btn btn-success" th:text="#{house.button.add}" style="width: 150px;" ></button>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+                                <div id="userContainer">
+                                    <div class="form-group for-valid-user" id="userDiv1">
+                                        <label class="form-label" th:text="#{house.add.fullName}"></label>
+                                        <div style="display: flex">
+                                            <div style="width: 50%">
+                                                    <select class="mb-1 form-select form-select users " aria-label=".form-select-lg example" name="userList" id="users1" style="width: 100%" onchange="changeUser(1)">
+                                                        <option selected=""></option>
+                                                    </select>
+                                            </div>
+                                            <input type="text" class="form-control user" style="width: 45%; margin-left: 5%" disabled = "" id="userRole1">
+                                            <button type="button" class="btn btn-sm btn-icon text-danger"   onclick="deleteUser(1)" >
+                                                    <span class="btn-inner">
+                                                        <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                            <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                            <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                    </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; justify-content: center;  margin-bottom: 10px">
+                                    <button onclick="addUser()" type="button" class="btn btn-success" th:text="#{house.button.add}" style="width: 150px;"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div style="display: flex; justify-content: right;  margin-bottom: 10px">
+                        <button onclick="cancelHouse()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px" ></button>
+                        <button onclick="saveHouse()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px" ></button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer pt-0 pb-0" style="margin-bottom: 20px">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-modals">
+</th:block>
+<th:block layout:fragment="extra-script">
+<script>
+
+    function addSection(){
+        $.ajax({
+            url: "/admin/get-locale"
+        })
+            .done(function (response){
+                if (response === "uk"){
+                    createSection("Назва");
+                }else {
+                    createSection("Name");
+                }
+            })
+            .fail(function (){
+                createSection("Name");
+            })
+    }
+    function createSection(label){
+        var images = document.querySelectorAll('input[class="form-control section for-valid-section"]');
+        let i;
+        if (images.length>0){
+            var lastImage = images[images.length - 1];
+            var idAttribute = lastImage.getAttribute("id");
+            var number = idAttribute.replace("sectionName", "");
+            i = number;
+        }
+        else {
+            i = 1;
+        }
+        i++;
+        const container = document.getElementById("sectionContainer");
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("form-group");
+        newDiv.id = "sectionDiv"+i;
+        newDiv.innerHTML = " <label class=\"form-label\">"+label+"</label>\n" +
+            "                                        <div style=\"display: flex\">\n" +
+            "                                        <div style='width: 100%'>" +
+            "                                            <input type=\"text\" class=\"form-control section for-valid-section\" id=\"sectionName"+i+"\"  name=\"sectionNameList\">\n" +
+            "                                        </div>" +
+            "                                            <button type=\"button\" class=\"btn btn-sm btn-icon text-danger\"   onclick=\"deleteSection("+i+")\">\n" +
+            "                                                <span class=\"btn-inner\">\n" +
+            "                                                    <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
+            "                                                        <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                        <path d=\"M20.708 6.23975H3.75\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                        <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                    </svg>\n" +
+            "                                                </span>\n" +
+            "                                            </button>\n" +
+            "                                        </div>";
+
+        container.append(newDiv);
+
+    }
+    function deleteSection(i){
+        $("#sectionDiv" + i).remove();
+    }
+
+    function addFloor(){
+        $.ajax({
+            url: "/admin/get-locale"
+        })
+            .done(function (response){
+                if (response === "uk"){
+                    createFloor("Назва");
+                }else {
+                    createFloor("Name");
+                }
+            })
+            .fail(function (){
+                createFloor("Name");
+            })
+    }
+    function createFloor(label){
+        var images = document.querySelectorAll('input[class="form-control floor for-valid-floor"]');
+        let i;
+        if (images.length>0){
+            var lastImage = images[images.length - 1];
+            var idAttribute = lastImage.getAttribute("id");
+            var number = idAttribute.replace("floorName", "");
+            i = number;
+        }
+        else {
+            i = 1;
+        }
+        i++;
+        const container = document.getElementById("floorContainer");
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("form-group");
+        newDiv.id = "floorDiv"+i;
+        newDiv.innerHTML = "<label class=\"form-label\">"+label+"</label>\n" +
+            "                                        <div style=\"display: flex\">\n" +
+            "                                        <div style='width: 100%'>" +
+            "                                            <input type=\"text\" class=\"form-control floor for-valid-floor\" id=\"floorName"+i+"\"  name=\"floorNameList\">\n" +
+            "                                        </div>" +
+            "                                            <button type=\"button\" class=\"btn btn-sm btn-icon text-danger\"   onclick=\"deleteFloor("+i+")\">\n" +
+            "                                                    <span class=\"btn-inner\">\n" +
+            "                                                        <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
+            "                                                            <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                            <path d=\"M20.708 6.23975H3.75\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                            <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                        </svg>\n" +
+            "                                                    </span>\n" +
+            "                                            </button>\n" +
+            "                                        </div>";
+
+        container.append(newDiv);
+
+    }
+    function deleteFloor(i){
+        $("#floorDiv" + i).remove();
+    }
+
+    function addUser(){
+        $.ajax({
+            url: "/admin/get-locale"
+        })
+            .done(function (response){
+                if (response === "uk"){
+                    createUser("ПІБ");
+                }else {
+                    createUser("FullName");
+                }
+            })
+            .fail(function (){
+                createUser("FullName");
+            })
+    }
+    function createUser(label){
+        var images = document.querySelectorAll('input[class="form-control user"]');
+        let i;
+        if (images.length>0){
+            var lastImage = images[images.length - 1];
+            var idAttribute = lastImage.getAttribute("id");
+            var number = idAttribute.replace("userRole", "");
+            i = number;
+        }
+        else {
+            i = 1;
+        }
+        i++;
+        const container = document.getElementById("userContainer");
+        const newDiv = document.createElement("div");
+        newDiv.classList.add("form-group");
+        newDiv.classList.add("for-valid-user");
+        newDiv.id = "userDiv"+i;
+        newDiv.innerHTML = "<label class=\"form-label\">"+label+"</label>\n" +
+            "                                        <div style=\"display: flex\">\n" +
+            "                                        <div style='width: 50%'>" +
+            "                                            <select class=\"mb-1 form-select form-select users \" aria-label=\".form-select-lg example\" name=\"userList\" id=\"users"+i+"\" style=\"width: 100%\" onchange=\"changeUser("+i+")\">\n" +
+            "                                                <option selected=\"\"></option>\n" +
+            "                                            </select>\n" +
+            "                                        </div>" +
+            "                                            <input type=\"text\" class=\"form-control user\" style=\"width: 45%; margin-left: 5%\" disabled = \"\" id=\"userRole"+i+"\">\n" +
+            "                                            <button type=\"button\" class=\"btn btn-sm btn-icon text-danger\"   onclick=\"deleteUser("+i+")\" >\n" +
+            "                                                    <span class=\"btn-inner\">\n" +
+            "                                                        <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
+            "                                                            <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                            <path d=\"M20.708 6.23975H3.75\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                            <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
+            "                                                        </svg>\n" +
+            "                                                    </span>\n" +
+            "                                            </button>\n" +
+            "                                        </div>";
+
+        container.append(newDiv);
+        $.ajax({
+            url: "/admin/get-locale"
+        })
+            .done(function (response){
+                select2(response);
+            })
+            .fail(function (){
+                select2("en");
+            })
+    }
+    function deleteUser(i){
+        $("#userDiv" + i).remove();
+    }
+
+
+
+
+    function select2(lang){
+        var defaultSelect = " ";
+        $(".users").select2({
+            theme: 'bootstrap-5',
+            language: lang,
+            cache: true,
+            ajax: {
+                url: "/admin/staff/get-all-staff-for-house",
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.fullName
+                            };
+                        })
+                    };
+                },
+
+            },
+            placeholder: defaultSelect,
+            minimumResultsForSearch: 0
+        })
+    }
+
+    $(document).ready(function(){
+       $.ajax({
+           url: "/admin/get-locale"
+       })
+           .done(function (response){
+               select2(response);
+           })
+           .fail(function (){
+               select2("en");
+           })
+    })
+
+    function changeUser(id){
+        var selectElement = document.getElementById("users" + id);
+        var roleInput = document.getElementById("userRole" + id);
+        var selectedValue = selectElement.value;
+        $.ajax({
+            url: "/admin/staff/get-role-by-staff/"+selectedValue,
+            method: "GET"
+        })
+            .done(function (response){
+                roleInput.value = response;
+            })
+    }
+
+    function saveHouse(){
+        var form = document.getElementById("houseAdd");
+        var formData = new FormData(form);
+        $.ajax({
+            method:"POST",
+            url: "/admin/add-house",
+            contentType: false,
+            processData: false,
+            data:formData
+        }).done(
+            function (response){
+                window.location.href = "/admin/houses";
+            }
+        ).fail(
+            function(response){
+                clearValidMessages();
+                clearButtonColor();
+                let errors = response.responseJSON;
+                console.log(errors);
+                for (var i =0; i<Object.keys(errors).length; i++){
+                    var keys = Object.keys(errors)[i];
+                    var values = Object.values(errors)[i];
+                    var regex = /^floorNameList\[\d+\]$/;
+                    var regexSection = /^sectionNameList\[\d+\]$/;
+                    var regexUser = /^userList\[\d+\]$/;
+                    if (keys === "floorNameList"){
+                        var buttonElement = document.querySelector("#nav-floor-tab");
+                        buttonElement.style.color = "red";
+                        var imgs3 = document.querySelectorAll('.for-valid-floor');
+                        validResponse("#"+imgs3[0].id, values);
+                    }
+                    if (regex.test(keys)){
+                        var buttonElement = document.querySelector("#nav-floor-tab");
+                        buttonElement.style.color = "red";
+                        var startIndex3 = keys.indexOf("[") + 1;
+                        var endIndex3 = keys.indexOf("]");
+                        var number3 = keys.substring(startIndex3, endIndex3);
+                        var imgs3 = document.querySelectorAll('.for-valid-floor');
+                        for(let i = 0; i<imgs3.length;i++){
+                            if (parseInt(number3) === i){
+                                var id3 = imgs3[i].id;
+                                validResponse("#"+id3, values);
+                            }
+                        }
+                    }
+                    if (keys === "sectionNameList"){
+                        var buttonElement = document.querySelector("#nav-section-tab");
+                        buttonElement.style.color = "red";
+                        var imgs3 = document.querySelectorAll('.for-valid-section');
+                        validResponse("#"+imgs3[0].id, values);
+                    }
+                    if (regexSection.test(keys)){
+                        var buttonElement = document.querySelector("#nav-section-tab");
+                        buttonElement.style.color = "red";
+                        var startIndex3 = keys.indexOf("[") + 1;
+                        var endIndex3 = keys.indexOf("]");
+                        var number3 = keys.substring(startIndex3, endIndex3);
+                        var imgs3 = document.querySelectorAll('.for-valid-section');
+                        for(let i = 0; i<imgs3.length;i++){
+                            if (parseInt(number3) === i){
+                                var id3 = imgs3[i].id;
+                                validResponse("#"+id3, values);
+                            }
+                        }
+                    }
+                    if (keys === "userList"){
+                        var buttonElement = document.querySelector("#nav-users-tab");
+                        buttonElement.style.color = "red";
+                        var imgs3 = document.querySelectorAll('.for-valid-user');
+                        validResponse("#"+imgs3[0].id, values);
+                    }
+                    if (regexUser.test(keys)){
+                        var buttonElement = document.querySelector("#nav-users-tab");
+                        buttonElement.style.color = "red";
+                        var startIndex3 = keys.indexOf("[") + 1;
+                        var endIndex3 = keys.indexOf("]");
+                        var number3 = keys.substring(startIndex3, endIndex3);
+                        var imgs3 = document.querySelectorAll('.for-valid-user');
+                        for(let i = 0; i<imgs3.length;i++){
+                            if (parseInt(number3) === i){
+                                var id3 = imgs3[i].id;
+                                validResponse("#"+id3, values);
+                            }
+                        }
+                    }
+                    if (keys === "userContainer"){
+                        var buttonElement = document.querySelector("#nav-users-tab");
+                        buttonElement.style.color = "red";
+                    }
+                    validResponse("#" + keys, values);
+                }
+            }
+        )
+    }
+
+    function clearButtonColor(){
+        var buttonElement = document.querySelector("#nav-floor-tab");
+        buttonElement.removeAttribute("style");
+
+        var buttonElement1 = document.querySelector("#nav-section-tab");
+        buttonElement1.removeAttribute("style");
+
+        var buttonElement2 = document.querySelector("#nav-users-tab");
+        buttonElement2.removeAttribute("style");
+
+    }
+
+
+
+</script>
+</th:block>
+</html>

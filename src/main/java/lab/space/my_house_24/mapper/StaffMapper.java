@@ -121,4 +121,10 @@ public interface StaffMapper {
                 .role(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
                 .build();
     }
+    static  StaffResponseForHouseAdd entityToDtoForHouseAdd(Staff staff){
+        return StaffResponseForHouseAdd.builder()
+                .id(staff.getId())
+                .fullName(staff.getLastname()+" "+staff.getFirstname())
+                .build();
+    }
 }

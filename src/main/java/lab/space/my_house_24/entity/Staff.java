@@ -64,7 +64,7 @@ public class Staff implements UserDetails {
     @OneToMany(mappedBy = "staff")
     private List<CashBox> cashBoxList = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "staff_house",
             joinColumns = @JoinColumn(name = "staff_id"),

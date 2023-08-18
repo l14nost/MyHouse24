@@ -1,10 +1,7 @@
 package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.House;
-import lab.space.my_house_24.model.house.HouseRequestForMainPage;
-import lab.space.my_house_24.model.house.HouseResponseForCard;
-import lab.space.my_house_24.model.house.HouseResponseForMain;
-import lab.space.my_house_24.model.house.HouseResponseForTable;
+import lab.space.my_house_24.model.house.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -18,4 +15,6 @@ public interface HouseService {
     void deleteById(Long id);
 
     HouseResponseForCard findByIdForCard(Long id);
+
+    void save(HouseRequestForAddPage houseRequestForAddPage);
 }

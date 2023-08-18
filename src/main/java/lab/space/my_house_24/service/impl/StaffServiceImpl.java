@@ -307,4 +307,9 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
         String email = jwtService.extractUsername(token);
         return loadUserByUsername(email);
     }
+
+    @Override
+    public List<StaffResponseForHouseAdd> getAllStaffDtoForHouse() {
+        return staffRepository.findAll().stream().map(StaffMapper::entityToDtoForHouseAdd).toList();
+    }
 }

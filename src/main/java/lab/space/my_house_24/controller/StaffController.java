@@ -1,6 +1,7 @@
 package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
+import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
 import lab.space.my_house_24.service.StaffService;
@@ -128,6 +129,17 @@ public class StaffController {
         }
 
         return staffService.deleteStaff(id);
+    }
+    @GetMapping("/get-all-staff-for-house")
+    @ResponseBody
+    public List<StaffResponseForHouseAdd> getAllStaffForHousePage() {
+        return staffService.getAllStaffDtoForHouse();
+    }
+
+    @GetMapping("/get-role-by-staff/{id}")
+    public ResponseEntity getRoleByStaff(@PathVariable Long id) {
+        Staff staff = staffService.getStaffById(id);
+        return ResponseEntity.ok().body(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()));
     }
 
 }
