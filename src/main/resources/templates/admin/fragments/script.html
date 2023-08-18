@@ -192,6 +192,18 @@
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
 
+    function addBadgeApplicationStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'IN_PROCESS') badgeClasses += ' bg-warning';
+        if (status?.name === 'NEW') badgeClasses += ' bg-primary';
+        if (status?.name === 'COMPLETED') badgeClasses += ' bg-success';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
     function addColorTextIncomeExpense(type){
 
         let badgeClasses = '';

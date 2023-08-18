@@ -16,6 +16,7 @@ public interface MastersApplicationMapper {
     static MastersApplicationResponse toMastersApplicationResponse(MastersApplication mastersApplication) {
         return MastersApplicationResponse.builder()
                 .id(mastersApplication.getId())
+                .createAt(mastersApplication.getCreateAt().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .description(mastersApplication.getDescription())
                 .comment(mastersApplication.getComment())
                 .master(EnumMapper.toSimpleDto(mastersApplication.getMaster().name(),

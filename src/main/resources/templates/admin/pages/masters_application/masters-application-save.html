@@ -38,7 +38,7 @@
                 </button>
             </div>
         </div>
-        <div class="col-auto mt-2">ot</div>
+        <div class="col-auto mt-2" th:text="#{masters_call.card.time.at}"></div>
         <div class="col-3">
             <div class="input-group">
                 <input class="form-control time_flatpicker" id="time" type="time" th:placeholder="#{masters_call.save.time.placeholder}">
@@ -247,7 +247,7 @@
                     clearValidMessages();
                 }
             }).done(function () {
-                // window.location.href = "/admin/staff";
+                window.location.href = "/admin/master-call";
             }).fail(function (response) {
                 const errors = response.responseJSON;
                 console.log(response);

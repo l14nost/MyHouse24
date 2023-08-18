@@ -37,6 +37,7 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public Page<RateResponse> getAllRatesResponse(RateRequest request) {
+        log.info("Try to get all RatesResponse by Request");
         final int DEFAULT_PAGE_SIZE = 10;
         return rateRepository.findAll(
                 rateSpecification.getRateByRequest(request),
@@ -53,10 +54,10 @@ public class RateServiceImpl implements RateService {
     @Override
     public ResponseEntity<?> getRateByIdDto(Long id) {
         try {
-            log.info("Try to get Rate");
+            log.info("Try to get RateResponse");
             return ResponseEntity.ok(RateMapper.toRateResponse(getRateById(id)));
         } catch (EntityNotFoundException e) {
-            log.error("Error get Rate by Update Request");
+            log.error("Error get RateResponse");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
     }
@@ -77,7 +78,7 @@ public class RateServiceImpl implements RateService {
         try {
             log.info("Try to update Rate by Update Request");
             Rate rate = saveRate(RateMapper.toRate(rateUpdateRequest, getRateById(rateUpdateRequest.id())));
-            log.info("Success save Rate by Update Request");
+            log.info("Success update Rate by Update Request");
             for (PriceRateRequest priceRate : rateUpdateRequest.priceRate()){
                 if (nonNull(priceRate.id())) {
                     priceRateService.updatePriceRateByRequest(priceRate, rate);

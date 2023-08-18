@@ -15,6 +15,9 @@ public record MastersApplicationResponse(
 
         Long id,
 
+        @JsonFormat(pattern = "dd.MM.yyyy - HH:mm")
+        LocalDateTime createAt,
+
         String description,
 
         String comment,
