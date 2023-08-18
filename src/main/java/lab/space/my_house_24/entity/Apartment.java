@@ -46,7 +46,7 @@ public class Apartment {
     @JoinColumn(name = "rate_id",nullable = false)
     private Rate rate;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bank_book_id",nullable = true)
     private BankBook bankBook;
 

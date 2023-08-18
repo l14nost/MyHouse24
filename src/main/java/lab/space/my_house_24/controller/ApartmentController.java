@@ -75,7 +75,6 @@ public class ApartmentController {
     @PostMapping("/add-apartment-save")
     public ResponseEntity addApartment(@RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result){
         if (apartmentAddRequest.bankBook()!=null) {
-            bankBookValidator.existBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest");
             bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","add",0L);
         }
         if (apartmentAddRequest.number()!=null && apartmentAddRequest.house()!=null){
@@ -103,7 +102,6 @@ public class ApartmentController {
     public ResponseEntity editApartment(@PathVariable Long id, @RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result){
         System.out.println(apartmentAddRequest.toString());
         if (apartmentAddRequest.bankBook()!=null) {
-            bankBookValidator.existBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest");
             bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","update",id);
         }
         if (apartmentAddRequest.number()!=null && apartmentAddRequest.house()!=null){

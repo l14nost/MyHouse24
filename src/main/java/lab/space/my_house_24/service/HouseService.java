@@ -17,4 +17,8 @@ public interface HouseService {
     HouseResponseForCard findByIdForCard(Long id);
 
     void save(HouseRequestForAddPage houseRequestForAddPage);
+
+    HouseResponseForEdit findByIdForEdit(Long id);
+
+    void update(HouseRequestForEditPage houseRequestForEditPage,Long id);
 }

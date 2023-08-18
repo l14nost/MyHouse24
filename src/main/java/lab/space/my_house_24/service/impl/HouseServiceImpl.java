@@ -126,4 +126,117 @@ public class HouseServiceImpl implements HouseService {
 
         houseRepository.save(house);
     }
+
+    @Override
+    public HouseResponseForEdit findByIdForEdit(Long id) {
+        return HouseMapper.entityToDtoForEditPage(findById(id));
+    }
+
+    @Override
+    public void update(HouseRequestForEditPage houseRequestForEditPage, Long id) {
+        House house = findById(id);
+        house.setName(houseRequestForEditPage.name());
+        house.setAddress(houseRequestForEditPage.address());
+        for (int i = 0; i<houseRequestForEditPage.deleteSectionList().size();i++){
+            for (int j = 0; j<house.getSectionList().size();j++){
+                if (house.getSectionList().get(j).getId().equals(houseRequestForEditPage.deleteSectionList().get(i))){
+                    house.getSectionList().remove(j);
+                }
+            }
+        }
+
+        for (int i = 0; i<houseRequestForEditPage.deleteFloorList().size();i++){
+            for (int j = 0; j<house.getFloorList().size();j++){
+                if (house.getFloorList().get(j).getId().equals(houseRequestForEditPage.deleteFloorList().get(i))){
+                    house.getFloorList().remove(j);
+                }
+            }
+        }
+        for (int i = 0; i<houseRequestForEditPage.deleteStaffList().size();i++){
+            for (int j = 0; j<house.getStaffList().size();j++){
+                if (house.getStaffList().get(j).getId().equals(houseRequestForEditPage.deleteStaffList().get(i))){
+                    house.getStaffList().remove(j);
+                    Staff staff = staffService.getStaffById(houseRequestForEditPage.deleteStaffList().get(i));
+                    for (int k = 0; k<staff.getHouseList().size(); k++){
+                        if (staff.getHouseList().get(k).getId().equals(id)){
+                            staff.getHouseList().remove(k);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!houseRequestForEditPage.image1().isEmpty()){
+            house.setImage1(FileHandler.saveFile(houseRequestForEditPage.image1()));
+        }
+        if (!houseRequestForEditPage.image2().isEmpty()){
+            house.setImage2(FileHandler.saveFile(houseRequestForEditPage.image2()));
+        }
+        if (!houseRequestForEditPage.image3().isEmpty()){
+            house.setImage3(FileHandler.saveFile(houseRequestForEditPage.image3()));
+        }
+        if (!houseRequestForEditPage.image4().isEmpty()){
+            house.setImage4(FileHandler.saveFile(houseRequestForEditPage.image4()));
+        }
+        if (!houseRequestForEditPage.image5().isEmpty()){
+            house.setImage5(FileHandler.saveFile(houseRequestForEditPage.image5()));
+        }
+
+
+        for (int i = 0; i<houseRequestForEditPage.sectionNameList().size();i++){
+            if (i<house.getSectionList().size()){
+                house.getSectionList().get(i).setName(houseRequestForEditPage.sectionNameList().get(i));
+            }
+            else {
+                house.getSectionList().add(Section.builder().name(houseRequestForEditPage.sectionNameList().get(i)).house(house).build());
+            }
+        }
+
+
+        for (int i = 0; i<houseRequestForEditPage.floorNameList().size();i++){
+            if (i<house.getFloorList().size()){
+                house.getFloorList().get(i).setName(houseRequestForEditPage.floorNameList().get(i));
+            }
+            else {
+                house.getFloorList().add(Floor.builder().name(houseRequestForEditPage.sectionNameList().get(i)).house(house).build());
+            }
+        }
+
+        List<Long> currentStaffList = new ArrayList<>();
+
+        for (Staff staff: house.getStaffList()){
+            currentStaffList.add(staff.getId());
+        }
+
+        for (int i = 0; i<houseRequestForEditPage.userList().size();i++){
+            boolean check = false;
+            for (int j = 0; j<currentStaffList.size();j++){
+                if (currentStaffList.get(j).equals(houseRequestForEditPage.userList().get(i))){
+                    check = true;
+                }
+            }
+            if (!check && i>=currentStaffList.size()){
+                Staff staff = staffService.getStaffById(houseRequestForEditPage.userList().get(i));
+                staff.getHouseList().add(house);
+                house.getStaffList().add(staff);
+            }
+            else if (!check && i<currentStaffList.size()){
+                Staff oldStaff = staffService.getStaffById(currentStaffList.get(i));
+                for (int k = 0; k<oldStaff.getHouseList().size();k++){
+                    if (oldStaff.getHouseList().get(k).getId().equals(id)){
+                        oldStaff.getHouseList().remove(k);
+                    }
+                }
+
+                Staff staff = staffService.getStaffById(houseRequestForEditPage.userList().get(i));
+                house.getStaffList().set(i, staff);
+                staff.getHouseList().add(house);
+            }
+        }
+
+        houseRepository.save(house);
+
+
+
+    }
 }

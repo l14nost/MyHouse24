@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class BankBookServiceImpl implements BankBookService {
@@ -19,6 +21,11 @@ public class BankBookServiceImpl implements BankBookService {
     @Override
     public BankBook findById(Long id) {
         return bankBookRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Bank book by id "+id+" is not found"));
+    }
+
+    @Override
+    public Optional<BankBook> findByNumber(String number) {
+        return bankBookRepository.findBankBookByNumber(number);
     }
 
     @Override

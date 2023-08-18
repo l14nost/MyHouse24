@@ -2,6 +2,7 @@ package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.House;
 import lab.space.my_house_24.model.house.HouseResponseForCard;
+import lab.space.my_house_24.model.house.HouseResponseForEdit;
 import lab.space.my_house_24.model.house.HouseResponseForMain;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 
@@ -27,6 +28,22 @@ public class HouseMapper{
                 .image4(house.getImage4())
                 .image5(house.getImage5())
                 .address(house.getAddress())
+                .build();
+    }
+
+    public static HouseResponseForEdit entityToDtoForEditPage(House house){
+        return HouseResponseForEdit.builder()
+                .id(house.getId())
+                .name(house.getName())
+                .address(house.getAddress())
+                .image1(house.getImage1())
+                .image2(house.getImage2())
+                .image3(house.getImage3())
+                .image4(house.getImage4())
+                .image5(house.getImage5())
+                .sectionList(house.getSectionList().stream().map(SectionMapper::entityToDtoForTable).toList())
+                .floorList(house.getFloorList().stream().map(FloorMapper::entityToDtoForTable).toList())
+                .staffList(house.getStaffList().stream().map(StaffMapper::entityToDtoForHouseCard).toList())
                 .build();
     }
 }

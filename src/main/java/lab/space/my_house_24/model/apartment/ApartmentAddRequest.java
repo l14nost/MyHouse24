@@ -2,6 +2,7 @@ package lab.space.my_house_24.model.apartment;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 
@@ -30,8 +31,9 @@ public record ApartmentAddRequest(
 
         @NotNull(message = "{not.blank.message}")
         Long rate,
-        @NotNull(message = "{not.blank.message}")
-        Long bankBook
+        @NotBlank(message = "{not.blank.message}")
+        @Size(max = 9, message = "{size.less.message}"+" 9")
+        String bankBook
 
 
 ){

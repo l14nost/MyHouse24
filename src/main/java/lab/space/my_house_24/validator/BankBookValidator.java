@@ -25,12 +25,13 @@ public class BankBookValidator {
             result.addError(new FieldError(object, "bankBook", response));
         }
     }
-    public void busyBankBook(Long id, BindingResult result,String object, String method,Long apartmentId){
+    public void busyBankBook(String number, BindingResult result,String object, String method,Long apartmentId){
         Locale locale = LocaleContextHolder.getLocale();
         String response;
         if (locale.toLanguageTag().equals("uk")) response = "Особовий рахунок прив'язан до квартири";
         else response = "Bank book is tied to the apartment";
-        Optional<BankBook> bankBook = bankBookRepository.findById(id);
+
+        Optional<BankBook> bankBook = bankBookRepository.findBankBookByNumber(number);
         if (bankBook.isPresent()){
             if (method.equals("add")){
                 if (bankBook.get().getApartment()!=null) {

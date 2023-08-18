@@ -82,7 +82,7 @@
                                 <label class="form-label" th:text = "#{apartment.add.bank.book}"></label>
                                 <input type="text" class="form-control" id="bankBook"  name="bankBook" >
                                 <div style="margin-top: 10px">
-                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" style=" width: 160px">
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" name="bankBookSelect" style=" width: 160px">
                                         <option selected=""></option>
                                         <option th:each="bankBook:${bankBookList}" th:text="${bankBook.number()}" th:value = "${bankBook.number()}"></option>
                                     </select>

@@ -27,6 +27,6 @@ public class BankBook {
     @Column(name = "status", length = 50, nullable = false)
     private BankBookStatus bankBookStatus;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne
     private Apartment apartment;
 }

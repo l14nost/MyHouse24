@@ -2,6 +2,7 @@ package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.*;
+import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.mapper.ApartmentMapper;
 import lab.space.my_house_24.model.apartment.*;
 import lab.space.my_house_24.repository.ApartmentRepository;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ApartmentServiceImpl implements ApartmentService {
@@ -41,6 +44,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
     @Override
     public void deleteApartment(Long id) {
+
         apartmentRepository.deleteById(id);
     }
 
@@ -51,6 +55,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void saveApartment(ApartmentAddRequest apartmentAddRequest) {
+        Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
         Apartment apartment = Apartment.builder()
                 .number(apartmentAddRequest.number())
                 .area(apartmentAddRequest.area())
@@ -60,12 +65,16 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .house(House.builder().id(apartmentAddRequest.house()).build())
                 .user(User.builder().id(apartmentAddRequest.owner()).build())
                 .build();
+        if (bankBookOptional.isEmpty()){
+            apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
+        }
+        else {
+            BankBook bankBook = bankBookOptional.get();
+            bankBook.setApartment(apartment);
+            apartment.setBankBook(bankBook);
+        }
         apartmentRepository.save(apartment);
-        BankBook bankBook = bankBookService.findById(apartmentAddRequest.bankBook());
-        bankBook.setApartment(apartment);
-        bankBookService.update(apartmentAddRequest.bankBook(), bankBook);
-        apartment.setBankBook(bankBook);
-        apartmentRepository.save(apartment);
+
     }
 
     @Override
@@ -75,25 +84,28 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest) {
-        Long idChangeBankBook = null;
         Apartment apartment = findById(id);
-        if (!apartment.getBankBook().getId().equals(apartmentAddRequest.bankBook())){
-            idChangeBankBook = apartment.getBankBook().getId();
-        }
+        Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
         apartment.setArea(apartmentAddRequest.area());
         apartment.setHouse(House.builder().id(apartmentAddRequest.house()).build());
         apartment.setNumber(apartmentAddRequest.number());
         apartment.setUser(User.builder().id(apartmentAddRequest.owner()).build());
         apartment.setRate(Rate.builder().id(apartmentAddRequest.rate()).build());
         apartment.setFloor(Floor.builder().id(apartmentAddRequest.floor()).build());
-        BankBook bankBook = bankBookService.findById(apartmentAddRequest.bankBook());
-        bankBook.setApartment(apartment);
-        apartment.setBankBook(bankBook);
         apartment.setSection(Section.builder().id(apartmentAddRequest.section()).build());
-        apartmentRepository.save(apartment);
-        if (idChangeBankBook!=null){
-            bankBookService.setBankBookApartmentIdNull(idChangeBankBook);
+        if (bankBookOptional.isEmpty()){
+            apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
         }
+        else {
+            BankBook bankBook = bankBookOptional.get();
+            if (!bankBook.getId().equals(apartment.getBankBook().getId())){
+                apartment.getBankBook().setApartment(null);
+            }
+            bankBook.setApartment(apartment);
+            apartment.setBankBook(bankBook);
+
+        }
+        apartmentRepository.save(apartment);
     }
 
     @Override
