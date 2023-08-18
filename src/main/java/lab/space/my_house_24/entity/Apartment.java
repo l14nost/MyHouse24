@@ -43,17 +43,17 @@ public class Apartment {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "rate_id",nullable = false)
+    @JoinColumn(name = "rate_id", nullable = false)
     private Rate rate;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "bank_book_id",nullable = true)
+    @JoinColumn(name = "bank_book_id", nullable = true)
     private BankBook bankBook;
 
     @ManyToMany(mappedBy = "apartmentList")
     private List<Message> messageList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "apartmentList")
+    @OneToMany(mappedBy = "apartment")
     private List<MastersApplication> mastersApplicationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)

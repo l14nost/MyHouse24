@@ -8,21 +8,23 @@ import lab.space.my_house_24.repository.UserRepository;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.specification.UserSpecification;
 import lab.space.my_house_24.specification.UserSpecificationForTable;
-import lab.space.my_house_24.util.FileHandler;
 import lab.space.my_house_24.util.CustomMailSender;
+import lab.space.my_house_24.util.FileHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CustomMailSender customMailSender;
@@ -131,6 +133,15 @@ public class UserServiceImpl implements UserService {
     public Page<UserResponseForTable> userResponseForTables(Integer page, String search){
         UserSpecificationForTable userSpecificationForTable = UserSpecificationForTable.builder().search(search).build();
         return userRepository.findAll(userSpecificationForTable, PageRequest.of(page,5)).map(UserMapper::entityToDtoForTable);
+    }
+
+    @Override
+    public List<UserResponseForMastersApplication> getAllUsersForMastersApplication() {
+        log.info("Get all User and convert in Response For MastersApplication");
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::entityToResponseForMastersApplication)
+                .collect(Collectors.toList());
     }
 
 

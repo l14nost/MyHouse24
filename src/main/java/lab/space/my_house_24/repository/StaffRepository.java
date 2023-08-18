@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface StaffRepository extends JpaRepository<Staff, Long>, JpaSpecificationExecutor<Staff> {
     Optional<Staff> findByEmail(String email);
+
     boolean existsByEmail(String email);
 }

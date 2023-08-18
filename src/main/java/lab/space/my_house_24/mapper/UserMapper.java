@@ -1,16 +1,11 @@
 package lab.space.my_house_24.mapper;
 
 import lab.space.my_house_24.entity.Apartment;
-import lab.space.my_house_24.entity.Section;
 import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
-import lab.space.my_house_24.model.section.SectionResponseForTable;
-import lab.space.my_house_24.model.user.UserCardResponse;
-import lab.space.my_house_24.model.user.UserEditResponse;
-import lab.space.my_house_24.model.user.UserResponse;
-import lab.space.my_house_24.model.user.UserResponseForTable;
+import lab.space.my_house_24.model.user.*;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.time.ZoneId;
@@ -87,5 +82,13 @@ public class UserMapper {
 
     public  static UserResponseForTable entityToDtoForTable(User user){
         return UserResponseForTable.builder().name(user.getLastname()+" "+user.getFirstname()+" "+ user.getSurname()).id(user.getId()).build();
+    }
+
+    public static UserResponseForMastersApplication entityToResponseForMastersApplication(User user){
+        return UserResponseForMastersApplication.builder()
+                .id(user.getId())
+                .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
+                .phone(user.getNumber())
+                .build();
     }
 }

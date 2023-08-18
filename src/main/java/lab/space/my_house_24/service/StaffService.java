@@ -13,6 +13,7 @@ import java.util.Locale;
 public interface StaffService {
 
     void sendInvite(InviteRequest inviteRequest);
+
     void sendForgotPasswordUrl(String email);
 
     void sendUpdatePasswordWarning(String email, Locale locale);
@@ -32,6 +33,8 @@ public interface StaffService {
     Staff getMainDirector();
 
     List<Staff> getAllStaff();
+
+    List<StaffResponse> getAllStaffMaster(StaffMasterRequest request);
 
     Page<StaffResponse> getAllStaffDto(StaffRequest request);
 

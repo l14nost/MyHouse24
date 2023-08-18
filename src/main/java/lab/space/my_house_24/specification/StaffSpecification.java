@@ -2,6 +2,9 @@ package lab.space.my_house_24.specification;
 
 import jakarta.persistence.criteria.Predicate;
 import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.enums.JobTitle;
+import lab.space.my_house_24.enums.UserStatus;
+import lab.space.my_house_24.model.staff.StaffMasterRequest;
 import lab.space.my_house_24.model.staff.StaffRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -56,6 +59,28 @@ public class StaffSpecification {
                         criteriaBuilder.equal(root.get("staffStatus"), request.statusQuery())
                 ));
             }
+            query.orderBy(criteriaBuilder.asc(root.get("id")));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+
+    public Specification<Staff> getStaffMaster(StaffMasterRequest request) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (nonNull(request.role())) {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.equal(root.get("role").get("jobTitle"), request.role())
+                ));
+            } else {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.equal(root.get("role").get("jobTitle"), JobTitle.ELECTRIC),
+                        criteriaBuilder.equal(root.get("role").get("jobTitle"), JobTitle.PLUMBER)
+                ));
+            }
+            predicates.add(criteriaBuilder.or(
+                    criteriaBuilder.equal(root.get("staffStatus"), UserStatus.ACTIVE)
+            ));
             query.orderBy(criteriaBuilder.asc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
