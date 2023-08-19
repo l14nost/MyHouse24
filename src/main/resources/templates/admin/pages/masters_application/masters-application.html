@@ -3,7 +3,7 @@
       layout:decorate="~{admin/fragments/layout}">
 
 <head>
-    <title>Template</title>
+    <title th:text="#{masters_call.title}"></title>
 </head>
 
 <th:block layout:fragment="content">
@@ -12,12 +12,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    <h4 class="card-title" id="breadcrumb-title">Master Appls</h4>
+                    <h4 class="card-title" id="breadcrumb-title" th:text="#{masters_call.breadcrumb}"></h4>
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
                         <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page">Master Appls</li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{masters_call.breadcrumb}"></li>
                     </ol>
                 </nav>
             </div>
@@ -28,7 +28,7 @@
 
 
     <div class="col-12 text-end" style="padding-bottom: 30px">
-        <a th:href="@{/master-call/add}" type="button" class="btn btn-success">Add application</a>
+        <a th:href="@{/master-call/add}" type="button" class="btn btn-success" th:text="#{masters_call.button.add}"></a>
     </div>
 
     <div class="col-sm-12">
@@ -40,53 +40,53 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered link-row" id="staff-table"
+                <table class="table table-striped table-hover table-bordered link-row" id="masters-appl-table"
                        style="margin-top: 15px; max-width: 100%">
                     <thead>
                     <tr>
-                        <th>№ application</th>
-                        <th>Time</th>
-                        <th>Type master</th>
-                        <th>Description</th>
-                        <th>Apartment</th>
-                        <th>Apartment Owner</th>
-                        <th>Phone</th>
-                        <th>Master</th>
-                        <th>Status</th>
+                        <th th:text="#{masters_call.table.number}"></th>
+                        <th th:text="#{masters_call.table.time}"></th>
+                        <th th:text="#{masters_call.table.type_master}"></th>
+                        <th th:text="#{masters_call.table.description}"></th>
+                        <th th:text="#{masters_call.table.apartment}"></th>
+                        <th th:text="#{masters_call.table.owner}"></th>
+                        <th th:text="#{masters_call.table.phone}" style="min-width: 200px"></th>
+                        <th th:text="#{masters_call.table.master}"></th>
+                        <th th:text="#{masters_call.table.status}"></th>
                         <th></th>
                     </tr>
                     <tr id="search">
                         <td>
-                            <input class="form-control" type="text" id="number-application-search">
+                            <input class="form-control" type="text" id="number-application">
                         </td>
                         <td>
-                            <input class="form-control" type="text" id="time-search">
+                            <input class="form-control" type="text" id="time">
                         </td>
                         <td>
-                            <select id="type-master-search" class="mb-1 form-select form-select" aria-label=".form-select-lg example"
+                            <select id="type-master" class="mb-1 form-select form-select" aria-label=".form-select-lg example"
                                     style="width: 160px; height: 40px">
                                 <option value=""></option>
                             </select>
                         </td>
                         <td>
-                            <input class="form-control" type="text" id="description-search">
+                            <input class="form-control" type="text" id="description">
                         </td>
-                        <td><input class="form-control" type="text" id="apartment-search"></td>
+                        <td><input class="form-control" type="text" id="apartment"></td>
                         <td>
-                            <select id="apartment-owner-search" class="mb-1 form-select form-select"
+                            <select id="apartment-owner" class="mb-1 form-select form-select"
                                     aria-label=".form-select-lg example" style="width: 160px; height: 40px">
                                 <option value=""></option>
                             </select>
                         </td>
-                        <td><input class="form-control" type="text" id="phone-search"></td>
+                        <td><input class="form-control" type="text" id="phone"></td>
                         <td>
-                            <select id="master-search" class="mb-1 form-select form-select"
+                            <select id="master" class="mb-1 form-select form-select"
                                     aria-label=".form-select-lg example" style="width: 160px; height: 40px">
                                 <option value=""></option>
                             </select>
                         </td>
                         <td>
-                            <select id="status-search" class="mb-1 form-select form-select"
+                            <select id="status" class="mb-1 form-select form-select"
                                     aria-label=".form-select-lg example" style="width: 160px; height: 40px">
                                 <option value=""></option>
                             </select>
@@ -118,7 +118,382 @@
 
 <th:block layout:fragment="extra-script">
 
-    <!-- put JS here for only this page -->
+    <script>
+
+        let masterApplId = undefined;
+        let masterApplRequest ={};
+        masterApplRequest.pageIndex = 0;
+        let staffMasterRequest = {};
+        staffMasterRequest.role = undefined;
+        let filterTimeout;
+
+        $(document).ready(function () {
+            getAllMastersApplication();
+            $(document.body).on("click", "tr", function (e) {
+                if (!($(e.target).attr("data-actions") === "data-actions") && !$(e.target).is("svg") && !$(e.target).is("a") && !$(e.target).is("path")) {
+                    const href = $(this).data('href');
+                    if (href) {
+                        window.location.href = href;
+                    }
+                }
+
+                $('#number-application, #time, #description, #apartment, #phone').on('input', function () {
+                    clearTimeout(filterTimeout);
+                    filterTimeout = setTimeout(function () {
+                        updateMastersApplicationsRequestAndSend();
+                    }, 1000);
+                });
+
+                $('#type-master').on('select2:select', function () {
+                    updateMastersApplicationsRequestAndSend();
+                });
+
+                $('#apartment-owner').on('select2:select', function () {
+                    updateMastersApplicationsRequestAndSend();
+                });
+
+                $('#master').on('select2:select', function () {
+                    updateMastersApplicationsRequestAndSend();
+                });
+
+                $('#status').on('select2:select', function () {
+                    updateMastersApplicationsRequestAndSend();
+                });
+            });
+
+
+        });
+
+        $(document).on('click', '.text-danger', function () {
+            masterApplId = $(this).data('id');
+            $('#confirmDelete').modal('show');
+        });
+
+        function getAllMastersApplication() {
+            $.ajax({
+                method: "POST",
+                url: "/admin/master-call/get-all-master-call",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(masterApplRequest)
+            }).done(function (response) {
+                console.info(response)
+                const TABLE_BODY = createTable('#masters-appl-table', response?.totalElements, response?.totalPages , masterApplRequest?.pageIndex);
+                $.each(response?.content, function (index, mastersAppl) {
+                    const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" href="/admin/master-call/update-' + mastersAppl.id + '" aria-label="Edit User" data-bs-original-title="Edit User">' +
+                        '<span class="btn-inner">' +
+                        '<svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                        '<path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+                        '<path fill-rule="evenodd" clip-rule="evenodd" d="M8.82812 10.921L16.3011 3.44799C17.2321 2.51799 18.7411 2.51799 19.6721 3.44799L20.8891 4.66499C21.8201 5.59599 21.8201 7.10599 20.8891 8.03599L13.3801 15.545C12.9731 15.952 12.4211 16.181 11.8451 16.181H8.09912L8.19312 12.401C8.20712 11.845 8.43412 11.315 8.82812 10.921Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+                        '<path d="M15.1655 4.60254L19.7315 9.16854" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+                        '</svg>' +
+                        '</span>' +
+                        '</a>'
+                    const $deleteBtn = '<a class="btn btn-sm btn-icon text-danger" type="button" data-bs-toggle="tooltip" aria-label="Delete Staff" data-bs-original-title="Delete Staff" data-toggle="modal" data-target="#confirmDelete" data-id="' + mastersAppl.id + '">' +
+                        '<span class="btn-inner">' +
+                        '<svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">' +
+                        '<path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+                        '<path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+                        '<path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
+                        ' </svg>' +
+                        '</span>' +
+                        '</a>';
+                    $(TABLE_BODY).append(
+                        '<tr  data-href="/admin/master-call/card-' + mastersAppl.id + '" data-key="' + mastersAppl.id + '">' +
+                        '    <td>' + mastersAppl.id + '</td>' +
+                        '    <td>' + mastersAppl?.fullDate + '</td>' +
+                        '    <td>' + mastersAppl?.master?.value + '</td>' +
+                        '    <td>' + mastersAppl?.description + '</td>' +
+                        '    <td>' + mastersAppl?.apartment?.name + '</td>' +
+                        '    <td>' + mastersAppl?.apartment?.owner?.fullName + '</td>' +
+                        '    <td>' + mastersAppl?.apartment?.owner?.phone + '</td>' +
+                        '    <td>' + mastersAppl?.staff?.fullName + '</td>' +
+                        '    <td class="h5">' + addBadgeApplicationStatus(mastersAppl?.mastersApplicationStatus) + '</td>' +
+                        '    <td data-actions="data-actions">' + $edit + $deleteBtn + '</td>' +
+                        '</tr>'
+                    );
+                });
+            });
+
+            function createTable(tableSelector, itemsCount, pagesCount, pageIndex) {
+                const TABLE_DIV = $(tableSelector);
+                const TABLE_HEAD = $(TABLE_DIV).find('thead');
+                const TABLE_BODY = $(TABLE_DIV).find('tbody');
+                const TABLE_COLUMNS_COUNT = $(TABLE_HEAD).find('th').length;
+                const TABLE_PAGINATION_ROW = $(TABLE_DIV).parents('div.card').find('div.card-footer').find('div.row');
+
+                $(TABLE_BODY).empty();
+                $(TABLE_PAGINATION_ROW).empty();
+                if (itemsCount <= 0) {
+                    $(TABLE_DIV).parents('div.card').find('div.card-footer').attr('hidden', true);
+                    $(TABLE_BODY).append(
+                        '<tr>' +
+                        '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
+                        '[[#{table.empty}]]' +
+                        '    </td>' +
+                        '</tr>'
+                    );
+                }else {
+                    $(TABLE_DIV).parents('div.card').find('div.card-footer').attr('hidden', false);
+                    createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount);
+                }
+
+                return TABLE_BODY;
+            }
+
+            function createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount) {
+                const colDiv = '<div class="col-sm-12 col-md-6"></div>';
+                const paginationList =
+                    '<ul class="pagination pagination-sm mb-0 justify-content-center justify-content-md-end align-items-center">' +
+                    '</ul>';
+                const collapsedPageBtn =
+                    '   <li class="page-item">' +
+                    '       <a class="page-link disabled" role="button">...</a>' +
+                    '   </li>';
+                pagesCount = Number(pagesCount);
+                pageIndex = Number(pageIndex) + 1;
+                itemsCount = Number(itemsCount);
+                if (itemsCount > 0) {
+                    $(TABLE_PAGINATION_ROW).append(
+                        $($(colDiv).addClass('pagination-info').addClass('text-black'))
+                            .append('[[#{staff.table.footer.shown}]] X-Y [[#{staff.table.footer.of}]] Z [[#{staff.table.footer.records}]]'
+                                .replace('X', ((pageIndex - 1) * 10 + 1))
+                                .replace('Y', Math.min(pageIndex * 10, itemsCount))
+                                .replace('Z', itemsCount))
+                    );
+                }
+
+                $(TABLE_PAGINATION_ROW).append($(colDiv).append(paginationList));
+                const paginationListPath = $(TABLE_PAGINATION_ROW).find('ul.pagination');
+
+                // pagination logic
+                if (pagesCount > 1) {
+                    if (pageIndex !== 1) {
+                        $(paginationListPath).append(createPrevNextPageBtn(false, true));
+                        $(paginationListPath).append(createPageBtn(1, false));
+                    } else {
+                        $(paginationListPath).append(createPrevNextPageBtn(true, true));
+                        $(paginationListPath).append(createPageBtn(1, true));
+                    }
+
+                    if (pagesCount > 7) {
+                        if (pageIndex >= 5) {
+                            $(paginationListPath).append(collapsedPageBtn);
+                        }
+
+                        let start;
+                        let finish;
+                        if (pageIndex < 5) {
+                            start = 2;
+                            finish = 5;
+                        } else if (pagesCount - pageIndex < 4) {
+                            start = pagesCount - 4;
+                            finish = pagesCount - 1;
+                        } else {
+                            start = pageIndex - 1;
+                            finish = pageIndex + 1;
+                        }
+                        for (let i = start; i <= finish; i++) {
+                            if (i > 1 && i <= pagesCount - 1) {
+                                if (pageIndex === i) {
+                                    $(paginationListPath).append(createPageBtn(i, true));
+                                } else {
+                                    $(paginationListPath).append(createPageBtn(i, false));
+                                }
+                            }
+                        }
+
+                        if (pagesCount - pageIndex >= 4) {
+                            $(paginationListPath).append(collapsedPageBtn);
+                        }
+                    } else {
+                        for (let i = 2; i <= pagesCount - 1; i++) {
+                            if (pageIndex === i) {
+                                $(paginationListPath).append(createPageBtn(i, true));
+                            } else {
+                                $(paginationListPath).append(createPageBtn(i, false));
+                            }
+                        }
+                    }
+
+                    if (pageIndex !== pagesCount) {
+                        $(paginationListPath).append(createPageBtn(pagesCount, false));
+                        $(paginationListPath).append(createPrevNextPageBtn(false, false));
+                    } else {
+                        $(paginationListPath).append(createPageBtn(pagesCount, true));
+                        $(paginationListPath).append(createPrevNextPageBtn(true, false));
+                    }
+                }
+                // end of pagination logic
+            }
+
+            //  Create Next previous triangle Btn
+            function createPrevNextPageBtn(isDisabled, isPrev) {
+                return '' +
+                    '   <li class="page-item ' + (isPrev ? 'prev' : 'next') + (isDisabled ? ' disabled' : '') + '">' +
+                    '       <a class="page-link" role="button">' +
+                    (isPrev ? '<span aria-hidden="true">❮</span>' : '<span aria-hidden="true">❯</span>') +
+                    '       </a>' +
+                    '   </li>';
+            }
+
+            //  Create Pagination Btn
+            function createPageBtn(pageNumber, isActive) {
+                return '' +
+                    '<li class="page-item ' + (isActive ? 'active' : '') + '">' +
+                    '   <a class="page-link" role="button">' + pageNumber + '</a>' +
+                    '</li>';
+            }
+
+
+        }
+
+        $(document).on('click', 'a.page-link', function () {
+            const pageBtn = $(this);
+            if ($(pageBtn).parent('li.page-item').hasClass('prev')) {
+                masterApplRequest.pageIndex = --masterApplRequest.pageIndex;
+            } else if ($(pageBtn).parent('li.page-item').hasClass('next')) {
+                masterApplRequest.pageIndex = ++masterApplRequest.pageIndex;
+            } else {
+                masterApplRequest.pageIndex = Number($(pageBtn).text()) - 1;
+            }
+            getAllMastersApplication();
+        });
+
+        function deleteEntity() {
+            $.ajax({
+                method: "DELETE",
+                url: "/admin/master-call/delete-master-call/" + masterApplId,
+                contentType: 'application/json'
+            }).done(function () {
+                $('#confirmDelete').modal('hide');
+                masterApplId = undefined;
+                getAllMastersApplication();
+                showToast('success');
+            }).fail(function (response) {
+                console.log(response);
+                $('#confirmDelete').modal('hide');
+                showToast('error');
+                masterApplId = undefined;
+            })
+        }
+
+
+        function clearInput(){
+            $('#search td select').val('').trigger('change');
+            $('#search td select option').remove();
+            $('#search input').val('');
+            updateMastersApplicationsRequestAndSend();
+            showToast('success')
+        }
+
+        $('#type-master').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/master-call/get-all-type-master',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        $('#apartment-owner').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/master-call/get-all-user',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.fullName
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        $('#master').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'POST',
+                url: '/admin/master-call/get-all-staff',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(staffMasterRequest),
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    console.log(data)
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.fullName
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+
+        $('#status').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/master-call/get-all-status',
+                cache: true,
+                delay: 1500,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+        function updateMastersApplicationsRequestAndSend() {
+            masterApplRequest.idQuery = $('#number-application').val();
+            masterApplRequest.dateTime = $('#time').val();
+            if ($('#type-master').val()!==''){
+                masterApplRequest.typeMaster = $('#type-master').val();
+            }
+            masterApplRequest.descriptionQuery = $('#description').val();
+            masterApplRequest.apartmentQuery = $('#apartment').val();
+            masterApplRequest.ownerIdQuery = $('#apartment-owner').val();
+            masterApplRequest.phoneQuery = $('#phone').val();
+            masterApplRequest.staffIdQuery = $('#master').val();
+            if ($('#status').val()!==''){
+                masterApplRequest.statusQuery = $('#status').val();
+            }
+
+            masterApplRequest.pageIndex = 0;
+            getAllMastersApplication();
+        }
+    </script>
 
 </th:block>
 

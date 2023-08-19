@@ -11,6 +11,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "masters_application")
@@ -42,7 +43,7 @@ public class MastersApplication {
     private MastersApplicationStatus mastersApplicationStatus;
 
     @Column(nullable = false)
-    private Instant dateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne
     private Staff staff;

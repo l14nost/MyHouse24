@@ -26,6 +26,9 @@ public record MastersApplicationResponse(
 
         EnumResponse mastersApplicationStatus,
 
+        @JsonFormat(pattern = "dd.MM.yyyy - HH:mm", timezone = "Europe/Kiev")
+        LocalDateTime fullDate,
+
         @JsonFormat(pattern = "dd.MM.yyyy")
         LocalDateTime date,
 

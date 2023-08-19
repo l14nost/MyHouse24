@@ -71,4 +71,13 @@ public class ApartmentMapper {
                 .build();
 
     }
+
+    public static ApartmentResponseForMastersApplication entityToResponseForMastersApplicationTable(Apartment apartment) {
+        return ApartmentResponseForMastersApplication.builder()
+                .id(apartment.getId())
+                .name(apartment.getNumber() + ", " + apartment.getHouse().getName())
+                .owner(UserMapper.entityToResponseForMastersApplication(apartment.getUser()))
+                .build();
+
+    }
 }

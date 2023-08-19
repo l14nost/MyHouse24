@@ -3,7 +3,7 @@
       layout:decorate="~{admin/fragments/layout}">
 
 <head>
-    <title>Template</title>
+    <title th:text="#{masters_call.save.title}"></title>
 </head>
 
 <th:block layout:fragment="content">
@@ -17,6 +17,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
                         <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{masters_call.breadcrumb}"></li>
                     </ol>
                 </nav>
             </div>

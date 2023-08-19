@@ -7,6 +7,8 @@ import lab.space.my_house_24.enums.MastersApplicationStatus;
 import lab.space.my_house_24.mapper.EnumMapper;
 import lab.space.my_house_24.mapper.MastersApplicationMapper;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
+import lab.space.my_house_24.model.masters_application.MastersApplicationRequest;
+import lab.space.my_house_24.model.masters_application.MastersApplicationResponse;
 import lab.space.my_house_24.model.masters_application.MastersApplicationSaveRequest;
 import lab.space.my_house_24.model.masters_application.MastersApplicationUpdateRequest;
 import lab.space.my_house_24.repository.MastersApplicationRepository;
@@ -14,9 +16,12 @@ import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.MastersApplicationService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.service.UserService;
+import lab.space.my_house_24.specification.MastersApplicationSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,6 +39,7 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
     private final StaffService staffService;
     private final UserService userService;
     private final ApartmentService apartmentService;
+    private final MastersApplicationSpecification specification;
 
     @Override
     public MastersApplication getMastersApplicationById(Long id) throws EntityNotFoundException {
@@ -108,6 +114,13 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
             log.error("Error delete MastersApplication by id " + id);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
+    }
+
+    @Override
+    public Page<MastersApplicationResponse> getAllMastersApplication(MastersApplicationRequest request) {
+        final int DEFAULT_PAGE_SIZE = 10;
+        return repository.findAll(specification.getMastersApplicationByRequest(request),
+                PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(MastersApplicationMapper::toMastersApplicationResponseForTable);
     }
 
     @Override

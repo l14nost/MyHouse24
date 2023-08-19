@@ -12,6 +12,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import static java.util.Objects.nonNull;
+
 public interface MastersApplicationMapper {
     static MastersApplicationResponse toMastersApplicationResponse(MastersApplication mastersApplication) {
         return MastersApplicationResponse.builder()
@@ -24,9 +26,23 @@ public interface MastersApplicationMapper {
                 .mastersApplicationStatus(EnumMapper.toSimpleDto(mastersApplication.getMastersApplicationStatus().name(),
                         mastersApplication.getMastersApplicationStatus().getMastersApplicationStatus(LocaleContextHolder.getLocale())))
                 .staff(StaffMapper.toStaffResponse(mastersApplication.getStaff()))
-                .date(mastersApplication.getDateTime().atZone(ZoneId.systemDefault()).toLocalDateTime())
-                .time(mastersApplication.getDateTime().atZone(ZoneId.systemDefault()).toLocalDateTime())
+                .date(mastersApplication.getDateTime())
+                .time(mastersApplication.getDateTime())
                 .apartment(ApartmentMapper.entityToResponseForMastersApplication(mastersApplication.getApartment()))
+                .build();
+    }
+
+    static MastersApplicationResponse toMastersApplicationResponseForTable(MastersApplication mastersApplication) {
+        return MastersApplicationResponse.builder()
+                .id(mastersApplication.getId())
+                .description(mastersApplication.getDescription())
+                .master(EnumMapper.toSimpleDto(mastersApplication.getMaster().name(),
+                        mastersApplication.getMaster().getMaster(LocaleContextHolder.getLocale())))
+                .mastersApplicationStatus(EnumMapper.toSimpleDto(mastersApplication.getMastersApplicationStatus().name(),
+                        mastersApplication.getMastersApplicationStatus().getMastersApplicationStatus(LocaleContextHolder.getLocale())))
+                .staff(nonNull(mastersApplication.getStaff()) ? StaffMapper.toStaffResponse(mastersApplication.getStaff()) : null)
+                .fullDate(mastersApplication.getDateTime())
+                .apartment(ApartmentMapper.entityToResponseForMastersApplicationTable(mastersApplication.getApartment()))
                 .build();
     }
 
@@ -37,8 +53,7 @@ public interface MastersApplicationMapper {
                 .setComment(request.comment())
                 .setMaster(request.master())
                 .setMastersApplicationStatus(request.mastersApplicationStatus())
-                .setDateTime(LocalDateTime.of(request.date(), request.time())
-                        .atZone(ZoneId.systemDefault()).toInstant())
+                .setDateTime(LocalDateTime.of(request.date(), request.time()))
                 .setStaff(staff)
                 .setUser(user)
                 .setApartment(apartment);
@@ -50,8 +65,7 @@ public interface MastersApplicationMapper {
                 .comment(request.comment())
                 .master(request.master())
                 .mastersApplicationStatus(request.mastersApplicationStatus())
-                .dateTime(LocalDateTime.of(request.date(), request.time())
-                        .atZone(ZoneId.systemDefault()).toInstant())
+                .dateTime(LocalDateTime.of(request.date(), request.time()))
                 .staff(staff)
                 .user(user)
                 .apartment(apartment)

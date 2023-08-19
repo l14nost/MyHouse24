@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentMastersApplicationRequest;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForMastersApplication;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
+import lab.space.my_house_24.model.masters_application.MastersApplicationRequest;
+import lab.space.my_house_24.model.masters_application.MastersApplicationResponse;
 import lab.space.my_house_24.model.masters_application.MastersApplicationSaveRequest;
 import lab.space.my_house_24.model.masters_application.MastersApplicationUpdateRequest;
 import lab.space.my_house_24.model.staff.StaffMasterRequest;
@@ -15,6 +17,8 @@ import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -54,7 +58,15 @@ public class MastersApplicationController {
 
     @GetMapping("/get-masters-application-{id}")
     public ResponseEntity<?> getMastersApplicationById(@PathVariable Long id) {
+        if (id < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
+        }
         return mastersApplicationService.getMastersApplicationResponseById(id);
+    }
+
+    @PostMapping("/get-all-master-call")
+    public ResponseEntity<Page<MastersApplicationResponse>> getAllMastersApplication(@RequestBody MastersApplicationRequest request) {
+        return ResponseEntity.ok(mastersApplicationService.getAllMastersApplication(request));
     }
 
     @GetMapping("/get-all-type-master")
@@ -101,5 +113,13 @@ public class MastersApplicationController {
         }
 
         return mastersApplicationService.updateMastersApplicationByRequest(request);
+    }
+
+    @DeleteMapping("/delete-master-call/{id}")
+    public ResponseEntity<?> deleteMastersApplicationById(@PathVariable Long id) {
+        if (id < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
+        }
+        return mastersApplicationService.deleteMastersApplicationById(id);
     }
 }
