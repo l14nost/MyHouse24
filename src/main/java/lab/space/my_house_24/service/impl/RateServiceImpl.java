@@ -11,6 +11,7 @@ import lab.space.my_house_24.service.RateService;
 import lab.space.my_house_24.specification.RateSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -117,7 +118,19 @@ public class RateServiceImpl implements RateService {
     public ResponseEntity<?> deleteRateById(Long id) {
         try {
             log.info("Try to delete Rate by id " + id);
-            rateRepository.delete(getRateById(id));
+            Rate rate = getRateById(id);
+            if (rate.getApartmentList().isEmpty() && rate.getBillList().isEmpty()){
+                rateRepository.delete(rate);
+            }else {
+                String error;
+                if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
+                    error = "Тарифом користуються. Видалення неможливе.";
+                } else {
+                    error = "The rate is used. Removal is not possible.";
+                }
+                log.warn("Warning delete Rate");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+            }
             log.info("Success delete Rate by id " + id);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
