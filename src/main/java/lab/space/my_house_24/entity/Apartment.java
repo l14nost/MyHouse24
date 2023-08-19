@@ -24,7 +24,7 @@ public class Apartment {
     private Integer number;
 
     @Column(nullable = false)
-    private Integer area;
+    private Double area;
 
     @ManyToOne
     @JoinColumn(name = "house_id")

@@ -13,7 +13,7 @@ public record ApartmentAddRequest(
 
 
         @NotNull(message = "{not.blank.message}")
-        Integer area,
+        Double area,
 
 
         @NotNull(message = "{not.blank.message}")

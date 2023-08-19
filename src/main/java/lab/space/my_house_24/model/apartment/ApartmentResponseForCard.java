@@ -12,7 +12,7 @@ public record ApartmentResponseForCard(
         String title,
         BankBookResponseForTable bankBook,
         Integer number,
-        Integer area,
+        Double area,
 
         HouseResponseForTable house,
         String section,

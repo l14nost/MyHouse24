@@ -49,11 +49,10 @@ public class ServicePageServiceImpl implements ServicePageService {
                     }
                 } else {
                     if (i < servicePageRequest.imageList().size()) {
-                        servicePage.getBannerList().get(i).setImage(null);
                         servicePage.getBannerList().get(i).setName(servicePageRequest.blockTitleList().get(i));
                         servicePage.getBannerList().get(i).setDescription(servicePageRequest.blockDescriptionList().get(i));
                     } else {
-                        servicePage.getBannerList().add(Banner.builder().image(null).name(servicePageRequest.blockTitleList().get(i)).description(servicePageRequest.blockDescriptionList().get(i)).servicePage(servicePage).build());
+                        servicePage.getBannerList().add(Banner.builder().image("").name(servicePageRequest.blockTitleList().get(i)).description(servicePageRequest.blockDescriptionList().get(i)).servicePage(servicePage).build());
                     }
                 }
             }
@@ -62,7 +61,6 @@ public class ServicePageServiceImpl implements ServicePageService {
         servicePage.getSeo().setTitle(servicePageRequest.seoTitle());
         servicePage.getSeo().setKeyWords(servicePageRequest.seoKeyWords());
         servicePage.getSeo().setDescription(servicePageRequest.seoDescription());
-        System.out.println(servicePage.getBannerList().size());
         servicePageRepository.save(servicePage);
     }
 }

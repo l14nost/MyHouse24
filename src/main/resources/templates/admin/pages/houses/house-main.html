@@ -84,7 +84,7 @@
                     <p style="display: flex; justify-content: center" th:text = "#{table.empty}"></p>
                 </div>
                 <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
-                        <div id="tableInfoShowing" th:text="  #{table.show.info.Showing} + ' 1 ' + '-' + ' 2 ' + #{table.show.info.of}+' 3 '+#{table.show.info.entries}">
+                        <div id="tableInfoShowing">
 
                         </div>
                         <div style="display: flex; margin-right: 10px" >
@@ -145,6 +145,7 @@
             $('#searchApartmentTable select').val(null).trigger("change");
             var formData = new FormData();
             formData.append("page", "0");
+
             getAllHouse(formData);
         }
 
@@ -320,16 +321,12 @@
                             }
                             if (response.totalElements>0){
                                 const tableInfoDiv = document.getElementById("tableInfoShowing");
-                                const textContent = tableInfoDiv.textContent;
-                                const digitsArray = textContent.match(/\d+/g);
-
-
-
+                                let  text = " [[#{table.show.info.Showing}]] X - Y [[#{table.show.info.of}]] Z [[#{table.show.info.entries}]]";
                                 const newX = response.number * 10 + 1;
                                 const newY = response.content.length + response.number * 10;
                                 const newZ = response.totalElements;
-                                const updatedText = textContent.replace(digitsArray[0], newX).replace(digitsArray[1], newY).replace(digitsArray[2], newZ);
-                                tableInfoDiv.textContent = updatedText;
+                                console.log(newX+" "+newY+" "+newZ);
+                                tableInfoDiv.innerHTML = text.replace('X', newX).replace('Y', newY).replace('Z', newZ);
                             }
 
 

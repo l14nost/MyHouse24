@@ -13,7 +13,7 @@ import lombok.Builder;
 @Builder
 public record ApartmentResponseForEdit(
         Integer number,
-        Integer area,
+        Double area,
         HouseResponseForTable house,
         SectionResponseForTable section,
         FloorResponseForTable floor,
