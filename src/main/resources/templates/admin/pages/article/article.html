@@ -138,6 +138,7 @@
                         '</tr>'
                     );
                 }else {
+                    $(TABLE_DIV).parents('div.card').find('div.card-footer').attr('hidden', false);
                     createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount);
                 }
 
