@@ -52,7 +52,7 @@ public class AboutServiceImpl implements AboutService {
         }
         if (!aboutRequest.deleteDocumentList().isEmpty()){
             for (int i = 0 ; i< aboutRequest.deleteDocumentList().size();i++){
-                photoService.delete(aboutRequest.deleteDocumentList().get(i));
+                documentService.delete(aboutRequest.deleteDocumentList().get(i));
             }
         }
         List<Photo> gallery = new ArrayList<>();
