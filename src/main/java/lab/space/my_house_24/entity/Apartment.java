@@ -53,7 +53,7 @@ public class Apartment {
     @ManyToMany(mappedBy = "apartmentList")
     private List<Message> messageList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "apartmentList")
+    @OneToMany(mappedBy = "apartment")
     private List<MastersApplication> mastersApplicationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
