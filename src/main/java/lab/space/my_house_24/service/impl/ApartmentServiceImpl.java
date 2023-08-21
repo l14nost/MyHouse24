@@ -10,20 +10,26 @@ import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.specification.ApartmentSpecification;
+import lab.space.my_house_24.specification.ApartmentSpecificationForMasterApplication;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ApartmentServiceImpl implements ApartmentService {
     private final ApartmentRepository apartmentRepository;
     private final HouseService houseService;
     private final BankBookService bankBookService;
+    private final ApartmentSpecificationForMasterApplication apartmentSpecificationForMasterApplication;
 
     @Override
     public Page<ApartmentResponse> findAllForMainPage(ApartmentRequestForMainPage apartmentRequestForMainPage) {
@@ -44,7 +50,6 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
     @Override
     public void deleteApartment(Long id) {
-
         apartmentRepository.deleteById(id);
     }
 
@@ -74,7 +79,6 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setBankBook(bankBook);
         }
         apartmentRepository.save(apartment);
-
     }
 
     @Override
@@ -112,4 +116,14 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Apartment findById(Long id) {
         return apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found"));
     }
+
+    @Override
+    public List<ApartmentResponseForMastersApplication> getAllApartmentResponseByUserId(ApartmentMastersApplicationRequest request) {
+        log.info("Get all Apartment and convert in Response for MastersApplication");
+        return apartmentRepository.findAll(apartmentSpecificationForMasterApplication.getApartmentByUserId(request))
+                .stream()
+                .map(ApartmentMapper::entityToResponseForMastersApplication)
+                .collect(Collectors.toList());
+    }
+
 }

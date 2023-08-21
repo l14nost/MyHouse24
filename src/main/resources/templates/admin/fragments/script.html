@@ -181,7 +181,6 @@
 
 
     function addBadgeUserStatus(status){
-        console.log(status);
 
         let badgeClasses = 'badge rounded-pill';
         let badgeText = status?.value;
@@ -189,6 +188,18 @@
         if (status?.name === 'ACTIVE') badgeClasses += ' bg-success';
         if (status?.name === 'NEW') badgeClasses += ' bg-warning';
         if (status?.name === 'DISABLED') badgeClasses += ' bg-danger';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
+    function addBadgeApplicationStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'IN_PROCESS') badgeClasses += ' bg-warning';
+        if (status?.name === 'NEW') badgeClasses += ' bg-primary';
+        if (status?.name === 'COMPLETED') badgeClasses += ' bg-success';
 
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
@@ -218,6 +229,10 @@
     window.addEventListener("resize", handleScreenWidthChange);
     handleScreenWidthChange();
 
+    function setEditorContentFromHTML(html) {
+        const delta = editor.clipboard.convert( html );
+        editor.setContents(delta);
+    }
 
 </script>
 

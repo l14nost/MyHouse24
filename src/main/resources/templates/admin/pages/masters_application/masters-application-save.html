@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title th:text="#{masters_call.save.title}"></title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{masters_call.breadcrumb}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" id="date" type="date" th:placeholder="#{masters_call.save.date.placeholder}">
+                <button class="input-group-text input-button pointer-event" disabled>
+                    <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="col-auto mt-2" th:text="#{masters_call.card.time.at}"></div>
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control time_flatpicker" id="time" type="time" th:placeholder="#{masters_call.save.time.placeholder}">
+                <button class="input-group-text input-button pointer-event" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 512 512">
+                        <path d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mt-2">
+                    <div class="col-6">
+
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{masters_call.save.owner}"></label>
+                            <select id="apartment-owner" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="phone">
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="description" class="form-label" th:text="#{masters_call.save.description}"></label>
+                            <textarea type="text" class="form-control" id="description"
+                                      rows="12"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="col-6">
+
+                        <div class="form-group" id="house" style="margin-bottom: 0.75rem">
+                        </div>
+
+                        <div class="form-group" id="section" style="margin-bottom: 0.75rem">
+                        </div>
+
+                        <div class="form-group" id="floor">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{masters_call.save.apartment}"></label>
+                            <select id="apartment" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{masters_call.save.type_master}"></label>
+                            <select id="type-master" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{masters_call.save.status}"></label>
+                            <select id="status" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{masters_call.save.master}"></label>
+                            <select id="master" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="header-title">
+                                    <h4 class="card-title" th:text="#{masters_call.save.comment}"></h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="editor"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col text-end mb-3">
+                <a th:href="@{/master-call}" type="button" class="btn btn-light" th:text="#{global.button.cancel}"></a>
+                <button onclick="saveMastersApplication()" type="button" class="btn btn-success"
+                        style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}">
+                </button>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+
+        let masterApplId = undefined;
+        let staffMasterRequest = {};
+        staffMasterRequest.role = undefined;
+        let apartmentMastersApplicationRequest = {};
+        apartmentMastersApplicationRequest.id = undefined;
+
+        $(document).ready(function () {
+            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                masterApplId = new URL(window.location.href).pathname.split("-").pop()
+                getMastersApplicationResponse(masterApplId);
+            }else {
+                $("#breadcrumb-title").append('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]');
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+
+                newFloorContent('-');
+                newHouseContent('-');
+                newSectionContent('-');
+                newPhoneContent('-');
+
+                selectMaster();
+                selectApartment();
+            }
+            selectApartmentOwner();
+        });
+
+        function getMastersApplicationResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/master-call/get-masters-application-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                newFloorContent(response?.apartment?.floor);
+                newHouseContent(response?.apartment?.house, response?.apartment?.houseId);
+                newSectionContent(response?.apartment?.section);
+                newPhoneContent(response?.apartment?.owner?.phone, response?.apartment?.owner?.id);
+
+                $("#date").val(response?.date);
+                $("#time").val(response?.time);
+                $("#description").val(response?.description);
+                $("#type-master").append('<option selected value="' + response?.master?.name + '">' + response?.master?.value + '</option>');
+                $("#status").append('<option selected value="' + response?.mastersApplicationStatus?.name + '">' + response?.mastersApplicationStatus?.value + '</option>');
+                if (response?.staff) $("#master").append('<option selected value="' + response?.staff?.id + '">' + response?.staff?.fullName + '</option>');
+                $("#apartment").append('<option selected value="' + response?.apartment?.id + '">' + response?.apartment?.name + '</option>');
+                $("#apartment-owner").append('<option selected value="' + response?.apartment?.owner?.id + '">' + response?.apartment?.owner?.fullName + '</option>');
+                setEditorContentFromHTML(response?.comment);
+
+                apartmentMastersApplicationRequest.id = response?.apartment?.owner?.id;
+                staffMasterRequest.role = response?.master?.name;
+                selectMaster();
+                selectApartment();
+
+                $("#breadcrumb-title").append('[[#{masters_call.card.breadcrumb}]] №' + response?.id);
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.card.breadcrumb}]] №' + response?.id));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+            }).fail(function (){
+                window.location.href = "/admin/error";
+            });
+        }
+
+        function saveMastersApplication() {
+            let mastersApplicationRequest = {
+                id: undefined,
+                description: undefined,
+                comment: undefined,
+                master: undefined,
+                mastersApplicationStatus: undefined,
+                date: undefined,
+                time: undefined,
+                staffId: undefined,
+                userId: undefined,
+                apartmentId: undefined
+            };
+            mastersApplicationRequest.id = masterApplId;
+            mastersApplicationRequest.description = $("#description").val();
+            mastersApplicationRequest.comment = editor.root.innerHTML;
+            if ($("#type-master").val() !=='') mastersApplicationRequest.master = $("#type-master").val();
+            if ($("#status").val() !=='') mastersApplicationRequest.mastersApplicationStatus = $("#status").val();
+            if ($("#date").val() !=='') mastersApplicationRequest.date = getTrueDate($("#date").val());
+            if ($("#time").val() !=='') mastersApplicationRequest.time = $("#time").val();
+            if ($("#master").val() !=='') mastersApplicationRequest.staffId = $("#master").val();
+            if ($("#apartment-owner").val() !=='') mastersApplicationRequest.userId = $("#apartment-owner").val();
+            if ($("#apartment").val() !=='') mastersApplicationRequest.apartmentId = $("#apartment").val();
+            console.log(mastersApplicationRequest);
+            $.ajax({
+                method: mastersApplicationRequest.id ? 'PUT' : "POST",
+                url: mastersApplicationRequest.id ? '/admin/master-call/update-master-call' : '/admin/master-call/save-master-call',
+                contentType: 'application/json',
+                data: JSON.stringify(mastersApplicationRequest),
+                beforeSend: function () {
+                    clearValidMessages();
+                }
+            }).done(function () {
+                window.location.href = "/admin/master-call";
+            }).fail(function (response) {
+                const errors = response.responseJSON;
+                console.log(response);
+                if (errors?.description) validResponse($('#description'), errors.description, 'div')
+                if (errors?.comment) validResponse($('#editor'), errors.comment, 'div')
+                if (errors?.master) validResponse($('#type-master'), errors.master, 'div')
+                if (errors?.mastersApplicationStatus) validResponse($('#status'), errors.mastersApplicationStatus, 'div')
+                if (errors?.date) validResponse($('#date'), errors.date, 'div')
+                if (errors?.time) validResponse($('#time'), errors.time, 'div')
+                if (errors?.staffId) validResponse($('#master'), errors.staffId, 'div')
+                if (errors?.userId) validResponse($('#apartment-owner'), errors.userId, 'div')
+                if (errors?.apartmentId) validResponse($('#apartment'), errors.apartmentId, 'div')
+            })
+        }
+
+        $('#status').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/master-call/get-all-status',
+                cache: true,
+                delay: 1000,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        $('#type-master').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/master-call/get-all-type-master',
+                cache: true,
+                delay: 1000,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        function selectMaster(master) {
+            $('#master').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'POST',
+                    url: '/admin/master-call/get-all-staff',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(staffMasterRequest),
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.fullName,
+                                    role: item.role
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+            if (master) {
+                $('#type-master').append('<option selected value="' + master?.name + '">' + master?.value + '</option>');
+            }
+        }
+
+        function selectApartmentOwner(owner){
+            $('#apartment-owner').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/master-call/get-all-user',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.fullName,
+                                    phone: item.phone
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+            if (owner) {
+                $('#apartment-owner').append('<option selected value="' + owner?.id + '">' + owner?.fullName + '</option>');
+                newPhoneContent(owner?.phone);
+            }
+        }
+        function selectApartment(){
+            $('#apartment').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: Infinity,
+                ajax: {
+                    method: 'POST',
+                    url: '/admin/master-call/get-all-apartment',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(apartmentMastersApplicationRequest),
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        console.log(data)
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name,
+                                    owner: item.owner,
+                                    floor: item.floor,
+                                    house: item.house,
+                                    section: item.section
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
+        $('#apartment').on('select2:select', function (e) {
+            let selectApartment = e.params.data;
+            selectApartmentOwner(selectApartment.owner);
+            newHouseContent(selectApartment?.house)
+            newSectionContent(selectApartment?.section)
+            newFloorContent(selectApartment?.floor)
+        });
+
+        $('#apartment-owner').on('select2:select', function (e) {
+            let selectedUser = e.params.data;
+            newPhoneContent(selectedUser?.phone)
+            apartmentMastersApplicationRequest.id = selectedUser.id;
+            console.log(selectedUser);
+            $('#apartment').val('').trigger('change');
+            $('#apartment option').remove();
+            selectApartment();
+        });
+
+        $('#type-master').on('select2:select', function (e) {
+            let selectedRoleId = (e.params.data.id !== 'ANY_MASTER') ? e.params.data.id : undefined;
+            staffMasterRequest.role = selectedRoleId;
+            selectMaster();
+        });
+
+        $('#master').on('select2:select', function (e) {
+            let selectedMasterType = e.params.data.role;
+            let selectedRoleId = e.params.data.role.name;
+            staffMasterRequest.role = selectedRoleId;
+            selectMaster(selectedMasterType);
+        });
+
+        function newPhoneContent(phone, id) {
+            let onclickAdd = id ? 'onclick="userCard(' + id + ')"' : '';
+            document.getElementById('phone').innerHTML = '<label class="form-label">[[#{masters_call.save.phone}]]: <a ' + onclickAdd + ' type="button" class="link">' + phone + '</a></label>';
+        }
+
+        function newHouseContent(house, id) {
+            let onclickAdd = id ? 'onclick="houseCard(' + id + ')"' : '';
+            document.getElementById('house').innerHTML = '<label class="form-label">[[#{masters_call.save.house}]]: <a ' + onclickAdd + ' type="button" class="link">' + house + '</a></label>';
+        }
+
+        function newSectionContent(section) {
+            document.getElementById('section').innerHTML = '<label class="form-label">[[#{masters_call.save.section}]]: <a>' + section + '</a></label>';
+        }
+
+        function newFloorContent(floor) {
+            document.getElementById('floor').innerHTML = '<label class="form-label">[[#{masters_call.save.floor}]]: <a>' + floor + '</a></label>';
+        }
+
+        let options = {
+            modules: {
+                toolbar: true
+            },
+            placeholder: 'Piwi cuda',
+            theme: 'snow'
+        };
+        let editor = new Quill('#editor', options);
+
+
+        const date_flatpickr = document.querySelectorAll('#date');
+        Array.from(date_flatpickr, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    minDate: "today",
+                    dateFormat: "d.m.Y",
+                })
+            }
+        })
+
+        function getTrueDate(date){
+            let trueDate= '';
+            let split = date.split(".");
+            trueDate = split[2] + '-' + split[1] + '-' + split[0];
+            return trueDate;
+        }
+
+        function userCard(id){
+            document.location.href = '/admin/user-card/' + id;
+        }
+
+        function houseCard(id){
+            document.location.href = '/admin/house-card/' + id;
+        }
+
+    </script>
+
+</th:block>
+
+</html>

@@ -25,6 +25,14 @@ public class Unit {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "unit", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "unit")
     private List<Service> serviceList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Unit{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

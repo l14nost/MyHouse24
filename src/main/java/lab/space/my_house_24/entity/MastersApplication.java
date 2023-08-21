@@ -7,10 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "masters_application")
@@ -18,18 +19,23 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class MastersApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @CreationTimestamp
+    private Instant createAt;
+
     @Column(length = 1000, nullable = false)
     private String description;
 
-    @Column(length = 1000, nullable = false)
+    @Column(length = 1000)
     private String comment;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 50, nullable = false)
     private Master master;
 
     @Enumerated(EnumType.STRING)
@@ -37,7 +43,7 @@ public class MastersApplication {
     private MastersApplicationStatus mastersApplicationStatus;
 
     @Column(nullable = false)
-    private Instant dateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne
     private Staff staff;
@@ -45,12 +51,7 @@ public class MastersApplication {
     @ManyToOne
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "masters_application_apartment",
-            joinColumns = @JoinColumn(name = "masters_application_id"),
-            inverseJoinColumns = @JoinColumn(name = "apartment_id")
-    )
-    private List<Apartment> apartmentList = new ArrayList<>();
+    @ManyToOne
+    private Apartment apartment;
 
 }

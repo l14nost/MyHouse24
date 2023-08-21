@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title th:text="#{rate.save.title}"></title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title"  id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb"  id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{rate.breadcrumb.rates}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row pb-3">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="form-group">
+                                    <label for="rate-name" class="form-label" th:text="#{rate.save.name}"></label>
+                                    <input type="text" class="form-control" id="rate-name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="form-group">
+                                    <label for="rate-description" class="form-label" th:text="#{rate.save.description}"></label>
+                                    <textarea type="text" class="form-control" id="rate-description"
+                                              rows="8"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="service-row">
+
+                        </div>
+                        <div class="col">
+                            <button onclick="addEmptyRowService()" type="button" id="add-button" class="btn btn-light"
+                                    th:text="#{rate.save.button.add}"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer py-0">
+                <div class="col text-end mb-3">
+                    <a th:href="@{/rates}" type="button" class="btn btn-light" th:text="#{global.button.cancel}"></a>
+                    <button onclick="saveService()" type="button" class="btn btn-success"
+                            style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+        let rateId;
+        let copyId;
+        let loadService = 0;
+        let serviceSelectCount = 0;
+        let serviceId;
+        let serviceRowContent = $('#service-row');
+
+        $(document).ready(function () {
+            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                if (new URL(window.location.href).pathname.split("-")[1] !== "copy"){
+                    rateId = new URL(window.location.href).pathname.split("-").pop();
+                    getRate(rateId);
+                }else {
+                    copyId =new URL(window.location.href).pathname.split("-").pop();
+                    $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]'));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+                    getRate(copyId);
+                }
+            }else {
+                $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+            }
+        });
+
+        $(document).on('click', '.text-danger.service', function () {
+            serviceId = $(this).data('id');
+            $('#confirmDelete').modal('show');
+        });
+
+        $(document).on('click', '.remove-row', function () {
+            $(this).closest('.row').remove();
+        });
+
+        function getRate(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/rates/get-rate-" + id,
+                dataType: 'json'
+            }).done(function (rateResponse) {
+                console.log(rateResponse)
+                if(rateId){
+                    $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name);
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+                }
+                $('#rate-name').val(rateResponse.name);
+                $('#rate-description').val(rateResponse.description);
+                serviceRowContent.empty();
+                $.each(rateResponse?.priceRate, function (index, priceRate) {
+                    serviceRowContent.append(addRowService(priceRate));
+                    selectService(priceRate?.id,priceRate?.service);
+                    serviceSelectCount = priceRate?.id;
+                })
+                serviceSelectCount++;
+                if (loadService>0) {
+                    showToast('success');
+                }
+                loadService++;
+            }).fail(function () {
+                console.log('fail');
+                showToast('error');
+            })
+        }
+
+        function addRowService(priceRate) {
+            let row = '            <div class="row service">              ' +
+                '                              <input type="text" class="form-control" id="priceRate-id-' + priceRate?.id + '" value="' + priceRate?.id + '" hidden>\n' +
+                '                              <div class="col-3">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="service-' + priceRate?.id + '" class="form-label">[[#{rate.save.service}]]</label>\n' +
+                '                                    <select id="service-' + priceRate?.id + '" class="mb-1 form-select" aria-label=".form-select-lg example">\n' +
+                '                                        <option value=""></option>\n' +
+                '                                    </select>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col-3">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="price-rate-' + priceRate?.id + '" class="form-label">[[#{rate.save.price}]]</label>\n' +
+                '                                    <input type="text" class="form-control" id="price-rate-' + priceRate?.id + '" value="' + priceRate?.price + '">\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col-3">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="currency-' + priceRate?.id + '" class="form-label">[[#{rate.save.label.currency}]]</label>\n' +
+                '                                    <input type="text" class="form-control" id="currency-' + priceRate?.id + '" value="[[#{rate.save.inp.currency}]]" disabled>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="unit-name-' + priceRate?.id + '" class="form-label">[[#{rate.save.unit}]]</label>\n' +
+                '                                    <div class="input-group" id="unit-' + priceRate?.id + '">\n' +
+                '                                        <input type="text" class="form-control" id="unit-name-' + priceRate?.id + '" value="' + priceRate?.service?.unit?.name + '" disabled>\n' +
+                '                                        <button class="btn btn-sm btn-icon text-danger btn-delete service" type="button"\n' +
+                '                                                data-bs-toggle="tooltip" aria-label="Delete Unit" data-toggle="modal"\n' +
+                '                                                data-target="#confirmDelete" data-id="' + priceRate?.id + '"\n' +
+                '                                                data-bs-original-title="Delete Unit">\n' +
+                '                                         <span class="btn-inner">\n' +
+                '                                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"\n' +
+                '                                                      xmlns="http://www.w3.org/2000/svg" stroke="currentColor">\n' +
+                '                                                <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"\n' +
+                '                                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"\n' +
+                '                                                      stroke-linejoin="round"></path>\n' +
+                '                                                <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5"\n' +
+                '                                                      stroke-linecap="round" stroke-linejoin="round"></path>\n' +
+                '                                                <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"\n' +
+                '                                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"\n' +
+                '                                                      stroke-linejoin="round"></path>\n' +
+                '                                                </svg>\n' +
+                '                                            </span>\n' +
+                '                                        </button>\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '                            </div>' +
+                '</div>  ';
+            return row;
+        }
+
+        function addEmptyRowService() {
+            let emptyRow = '            <div class="row service">              ' +
+                '                              <input type="text" class="form-control" id="priceRate-id-' + serviceSelectCount + '" hidden>\n' +
+                '                              <div class="col-3">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="service-' + serviceSelectCount + '" class="form-label">[[#{rate.save.service}]]</label>\n' +
+                '                                    <select id="service-' + serviceSelectCount + '" class="mb-1 form-select" aria-label=".form-select-lg example">\n' +
+                '                                        <option value=""></option>\n' +
+                '                                    </select>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col-3">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="price-rate-' + serviceSelectCount + '" class="form-label">[[#{rate.save.price}]]</label>\n' +
+                '                                    <input type="text" class="form-control" id="price-rate-' + serviceSelectCount + '">\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col-3">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="currency-' + serviceSelectCount + '" class="form-label">[[#{rate.save.label.currency}]]</label>\n' +
+                '                                    <input type="text" class="form-control" id="currency-' + serviceSelectCount + '" value="[[#{rate.save.inp.currency}]]" disabled>\n' +
+                '                                </div>\n' +
+                '                            </div>\n' +
+                '                            <div class="col">\n' +
+                '                                <div class="form-group">\n' +
+                '                                    <label for="unit-name-' + serviceSelectCount + '" class="form-label">[[#{rate.save.unit}]]</label>\n' +
+                '                                    <div class="input-group" id="unit-' + serviceSelectCount + '">\n' +
+                '                                        <input type="text" class="form-control" id="unit-name-' + serviceSelectCount + '" disabled>\n' +
+                '                                        <button class="btn btn-sm btn-icon text-danger btn-delete remove-row" type="button"\n' +
+                '                                                data-bs-toggle="tooltip" aria-label="Delete Unit" data-toggle="modal"\n' +
+                '                                                data-target="#confirmDelete" data-id="123"\n' +
+                '                                                data-bs-original-title="Delete Unit">\n' +
+                '                                         <span class="btn-inner">\n' +
+                '                                                 <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"\n' +
+                '                                                      xmlns="http://www.w3.org/2000/svg" stroke="currentColor">\n' +
+                '                                                <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"\n' +
+                '                                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"\n' +
+                '                                                      stroke-linejoin="round"></path>\n' +
+                '                                                <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5"\n' +
+                '                                                      stroke-linecap="round" stroke-linejoin="round"></path>\n' +
+                '                                                <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"\n' +
+                '                                                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"\n' +
+                '                                                      stroke-linejoin="round"></path>\n' +
+                '                                                </svg>\n' +
+                '                                            </span>\n' +
+                '                                        </button>\n' +
+                '                                    </div>\n' +
+                '                                </div>\n' +
+                '                            </div>' +
+                '</div>  ';
+            clearErrorMessages();
+            serviceRowContent.append(emptyRow);
+            selectService(serviceSelectCount);
+            serviceSelectCount++;
+        }
+
+        function collectServiceData() {
+            let unitData = [];
+            $('.row.service').each(function() {
+                let priceRateId = $(this).find('.form-control[id^="priceRate-id-"]').val();
+                let serviceId = $(this).find('.form-select[id^="service-"]').val();
+                let price = $(this).find('.form-control[id^="price-rate-"]').val();
+                unitData.push({
+                    id: priceRateId || null,
+                    serviceId: serviceId || null,
+                    price: price || null
+                });
+            });
+            return unitData;
+        }
+
+        function collectServiceDataResponse() {
+            let unitData = [];
+            $('.row.service').each(function() {
+                let serviceId = $(this).find('.form-select[id^="service-"]');
+                let price = $(this).find('.form-control[id^="price-rate-"]');
+                unitData.push({
+                    serviceId: serviceId || null,
+                    price: price || null
+                });
+            });
+            return unitData;
+        }
+
+        function saveService() {
+            let priceRateList = collectServiceData();
+            let data = {
+                id: rateId ? rateId : null,
+                name: $('#rate-name').val(),
+                description: $('#rate-description').val(),
+                priceRate: priceRateList
+            };
+            console.log(rateId ? "/admin/rates/update-rate" : "/admin/rates/save-rate")
+            $.ajax({
+                method: rateId ? "PUT" : "POST",
+                url: rateId ? "/admin/rates/update-rate" : "/admin/rates/save-rate",
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                beforeSend : function (){
+                    console.log(data)
+                    clearValidMessages();
+                }
+            }).done(function () {
+                showToast('success');
+                window.location.href = "/admin/rates";
+            }).fail(function (response) {
+                console.log(response);
+                const errors = response.responseJSON;
+                if (errors?.name) validResponse($('#rate-name'), errors.name)
+                if (errors?.description) validResponse($('#rate-description'), errors.description)
+                if (errors?.priceRate) errorResponse($('#add-button'), errors.priceRate, 'div')
+                data={
+                    errorData:  collectServiceDataResponse()
+                }
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        const index = parseInt(key.match(/priceRate\[(\d+)\]\.(\w+)/)[1]);
+                        const col = key.split('.').pop();
+                        const value = errors[key];
+                        if (col === 'price') validResponse($('#' + data?.errorData[index]?.price[0].id), value);
+                        if (col === 'serviceId') validResponse($('#' + data?.errorData[index]?.serviceId[0].id), value,'div');
+
+                    }
+                }
+                if (response?.status !== 400){
+                    showToast('error');
+                }
+            });
+        }
+
+        function deleteEntity() {
+            $.ajax({
+                method: "DELETE",
+                url: "/admin/rates/delete-price-rate/" + serviceId ,
+                contentType: 'application/json',
+                beforeSend : function (){
+                    clearValidMessages();
+                }
+            }).done(function () {
+                $('#confirmDelete').modal('hide');
+                getRate(rateId);
+                serviceId = undefined;
+                showToast('success');
+            }).fail(function (response) {
+                console.log(response);
+                $('#confirmDelete').modal('hide');
+                showToast('error');
+                console.log(serviceId)
+                if (response) validResponse($('#service-row-' + serviceId), response.responseText);
+                serviceId = undefined;
+            })
+        }
+
+        function selectService(id,service){
+            let select = $('#service-'+id);
+            select.select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/rates/get-all-services',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name,
+                                    unitName: item.unit.name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+            if (service){
+                select.append('<option selected value="' + service?.id + '">' + service?.name + '</option>');
+            }
+            select.on('select2:select', function (e) {
+                let selectedUnitId = e.params.data.unitName;
+                $('#unit-name-' + id).val(selectedUnitId);
+            });
+        }
+
+        function errorResponse(divId, message, afterDiv) {
+            $(divId).addClass('is-invalid');
+            if (afterDiv) {
+                $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
+                $(divId).removeClass('btn-light');
+                $(divId).addClass('btn-danger');
+            } else {
+                $(divId).after('<div class="invalid-feedback">' + message + '</div>');
+                $(divId).removeClass('btn-light');
+                $(divId).addClass('btn-danger');
+            }
+
+        }
+
+        function clearErrorMessages() {
+            $('.btn-danger').addClass('btn-light');
+            $('.btn-danger').removeClass('btn-danger');
+            $('.invalid-feedback').remove();
+        }
+    </script>
+
+</th:block>
+
+</html>

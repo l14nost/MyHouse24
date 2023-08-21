@@ -43,6 +43,14 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    public List<ServiceResponse> getAllServicesByIsActiveDto() {
+        log.info("Try to get All Service and convert in Dto");
+        return serviceRepository.findAllByIsActiveOrderById(true)
+                .stream()
+                .map(ServiceMapper::toSimpleDto).collect(Collectors.toList());
+    }
+
+    @Override
     public void saveService(lab.space.my_house_24.entity.Service service) {
         log.info("Try to save Service");
         serviceRepository.save(service);

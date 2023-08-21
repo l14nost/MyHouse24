@@ -33,6 +33,19 @@ public interface StaffMapper {
                 .build();
     }
 
+    static StaffResponse toStaffResponse(Staff staff) {
+        return StaffResponse.builder()
+                .id(staff.getId())
+                .fullName(staff.getFirstname() + " " + staff.getLastname())
+                .role(
+                        EnumMapper.toSimpleDto(
+                                staff.getRole().getJobTitle().name(),
+                                staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale())
+                        )
+                )
+                .build();
+    }
+
     static StaffResponse toCarDto(Staff staff) {
         return StaffResponse.builder()
                 .fullName(staff.getFirstname() + " " + staff.getLastname())

@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -44,6 +45,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final StaffSpecification staffSpecification;
     private final CustomMailSender customMailSender;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
     private final String url = "http://localhost:7575/admin/";
 
     @Override
@@ -152,6 +154,15 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
+    public List<StaffResponse> getAllStaffMaster(StaffMasterRequest request) {
+        log.info("Get all Staff and convert in Response for MastersApplication");
+        return staffRepository.findAll(staffSpecification.getStaffMaster(request))
+                .stream()
+                .map(StaffMapper::toStaffResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Page<StaffResponse> getAllStaffDto(StaffRequest request) {
         log.info("Search all Staff and convert in DTO");
         final int DEFAULT_PAGE_SIZE = 10;
@@ -189,7 +200,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                     && director.getRole().getJobTitle().equals(staffUpdateRequest.role())) {
                 if (nonNull(staffUpdateRequest.password()) &&
                         !staffUpdateRequest.password().equals("") &&
-                        !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())) {
+                        !passwordEncoder.matches(staffUpdateRequest.password(), staff.getPassword())) {
                     sendUpdatePasswordWarning(
                             staff.getEmail(),
                             LocaleContextHolder.getLocale()

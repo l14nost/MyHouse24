@@ -5,7 +5,7 @@ import lab.space.my_house_24.model.unit.UnitResponse;
 import lombok.Builder;
 
 @Builder
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record ServiceResponse(
         Long id,
         String name,
