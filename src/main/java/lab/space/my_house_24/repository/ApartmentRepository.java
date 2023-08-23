@@ -15,5 +15,7 @@ public interface ApartmentRepository extends JpaRepository<Apartment,Long>, JpaS
     List<Apartment> findAllBySection_Id(Long id);
     List<Apartment> findAllByFloor_Id(Long id);
 
+    List<Apartment> findAllByHouse_IdAndSection_IdOrderById(Long houseId,Long sectionId);
+
 //    List<Apartment> findAllByHouse_IdAndSection_IdAndFloor_Id(Long id, Long sectionId, Long floorId);
 }

@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "bank_book")
@@ -15,6 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class BankBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

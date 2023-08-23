@@ -10,18 +10,18 @@ import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.specification.ApartmentSpecification;
-import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lab.space.my_house_24.specification.ApartmentSpecificationForMasterApplication;
+import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -124,6 +124,33 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepository.findAll(apartmentSpecificationForMasterApplication.getApartmentByUserId(request))
                 .stream()
                 .map(ApartmentMapper::entityToResponseForMastersApplication)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBankBook> getAllApartmentResponseByHouseId(Long id) {
+        log.info("Get all Apartment by HouseId and convert in Response for BankBook");
+        return findAllApartmentByHouse(id)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBankBook)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBankBook> getAllApartmentResponseByHouseIdAndSectionId(Long houseId, Long sectionId) {
+        log.info("Get all Apartment by HouseId and SectionId, and convert in Response for BankBook");
+        return apartmentRepository.findAllByHouse_IdAndSection_IdOrderById(houseId,sectionId)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBankBook)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBankBook> getAllApartmentResponse() {
+        log.info("Get all Apartment and convert in Response for BankBook");
+        return apartmentRepository.findAll(Sort.by(Sort.Direction.ASC,"id"))
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBankBook)
                 .collect(Collectors.toList());
     }
 

@@ -80,4 +80,15 @@ public class ApartmentMapper {
                 .build();
 
     }
+
+    public static ApartmentResponseForBankBook entityToResponseForBankBook(Apartment apartment) {
+        return ApartmentResponseForBankBook.builder()
+                .id(apartment.getId())
+                .number(String.valueOf(apartment.getNumber()))
+                .house(HouseMapper.entityToDtoForTable(apartment.getHouse()))
+                .section(SectionMapper.entityToDtoForTable(apartment.getSection()))
+                .owner(UserMapper.entityToResponseForMastersApplication(apartment.getUser()))
+                .build();
+
+    }
 }

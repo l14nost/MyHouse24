@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title>Template</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page"
+                            th:text="#{bank_book.breadcrumb}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+
+        <div class="col-3">
+            <div class="form-group" id="password-col">
+                <div class="input-group" id="passwordResponse">
+                    <button class="btn btn-gray disabled" type="button">№</button>
+                    <input type="text" class="form-control pass" id="number" oninput="applyMask(this);">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row pb-3">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bank_book.save.status}"></label>
+                            <select id="status" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bank_book.save.house}"></label>
+                            <select id="house" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bank_book.save.section}"></label>
+                            <select id="section" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bank_book.save.apartment}"></label>
+                            <select id="apartment" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="owner">
+                        </div>
+                        <div class="form-group" id="phone">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer py-0">
+                <div class="col text-end mb-3">
+                    <a th:href="@{/bank-books}" type="button" class="btn btn-light"
+                       th:text="#{global.button.cancel}"></a>
+                    <button type="button" class="btn btn-success"
+                            style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}"
+                            onclick="saveBankBook()">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+
+        let houseId = undefined;
+        let sectionId = undefined;
+        let bankBookId = undefined
+
+        $(document).ready(function () {
+            newOwnerContent('-');
+            newPhoneContent('-');
+
+            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                bankBookId = new URL(window.location.href).pathname.split("-").pop()
+                getBankBookResponse(bankBookId);
+            }else {
+                $("#breadcrumb-title").append('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]');
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+
+                selectHouse();
+            }
+        });
+
+        function getBankBookResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/bank-books/get-bank-book-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                $("#number").val(response?.number);
+                $("#status").append('<option selected value="' + response?.status?.name + '">' + response?.status?.value + '</option>');
+                if (response?.apartment) {
+                    selectHouse(response?.apartment?.house)
+                    houseId = response?.apartment?.house?.id;
+                    selectSection(houseId, response?.apartment?.section);
+                    sectionId = response?.apartment?.section?.id;
+                    selectApartment(response?.apartment);
+
+                    newOwnerContent(response?.apartment?.owner?.fullName);
+                    newPhoneContent(response?.apartment?.owner?.phone);
+                }else {
+                    selectHouse();
+                }
+                $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]] №' + response?.number);
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+            }).fail(function () {
+                window.location.href = "/admin/error";
+            });
+        }
+
+        function saveBankBook() {
+            let bankBookRequest = {
+                id: undefined,
+                status: undefined,
+                apartmentId: undefined,
+                number: undefined
+            };
+            bankBookRequest.id = bankBookId;
+            if ($("#apartment").val() !== '') bankBookRequest.apartmentId = $("#apartment").val();
+            if ($("#status").val() !== '') bankBookRequest.status = $("#status").val();
+            if ($("#number").val() !== '') bankBookRequest.number = $("#number").val();
+            console.log(bankBookRequest);
+            $.ajax({
+                method: bankBookRequest.id ? 'PUT' : "POST",
+                url: bankBookRequest.id ? '/admin/bank-books/update-bank-book' : '/admin/bank-books/save-bank-book',
+                contentType: 'application/json',
+                data: JSON.stringify(bankBookRequest),
+                beforeSend: function () {
+                    clearValidMessages();
+                }
+            }).done(function () {
+                window.location.href = "/admin/bank-books";
+            }).fail(function (response) {
+                const errors = response.responseJSON;
+                console.log(response);
+                if (errors?.status) validResponse($('#status'), errors.status, 'div')
+                if (errors?.apartmentId) validResponse($('#apartment'), errors.apartmentId, 'div')
+                if (errors?.number) validResponse($('#number'), errors.number, 'div')
+            })
+        }
+
+        $('#status').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/bank-books/get-all-status',
+                cache: true,
+                delay: 1000,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.name,
+                                text: item.value
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        function selectHouse(house) {
+            $('#house').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bank-books/get-all-house',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (house) {
+                $('#house').append('<option selected value="' + house?.id + '">' + house?.name + '</option>');
+            }
+        }
+
+        function selectSection(houseId, section) {
+            $('#section').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bank-books/get-section/' + houseId,
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (section) {
+                $('#section').append('<option selected value="' + section?.id + '">' + section?.name + '</option>');
+            }
+        }
+
+        $('#apartment').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/bank-books/get-all-apartment',
+                cache: true,
+                delay: 1000,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.number,
+                                owner: item.owner,
+                                house: item.house,
+                                section: item.section
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        function selectApartment(apartment) {
+            $('#apartment').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: sectionId ? '/admin/bank-books/get-all-apartment-' + houseId + '/' + sectionId : '/admin/bank-books/get-all-apartment-' + houseId,
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number,
+                                    owner: item.owner,
+                                    house: item.house,
+                                    section: item.section
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (apartment) {
+                $('#apartment').append('<option selected value="' + apartment?.id + '">' + apartment?.number + '</option>');
+            }
+        }
+
+        $('#house').on('select2:select', function (e) {
+            let selectedUser = e.params.data;
+            houseId = selectedUser.id;
+            sectionId = undefined;
+            $('#section').val('').trigger('change');
+            $('#section option').remove();
+            $('#apartment').val('').trigger('change');
+            $('#apartment option').remove();
+            selectSection(houseId);
+            selectApartment();
+        });
+
+        $('#section').on('select2:select', function (e) {
+            let selectedUser = e.params.data;
+            sectionId = selectedUser.id;
+            $('#apartment').val('').trigger('change');
+            $('#apartment option').remove();
+            selectApartment();
+        });
+
+        $('#apartment').on('select2:select', function (e) {
+            let selectedApartment = e.params.data;
+            if (!houseId) {
+                selectHouse(selectedApartment.house);
+            }
+            if (!sectionId) {
+                selectSection(selectedApartment.house.id, selectedApartment.section);
+            }
+            houseId = selectedApartment.house.id;
+            sectionId = selectedApartment.section.id;
+
+            newOwnerContent(selectedApartment.owner.fullName);
+            newPhoneContent(selectedApartment.owner.phone);
+        });
+
+        function newPhoneContent(phone) {
+            document.getElementById('phone').innerHTML = '<label class="form-label">[[#{bank_book.save.phone}]]: <a>' + phone + '</a></label>';
+        }
+
+        function newOwnerContent(house) {
+            document.getElementById('owner').innerHTML = '<label class="form-label">[[#{bank_book.save.owner}]]: <a>' + house + '</a></label>';
+        }
+
+        function applyMask(input) {
+            let value = input.value.replace(/\D/g, "");
+
+            if (value.length > 5) {
+                value = value.substring(0, 5) + "-" + value.substring(5, 10);
+            }
+
+            input.value = value;
+        }
+
+    </script>
+
+</th:block>
+
+</html>
