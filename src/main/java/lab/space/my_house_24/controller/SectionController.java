@@ -19,7 +19,6 @@ public class SectionController {
     @GetMapping("/get-section/{houseId}")
     @ResponseBody
     public List<SectionResponseForTable> getSectionByHouse(@PathVariable Long houseId){
-        System.out.println(sectionService.sectionByHouse(houseId));
         return sectionService.sectionByHouse(houseId);
 
     }

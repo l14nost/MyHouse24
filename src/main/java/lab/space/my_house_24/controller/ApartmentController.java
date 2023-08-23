@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentAddRequest;
 import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForEdit;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
+import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -134,5 +138,12 @@ public class ApartmentController {
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
         model.addAttribute("id", 0);
         return "/admin/pages/apartment/apartment-edit";
+    }
+
+    @GetMapping("/get-apartment")
+    @ResponseBody
+    public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam Long idSection,@RequestParam Long idFloor){
+        return apartmentService.apartmentForSelect(idHouse,idSection,idFloor);
+
     }
 }

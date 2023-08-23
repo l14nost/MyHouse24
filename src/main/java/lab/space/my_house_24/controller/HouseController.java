@@ -1,15 +1,14 @@
 package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
-import lab.space.my_house_24.model.house.HouseRequestForAddPage;
-import lab.space.my_house_24.model.house.HouseRequestForEditPage;
-import lab.space.my_house_24.model.house.HouseRequestForMainPage;
-import lab.space.my_house_24.model.house.HouseResponseForEdit;
+import lab.space.my_house_24.model.house.*;
+import lab.space.my_house_24.model.user.UserResponseForTable;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.HouseValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,5 +86,12 @@ public class HouseController {
         }
         houseService.update(houseRequestForEditPage, id);
         return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/get-houses-for-select")
+    @ResponseBody
+    public Page<HouseResponseForTable> userForApartmentTable(@RequestParam Integer page, @RequestParam String search){
+        return houseService.houseResponseForSelect(page,search);
     }
 }

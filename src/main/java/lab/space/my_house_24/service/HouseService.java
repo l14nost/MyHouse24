@@ -21,4 +21,8 @@ public interface HouseService {
     HouseResponseForEdit findByIdForEdit(Long id);
 
     void update(HouseRequestForEditPage houseRequestForEditPage,Long id);
+
+    Page<HouseResponseForTable> houseResponseForSelect(Integer page, String search);
+
+    List<House> findAll();
 }

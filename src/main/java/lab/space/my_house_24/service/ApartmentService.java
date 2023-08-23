@@ -1,6 +1,7 @@
 package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.Apartment;
+import lab.space.my_house_24.entity.Floor;
 import lab.space.my_house_24.model.apartment.*;
 import org.springframework.data.domain.Page;
 
@@ -21,4 +22,11 @@ public interface ApartmentService {
     Apartment findById(Long id);
 
     List<ApartmentResponseForMastersApplication> getAllApartmentResponseByUserId(ApartmentMastersApplicationRequest request);
+
+
+    List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor);
+
+    List<Apartment> findAllApartmentByHouse(Long house);
+    List<Apartment> findAllApartmentByFloor(Long floor);
+    List<Apartment> findAllApartmentBySection(Long section);
 }

@@ -11,6 +11,7 @@ import lab.space.my_house_24.repository.HouseRepository;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.specification.HouseSpecification;
+import lab.space.my_house_24.specification.HouseSpecificationForSelect;
 import lab.space.my_house_24.util.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -238,5 +239,16 @@ public class HouseServiceImpl implements HouseService {
 
 
 
+    }
+
+    @Override
+    public Page<HouseResponseForTable> houseResponseForSelect(Integer page, String search) {
+        HouseSpecificationForSelect houseSpecificationForSelect = HouseSpecificationForSelect.builder().search(search).build();
+        return houseRepository.findAll(houseSpecificationForSelect,PageRequest.of(page,5)).map(HouseMapper::entityToDtoForTable);
+    }
+
+    @Override
+    public List<House> findAll() {
+        return houseRepository.findAll();
     }
 }

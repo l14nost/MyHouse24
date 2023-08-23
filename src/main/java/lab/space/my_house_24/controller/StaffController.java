@@ -142,4 +142,11 @@ public class StaffController {
         return ResponseEntity.ok().body(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()));
     }
 
+    @GetMapping("/get-current-staff")
+    public ResponseEntity getCurrentStaff(){
+        return ResponseEntity.ok().body(staffService.getCurrentStaff());
+    }
+
+
+
 }
