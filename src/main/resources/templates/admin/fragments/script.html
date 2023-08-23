@@ -60,7 +60,6 @@
             if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
 
                 const newClass = targetElement.className;
-                console.log(newClass.indexOf('sidebar-mini'));
                 if (newClass.indexOf('sidebar-mini') === 68 || newClass.indexOf('sidebar-mini') === 78){
                     logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
                 }
@@ -218,7 +217,45 @@
     window.addEventListener("resize", handleScreenWidthChange);
     handleScreenWidthChange();
 
+    window.addEventListener('load', function() {
+        let previousPage = localStorage.getItem("previousPage");
+        var pathAndQuery = window.location.pathname + window.location.search;
+        var targetLinks = document.querySelectorAll('a[href="'+pathAndQuery+'"]');
+        if (targetLinks.length>0){
+            targetLinks[0].classList.add("active");
+            if (targetLinks[0].classList.contains("site")){
+                var targetUlSite = document.getElementById("sidebar-special");
+                var linkElement = document.getElementById('special-a');
+                linkElement.setAttribute('aria-expanded', 'true');
+                targetUlSite.classList.add("show");
 
+            }
+            else if (targetLinks[0].classList.contains("system")){
+                var targetUlSystem = document.getElementById("sidebar-icons");
+                var linkElement1  = document.getElementById('icons-a');
+                linkElement1.setAttribute('aria-expanded', 'true');
+                targetUlSystem.classList.add("show");
+            }
+            localStorage.setItem("previousPage", pathAndQuery);
+        }
+        else {
+            var previousTargetLinks = document.querySelectorAll('a[href="'+previousPage+'"]');
+                previousTargetLinks[0].classList.add("active");
+            if (previousTargetLinks[0].classList.contains("site")){
+                var targetUlSite1 = document.getElementById("sidebar-special");
+                var linkElement3 = document.getElementById('special-a');
+                linkElement3.setAttribute('aria-expanded', 'true');
+                targetUlSite1.classList.add("show");
+
+            }
+            else if (previousTargetLinks[0].classList.contains("system")){
+                var targetUlSystem1 = document.getElementById("sidebar-icons");
+                var linkElement2  = document.getElementById('icons-a');
+                linkElement2.setAttribute('aria-expanded', 'true');
+                targetUlSystem1.classList.add("show");
+            }
+        }
+    });
 </script>
 
 

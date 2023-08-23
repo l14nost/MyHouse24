@@ -1,5 +1,7 @@
 package lab.space.my_house_24.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
+import lab.space.my_house_24.entity.Floor;
 import lab.space.my_house_24.mapper.FloorMapper;
 import lab.space.my_house_24.model.floor.FloorResponseForTable;
 import lab.space.my_house_24.model.section.SectionResponseForTable;
@@ -22,5 +24,15 @@ public class FloorServiceImpl implements FloorService {
     @Override
     public List<FloorResponseForTable> floorByHouse(Long houseId) {
         return floorRepository.findAllByHouse_Id(houseId).stream().map(FloorMapper::entityToDtoForTable).toList();
+    }
+
+    @Override
+    public Floor findById(Long floor) {
+        return floorRepository.findById(floor).orElseThrow(()->new EntityNotFoundException("Floor by id "+floor+" is not found"));
+    }
+
+    @Override
+    public List<Floor> findAllFloorByHouse(Long house) {
+        return floorRepository.findAllByHouse_Id(house);
     }
 }

@@ -203,3 +203,16 @@
 }
 
 
+.sidebar.sidebar-default .nav-link:not(.static-item).active, .sidebar.sidebar-default .nav-link:not(.static-item)[aria-expanded=true] {
+    background: var(--bs-success);
+    color: #ffffff;
+    -webkit-box-shadow: 0 10px 20px -10px rgba(var(--shadow-dark-color), 38%);
+    box-shadow: 0 10px 20px -10px rgba(var(--shadow-dark-color), 38%);
+}
+
+.sidebar.sidebar-default .nav-link:not(.static-item):hover:not(.active):not([aria-expanded=true]) {
+    background: #E8F6EEFF;
+    color: var(--bs-success);
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+}

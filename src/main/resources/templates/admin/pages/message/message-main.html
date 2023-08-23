@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{left.sidebar.houses}"></title>
+    <th:block layout:fragment="extra-style">
+        <style>
+
+        </style>
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{left.sidebar.messages}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{left.sidebar.messages}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div style="display: flex; justify-content: right; margin-bottom: 30px">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" th:text = "#{message.send.button}" onclick="entityAdd()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+
+                <div style="display: flex; justify-content: space-between">
+                    <div style="display: flex">
+                        <button class="btn btn-light" onclick="checkAll()">
+                            <input type="checkbox" class="form-check-input" id="allCheck">
+                        </button>
+                        <button class="btn btn-danger delete-entity" style="margin-left: 5px" id="deleteButton" disabled >
+                                            <span class="btn-inner">
+                                                <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                                    <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M20.708 6.23975H3.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </span>
+                        </button>
+                    </div>
+                    <form id="filter">
+                        <div class="input-group search-input" style="width: 200px">
+                            <input type="search" class="form-control" th:placeholder="#{message.table.search}" name="keyWord">
+                            <button class="btn btn-success" style="width: 50px; display: flex; justify-content: center; align-items: center">
+                                <div>
+                                    <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
+                                        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="table">
+
+                <table class="table table-striped table-bordered" style="margin-top: 15px">
+                    <thead>
+                    <tr>
+                        <th style="width: 5%"></th>
+                        <th style="width: 20%" th:text="#{message.table.recipient}"></th>
+                        <th style="width: 60%" th:text="#{message.table.text}"></th>
+                        <th style="width: 15%" th:text="#{message.table.date}"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="table" style="min-height: 55px">
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer pt-0 pb-0" style="margin-top: 15px">
+                <div style="display: none; justify-content: center; min-height: 100px" id="emptyTable" >
+                    <p style="display: flex; justify-content: center" th:text = "#{table.empty}"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
+                        <div id="tableInfoShowing">
+
+                        </div>
+                        <div style="display: flex; margin-right: 10px" >
+                            <nav aria-label="Page navigation example" id = "pagination">
+                            </nav>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-alert">
+    <div id="liveAlertPlaceholder" style="right: 0; position: fixed; bottom: 0"></div>
+</th:block>
+<th:block layout:fragment="extra-modals">
+    <div class="modal fade" id="confirmDeleteEntity" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteEntityLabel">Delete Apartment Owner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete apartment?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" onclick="entityDelete()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script>
+        let countClick = 0;
+        function checkAll() {
+            var checkboxes = document.querySelectorAll('.deleteCheck');
+            var checkboxAll = document.getElementById('allCheck');
+            if (countClick === 0) {
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.checked = true;
+                    checkboxAll.checked = true;
+                });
+                countClick = 1;
+            }
+            else if (countClick === 1){
+                checkboxes.forEach(function (checkbox) {
+                    checkbox.checked = false;
+                    checkboxAll.checked = false;
+
+                });
+                countClick = 0;
+            }
+            updateButtonState();
+
+        }
+
+    </script>
+    <script>
+        function updateButtonState() {
+            const checkboxes = document.querySelectorAll('.deleteCheck');
+            const deleteButton = document.getElementById('deleteButton');
+            let anyCheckboxChecked = false;
+            for (let i = 0; i<checkboxes.length;i++){
+                if (checkboxes[i].checked){
+                    anyCheckboxChecked = true;
+                }
+            }
+            if (anyCheckboxChecked){
+                deleteButton.removeAttribute("disabled");
+            }
+            else {
+                deleteButton.setAttribute("disabled","disabled");
+
+            }
+        }
+
+        updateButtonState();
+    </script>
+    <script>
+
+
+        function clearFilters(){
+            $('#searchApartmentTable input').val('');
+            $('#searchApartmentTable select').val(null).trigger("change");
+            var formData = new FormData();
+            formData.append("page", "0");
+
+            getAllHouse(formData);
+        }
+
+        var filterData = new FormData(document.getElementById("filter"));
+        function filter() {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            filterData = formData;
+            formData.append("page", "0");
+            getAllHouse(formData);
+        }
+
+
+
+
+        document.addEventListener("click", function () {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            for (var pair of formData.entries()){
+                if (filterData.get(pair[0])!==pair[1]){
+                    filter();
+                }
+            }
+
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("filter");
+
+            const selectElements = form.querySelectorAll("select");
+
+            function handleSelectChange() {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            }
+            selectElements.forEach(function(select) {
+                select.addEventListener("change", handleSelectChange);
+            });
+        });
+
+
+
+        $(document).ready(function (){
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", "0");
+            getAllHouse(formData);
+
+        });
+        function changePage(page,event){
+            event.preventDefault();
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", page);
+            getAllHouse(formData);
+
+        }
+
+        function getAllHouse(formData) {
+
+            let page = parseInt(formData.get("page"));
+
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            $.ajax({
+                method: "POST",
+                url: "/admin/get-all-message",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            })
+                .done(
+                    function (response) {
+                        const pagination = document.getElementById("pagination");
+                        pagination.innerHTML = "";
+                        const table = document.getElementById("table");
+                        table.innerHTML = "";
+                        if (response.content.length === 0) {
+                            const container = document.getElementById("emptyTable");
+                            container.style.display = "flex";
+                            const container1 = document.getElementById("tableInfo");
+                            container1.style.display = "none";
+                        } else {
+                            const container2 = document.getElementById("emptyTable");
+                            container2.style.display = "none";
+                            const container3 = document.getElementById("tableInfo");
+                            container3.style.display = "flex";
+                            $.each(response.content, function (index, entity) {
+
+                                const container = document.getElementById("table");
+                                const newTr = document.createElement("tr");
+                                newTr.style.cursor = "pointer";
+                                newTr.innerHTML = " <td><input type=\"checkbox\" class=\"form-check-input deleteCheck\" name='deleteIds' value='"+entity.id+"' onchange='updateButtonState()'></td>\n" +
+                                    "          <td onclick='entityCard("+entity.id+")'>" + entity.recipient + "</td>\n" +
+                                    "          <td class='text-truncate' style='max-width: 100px' onclick='entityCard("+entity.id+")'>" + entity.text + "</td>\n" +
+                                    "          <td onclick='entityCard("+entity.id+")'>" + entity.sendDate + "</td>\n"
+                                container.appendChild(newTr);
+                            })
+
+                            if (response.totalPages >= 2 && response.totalPages<7) {
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'>❮</a></li>\n";
+                                var containerPagination = document.getElementById("pagination");
+                                const newUl = document.createElement("ul");
+                                newUl.id = "apartmentPaginationList";
+                                newUl.classList.add("pagination");
+                                for (var i = 0; i < response.totalPages; i++) {
+                                    var currentNum = i + 1;
+
+                                    addElements += "<li class=\"page-item " + checkCurrentPage(currentNum) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+i+','+'event'+")'>" + currentNum + "</a></li>\n"
+                                }
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>❯</a></li>\n"
+                                newUl.innerHTML = addElements
+                                containerPagination.appendChild(newUl);
+                            }
+                            else if (response.totalPages>=7) {
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'>❮</a></li>\n";
+                                var containerPagination = document.getElementById("pagination");
+                                const newUl = document.createElement("ul");
+                                newUl.id = "apartmentPaginationList";
+                                newUl.classList.add("pagination");
+                                addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+'event'+")'> 1 </a></li>\n"
+                                if (page-2<0){
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+'event'+")'> 2 </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(3) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(2,"+'event'+")'> 3 </a></li>\n"
+                                }
+                                if(page-2>0) {
+                                    addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\">...</a></li>\n"
+                                }
+                                if (page-2>=0 && page+3<=response.totalPages){
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page-1) +','+'event'+")'> "+(page) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page) +','+'event'+")'> "+(page+1) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page+1) +','+'event'+")'> "+(page+2) +" </a></li>\n"
+
+                                }
+
+                                if (page+3<response.totalPages) {
+                                    addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\"'>...</a></li>\n"
+                                }
+                                if (page+3>response.totalPages) {
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(response.totalPages-2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(response.totalPages - 3)+','+'event'+")'> "+ (response.totalPages-2) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(response.totalPages-1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(response.totalPages - 2)+','+'event'+")'> "+ (response.totalPages-1) +" </a></li>\n"
+                                }
+
+                                addElements+="<li class=\"page-item " + checkCurrentPage(response.totalPages) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(response.totalPages - 1)+','+'event'+")'> "+ response.totalPages +" </a></li>\n"
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>❯</a></li>\n"
+                                newUl.innerHTML = addElements
+                                containerPagination.appendChild(newUl);
+                            }
+                            if (response.totalElements>0){
+                                const tableInfoDiv = document.getElementById("tableInfoShowing");
+                                let  text = " [[#{table.show.info.Showing}]] X - Y [[#{table.show.info.of}]] Z [[#{table.show.info.entries}]]";
+                                const newX = response.number * 10 + 1;
+                                const newY = response.content.length + response.number * 10;
+                                const newZ = response.totalElements;
+
+                                tableInfoDiv.innerHTML = text.replace('X', newX).replace('Y', newY).replace('Z', newZ);
+                            }
+
+
+                            function checkCurrentPage(currentNum) {
+                                if (currentNum - 1 === parseInt(page)) {
+                                    return "active";
+                                } else return "";
+                            }
+
+                            function checkForDisabledPrev() {
+                                if (parseInt(page) === 0) {
+                                    return "disabled";
+                                } else return "";
+                            }
+                            function checkForDisabledNext() {
+                                var currentNum = parseInt(page);
+                                if (currentNum+1 === response.totalPages) {
+                                    return "disabled";
+                                } else return "";
+                            }
+
+
+
+                        }
+
+
+                    }
+                )
+        }
+        function entityCard(id){
+            window.location.href = "/admin/message-card/"+id;
+        }
+        function entityAdd(){
+            window.location.href = "/admin/add-message";
+        }
+
+
+
+    </script>
+    <script>
+        $(document).on('click', '.delete-entity', function (event) {
+            $('#confirmDeleteEntity').modal('show');
+        });
+        function entityDelete(){
+            let deleteIds = [];
+
+            const checkboxes = document.querySelectorAll('.deleteCheck');
+            for (let i = 0; i<checkboxes.length;i++){
+                if (checkboxes[i].checked){
+                    deleteIds.push(checkboxes[i].value);
+                }
+            }
+            console.log(deleteIds);
+            const idsQueryParam = deleteIds.join(',');
+            $.ajax({
+                method: "DELETE",
+                url: "/admin/delete-messages",
+                data: {
+                    ids: idsQueryParam
+                }
+            }).done(
+                function (){
+                    $('#confirmDeleteEntity').modal('hide');
+                    houseId = undefined;
+                    var form = document.getElementById("filter");
+                    var formData = new FormData(form);
+                    filterData = formData;
+                    formData.append("page", "0");
+                    getAllHouse(formData);
+                    showToast('success');
+                    const deleteButton = document.getElementById('deleteButton');
+                    deleteButton.setAttribute("disabled", "disabled");
+                }
+            ).fail(
+                function (response){
+                    $('#confirmDeleteEntity').modal('hide');
+                    showToast('error');
+                    const deleteButton = document.getElementById('deleteButton');
+                    deleteButton.setAttribute("disabled", "disabled");
+
+                }
+            )
+        }
+    </script>
+</th:block>
+</html>

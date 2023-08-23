@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text = "#{message.add.title}"></title>
+    <th:block layout:fragment="extra-style">
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{message.add.title}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/messages}" th:text = "#{left.sidebar.messages}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{message.add.title}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form id="messageAdd" style="margin-top: 10px">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <input type="hidden" name="staff" id="staff">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="subject"  name="subject" th:placeholder="#{message.add.title.input}">
+                                </div>
+                                <div class="form-group">
+                                    <div id="message-div"><div id="message" style="height: 226px;"></div></div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check form-check-inline">
+                                        <input type="checkbox" class="form-check-input" id="debt" name="debt">
+                                        <label class="form-check-label pl-2" for="debt" th:text="#{message.add.owner}" ></label>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="houseResponse">
+                                    <label class="form-label" th:text="#{apartment.add.house}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                                        <option selected="" th:text="#{message.add.to.all}" value = "0"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="sectionResponse">
+                                    <label class="form-label" th:text="#{apartment.add.section}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
+                                        <option selected="" th:text="#{message.add.to.all}" value = "0"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="floorResponse">
+                                    <label class="form-label" th:text="#{apartment.add.floor}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="floor" id="floor">
+                                        <option selected="" th:text="#{message.add.to.all}" value = "0"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="apartmentResponse">
+                                    <label class="form-label" th:text="#{message.add.apartment}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="apartment" id="apartment">
+                                        <option selected="" th:text="#{message.add.to.all}" value = "0"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: right;  margin-bottom: 10px; margin-right: 20px">
+                            <button onclick="saveApartment()" type="button" class="btn btn-success" th:text="#{global.button.send}" style="width: 150px; margin-left: 10px"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-modals">
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script>
+        function select2(lang){
+            var defaultSelect = " ";
+            $("#house").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                ajax: {
+                    url: "/admin/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true,
+                },
+                placeholder: defaultSelect,
+                allowClear: true
+            });
+            $("#floor").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7,
+                allowClear: true
+            });
+            $("#section").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7,
+                allowClear: true
+            });
+            $("#apartment").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7,
+                allowClear: true
+            });
+            $("#house").on("change", function (){
+                $('#floor').val(0).trigger("change");
+                $('#section').val(0).trigger("change");
+                $('#apartment').val(0).trigger("change");
+                var idHouse = this.value;
+                var idFloor = $("#floor").val();
+                var idSection = $("#section").val();
+                $("#section").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-section/"+idHouse,
+                        data: function (param) {
+                            return {
+                                search: param.term || "",
+                                page: param.page || 0
+                            }
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7,
+                    allowClear: true
+                });
+                $("#floor").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-floor/"+idHouse,
+                        data: function (param) {
+                            return {
+                                search: param.term || "",
+                                page: param.page || 0
+                            }
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7,
+                    allowClear: true
+                });
+                $("#apartment").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-apartment",
+                        method: "GET",
+                        data:{
+                          idHouse: idHouse,
+                          idSection: idSection,
+                          idFloor: idFloor
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7,
+                    allowClear: true
+                });
+
+            })
+            $("#section").on("change", function (){
+                $('#apartment').val(0).trigger("change");
+                var idSection = this.value;
+                var idHouse = $("#house").val();
+                var idFloor = $("#floor").val();
+                $("#apartment").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-apartment",
+                        data:{
+                            idHouse: idHouse,
+                            idSection: idSection,
+                            idFloor: idFloor
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7,
+                    allowClear: true
+                });
+
+            })
+            $("#floor").on("change", function (){
+                $('#apartment').val(0).trigger("change");
+                var idFloor = this.value;
+                var idHouse = $("#house").val();
+                var idSection = $("#section").val();
+                $("#apartment").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-apartment",
+                        data:{
+                            idHouse: idHouse,
+                            idSection: idSection,
+                            idFloor: idFloor
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7,
+                    allowClear: true
+                });
+
+            })
+
+        }
+
+        $(document).ready(function (){
+            $.ajax({
+                url: "/admin/staff/get-current-staff"
+            })
+                .done(function (response){
+                    var staff = document.getElementById("staff");
+                    staff.value = response;
+                })
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+            $('#house').on('select2:clear', function() {
+                $('#house').val(0).trigger('change');
+            });
+            $('#apartment').on('select2:clear', function() {
+                $('#apartment').val(0).trigger('change');
+            });
+            $('#section').on('select2:clear', function() {
+                $('#section').val(0).trigger('change');
+            });
+            $('#floor').on('select2:clear', function() {
+                $('#floor').val(0).trigger('change');
+            });
+        });
+        var options = {
+            modules: {
+                toolbar: true,
+
+            },
+            placeholder: "[[#{message.add.message.input}]]",
+            theme: 'snow'
+        };
+        var editor = new Quill('#message', options);
+
+
+
+
+
+
+
+
+        function saveApartment(){
+            var form = document.getElementById("messageAdd");
+            var formData = new FormData(form);
+            var checkBox = document.getElementById("debt");
+            formData.delete("debt");
+            if (checkBox.checked){
+                formData.append("debt",true);
+            }
+            else formData.append("debt",false);
+
+            formData.append("messageStyle",editor.root.innerHTML);
+            formData.append("message",editor.getText());
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            console.log(jsonData);
+            $.ajax({
+                method:"POST",
+                url: "/admin/add-message",
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            }).done(
+                function (response){
+                    window.location.href = "/admin/messages";
+                }
+            ).fail(
+                function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        if (keys === 'floor'){
+                            validResponse("#"+keys,values,"#floorResponse");
+                        }
+                        if (keys === 'house'){
+                            validResponse("#"+keys,values,"#houseResponse");
+                        }
+                        if (keys === 'section'){
+                            validResponse("#"+keys,values,"#sectionResponse");
+                        }
+                        if (keys === 'apartment'){
+                            validResponse("#"+keys,values,"#apartmentResponse");
+                        }
+                        validResponse("#" + keys, values);
+
+                    }
+                }
+            )
+        }
+
+
+    </script>
+</th:block>
+</html>

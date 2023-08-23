@@ -23,6 +23,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -311,5 +313,10 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     @Override
     public List<StaffResponseForHouseAdd> getAllStaffDtoForHouse() {
         return staffRepository.findAll().stream().map(StaffMapper::entityToDtoForHouseAdd).toList();
+    }
+    @Override
+    public Long getCurrentStaff() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return staffRepository.findByEmail(authentication.getName()).orElseThrow(() -> new EntityNotFoundException("Staff not found by email " + authentication.getName())).getId();
     }
 }

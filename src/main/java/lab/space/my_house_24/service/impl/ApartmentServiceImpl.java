@@ -10,6 +10,7 @@ import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.specification.ApartmentSpecification;
+import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -112,4 +113,31 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Apartment findById(Long id) {
         return apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found"));
     }
+
+    @Override
+    public List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor) {
+        ApartmentSpecificationForSelect apartmentSpecificationForSelect = ApartmentSpecificationForSelect.builder()
+                .idFloor(idFloor)
+                .idHouse(idHouse)
+                .idSection(idSection)
+                .build();
+        return apartmentRepository.findAll(apartmentSpecificationForSelect).stream().map(ApartmentMapper::entityToDtoForTable).toList();
+
+    }
+
+    @Override
+    public List<Apartment> findAllApartmentByHouse(Long house) {
+        return apartmentRepository.findAllByHouse_Id(house);
+    }
+
+    @Override
+    public List<Apartment> findAllApartmentByFloor(Long floor) {
+        return apartmentRepository.findAllByHouse_Id(floor);
+    }
+
+    @Override
+    public List<Apartment> findAllApartmentBySection(Long section) {
+        return apartmentRepository.findAllByHouse_Id(section);
+    }
+
 }

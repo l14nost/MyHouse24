@@ -29,7 +29,7 @@ public class Floor {
     @OneToMany(mappedBy = "floor")
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "floorList")
+    @ManyToMany(mappedBy = "floorList",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Message> messageList = new ArrayList<>();
 
 }
