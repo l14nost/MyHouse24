@@ -3,17 +3,18 @@ package lab.space.my_house_24.controller;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForBankBook;
+import lab.space.my_house_24.model.bankBook.BankBookRequest;
+import lab.space.my_house_24.model.bankBook.BankBookResponse;
 import lab.space.my_house_24.model.bankBook.BankBookSaveRequest;
 import lab.space.my_house_24.model.bankBook.BankBookUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.section.SectionResponseForTable;
-import lab.space.my_house_24.service.ApartmentService;
-import lab.space.my_house_24.service.BankBookService;
-import lab.space.my_house_24.service.HouseService;
-import lab.space.my_house_24.service.SectionService;
+import lab.space.my_house_24.model.user.UserResponseForTable;
+import lab.space.my_house_24.service.*;
 import lab.space.my_house_24.util.ErrorMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class BankBookController {
     private final ApartmentService apartmentService;
     private final SectionService sectionService;
     private final HouseService houseService;
+    private final UserService userService;
 
     @GetMapping({"/", ""})
     public String showBankBookPage() {
@@ -50,6 +52,21 @@ public class BankBookController {
     @GetMapping("/update-{id}")
     public String showBankBookUpdatePage(@PathVariable Long id) {
         return "admin/pages/bank_book/bank-book-save";
+    }
+
+    @GetMapping("/get-all-balance-status")
+    public ResponseEntity<List<EnumResponse>> getAllBalanceStatus(){
+        return ResponseEntity.ok(bankBookService.getAllBalanceStatus());
+    }
+
+    @GetMapping("/get-all-owner")
+    public ResponseEntity<List<UserResponseForTable>> getAllUser(){
+        return ResponseEntity.ok(userService.userListForTable());
+    }
+
+    @GetMapping("/get-all-section")
+    public ResponseEntity<List<SectionResponseForTable>> getAllSection(){
+        return ResponseEntity.ok(sectionService.sectionListForTable());
     }
 
     @GetMapping("/get-all-status")
@@ -90,6 +107,11 @@ public class BankBookController {
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @PostMapping("/get-all-bank-book")
+    public ResponseEntity<Page<BankBookResponse>> getAllMastersApplication(@RequestBody BankBookRequest request) {
+        return ResponseEntity.ok(bankBookService.getAllBankBookResponse(request));
     }
 
     @PutMapping("/update-bank-book")

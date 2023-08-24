@@ -2,11 +2,9 @@ package lab.space.my_house_24.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.BankBook;
-import lab.space.my_house_24.model.bankBook.BankBookResponse;
-import lab.space.my_house_24.model.bankBook.BankBookResponseForTable;
-import lab.space.my_house_24.model.bankBook.BankBookSaveRequest;
-import lab.space.my_house_24.model.bankBook.BankBookUpdateRequest;
+import lab.space.my_house_24.model.bankBook.*;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +18,10 @@ public interface BankBookService {
     Optional<BankBook> findByNumber(String number);
 
     List<BankBookResponseForTable> bankBookListForTable();
+
+    Page<BankBookResponse> getAllBankBookResponse(BankBookRequest request);
+
+    List<EnumResponse> getAllBalanceStatus();
 
     List<EnumResponse> getAllBankBookStatus();
 

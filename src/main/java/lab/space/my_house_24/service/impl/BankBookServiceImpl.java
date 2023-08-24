@@ -3,20 +3,21 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Apartment;
 import lab.space.my_house_24.entity.BankBook;
+import lab.space.my_house_24.enums.BalanceStatus;
 import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.mapper.BankBookMapper;
 import lab.space.my_house_24.mapper.EnumMapper;
-import lab.space.my_house_24.model.bankBook.BankBookResponse;
-import lab.space.my_house_24.model.bankBook.BankBookResponseForTable;
-import lab.space.my_house_24.model.bankBook.BankBookSaveRequest;
-import lab.space.my_house_24.model.bankBook.BankBookUpdateRequest;
+import lab.space.my_house_24.model.bankBook.*;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.repository.ApartmentRepository;
 import lab.space.my_house_24.repository.BankBookRepository;
 import lab.space.my_house_24.service.BankBookService;
+import lab.space.my_house_24.specification.BankBookSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -34,6 +35,7 @@ public class BankBookServiceImpl implements BankBookService {
 
     private final BankBookRepository bankBookRepository;
     private final ApartmentRepository apartmentRepository;
+    private final BankBookSpecification bankBookSpecification;
 
     @Override
     public BankBook getBankBookById(Long id) throws EntityNotFoundException {
@@ -56,6 +58,26 @@ public class BankBookServiceImpl implements BankBookService {
     @Override
     public List<BankBookResponseForTable> bankBookListForTable() {
         return bankBookRepository.findAllByApartmentIsNull().stream().map(BankBookMapper::entityToDtoForTable).toList();
+    }
+
+    @Override
+    public Page<BankBookResponse> getAllBankBookResponse(BankBookRequest request) {
+        log.info("Try to get all BankBookResponse by Request");
+        final int DEFAULT_PAGE_SIZE = 10;
+        return bankBookRepository.findAll(
+                bankBookSpecification.getBankBookByRequest(request),
+                PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(BankBookMapper::toBankBookResponse);
+    }
+
+    @Override
+    public List<EnumResponse> getAllBalanceStatus() {
+        log.info("Try to get all BalanceStatus");
+        return Arrays.stream(BalanceStatus.values())
+                .map(status -> EnumMapper.toSimpleDto(
+                        status.name(),
+                        status.getBalanceStatus(LocaleContextHolder.getLocale())
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override
