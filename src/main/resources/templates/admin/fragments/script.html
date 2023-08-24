@@ -203,6 +203,17 @@
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
 
+    function addBadgeBankBookStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'ACTIVE') badgeClasses += ' bg-success';
+        if (status?.name === 'INACTIVE') badgeClasses += ' bg-danger';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
     function addColorTextIncomeExpense(type){
 
         let badgeClasses = '';

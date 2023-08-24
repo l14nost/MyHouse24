@@ -142,7 +142,7 @@
                 }else {
                     selectHouse();
                 }
-                $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]] №' + response?.number);
+                $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]]');
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
             }).fail(function () {
