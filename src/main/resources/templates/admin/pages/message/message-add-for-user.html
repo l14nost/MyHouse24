@@ -327,11 +327,6 @@
         }
 
         $(document).ready(function (){
-            var pathAndQuery = window.location.pathname + window.location.search;
-            if (pathAndQuery === "/admin/messages/add-message-debt"){
-                var checkbox = document.getElementById("debt");
-                checkbox.checked = true;
-            }
             $.ajax({
                 url: "/admin/staff/get-current-staff"
             })

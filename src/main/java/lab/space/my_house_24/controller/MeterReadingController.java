@@ -92,4 +92,19 @@ public class MeterReadingController {
         return ResponseEntity.ok().build();
     }
 
+
+
+    @GetMapping("/add-meter-reading-apartment")
+    public String meterReadingByApartmentAddPage(@RequestParam Long idApartment,@RequestParam Long idService, Model model){
+        model.addAttribute("number",  String.format("%09d", meterReadingService.count()+1));
+        if (meterReadingService.findByIdForApartmentAdd(idApartment, idService)==null){
+            return "/admin/pages/meterReading/meter-reading-add";
+        }
+        model.addAttribute("meterReading", meterReadingService.findByIdForApartmentAdd(idApartment, idService));
+        model.addAttribute("houseList", houseService.houseListForTable());
+        model.addAttribute("apartmentList", apartmentService.apartmentListForSelect());
+        model.addAttribute("sectionList", sectionService.sectionListForTable());
+        model.addAttribute("serviceList", serviceService.serviceListForTable());
+        return "/admin/pages/meterReading/meter-reading-add-apartment";
+    }
 }

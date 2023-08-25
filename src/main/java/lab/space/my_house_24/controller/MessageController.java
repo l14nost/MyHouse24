@@ -60,7 +60,6 @@ public class MessageController {
 
     @PostMapping("/add-message")
     public ResponseEntity addMessage(@RequestBody @Valid MessageRequestForSend messageRequestForSend, BindingResult result){
-        System.out.println(messageRequestForSend);
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
@@ -75,5 +74,39 @@ public class MessageController {
         }
         return ResponseEntity.ok().build();
     }
+
+
+    @GetMapping("/add-message-for-user/{idUser}")
+    public String addMessageForUserPage(@PathVariable Long idUser,Model model){
+        return "/admin/pages/message/message-add-for-user";
+    }
+
+
+    @PostMapping("/add-message-for-user/{idUser}")
+    public ResponseEntity addMessageForUser(@PathVariable Long idUser, @RequestBody @Valid MessageRequestForSend messageRequestForSend, BindingResult result){
+        System.out.println(messageRequestForSend);
+        if (result.hasErrors()){
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
+        }
+        messageService.sendMessage(messageRequestForSend);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/add-message-debt")
+    public String addMessageDebtPage(Model model){
+        return "/admin/pages/message/message-add";
+    }
+
+
+    @PostMapping("/add-message-debt")
+    public ResponseEntity addMessageDebt(@RequestBody @Valid MessageRequestForSend messageRequestForSend, BindingResult result){
+        if (result.hasErrors()){
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
+        }
+        messageService.sendMessage(messageRequestForSend);
+        return ResponseEntity.ok().build();
+    }
+
+
 
 }

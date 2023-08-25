@@ -97,7 +97,7 @@
             </div>
             <div class="card-footer pt-0 pb-0" style="margin-bottom: 20px">
                 <div>
-                    <a href="#" th:text="#{apartment.footer.1}"></a>
+                    <a th:href="'/admin/meter-readings/meter-readings-by-apartment?idApartment='+${id}+'&idService='+${0}" th:text="#{apartment.footer.1}"></a>
                 </div>
                 <div>
                     <a href="#" th:text="#{apartment.footer.2}"></a>

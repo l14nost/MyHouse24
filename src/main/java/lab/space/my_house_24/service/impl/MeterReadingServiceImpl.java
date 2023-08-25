@@ -3,6 +3,7 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Apartment;
 import lab.space.my_house_24.entity.MeterReading;
+import lab.space.my_house_24.enums.MeterReadingStatus;
 import lab.space.my_house_24.mapper.MeterReadingMapper;
 import lab.space.my_house_24.model.meterReading.*;
 import lab.space.my_house_24.repository.MeterReadingRepository;
@@ -14,7 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.ZoneId;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +66,26 @@ public class MeterReadingServiceImpl implements MeterReadingService {
     @Override
     public MeterReadingResponseEdit findByIdEdit(Long id) {
         return MeterReadingMapper.entityToDtoForEdit(meterReadingRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Meter reading by id "+id+" is not found")));
+    }
+
+    @Override
+    public MeterReadingResponseEdit findByIdForApartmentAdd(Long id,Long idService) {
+        if (idService!=0L){
+            List<MeterReading> meterReadingList = meterReadingRepository.findAllByApartment_IdAndService_id(id,idService);
+            if (!meterReadingList.isEmpty()) {
+                return MeterReadingMapper.entityToDtoForEdit(meterReadingList.get(meterReadingList.size() - 1));
+            }
+            else return null;
+        }
+        else {
+            List<MeterReading> meterReadingList = meterReadingRepository.findAllByApartment_Id(id);
+            if (!meterReadingList.isEmpty()) {
+                return MeterReadingMapper.entityToDtoForEdit(meterReadingList.get(meterReadingList.size() - 1));
+
+            }
+            else return null;
+
+        }
     }
 
     @Override

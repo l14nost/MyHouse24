@@ -521,38 +521,5 @@
 
 
     </script>
-    <script>
-        let apartmentId;
-        $(document).on('click', '.delete-apartment', function (event) {
-            event.preventDefault();
-            apartmentId = $(this).data('id');
-            $('#confirmDeleteApartment').modal('show');
-        });
-        function apartmentDelete(){
-            $.ajax({
-                method: "DELETE",
-                url: "/admin/meter-readings/delete-apartment/"+apartmentId,
-                contentType: 'application/json'
-            }).done(
-                function (){
-                    $('#confirmDeleteApartment').modal('hide');
-                    apartmentId = undefined;
-                    var form = document.getElementById("filter");
-                    var formData = new FormData(form);
-                    filterData = formData;
-                    formData.append("page", "0");
-                    getAllApartment(formData);
-                    showToast('success');
-                }
-            ).fail(
-                function (response){
-                    $('#confirmDeleteApartment').modal('hide');
-                    showToast('error');
-                    apartmentId = undefined;
-
-                }
-            )
-        }
-    </script>
 </th:block>
 </html>

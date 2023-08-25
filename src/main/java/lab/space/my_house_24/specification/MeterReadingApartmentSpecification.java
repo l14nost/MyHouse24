@@ -23,20 +23,18 @@ public class MeterReadingApartmentSpecification implements Specification<MeterRe
     public Predicate toPredicate(Root<MeterReading> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(criteriaBuilder.and(
-                criteriaBuilder.equal(root.get("apartment").get("id"), meterReadingRequestForApartmentPage.idApartment()),
-                criteriaBuilder.equal(root.get("service").get("id"), meterReadingRequestForApartmentPage.idService())
-        ));
+        if (meterReadingRequestForApartmentPage.idService()!=0){
+            predicates.add(criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get("apartment").get("id"), meterReadingRequestForApartmentPage.idApartment()),
+                    criteriaBuilder.equal(root.get("service").get("id"), meterReadingRequestForApartmentPage.idService())
+            ));
+        }
+        else {
+            predicates.add(
+                    criteriaBuilder.equal(root.get("apartment").get("id"), meterReadingRequestForApartmentPage.idApartment())
+            );
+        }
 
-//        if (meterReadingRequestForApartmentPage.apartment()!=null){
-//            predicates.add(criteriaBuilder.equal(root.get("apartment").get("number"), meterReadingRequestForApartmentPage.apartment()));
-//        }
-//        if (meterReadingRequestForApartmentPage.house()!=null){
-//            predicates.add(criteriaBuilder.equal(root.get("apartment").get("house").get("id"), meterReadingRequestForApartmentPage.house()));
-//        }
-//        if (meterReadingRequestForApartmentPage.section()!=null){
-//            predicates.add(criteriaBuilder.equal(root.get("apartment").get("section").get("id"), meterReadingRequestForApartmentPage.section()));
-//        }
         if (meterReadingRequestForApartmentPage.id()!=null){
             predicates.add(criteriaBuilder.equal(root.get("id"), meterReadingRequestForApartmentPage.id()));
         }

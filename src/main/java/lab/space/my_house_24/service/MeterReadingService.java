@@ -16,6 +16,7 @@ public interface MeterReadingService {
     Long count();
 
     MeterReadingResponseEdit findByIdEdit(Long id);
+    MeterReadingResponseEdit findByIdForApartmentAdd(Long id, Long idService);
     MeterReading findById(Long id);
 
     void delete(Long id);

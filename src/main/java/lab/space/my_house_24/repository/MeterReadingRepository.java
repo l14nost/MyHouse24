@@ -14,5 +14,6 @@ import java.util.List;
 
 @Repository
 public interface MeterReadingRepository extends JpaRepository<MeterReading, Long>, JpaSpecificationExecutor<MeterReading> {
-
+    List<MeterReading> findAllByApartment_IdAndService_id(Long idApartment, Long idService);
+    List<MeterReading> findAllByApartment_Id(Long idApartment);
 }
