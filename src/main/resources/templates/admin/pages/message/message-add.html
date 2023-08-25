@@ -109,7 +109,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/get-houses-for-select",
+                    url: "/admin/houses/get-houses-for-select",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -226,7 +226,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         method: "GET",
                         data:{
                           idHouse: idHouse,
@@ -262,7 +262,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
@@ -297,7 +297,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
@@ -392,7 +392,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-message",
+                url: "/admin/messages/add-message",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

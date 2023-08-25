@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("meter-readings")
 @RequiredArgsConstructor
 public class MeterReadingController {
     private final MeterReadingService meterReadingService;
@@ -23,7 +24,7 @@ public class MeterReadingController {
     private final SectionService sectionService;
     private final ServiceService serviceService;
 
-    @GetMapping("/meter-readings")
+    @GetMapping({"/",""})
     public String meterReadingPage(){
         return "/admin/pages/meterReading/meter-reading-main";
     }

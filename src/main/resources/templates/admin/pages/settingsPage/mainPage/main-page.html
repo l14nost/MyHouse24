@@ -264,7 +264,7 @@
             formData.append("blockDescription", editorBlock5.root.innerHTML)
             formData.append("blockDescription", editorBlock6.root.innerHTML)
             $.ajax({
-                url: "/admin/site-main-page-save",
+                url: "/admin/site/main-page-save",
                 method: "PUT",
                 contentType: false,
                 processData: false,
@@ -342,7 +342,7 @@
                 })
         }
         function cancelMainPage(){
-            window.location.href = "/admin/site-main-page"
+            window.location.href = "/admin/site/main-page"
         }
 
 

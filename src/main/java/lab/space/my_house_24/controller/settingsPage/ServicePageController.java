@@ -14,18 +14,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("site")
 @RequiredArgsConstructor
 public class ServicePageController {
     private final ServicePageService servicePageService;
 
-    @GetMapping("/site-service-page")
+    @GetMapping("/service-page")
     public String siteServicePage(Model model){
         model.addAttribute("service", servicePageService.findByIdResponse(1L));
         return "/admin/pages/settingsPage/service/service-page";
     }
-    @PutMapping("/site-service-page-save")
+    @PutMapping("/service-page-save")
     public ResponseEntity saveServicePage(@ModelAttribute @Valid ServicePageRequest servicePageRequest, BindingResult result){
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));

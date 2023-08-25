@@ -91,7 +91,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"PUT",
-                url: "/admin/payment-details-save",
+                url: "/admin/payment-details/payment-details-save",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData),
             }).done(

@@ -220,7 +220,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/get-users/apartment-table",
+                    url: "/admin/users/get-users/apartment-table",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -395,7 +395,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/get-all-apartments",
+                url: "/admin/apartments/get-all-apartments",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -547,13 +547,13 @@
                 )
         }
         function apartmentCard(id){
-            window.location.href = "/admin/apartment-card/"+id;
+            window.location.href = "/admin/apartments/apartment-card/"+id;
         }
         function apartmentEdit(id){
-            window.location.href = "/admin/edit-apartment/"+id;
+            window.location.href = "/admin/apartments/edit-apartment/"+id;
         }
         function apartmentAdd(){
-            window.location.href = "/admin/add-apartment";
+            window.location.href = "/admin/apartments/add-apartment";
         }
 
 
@@ -569,7 +569,7 @@
         function apartmentDelete(){
             $.ajax({
                 method: "DELETE",
-                url: "/admin/delete-apartment/"+apartmentId,
+                url: "/admin/apartments/delete-apartment/"+apartmentId,
                 contentType: 'application/json'
             }).done(
                 function (){

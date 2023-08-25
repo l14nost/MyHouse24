@@ -12,19 +12,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("site")
 @RequiredArgsConstructor
 public class MainPageController {
     private final MainPageService mainPageService;
 
-    @GetMapping("/site-main-page")
+    @GetMapping("/main-page")
     public String mainPage(Model model){
         model.addAttribute("mainPage",mainPageService.findByIdResponse(1L));
         return "/admin/pages/settingsPage/mainPage/main-page";
     }
 
-    @PutMapping("/site-main-page-save")
+    @PutMapping("/main-page-save")
     public ResponseEntity saveMainPage(@ModelAttribute @Valid MainPageRequest mainPageRequest, BindingResult result){
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));

@@ -87,7 +87,7 @@
 
     function deleteEntity(id){
         $.ajax({
-            url: "/admin/delete-message/"+[[${id}]],
+            url: "/admin/messages/delete-message/"+[[${id}]],
             method: "DELETE"
         })
             .done(function (response){
@@ -102,7 +102,7 @@
 
     $(document).ready(function () {
         $.ajax({
-            url: "/admin/get-message-by-id/"+[[${id}]]
+            url: "/admin/messages/get-message-by-id/"+[[${id}]]
         })
             .done(function (response){
                 console.log(response);

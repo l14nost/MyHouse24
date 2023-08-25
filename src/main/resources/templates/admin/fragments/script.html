@@ -245,42 +245,44 @@
         const delta = editor.clipboard.convert( html );
         editor.setContents(delta);
     }
+
+
     window.addEventListener('load', function() {
-        let previousPage = localStorage.getItem("previousPage");
+        var navLinks = document.querySelectorAll(".sidebar-active");
         var pathAndQuery = window.location.pathname + window.location.search;
-        var targetLinks = document.querySelectorAll('a[href="'+pathAndQuery+'"]');
-        if (targetLinks.length>0){
-            targetLinks[0].classList.add("active");
-            if (targetLinks[0].classList.contains("site")){
-                var targetUlSite = document.getElementById("sidebar-special");
-                var linkElement = document.getElementById('special-a');
-                linkElement.setAttribute('aria-expanded', 'true');
-                targetUlSite.classList.add("show");
+        var pathSplit = pathAndQuery.split("/");
+        var chapter = pathSplit[2];
 
-            }
-            else if (targetLinks[0].classList.contains("system")){
-                var targetUlSystem = document.getElementById("sidebar-icons");
-                var linkElement1  = document.getElementById('icons-a');
-                linkElement1.setAttribute('aria-expanded', 'true');
-                targetUlSystem.classList.add("show");
-            }
-            localStorage.setItem("previousPage", pathAndQuery);
+        var ids = [];
+        for (var i = 0; i < navLinks.length; i++) {
+            ids.push(navLinks[i].id);
         }
-        else {
-            var previousTargetLinks = document.querySelectorAll('a[href="'+previousPage+'"]');
-                previousTargetLinks[0].classList.add("active");
-            if (previousTargetLinks[0].classList.contains("site")){
-                var targetUlSite1 = document.getElementById("sidebar-special");
-                var linkElement3 = document.getElementById('special-a');
-                linkElement3.setAttribute('aria-expanded', 'true');
-                targetUlSite1.classList.add("show");
-
+        console.log(chapter);
+        for (var i =0; i< ids.length; i++){
+            if (chapter.includes(ids[i]) && !chapter.includes("site") && !chapter.includes("system")){
+                var targetLinks = document.getElementById(ids[i]);
+                targetLinks.classList.add("active")
             }
-            else if (previousTargetLinks[0].classList.contains("system")){
-                var targetUlSystem1 = document.getElementById("sidebar-icons");
-                var linkElement2  = document.getElementById('icons-a');
-                linkElement2.setAttribute('aria-expanded', 'true');
-                targetUlSystem1.classList.add("show");
+            else{
+                if (pathSplit.length>3){
+                    var chapter1 = pathSplit[3];
+                    if (chapter1.includes(ids[i]) && chapter.includes("site")) {
+                        var targetLinksSite = document.getElementById(ids[i]);
+                        targetLinksSite.classList.add("active")
+                        var targetUlSite = document.getElementById("sidebar-special");
+                        var linkElement = document.getElementById('special-a');
+                        linkElement.setAttribute('aria-expanded', 'true');
+                        targetUlSite.classList.add("show");
+                    }
+                    else if(chapter1.includes(ids[i]) && chapter.includes("system")){
+                        var targetLinksSystem = document.getElementById(ids[i]);
+                        targetLinksSystem.classList.add("active")
+                        var targetUlSystem = document.getElementById("sidebar-icons");
+                        var linkElement1  = document.getElementById('icons-a');
+                        linkElement1.setAttribute('aria-expanded', 'true');
+                        targetUlSystem.classList.add("show");
+                    }
+                }
             }
         }
     });

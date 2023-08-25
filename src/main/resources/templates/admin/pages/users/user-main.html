@@ -43,9 +43,9 @@
                     <span class="visually-hidden">Toggle Dropdown</span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" th:href="@{/add-user}" th:text = "#{users.choose.button.1}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/users/add-user}" th:text = "#{users.choose.button.1}"></a></li>
                     <li><a class="dropdown-item" href="#" th:text = "#{users.choose.button.2}"></a></li>
-                    <li><a class="dropdown-item" th:href="@{/invite-user}" th:text = "#{users.choose.button.3}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/users/invite-user}" th:text = "#{users.choose.button.3}"></a></li>
                 </ul>
             </div>
         </div>
@@ -299,7 +299,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/get-all-users",
+                url: "/admin/users/get-all-users",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -363,7 +363,7 @@
                                 $.each(user.houses, function (indexHouse, house) {
                                     const containerHouse = document.getElementById("userHouse" + index);
                                     const newP = document.createElement("a");
-                                    newP.href = "/admin/house-card/" + house.id;
+                                    newP.href = "/admin/houses/house-card/" + house.id;
                                     newP.innerHTML = house.name;
                                     newP.style.margin = "0";
                                     newP.style.display = "flex";
@@ -375,7 +375,7 @@
                                     const containerHouse = document.getElementById("userApartment" + index);
                                     const newP = document.createElement("a");
                                     newP.innerHTML = "№" + apartment.number;
-                                    newP.href = "/admin/apartment-card/" + apartment.id;
+                                    newP.href = "/admin/apartments/apartment-card/" + apartment.id;
                                     newP.style.margin = "0";
                                     newP.style.display = "flex";
                                     newP.style.justifyContent = "center";
@@ -474,10 +474,10 @@
                 )
         }
         function userCard(id){
-            window.location.href = "/admin/user-card/"+id;
+            window.location.href = "/admin/users/user-card/"+id;
         }
         function userEdit(id){
-            window.location.href = "/admin/edit-user/"+id;
+            window.location.href = "/admin/users/edit-user/"+id;
         }
 
         $(window).on('beforeunload', function() {
@@ -495,7 +495,7 @@
         function userDelete(){
             $.ajax({
                 method: "DELETE",
-                url: "/admin/delete-user/"+userId,
+                url: "/admin/users/delete-user/"+userId,
                 contentType: 'application/json'
             }).done(
                 function (){

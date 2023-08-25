@@ -218,7 +218,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/get-all-house",
+                url: "/admin/houses/get-all-house",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -357,13 +357,13 @@
                 )
         }
         function entityCard(id){
-            window.location.href = "/admin/house-card/"+id;
+            window.location.href = "/admin/houses/house-card/"+id;
         }
         function entityEdit(id){
-            window.location.href = "/admin/edit-house/"+id;
+            window.location.href = "/admin/houses/edit-house/"+id;
         }
         function entityAdd(){
-            window.location.href = "/admin/add-house";
+            window.location.href = "/admin/houses/add-house";
         }
 
 
@@ -379,7 +379,7 @@
         function entityDelete(){
             $.ajax({
                 method: "DELETE",
-                url: "/admin/delete-house/"+houseId,
+                url: "/admin/houses/delete-house/"+houseId,
                 contentType: 'application/json'
             }).done(
                 function (){

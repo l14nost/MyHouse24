@@ -1,7 +1,6 @@
 package lab.space.my_house_24.model.meterReading;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lab.space.my_house_24.entity.MeterReading;
 import lab.space.my_house_24.enums.MeterReadingStatus;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
@@ -20,6 +19,7 @@ public record MeterReadingResponseEdit(
         ServiceResponseForSelect service,
         MeterReadingStatus status,
         Double count,
+        @JsonFormat(pattern = "dd.MM.yyyy")
         LocalDate date
 
 ) {

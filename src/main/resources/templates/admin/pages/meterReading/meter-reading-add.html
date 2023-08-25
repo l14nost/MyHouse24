@@ -173,7 +173,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/get-houses-for-select",
+                    url: "/admin/houses/get-houses-for-select",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -249,7 +249,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse
                         },
@@ -281,7 +281,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection
@@ -336,7 +336,7 @@
 
 
         function cancelApartment(){
-            window.location.href = "/admin/apartments";
+            window.location.href = "/admin/meter-readings";
         }
         function getTrueDate(date){
             let trueDate= '';
@@ -360,7 +360,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-meter-reading",
+                url: "/admin/meter-readings/add-meter-reading",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

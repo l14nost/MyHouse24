@@ -132,7 +132,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/get-users/apartment-table",
+                    url: "/admin/users/get-users/apartment-table",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -282,7 +282,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-apartment-save",
+                url: "/admin/apartments/add-apartment-save",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(
@@ -330,7 +330,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-apartment-save",
+                url: "/admin/apartments/add-apartment-save",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

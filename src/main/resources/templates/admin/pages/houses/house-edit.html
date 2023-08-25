@@ -522,7 +522,7 @@
         formData.append("deleteStaffList", deleteIdsUser);
         $.ajax({
             method:"PUT",
-            url: "/admin/edit-house/"+[[${house.id()}]],
+            url: "/admin/houses/edit-house/"+[[${house.id()}]],
             contentType: false,
             processData: false,
             data:formData

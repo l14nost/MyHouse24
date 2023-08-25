@@ -181,7 +181,7 @@
             var formData = new FormData(form);
             $.ajax({
                 method:"PUT",
-                url: "/admin/edit-user/"+[[${user.id()}]],
+                url: "/admin/users/edit-user/"+[[${user.id()}]],
                 contentType: false,
                 processData: false,
                 data:formData

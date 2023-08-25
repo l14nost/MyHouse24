@@ -214,7 +214,7 @@
             });
             formData.append("deleteBlockList", deleteIdsBlock);
             $.ajax({
-                url: "/admin/site-service-page-save",
+                url: "/admin/site/service-page-save",
                 method: "PUT",
                 contentType: false,
                 processData: false,
@@ -282,7 +282,7 @@
                 })
         }
         function cancelMainPage(){
-            window.location.href = "/admin/site-service-page"
+            window.location.href = "/admin/site/service-page"
         }
 
         function addService(){

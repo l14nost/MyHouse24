@@ -360,7 +360,7 @@
             formData.append("deleteAddGalleryList", deleteIdsAddGallery);
             formData.append("deleteDocumentList", deleteIds);
             $.ajax({
-                url: "/admin/site-about-save",
+                url: "/admin/site/about-save",
                 method: "PUT",
                 contentType: false,
                 processData: false,
@@ -427,7 +427,7 @@
                 })
         }
         function cancelAboutPage(){
-            window.location.href = "/admin/site-about"
+            window.location.href = "/admin/site/about"
         }
 
         function addPhoto(div){

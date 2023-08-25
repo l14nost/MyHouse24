@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("messages")
+
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
 
 
-    @GetMapping("/messages")
+    @GetMapping({"/",""})
     public String messageMainPage(){
         return "/admin/pages/message/message-main";
     }

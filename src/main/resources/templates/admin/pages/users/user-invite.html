@@ -90,7 +90,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/invite-user",
+                url: "/admin/users/invite-user",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData),
             }).done(
