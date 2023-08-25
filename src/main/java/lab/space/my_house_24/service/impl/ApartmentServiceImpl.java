@@ -154,4 +154,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepository.findAllByHouse_Id(section);
     }
 
+    @Override
+    public List<ApartmentResponseForTable> apartmentListForSelect() {
+        return apartmentRepository.findAll().stream().map(ApartmentMapper::entityToDtoForTable).toList();
+    }
+
 }

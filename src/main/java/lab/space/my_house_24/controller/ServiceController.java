@@ -1,8 +1,10 @@
 package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
+import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.service.ServiceRequest;
 import lab.space.my_house_24.model.service.ServiceResponse;
+import lab.space.my_house_24.model.service.ServiceResponseForSelect;
 import lab.space.my_house_24.model.service.ServiceSaveRequest;
 import lab.space.my_house_24.model.unit.UnitRequest;
 import lab.space.my_house_24.model.unit.UnitResponse;
@@ -14,6 +16,7 @@ import lab.space.my_house_24.validator.ServiceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -97,6 +100,12 @@ public class ServiceController {
     @DeleteMapping("/delete-unit/{id}")
     public ResponseEntity<?> deleteUnitById(@PathVariable Long id) {
         return unitService.deleteUnitById(id);
+    }
+
+    @GetMapping("/get-services-for-select")
+    @ResponseBody
+    public Page<ServiceResponseForSelect> serviceForSelect(@RequestParam Integer page, @RequestParam String search){
+        return serviceService.serviceResponseForSelect(page,search);
     }
 
 }

@@ -64,7 +64,16 @@
                     logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
                 }
                 else if (newClass.indexOf('sidebar-mini') === -1){
-                    logoImg.src = '/admin/assets/images/pages/logo.svg';
+                    $.ajax({
+                        url: "/admin/get-locale"
+                    })
+                        .done(function (response){
+                            if (response === 'en') {
+                                logoImg.src = '/admin/assets/images/pages/logo-en.png';
+                            } else if (response === 'uk') {
+                                logoImg.src = '/admin/assets/images/pages/logo-ua1.png';
+                            }
+                        });
                 }
 
             }
@@ -98,10 +107,12 @@
     function getLocale(){
 
 
+
         $.ajax({
             url: "/admin/get-locale"
         })
             .done(function (response){
+                const logoImg = document.getElementById('logoImg');
                 const container = document.getElementById("langDiv");
                 const newImg = document.createElement("img");
                 newImg.classList.add("img-fluid");
@@ -113,8 +124,10 @@
                 newImg.id = "langImg"
                 if (response === 'en') {
                     newImg.src = '/admin/assets/images/Flag/flag001.png';
+                    logoImg.src = '/admin/assets/images/pages/logo-en.png';
                 } else if (response === 'uk') {
                     newImg.src  = '/admin/assets/images/Flag/flag002.png';
+                    logoImg.src = '/admin/assets/images/pages/logo-ua1.png';
                 }
                 container.appendChild(newImg);
             });

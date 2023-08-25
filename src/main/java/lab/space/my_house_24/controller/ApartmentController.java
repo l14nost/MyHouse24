@@ -142,7 +142,8 @@ public class ApartmentController {
 
     @GetMapping("/get-apartment")
     @ResponseBody
-    public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam Long idSection,@RequestParam Long idFloor){
+    public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam(required = false) Long idSection,@RequestParam(required = false) Long idFloor){
+        System.out.println(idFloor+" "+idHouse+" "+idSection);
         return apartmentService.apartmentForSelect(idHouse,idSection,idFloor);
 
     }

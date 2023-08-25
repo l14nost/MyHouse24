@@ -29,4 +29,6 @@ public interface ApartmentService {
     List<Apartment> findAllApartmentByHouse(Long house);
     List<Apartment> findAllApartmentByFloor(Long floor);
     List<Apartment> findAllApartmentBySection(Long section);
+
+    List<ApartmentResponseForTable> apartmentListForSelect();
 }
