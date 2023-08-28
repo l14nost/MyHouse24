@@ -27,7 +27,7 @@ public class MeterReadingMapper {
     public static MeterReadingResponseForApartment entityToDtoForApartment(MeterReading meterReading){
         return MeterReadingResponseForApartment.builder()
                 .id(meterReading.getId())
-                .status(meterReading.getStatus().getMeterReadingStatus(LocaleContextHolder.getLocale()))
+                .status(EnumMapper.toSimpleDto(meterReading.getStatus().name(), meterReading.getStatus().getMeterReadingStatus(LocaleContextHolder.getLocale())))
                 .section(meterReading.getApartment().getSection().getName())
                 .apartment("№"+meterReading.getApartment().getNumber())
                 .house(meterReading.getApartment().getHouse().getName())

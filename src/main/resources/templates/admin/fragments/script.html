@@ -285,6 +285,19 @@
             }
         }
     });
+
+    function addMeterReadingStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'NEW') badgeClasses += ' bg-warning';
+        if (status?.name === 'ZERO') badgeClasses += ' bg-primary';
+        if (status?.name === 'CONSIDERED') badgeClasses += ' bg-success';
+        if (status?.name === 'CONSIDERED_PAID') badgeClasses += ' bg-success';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
 </script>
 
 

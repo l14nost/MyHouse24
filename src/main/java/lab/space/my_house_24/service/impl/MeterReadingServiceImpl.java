@@ -54,7 +54,7 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         meterReading.setApartment(Apartment.builder().id(meterReadingRequestForEdit.apartment()).build());
         meterReading.setDate(meterReadingRequestForEdit.date().atStartOfDay(ZoneId.systemDefault()).toInstant());
         meterReading.setCount(meterReadingRequestForEdit.count());
-        meterReading.setStatus(meterReading.getStatus());
+        meterReading.setStatus(meterReadingRequestForEdit.status());
         meterReadingRepository.save(meterReading);
     }
 
