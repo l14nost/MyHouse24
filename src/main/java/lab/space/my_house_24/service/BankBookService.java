@@ -17,4 +17,6 @@ public interface BankBookService {
     void setBankBookApartmentIdNull(Long id);
 
     void update(Long id,BankBook bankBook);
+
+    Long count();
 }

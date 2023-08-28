@@ -47,4 +47,9 @@ public class BankBookServiceImpl implements BankBookService {
         bankBook1.setBankBookStatus(bankBook.getBankBookStatus());
         bankBookRepository.save(bankBook1);
     }
+
+    @Override
+    public Long count() {
+        return bankBookRepository.count();
+    }
 }

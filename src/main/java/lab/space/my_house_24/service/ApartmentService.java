@@ -31,4 +31,6 @@ public interface ApartmentService {
     List<Apartment> findAllApartmentBySection(Long section);
 
     List<ApartmentResponseForTable> apartmentListForSelect();
+
+    Long count();
 }

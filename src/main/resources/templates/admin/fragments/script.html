@@ -257,7 +257,6 @@
         for (var i = 0; i < navLinks.length; i++) {
             ids.push(navLinks[i].id);
         }
-        console.log(chapter);
         for (var i =0; i< ids.length; i++){
             if (chapter.includes(ids[i]) && !chapter.includes("site") && !chapter.includes("system")){
                 var targetLinks = document.getElementById(ids[i]);

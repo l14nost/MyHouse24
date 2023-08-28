@@ -159,4 +159,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepository.findAll().stream().map(ApartmentMapper::entityToDtoForTable).toList();
     }
 
+    @Override
+    public Long count() {
+        return apartmentRepository.count();
+    }
+
 }

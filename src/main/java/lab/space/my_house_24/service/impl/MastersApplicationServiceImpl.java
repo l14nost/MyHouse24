@@ -146,4 +146,9 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
                 )
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Long countByStatus(MastersApplicationStatus mastersApplicationStatus) {
+        return repository.countByMastersApplicationStatus(mastersApplicationStatus);
+    }
 }

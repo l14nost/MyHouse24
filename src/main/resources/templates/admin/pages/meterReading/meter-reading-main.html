@@ -24,7 +24,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{users.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text = "#{left.sidebar.meter.reading}"></li>
                     </ol>
                 </nav>
@@ -63,20 +63,20 @@
                     </tr>
                     <tr id="searchApartmentTable">
                         <form id="filter">
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
-                            <option selected=""></option>
-                        </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
-                            <option selected=""></option>
-                        </select></td>
-                        <td>
-                            <input class="form-control" type="number" name="apartment" style="width: 100px">
-                        </td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="service" id="service">
-                            <option selected=""></option>
-                        </select></td>
-                        <td></td>
-                        <td></td>
+                            <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                                <option selected=""></option>
+                            </select></td>
+                            <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
+                                <option selected=""></option>
+                            </select></td>
+                            <td>
+                                <input class="form-control" type="number" name="apartment" style="width: 100px">
+                            </td>
+                            <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="service" id="service">
+                                <option selected=""></option>
+                            </select></td>
+                            <td></td>
+                            <td></td>
                         </form>
                         <td>
                         </td>
@@ -230,7 +230,6 @@
                     cache: true,
                 },
                 placeholder: defaultSelect,
-                allowClear: true,
                 minimumResultsForSearch:5
             });
             $("#house").select2({
@@ -322,6 +321,14 @@
                     }
             });
             $('#section').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#service').on('select2:select', function () {
                 var formData = new FormData(form);
                 for (var pair of formData.entries()){
                     if (filterData.get(pair[0])!==pair[1]){

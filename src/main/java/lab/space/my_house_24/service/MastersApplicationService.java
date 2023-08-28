@@ -1,6 +1,7 @@
 package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.MastersApplication;
+import lab.space.my_house_24.enums.MastersApplicationStatus;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.masters_application.MastersApplicationRequest;
 import lab.space.my_house_24.model.masters_application.MastersApplicationResponse;
@@ -29,4 +30,6 @@ public interface MastersApplicationService {
     List<EnumResponse> getAllStatus();
 
     List<EnumResponse> getAllTypeMaster();
+
+    Long countByStatus(MastersApplicationStatus mastersApplicationStatus);
 }
