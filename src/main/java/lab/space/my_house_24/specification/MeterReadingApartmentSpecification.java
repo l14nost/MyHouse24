@@ -51,6 +51,8 @@ public class MeterReadingApartmentSpecification implements Specification<MeterRe
             predicates.add(criteriaBuilder.between(root.get("date"),start,end));
         }
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(root.get("id")));
+
         return predicate;
 
 

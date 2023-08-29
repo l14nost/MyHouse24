@@ -55,4 +55,6 @@ public interface StaffService {
     List<StaffResponseForHouseAdd> getAllStaffDtoForHouse();
 
     Long getCurrentStaff();
+
+    void changeTheme(Boolean theme);
 }

@@ -53,6 +53,8 @@ public class MeterReadingSpecification implements Specification<MeterReading> {
         predicates.add(inExpression);
 
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(root.get("id")));
+
         return predicate;
 
 

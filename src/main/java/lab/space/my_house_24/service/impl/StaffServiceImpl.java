@@ -330,4 +330,11 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return staffRepository.findByEmail(authentication.getName()).orElseThrow(() -> new EntityNotFoundException("Staff not found by email " + authentication.getName())).getId();
     }
+
+    @Override
+    public void changeTheme(Boolean theme) {
+        Staff staff = getStaffById(getCurrentStaff());
+        staff.setTheme(theme);
+        staffRepository.save(staff);
+    }
 }

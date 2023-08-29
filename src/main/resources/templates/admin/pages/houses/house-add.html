@@ -252,6 +252,47 @@
 </th:block>
 <th:block layout:fragment="extra-script">
 <script>
+    const inputsSection = document.querySelectorAll('.section');
+
+    inputsSection.forEach(input => {
+        input.addEventListener('input', event => {
+            const parentDiv = document.getElementById('nav-tabContent');
+            const invalidFeedbackDiv = parentDiv.querySelector('.invalid-feedback');
+            if (invalidFeedbackDiv) {
+                var buttonElement1 = document.querySelector("#nav-section-tab");
+                buttonElement1.removeAttribute("style");
+            }
+        });
+    });
+
+    const inputsFloor = document.querySelectorAll('.floor');
+
+    inputsFloor.forEach(input => {
+        input.addEventListener('input', event => {
+            const parentDiv = document.getElementById('nav-floor');
+            const invalidFeedbackDiv = parentDiv.querySelector('.invalid-feedback');
+            if (invalidFeedbackDiv) {
+                var buttonElement1 = document.querySelector("#nav-floor-tab");
+                buttonElement1.removeAttribute("style");
+            }
+        });
+    });
+
+    $('.users').on('select2:select', function(e) {
+        let isInvalidLength = document.querySelectorAll('.is-invalid');
+        let invalidFeedbackLength = document.querySelectorAll('.invalid-feedback');
+        if (isInvalidLength.length>0||invalidFeedbackLength>0) {
+            const selectId = e.target.id;
+            let number = selectId.substring(5);
+            clearSimpleValidMessages('userDiv'+number);
+        }
+        const parentDiv = document.getElementById('nav-users');
+        const invalidFeedbackDiv = parentDiv.querySelector('.invalid-feedback');
+        if (invalidFeedbackDiv) {
+            var buttonElement1 = document.querySelector("#nav-users-tab");
+            buttonElement1.removeAttribute("style");
+        }
+    });
 
     function addSection(){
         $.ajax({

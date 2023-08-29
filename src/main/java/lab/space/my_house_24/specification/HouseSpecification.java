@@ -30,6 +30,7 @@ public class HouseSpecification implements Specification<House> {
             predicates.add(criteriaBuilder.like(root.get("name"), "%"+houseRequestForMainPage.name()+"%"));
         }
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(root.get("id")));
         return predicate;
 
 

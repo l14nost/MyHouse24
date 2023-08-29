@@ -105,9 +105,6 @@
     }
 
     function getLocale(){
-
-
-
         $.ajax({
             url: "/admin/get-locale"
         })
@@ -179,16 +176,23 @@
     function validResponse(divId, message, afterDiv) {
 
         $(divId).addClass('is-invalid');
+        let validId = divId+'Valid';
         if (afterDiv) {
-            $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
+            $(divId).parents(afterDiv).append('<div class="invalid-feedback" id="'+validId+'">' + message + '</div>');
         } else {
-            $(divId).after('<div class="invalid-feedback">' + message + '</div>');
+            $(divId).after('<div class="invalid-feedback" id="'+validId+'">' + message + '</div>');
         }
     }
 
     function clearValidMessages() {
         $('.is-invalid').removeClass('is-invalid');
         $('.invalid-feedback').remove();
+    }
+
+    function clearSimpleValidMessages(id) {
+        let validId = id +'Valid'
+        $('#'+id).removeClass('is-invalid');
+        $('#'+validId).remove();
     }
 
 
@@ -298,7 +302,121 @@
 
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
+
+
+    function formatNumberWithZeroes(number, length) {
+        const numString = number.toString();
+        const diff = length - numString.length;
+
+        if (diff > 0) {
+            const zeroes = '0'.repeat(diff);
+            return zeroes + numString;
+        }
+
+        return numString;
+    }
+
+    function changeTheme(checked){
+        if (checked){
+            const bodyElement = document.body;
+            bodyElement.classList.remove("dark");
+        }
+        else {
+            const bodyElement = document.body;
+            bodyElement.classList.add("dark");
+        }
+    }
+
+    const checkbox = document.getElementById('switchTheme');
+
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            $.ajax({
+                url: "/admin/change-theme",
+                method: "POST",
+                data:{
+                    theme: true
+                }
+            })
+            changeTheme(true);
+        } else {
+            $.ajax({
+                url: "/admin/change-theme",
+                method: "POST",
+                data:{
+                    theme: false
+                }
+            })
+            changeTheme(false);
+        }
+    });
+
+
+    $(document).ready ( function(){
+        function getTheme() {
+            $.ajax({
+                url: "/admin/get-theme"
+            })
+                .done(function(response) {
+                    const checkbox = document.getElementById('switchTheme');
+                    if (response === null) {
+                        checkbox.checked = true;
+                        changeTheme(true);
+                    } else {
+                        checkbox.checked = response;
+                        changeTheme(response);
+                    }
+                });
+        }
+
+        getTheme();
+    });
 </script>
+<script>
+
+
+    $('.form-select').on('select2:select', function(e) {
+        let isInvalidLength = document.querySelectorAll('.is-invalid');
+        let invalidFeedbackLength = document.querySelectorAll('.invalid-feedback');
+        if (isInvalidLength.length>0||invalidFeedbackLength>0) {
+            const selectId = e.target.id;
+            clearSimpleValidMessages(selectId);
+        }
+    });
+
+    const inputs = document.querySelectorAll('.form-control');
+
+    inputs.forEach(input => {
+        input.addEventListener('input', event => {
+            let isInvalidLength = document.querySelectorAll('.is-invalid');
+            let invalidFeedbackLength = document.querySelectorAll('.invalid-feedback');
+            if (isInvalidLength.length>0||invalidFeedbackLength>0) {
+                const inputId = event.target.id;
+                clearSimpleValidMessages(inputId);
+            }
+        });
+    });
+</script>
+<script>
+    window.onload = function () {
+        document.body.classList.add('loaded_hiding');
+        window.setTimeout(function () {
+            document.body.classList.add('loaded');
+            document.body.classList.remove('loaded_hiding');
+        }, 500);
+    }
+</script>
+
+<script>
+    $(window).on('load', function () {
+        $('body').addClass('loaded_hiding');
+        window.setTimeout(function () {
+            $('body').addClass('loaded');
+            $('body').removeClass('loaded_hiding');
+        }, 500);
+    })
+</script>
+
 
 
 

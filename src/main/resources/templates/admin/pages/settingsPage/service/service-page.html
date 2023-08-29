@@ -183,6 +183,8 @@
 
             quillContentList.forEach(function(item) {
                 var editorDiv = document.createElement("div");
+                editorDiv.classList.add("blockDescription");
+
                 editorDiv.id = "blockDescription" + item.id;
                 document.querySelector("#blockDescriptionDiv"+item.id).appendChild(editorDiv);
 
@@ -190,6 +192,9 @@
                     theme: "snow"
                 });
                 quill.root.innerHTML = item.description;
+                quill.on('text-change', function(delta, oldDelta, source) {
+                    clearSimpleValidMessages("blockDescriptionDiv"+item.id);
+                });
             });
         });
 

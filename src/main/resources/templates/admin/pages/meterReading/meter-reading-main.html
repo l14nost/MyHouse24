@@ -276,6 +276,7 @@
                 minimumResultsForSearch: Infinity
             });
             $("#house").on("change", function (){
+                $('#section').val(null).trigger("change");
                 var idHouse = this.value;
                         $("#section").select2({
                             theme: 'bootstrap-5',

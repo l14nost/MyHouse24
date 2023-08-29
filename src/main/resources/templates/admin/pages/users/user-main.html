@@ -37,10 +37,10 @@
     </div>
     <div class="col-sm-12">
         <div style="display: flex; justify-content: right; margin-bottom: 30px">
-            <div class="btn-group">
-                <button type="button" class="btn btn-success disabled" th:text = "#{users.choose.button}"></button>
-                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="visually-hidden">Toggle Dropdown</span>
+            <div class="col text-end pe-0">
+                <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="me-2" th:text="#{users.choose.button}"></span>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" th:href="@{/users/add-user}" th:text = "#{users.choose.button.1}"></a></li>
@@ -75,25 +75,25 @@
                     </tr>
                     <tr id="searchUserTable">
                         <form id="filter">
-                        <td>
+                        <th>
                             <input class="form-control" type="text" name="id" id="id" style="width: 70px;">
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <input class="form-control" type="text" name="fullName" >
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <input class="form-control" type="text" name="number" style="width: 100px">
-                        </td>
-                        <td><input class="form-control" type="text" name="email"></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="house" name="house" style="width: 100px">
+                        </th>
+                        <th><input class="form-control" type="text" name="email"></th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="house" name="house" style="width: 100px">
                             <option value=""></option>
                             <option th:each="house:${houseList}" th:text="${house.name()}" th:value="${house.name()}"></option>
-                        </select></td>
+                        </select></th>
 
-                        <td>
+                        <th>
                             <input class="form-control" type="text" name="apartmentNumber">
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <div class="input-group">
                                 <input class="form-control flatpickr_humandate" type="text"  data-id="range" name="addDate" aria-describedby="datePicker">
                                 <span class="input-group-text" id="datePicker">
@@ -102,24 +102,24 @@
                                     </svg>
                                 </span>
                             </div>
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status" style="width: 80px">
                                 <option value=""></option>
                                 <option th:each="status:${T(lab.space.my_house_24.enums.UserStatus).values()}" th:text="${status.getUserStatus(#locale)}"  th:value="${status.name()}"></option>
                             </select>
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="duty" name="duty" style="width: 80px">
                                 <option value=""></option>
                                 <option th:text="#{users.table.duty.yes}" value="true"></option>
                                 <option th:text="#{users.table.duty.no}" value="false"></option>
                             </select>
-                        </td>
+                        </th>
                         </form>
-                        <td >
+                        <th >
 
-                        </td>
+                        </th>
                     </tr>
                     </thead>
                     <tbody id="table" style="min-height: 55px">

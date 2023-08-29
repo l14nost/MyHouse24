@@ -341,6 +341,9 @@
         };
         var editor = new Quill('#description', options);
         editor.root.innerHTML = /*[[${about.description()}]]*/ '';
+        editor.on('text-change', function(delta, oldDelta, source) {
+            clearSimpleValidMessages("description");
+        });
 
         var options1 = {
             modules: {
@@ -350,6 +353,9 @@
         };
         var editor1 = new Quill('#addDescription', options1);
         editor1.root.innerHTML = /*[[${about.descriptionAdd()}]]*/ '';
+        editor1.on('text-change', function(delta, oldDelta, source) {
+            clearSimpleValidMessages("addDescription");
+        });
 
         function saveAboutPage(){
             var form = document.getElementById("aboutPage");

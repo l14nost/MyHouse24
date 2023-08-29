@@ -20,6 +20,7 @@ public class MessageSpecification implements Specification<Message> {
     public Predicate toPredicate(Root<Message> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
         Predicate predicate = criteriaBuilder.and(criteriaBuilder.like(root.get("title"), "%"+mainPageRequest.keyWord()+"%"));
+        query.orderBy(criteriaBuilder.desc(root.get("id")));
         return predicate;
 
 

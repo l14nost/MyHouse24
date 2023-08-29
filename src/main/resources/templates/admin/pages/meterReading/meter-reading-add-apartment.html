@@ -104,7 +104,7 @@
                         <div style="display: flex; justify-content: right;  margin-bottom: 10px; margin-right: 20px">
                             <button onclick="cancelApartment()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px"></button>
                             <button onclick="saveApartment()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px"></button>
-<!--                            <button onclick="saveAndAddApartment()" type="button" class="btn btn-success" th:text="#{global.button.save.and.add}" style="width: 250px; margin-left: 10px"></button>-->
+                            <button onclick="saveAndAddApartment()" type="button" class="btn btn-success" th:text="#{global.button.save.and.add}" style="width: 250px; margin-left: 10px"></button>
                         </div>
                     </div>
             </div>
@@ -405,6 +405,11 @@
         function saveAndAddApartment(){
             var form = document.getElementById("apartmentAdd");
             var formData = new FormData(form);
+
+            if ($("#date").val() !==''){
+                formData.delete("date");
+                formData.append("date",getTrueDate($("#date").val()));
+            }
             var jsonData = {};
             formData.forEach((value, key) => {
                 jsonData[key] = value;
@@ -412,7 +417,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-apartment-save",
+                url: "/admin/meter-readings/add-meter-reading",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(
@@ -420,7 +425,7 @@
                     showToast("success");
                     var number = document.getElementById("number");
                     var numberValue = parseFloat(number.value);
-                    number.value = numberValue + 1;
+                    number.value = formatNumberWithZeroes(numberValue + 1,9);
                 }
             ).fail(
                 function(response){
@@ -429,8 +434,8 @@
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
                         var values = Object.values(errors)[i];
-                        if (keys === 'floor'){
-                            validResponse("#"+keys,values,"#floorResponse");
+                        if (keys === 'status'){
+                            validResponse("#"+keys,values,"#statusResponse");
                         }
                         if (keys === 'house'){
                             validResponse("#"+keys,values,"#houseResponse");
@@ -438,13 +443,16 @@
                         if (keys === 'section'){
                             validResponse("#"+keys,values,"#sectionResponse");
                         }
-                        if (keys === 'owner'){
-                            validResponse("#"+keys,values,"#ownerResponse");
+                        if (keys === 'apartment'){
+                            validResponse("#"+keys,values,"#apartmentResponse");
                         }
-                        if (keys === 'rate'){
-                            validResponse("#"+keys,values,"#rateResponse");
+                        if (keys === 'service'){
+                            validResponse("#"+keys,values,"#serviceResponse");
                         }
-                        if (keys === 'number' || keys === 'area' || keys==='bankBook') {
+                        if (keys === 'date'){
+                            validResponse($('#date'),values,"div");
+                        }
+                        else if (keys === 'count') {
                             validResponse("#" + keys, values);
                         }
                     }

@@ -176,6 +176,9 @@
         };
         var editor = new Quill('#description', options);
         editor.root.innerHTML = /*[[${contactPage.description()}]]*/'';
+        editor.on('text-change', function(delta, oldDelta, source) {
+            clearSimpleValidMessages("description");
+        });
 
         function saveMainPage(){
             var form = document.getElementById("contactPage");

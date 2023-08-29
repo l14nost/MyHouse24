@@ -62,6 +62,7 @@ public class UserSpecification implements Specification<User> {
             predicates.add(criteriaBuilder.equal(root.get("userStatus"), UserStatus.valueOf(userMainPageRequest.status())));
         }
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        query.orderBy(criteriaBuilder.desc(root.get("id")));
         return predicate;
 
 

@@ -370,6 +370,10 @@
         };
         var editor = new Quill('#message', options);
 
+        editor.on('text-change', function(delta, oldDelta, source) {
+            clearSimpleValidMessages("message");
+        });
+
 
 
 

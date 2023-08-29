@@ -31,7 +31,7 @@ public record ApartmentAddRequest(
 
         @NotNull(message = "{not.blank.message}")
         Long rate,
-        @NotBlank(message = "{not.blank.message}")
+//        @NotBlank(message = "{not.blank.message}")
         @Size(max = 9, message = "{size.less.message}"+" 9")
         String bankBook
 

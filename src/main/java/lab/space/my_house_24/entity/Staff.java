@@ -49,6 +49,9 @@ public class Staff implements UserDetails {
     private String forgotToken;
 
     @Column
+    private Boolean theme;
+
+    @Column
     private Boolean tokenUsage;
 
     @Column

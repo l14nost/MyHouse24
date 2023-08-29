@@ -8,6 +8,9 @@ import lab.space.my_house_24.model.rate.RateResponseForTable;
 
 public class BankBookMapper {
     public  static BankBookResponseForTable entityToDtoForTable(BankBook bankBook){
-        return BankBookResponseForTable.builder().number(bankBook.getNumber()).id(bankBook.getId()).build();
+        if (bankBook!=null) {
+            return BankBookResponseForTable.builder().number(bankBook.getNumber()).id(bankBook.getId()).build();
+        }
+        else return BankBookResponseForTable.builder().build();
     }
 }

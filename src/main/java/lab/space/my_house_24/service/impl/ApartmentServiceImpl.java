@@ -61,7 +61,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public void saveApartment(ApartmentAddRequest apartmentAddRequest) {
-        Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
+
         Apartment apartment = Apartment.builder()
                 .number(apartmentAddRequest.number())
                 .area(apartmentAddRequest.area())
@@ -71,13 +71,15 @@ public class ApartmentServiceImpl implements ApartmentService {
                 .house(House.builder().id(apartmentAddRequest.house()).build())
                 .user(User.builder().id(apartmentAddRequest.owner()).build())
                 .build();
-        if (bankBookOptional.isEmpty()){
-            apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
-        }
-        else {
-            BankBook bankBook = bankBookOptional.get();
-            bankBook.setApartment(apartment);
-            apartment.setBankBook(bankBook);
+        if (apartmentAddRequest.bankBook()!=null && !apartmentAddRequest.bankBook().isEmpty()) {
+            Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
+            if (bankBookOptional.isEmpty()) {
+                apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
+            } else {
+                BankBook bankBook = bankBookOptional.get();
+                bankBook.setApartment(apartment);
+                apartment.setBankBook(bankBook);
+            }
         }
         apartmentRepository.save(apartment);
     }
@@ -90,7 +92,6 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest) {
         Apartment apartment = findById(id);
-        Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
         apartment.setArea(apartmentAddRequest.area());
         apartment.setHouse(House.builder().id(apartmentAddRequest.house()).build());
         apartment.setNumber(apartmentAddRequest.number());
@@ -98,17 +99,19 @@ public class ApartmentServiceImpl implements ApartmentService {
         apartment.setRate(Rate.builder().id(apartmentAddRequest.rate()).build());
         apartment.setFloor(Floor.builder().id(apartmentAddRequest.floor()).build());
         apartment.setSection(Section.builder().id(apartmentAddRequest.section()).build());
-        if (bankBookOptional.isEmpty()){
-            apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
-        }
-        else {
-            BankBook bankBook = bankBookOptional.get();
-            if (!bankBook.getId().equals(apartment.getBankBook().getId())){
-                apartment.getBankBook().setApartment(null);
-            }
-            bankBook.setApartment(apartment);
-            apartment.setBankBook(bankBook);
+        if (apartmentAddRequest.bankBook()!=null && !apartmentAddRequest.bankBook().isEmpty()) {
+            Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
+            if (bankBookOptional.isEmpty()) {
+                apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
+            } else {
+                BankBook bankBook = bankBookOptional.get();
+                if (!bankBook.getId().equals(apartment.getBankBook().getId())) {
+                    apartment.getBankBook().setApartment(null);
+                }
+                bankBook.setApartment(apartment);
+                apartment.setBankBook(bankBook);
 
+            }
         }
         apartmentRepository.save(apartment);
     }

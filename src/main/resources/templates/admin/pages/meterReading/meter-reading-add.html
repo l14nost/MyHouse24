@@ -33,7 +33,7 @@
         <div class="col-3">
             <div class="input-group">
                 <span class="input-group-text" id="inputGroupPrepend3" disabled>№</span>
-                <input class="form-control" type="text" disabled th:value="${number}">
+                <input class="form-control" type="text" disabled th:value="${number}" id="number">
             </div>
         </div>
         <div class="col-auto mt-2" th:text="#{masters_call.card.time.at}"></div>
@@ -404,6 +404,11 @@
         function saveAndAddApartment(){
             var form = document.getElementById("apartmentAdd");
             var formData = new FormData(form);
+
+            if ($("#date").val() !==''){
+                formData.delete("date");
+                formData.append("date",getTrueDate($("#date").val()));
+            }
             var jsonData = {};
             formData.forEach((value, key) => {
                 jsonData[key] = value;
@@ -411,7 +416,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-apartment-save",
+                url: "/admin/meter-readings/add-meter-reading",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(
@@ -419,7 +424,7 @@
                     showToast("success");
                     var number = document.getElementById("number");
                     var numberValue = parseFloat(number.value);
-                    number.value = numberValue + 1;
+                    number.value = formatNumberWithZeroes(numberValue + 1,9);
                 }
             ).fail(
                 function(response){
@@ -428,8 +433,8 @@
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
                         var values = Object.values(errors)[i];
-                        if (keys === 'floor'){
-                            validResponse("#"+keys,values,"#floorResponse");
+                        if (keys === 'status'){
+                            validResponse("#"+keys,values,"#statusResponse");
                         }
                         if (keys === 'house'){
                             validResponse("#"+keys,values,"#houseResponse");
@@ -437,13 +442,16 @@
                         if (keys === 'section'){
                             validResponse("#"+keys,values,"#sectionResponse");
                         }
-                        if (keys === 'owner'){
-                            validResponse("#"+keys,values,"#ownerResponse");
+                        if (keys === 'apartment'){
+                            validResponse("#"+keys,values,"#apartmentResponse");
                         }
-                        if (keys === 'rate'){
-                            validResponse("#"+keys,values,"#rateResponse");
+                        if (keys === 'service'){
+                            validResponse("#"+keys,values,"#serviceResponse");
                         }
-                        if (keys === 'number' || keys === 'area' || keys==='bankBook') {
+                        if (keys === 'date'){
+                            validResponse($('#date'),values,"div");
+                        }
+                        else if (keys === 'count') {
                             validResponse("#" + keys, values);
                         }
                     }
