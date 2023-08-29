@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -35,7 +36,7 @@ public class CashBox {
     private Instant date;
 
     @Column(nullable = false)
-    private Long sum;
+    private BigDecimal sum;
 
     @ManyToOne
     private Staff staff;

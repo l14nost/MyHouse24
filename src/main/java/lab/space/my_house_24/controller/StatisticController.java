@@ -18,6 +18,7 @@ public class StatisticController {
     private final BankBookService bankBookService;
     private final MastersApplicationService mastersApplicationService;
     private final ApartmentService apartmentService;
+    private final CashBoxService cashBoxService;
 
     @GetMapping({"/", ""})
     public String showMastersApplicationPage(Model model) {
@@ -27,6 +28,8 @@ public class StatisticController {
         model.addAttribute("bankBook",bankBookService.count());
         model.addAttribute("masterApplicationAtWork",mastersApplicationService.countByStatus(MastersApplicationStatus.IN_PROCESS));
         model.addAttribute("masterApplicationNew",mastersApplicationService.countByStatus(MastersApplicationStatus.NEW));
+        model.addAttribute("cashStatement",cashBoxService.statisticCashStatement());
+        model.addAttribute("accountBalance",cashBoxService.statisticAccountBalance());
         return "admin/pages/statistic/statistic";
     }
 }

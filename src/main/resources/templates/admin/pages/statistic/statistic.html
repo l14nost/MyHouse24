@@ -195,7 +195,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
             </div>
-            <h2 class="counter" style="visibility: visible;">37K</h2>
+            <h2 class="counter" style="visibility: visible;" th:text="${accountBalance}"></h2>
           </div>
           <div class="pt-3">
             <svg class="icon-20" xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 20 20" fill="#b91d12">
@@ -224,7 +224,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
-            <h2 class="counter" style="visibility: visible;">37K</h2>
+            <h2 class="counter" style="visibility: visible;" th:text="${cashStatement}"></h2>
           </div>
           <div class="pt-3">
             <svg class="icon-20" xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 20 20" fill="#b91d12">
@@ -268,76 +268,133 @@
 
 <th:block layout:fragment="extra-script">
 <script>
-  if($('#extrachart1').length) {
-    const options = {
-      series: [{
-        name: '[[#{statistics.chart1.green}]]',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66,63, 60, 66]
-      }, {
-        name: '[[#{statistics.chart1.red}]]',
-        data: [35, 41, 36, 26, 45, 48, 52, 53, 41,52, 53, 41]
-      }],
-      chart: {
-        type: 'bar',
-        height: 400
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 5,
-          horizontal: false,
-          columnWidth: '55%',
-          endingShape: 'rounded'
+  function extraChart1(firstArray, secondArray) {
+    if ($('#extrachart1').length) {
+      const options = {
+        series: [{
+          name: '[[#{statistics.chart1.green}]]',
+          data: firstArray
+        }, {
+          name: '[[#{statistics.chart1.red}]]',
+          data: secondArray
+        }],
+        chart: {
+          type: 'bar',
+          height: 400
         },
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: ['[[#{statistics.chart.Jan}]]','[[#{statistics.chart.Feb}]]','[[#{statistics.chart.Mar}]]','[[#{statistics.chart.Apr}]]','[[#{statistics.chart.May}]]','[[#{statistics.chart.Jun}]]','[[#{statistics.chart.Jul}]]','[[#{statistics.chart.Aug}]]','[[#{statistics.chart.Sep}]]','[[#{statistics.chart.Oct}]]','[[#{statistics.chart.Nov}]]','[[#{statistics.chart.Dec}]]' ],
-      },
-      fill: {
-        opacity: 1,
-
-        colors:['#02851b', '#b91d12']
-
-      },
-      legend:{
-        labels:{
-          colors:['#02851b', '#b91d12']
+        plotOptions: {
+          bar: {
+            borderRadius: 5,
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
         },
-        markers: {
-          width: 100,
-          fillColors:['#02851b', '#b91d12']
+        dataLabels: {
+          enabled: false
         },
-      },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: ['[[#{statistics.chart.Jan}]]', '[[#{statistics.chart.Feb}]]', '[[#{statistics.chart.Mar}]]', '[[#{statistics.chart.Apr}]]', '[[#{statistics.chart.May}]]', '[[#{statistics.chart.Jun}]]', '[[#{statistics.chart.Jul}]]', '[[#{statistics.chart.Aug}]]', '[[#{statistics.chart.Sep}]]', '[[#{statistics.chart.Oct}]]', '[[#{statistics.chart.Nov}]]', '[[#{statistics.chart.Dec}]]'],
+        },
+        fill: {
+          opacity: 1,
 
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return "₴ " + val
+          colors: ['#02851b', '#b91d12']
+
+        },
+        legend: {
+          labels: {
+            colors: ['#02851b', '#b91d12']
+          },
+          markers: {
+            width: 100,
+            fillColors: ['#02851b', '#b91d12']
+          },
+        },
+
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "₴ " + val
+            }
           }
         }
-      }
-    };
+      };
 
-    const chart = new ApexCharts(document.querySelector("#extrachart1"), options);
-    chart.render();
+      const chart = new ApexCharts(document.querySelector("#extrachart1"), options);
+      chart.render();
+    }
   }
 
+  $(document).ready( async function () {
+    let firstArray = [];
+    let secondArray = [];
+    await $.ajax({
+      url: "/admin/receipt/get-sum-of-all-paid-bills",
+      success: function (responseJSON) {
+        firstArray = responseJSON;
+      },
+      error: function (error) {
+        firstArray = null;
+      }
+    });
+    await $.ajax({
+      url: "/admin/receipt/get-sum-of-all-bills",
+      success: function (responseJSON) {
+        secondArray = responseJSON;
+      },
+      error: function (error) {
+        secondArray = null;
+      }
+    });
 
+    extraChart1(firstArray,secondArray);
+
+
+  });
+
+
+
+  $(document).ready( async function () {
+    let firstArray = [];
+    let secondArray = [];
+    await $.ajax({
+      url: "/admin/cash-box/get-statistics-for-coming",
+      success: function (responseJSON) {
+        firstArray = responseJSON;
+      },
+      error: function (error) {
+        firstArray = null;
+      }
+    });
+    await $.ajax({
+      url: "/admin/cash-box/get-statistics-for-costs",
+      success: function (responseJSON) {
+        secondArray = responseJSON;
+      },
+      error: function (error) {
+        secondArray = null;
+      }
+    });
+
+    extraChart2(firstArray,secondArray);
+
+
+  });
+function extraChart2(firstArray,secondArray){
   if($('#extrachart2').length) {
     const options = {
       series: [{
         name: '[[#{statistics.chart2.green}]]',
-        data: [44, 55, 57, 56, 61, 58, 63, 60, 66,63, 60, 66]
+        data: firstArray
       }, {
         name: '[[#{statistics.chart2.red}]]',
-        data: [35, 41, 36, 26, 45, 48, 52, 53, 41,52, 53, 41]
+        data: secondArray
       }],
       chart: {
         type: 'bar',
@@ -386,10 +443,34 @@
         }
       }
     };
+    $(document).ready(function () {
+      $.ajax({
+        url: "/admin/cash-box/get-statistics-for-coming",
+        success: function (responseJSON) {
+          options.series[0].data = responseJSON;
+        },
+        error: function (error) {
+          options.series[0].data = null;
+        }
+      });
+
+      $.ajax({
+        url: "/admin/cash-box/get-statistics-for-costs",
+        success: function (responseJSON) {
+          options.series[1].data = responseJSON;
+        },
+        error: function (error) {
+          options.series[1].data = null;
+        }
+      });
+    });
+
 
     const chart = new ApexCharts(document.querySelector("#extrachart2"), options);
     chart.render();
   }
+}
+
 </script>
   <!-- put JS here for only this page -->
 

@@ -63,32 +63,32 @@
                     </tr>
                     <tr id="searchApartmentTable">
                         <form id="filter">
-                        <td>
+                        <th>
                             <input class="form-control" type="text" name="number" style="width: 70px;">
-                        </td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                        </th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
                             <option selected=""></option>
                             <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}"></option>
-                        </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
+                        </select></th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
                             <option selected=""></option>
 <!--                            <option th:each="section:${sectionList}" th:text="${section.name()}"></option>-->
-                        </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="floor" id="floor">
+                        </select></th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="floor" id="floor">
                             <option selected=""></option>
 <!--                            <option th:each="floor:${floorList}" th:text="${floor.name()}"></option>-->
-                        </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner" style="width: 150px">
+                        </select></th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner" style="width: 150px">
                             <option selected=""></option>
-                        </select></td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="balance" id="balance" >
+                        </select></th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="balance" id="balance" >
                             <option selected=""></option>
                             <option th:text="#{apartment.debt}" value="true"></option>
                             <option th:text="#{apartment.no.debt}" value="false"></option>
-                        </select></td>
+                        </select></th>
                         </form>
-                        <td>
-                        </td>
+                        <th>
+                        </th>
                     </tr>
                     </thead>
                     <tbody id="table" style="min-height: 55px">

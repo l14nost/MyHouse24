@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,9 @@ public class Bill {
 
     @Column(nullable = false)
     private Boolean draft;
+
+    @Column(nullable = false)
+    private Instant createAt;
 
     @ManyToOne
     private Apartment apartment;
