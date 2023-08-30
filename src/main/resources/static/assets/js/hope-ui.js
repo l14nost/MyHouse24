@@ -511,4 +511,14 @@ window.addEventListener('load', function () {
     }
   })
 
+  const custom_range_flatpicker = document.querySelectorAll('.custom_range_flatpicker')
+  Array.from(custom_range_flatpicker, (elem) => {
+    if (typeof flatpickr !== typeof undefined) {
+      flatpickr(elem, {
+        mode: "range",
+        dateFormat: "Y-m-d",
+      })
+    }
+  })
+
 })();

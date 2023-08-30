@@ -16,12 +16,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("houses")
 @RequiredArgsConstructor
 public class HouseController {
     private final HouseService houseService;
     private final HouseValidator houseValidator;
     private final StaffService staffService;
-    @GetMapping("/houses")
+    @GetMapping({"/",""})
     public String mainPage(){
         return "/admin/pages/houses/house-main";
     }

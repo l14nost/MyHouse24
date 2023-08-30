@@ -12,17 +12,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("site")
 @RequiredArgsConstructor
 public class AboutPageController {
     private final AboutService aboutService;
-    @GetMapping("/site-about")
+    @GetMapping("/about")
     public String aboutPage(Model model){
         model.addAttribute("about", aboutService.findByIdResponse(1L));
         return "/admin/pages/settingsPage/about/about-page";
     }
-    @PutMapping("/site-about-save")
+    @PutMapping("/about-save")
     public ResponseEntity saveAbout(@ModelAttribute @Valid AboutRequest aboutRequest, BindingResult result){
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));

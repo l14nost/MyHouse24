@@ -251,4 +251,9 @@ public class HouseServiceImpl implements HouseService {
     public List<House> findAll() {
         return houseRepository.findAll();
     }
+
+    @Override
+    public Long count() {
+        return houseRepository.count();
+    }
 }

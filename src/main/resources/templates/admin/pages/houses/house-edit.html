@@ -18,7 +18,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{users.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/houses}" th:text = "#{left.sidebar.houses}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" id = "breadcrumb" th:text="${house.name()}"></li>
                     </ol>
@@ -522,7 +522,7 @@
         formData.append("deleteStaffList", deleteIdsUser);
         $.ajax({
             method:"PUT",
-            url: "/admin/edit-house/"+[[${house.id()}]],
+            url: "/admin/houses/edit-house/"+[[${house.id()}]],
             contentType: false,
             processData: false,
             data:formData

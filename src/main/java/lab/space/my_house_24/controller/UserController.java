@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -26,7 +27,7 @@ public class UserController {
     private final HouseService houseService;
     private final UserValidator userValidator;
 
-    @GetMapping("/users")
+    @GetMapping({"/",""})
     public String userMainPage(Model model){
         model.addAttribute("houseList", houseService.houseListForTable());
         return "admin/pages/users/user-main";

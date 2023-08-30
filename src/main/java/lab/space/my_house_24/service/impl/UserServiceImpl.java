@@ -2,6 +2,7 @@ package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.User;
+import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.mapper.UserMapper;
 import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.repository.UserRepository;
@@ -142,6 +143,11 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(UserMapper::entityToResponseForMastersApplication)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countByStatus(UserStatus userStatus) {
+        return userRepository.countByUserStatus(userStatus);
     }
 
 

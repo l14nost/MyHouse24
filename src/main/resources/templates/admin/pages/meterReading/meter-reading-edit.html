@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text = "#{user.add.title}"></title>
+    <th:block layout:fragment="extra-style">
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{meter.reading.add.title}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/meter-readings}" th:text = "#{left.sidebar.meter.reading}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{meter.reading.add.title}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <form id="apartmentAdd" style="margin-top: 10px">
+    <div class="row mb-3">
+        <div class="col-3">
+            <div class="input-group">
+                <span class="input-group-text" id="inputGroupPrepend3" disabled>№</span>
+                <input class="form-control" type="text" disabled th:value="${meterReading.number()}">
+            </div>
+        </div>
+        <div class="col-auto mt-2" th:text="#{masters_call.card.time.at}"></div>
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" name="date" id="date" type="date" th:placeholder="#{masters_call.save.date.placeholder}" th:value="${meterReading.date()}">
+                <button class="input-group-text input-button pointer-event" disabled>
+                    <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="form-group" id="houseResponse">
+                                    <label class="form-label" th:text="#{meter.reading.add.house}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                                        <option selected=""></option>
+                                        <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}" th:selected="${house.id() == meterReading.house().id()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="sectionResponse">
+                                    <label class="form-label" th:text="#{meter.reading.add.section}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
+                                        <option selected=""></option>
+                                        <option th:each="section:${sectionList}" th:text="${section.name()}" th:value = "${section.id()}" th:selected="${section.id() == meterReading.section().id()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="apartmentResponse">
+                                    <label class="form-label" th:text="#{meter.reading.add.apartment}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="apartment" id="apartment">
+                                        <option selected=""></option>
+                                        <option th:each="apartment:${apartmentList}" th:text="${apartment.number()}" th:value = "${apartment.id()}" th:selected="${apartment.id() == meterReading.apartment().id()}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="serviceResponse">
+                                    <label class="form-label" th:text="#{meter.reading.add.service}"></label>
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="service" id="service">
+                                        <option selected=""></option>
+                                        <option th:each="service:${serviceList}" th:text="${service.name()}" th:value = "${service.id()}" th:selected="${service.id() == meterReading.service().id()}"></option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="statusResponse">
+                                <label class="form-label" th:text="#{meter.reading.add.status}"></label>
+                                <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status">
+                                    <option th:each="status:${T(lab.space.my_house_24.enums.MeterReadingStatus).values()}" th:text="${status.getMeterReadingStatus(#locale)}"  th:value="${status.name()}" th:selected="${status.name().equals(meterReading.status())}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" th:text="#{meter.reading.add.indicators}"></label>
+                                <input type="number" class="form-control" id="count"  name="count" th:value="${meterReading.count()}">
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: right;  margin-bottom: 10px; margin-right: 20px">
+                            <button onclick="cancelApartment()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px"></button>
+                            <button onclick="saveApartment()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px"></button>
+<!--                            <button onclick="saveAndAddApartment()" type="button" class="btn btn-success" th:text="#{global.button.save.and.add}" style="width: 250px; margin-left: 10px"></button>-->
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-modals">
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script>
+        const date_flatpickr = document.querySelectorAll('#date');
+        Array.from(date_flatpickr, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    minDate: "today",
+                    dateFormat: "d.m.Y",
+                })
+            }
+        })
+        function select2(lang){
+            var defaultSelect = " ";
+            $("#service").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                ajax: {
+                    url: "/admin/system-service/get-services-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true,
+                },
+                placeholder: defaultSelect,
+                minimumResultsForSearch:5
+            });
+            $("#house").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                ajax: {
+                    url: "/admin/houses/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true,
+                },
+                placeholder: defaultSelect,
+                minimumResultsForSearch:5
+            });
+            $("#apartment").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7
+            });
+            $("#section").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: 7
+            });
+            $("#house").on("change", function (){
+                $('#section').val(null).trigger("change");
+                $('#apartment').val(null).trigger("change");
+                var idHouse = this.value;
+                $("#section").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/get-section/"+idHouse,
+                        data: function (param) {
+                            return {
+                                search: param.term || "",
+                                page: param.page || 0
+                            }
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7
+                });
+                $("#apartment").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/apartments/get-apartment",
+                        data:{
+                            idHouse: idHouse
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7
+                });
+
+            })
+            $("#section").on("change", function (){
+                $('#apartment').val(null).trigger("change");
+                var idSection = this.value;
+                var idHouse = $("#house").val();
+                $("#apartment").select2({
+                    theme: 'bootstrap-5',
+                    language: lang,
+                    ajax: {
+                        url: "/admin/apartments/get-apartment",
+                        data:{
+                            idHouse: idHouse,
+                            idSection: idSection
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 0;
+                            var mappedResults = data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number
+                                };
+                            });
+                            return {
+                                results: mappedResults,
+                            }
+                        },
+                        cache: true
+                    },
+                    placeholder: defaultSelect,
+                    minimumResultsForSearch: 7
+                });
+
+            })
+            $("#status").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+        }
+
+        $(document).ready(function (){
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+            $("#bankBookSelect").on("change", function (){
+                var bankBook = document.getElementById("bankBook");
+                bankBook.value = this.value;
+            })
+
+        });
+
+
+
+
+
+
+        function cancelApartment(){
+            window.location.href = "/admin/meter-readings";
+        }
+        function getTrueDate(date){
+            let trueDate= '';
+            let split = date.split(".");
+            trueDate = split[2] + '-' + split[1] + '-' + split[0];
+            return trueDate;
+        }
+
+        function saveApartment(){
+            var form = document.getElementById("apartmentAdd");
+            var formData = new FormData(form);
+            let dateSplit = $("#date").val().split("-");
+            if ($("#date").val() !=='' && dateSplit.length<2){
+                formData.delete("date");
+                formData.append("date",getTrueDate($("#date").val()));
+            }
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            console.log(jsonData);
+            $.ajax({
+                method:"POST",
+                url: "/admin/meter-readings/edit-meter-reading/"+[[${meterReading.number()}]],
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            }).done(
+                function (response){
+                    window.location.href = "/admin/meter-readings";
+                }
+            ).fail(
+                function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        if (keys === 'status'){
+                            validResponse("#"+keys,values,"#statusResponse");
+                        }
+                        if (keys === 'house'){
+                            validResponse("#"+keys,values,"#houseResponse");
+                        }
+                        if (keys === 'section'){
+                            validResponse("#"+keys,values,"#sectionResponse");
+                        }
+                        if (keys === 'apartment'){
+                            validResponse("#"+keys,values,"#apartmentResponse");
+                        }
+                        if (keys === 'service'){
+                            validResponse("#"+keys,values,"#serviceResponse");
+                        }
+                        if (keys === 'date'){
+                            validResponse($('#date'),values,"div");
+                        }
+                        else if (keys === 'count') {
+                            validResponse("#" + keys, values);
+                        }
+                    }
+                }
+            )
+        }
+
+
+        function saveAndAddApartment(){
+            var form = document.getElementById("apartmentAdd");
+            var formData = new FormData(form);
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            console.log(jsonData);
+            $.ajax({
+                method:"POST",
+                url: "/admin/add-apartment-save",
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            }).done(
+                function (response){
+                    showToast("success");
+                    var number = document.getElementById("number");
+                    var numberValue = parseFloat(number.value);
+                    number.value = numberValue + 1;
+                }
+            ).fail(
+                function(response){
+                    clearValidMessages();
+                    let errors = response.responseJSON;
+                    for (var i =0; i<Object.keys(errors).length; i++){
+                        var keys = Object.keys(errors)[i];
+                        var values = Object.values(errors)[i];
+                        if (keys === 'floor'){
+                            validResponse("#"+keys,values,"#floorResponse");
+                        }
+                        if (keys === 'house'){
+                            validResponse("#"+keys,values,"#houseResponse");
+                        }
+                        if (keys === 'section'){
+                            validResponse("#"+keys,values,"#sectionResponse");
+                        }
+                        if (keys === 'owner'){
+                            validResponse("#"+keys,values,"#ownerResponse");
+                        }
+                        if (keys === 'rate'){
+                            validResponse("#"+keys,values,"#rateResponse");
+                        }
+                        if (keys === 'number' || keys === 'area' || keys==='bankBook') {
+                            validResponse("#" + keys, values);
+                        }
+                    }
+                }
+            )
+        }
+    </script>
+</th:block>
+</html>

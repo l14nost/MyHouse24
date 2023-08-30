@@ -1,6 +1,7 @@
 package lab.space.my_house_24.service;
 
 import lab.space.my_house_24.entity.User;
+import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.model.user.*;
 import org.springframework.data.domain.Page;
 
@@ -27,4 +28,6 @@ public interface UserService {
     Page<UserResponseForTable> userResponseForTables(Integer page, String search);
 
     List<UserResponseForMastersApplication> getAllUsersForMastersApplication();
+
+    Long countByStatus(UserStatus userStatus);
 }

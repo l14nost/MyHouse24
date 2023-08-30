@@ -18,7 +18,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{users.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/users}" th:text = "#{left.sidebar.apartment.owner}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text = "#{user.invite.title}"></li>
                     </ol>
@@ -90,7 +90,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/invite-user",
+                url: "/admin/users/invite-user",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData),
             }).done(

@@ -18,7 +18,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{global.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page"> <a th:href="@{/messages}" th:text = "#{left.sidebar.messages}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text = "#{message.add.title}"></li>
                     </ol>
@@ -109,7 +109,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/get-houses-for-select",
+                    url: "/admin/houses/get-houses-for-select",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -226,7 +226,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         method: "GET",
                         data:{
                           idHouse: idHouse,
@@ -262,7 +262,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
@@ -297,7 +297,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-apartment",
+                        url: "/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
@@ -327,6 +327,11 @@
         }
 
         $(document).ready(function (){
+            var pathAndQuery = window.location.pathname + window.location.search;
+            if (pathAndQuery === "/admin/messages/add-message-debt"){
+                var checkbox = document.getElementById("debt");
+                checkbox.checked = true;
+            }
             $.ajax({
                 url: "/admin/staff/get-current-staff"
             })
@@ -392,7 +397,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/add-message",
+                url: "/admin/messages/add-message",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(
@@ -401,8 +406,10 @@
                 }
             ).fail(
                 function(response){
+
                     clearValidMessages();
                     let errors = response.responseJSON;
+                    console.log(errors)
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
                         var values = Object.values(errors)[i];

@@ -150,4 +150,9 @@ public class BankBookServiceImpl implements BankBookService {
 
         return String.format("%05d-%05d", firstPart, secondPart);
     }
+
+    @Override
+    public Long count() {
+        return bankBookRepository.count();
+    }
 }

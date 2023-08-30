@@ -21,7 +21,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{users.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text = "#{left.sidebar.messages}"></li>
                     </ol>
                 </nav>
@@ -59,7 +59,7 @@
                     <form id="filter">
                         <div class="input-group search-input" style="width: 200px">
                             <input type="search" class="form-control" th:placeholder="#{message.table.search}" name="keyWord">
-                            <button class="btn btn-success" style="width: 50px; display: flex; justify-content: center; align-items: center">
+                            <button type="button" class="btn btn-success" style="width: 50px; display: flex; justify-content: center; align-items: center" onclick="filterSearch()">
                                 <div>
                                     <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
@@ -129,11 +129,11 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteEntityLabel">Delete Apartment Owner</h5>
+                    <h5 class="modal-title" id="confirmDeleteEntityLabel">Delete Messages</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete apartment?</p>
+                    <p>Are you sure you want to delete messages?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
@@ -215,7 +215,7 @@
 
 
 
-        document.addEventListener("click", function () {
+        function filterSearch () {
             var form = document.getElementById("filter");
             var formData = new FormData(form);
             for (var pair of formData.entries()){
@@ -224,7 +224,7 @@
                 }
             }
 
-        });
+        }
 
         document.addEventListener("DOMContentLoaded", function() {
             const form = document.getElementById("filter");
@@ -272,7 +272,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/get-all-message",
+                url: "/admin/messages/get-all-message",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -392,10 +392,10 @@
                 )
         }
         function entityCard(id){
-            window.location.href = "/admin/message-card/"+id;
+            window.location.href = "/admin/messages/message-card/"+id;
         }
         function entityAdd(){
-            window.location.href = "/admin/add-message";
+            window.location.href = "/admin/messages/add-message";
         }
 
 
@@ -418,7 +418,7 @@
             const idsQueryParam = deleteIds.join(',');
             $.ajax({
                 method: "DELETE",
-                url: "/admin/delete-messages",
+                url: "/admin/messages/delete-messages",
                 data: {
                     ids: idsQueryParam
                 }

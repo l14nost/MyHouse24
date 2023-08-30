@@ -11,23 +11,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("site")
 @RequiredArgsConstructor
 public class ContactPageController {
     private final ContactService contactService;
 
-    @GetMapping("/site-contact-page")
+    @GetMapping("/contact-page")
     public String contactPage(Model model){
         model.addAttribute("contactPage",contactService.findByIdResponse(1L));
         return "/admin/pages/settingsPage/contact/contact-page";
     }
 
-    @PutMapping("/site-contact-page-save")
+    @PutMapping("/contact-page-save")
     public ResponseEntity saveMainPage(@RequestBody @Valid ContactRequest contactRequest, BindingResult result){
         if (result.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));

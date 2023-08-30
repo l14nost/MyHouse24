@@ -32,4 +32,7 @@ public interface BankBookService {
     void saveBankBook(BankBook bankBook);
 
     void deleteBankBookById(Long id) throws EntityNotFoundException;
+    void update(Long id,BankBook bankBook);
+
+    Long count();
 }

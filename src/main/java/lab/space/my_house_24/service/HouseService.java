@@ -25,4 +25,6 @@ public interface HouseService {
     Page<HouseResponseForTable> houseResponseForSelect(Integer page, String search);
 
     List<House> findAll();
+
+    Long count();
 }

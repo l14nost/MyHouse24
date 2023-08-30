@@ -12,13 +12,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("payment-details")
 @RequiredArgsConstructor
 public class RequisitesController {
     private final RequisitesService requisitesService;
 
-    @GetMapping("/payment-details")
+    @GetMapping({"/",""})
     public String requisitesPage(Model model){
         model.addAttribute("requisites", requisitesService.findByIdResponse(1L));
         return "/admin/pages/requisites/requisites-page";

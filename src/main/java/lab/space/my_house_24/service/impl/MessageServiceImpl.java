@@ -28,6 +28,7 @@ public class MessageServiceImpl implements MessageService {
     private final SectionService sectionService;
     private final FloorService floorService;
     private final ApartmentService apartmentService;
+    private final StaffService staffService;
     @Override
     public Page<MessageResponseForMain> findAllForMessageMain(MessageMainPageRequest mainPageRequest) {
         MessageSpecification messageSpecification = MessageSpecification.builder().mainPageRequest(mainPageRequest).build();
@@ -54,6 +55,7 @@ public class MessageServiceImpl implements MessageService {
                 .houseList(new ArrayList<>())
                 .sectionList(new ArrayList<>())
                 .sendDate(LocalDateTime.now().withNano(0).atZone(ZoneId.systemDefault()).toInstant())
+                .staff(Staff.builder().id(staffService.getCurrentStaff()).build())
                 .build();
         if (messageRequestForSend.house()!=0){
             message.addHouse(houseService.findById(messageRequestForSend.house()));

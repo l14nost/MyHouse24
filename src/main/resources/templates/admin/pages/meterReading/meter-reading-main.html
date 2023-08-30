@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/admin/fragments/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{left.sidebar.meter.reading}"></title>
+    <th:block layout:fragment="extra-style">
+        <style>
+            .btn.btn-success.disabled {
+                pointer-events: none;
+                opacity: 1;
+            }
+        </style>
+    </th:block>
+
+</head>
+<th:block layout:fragment="content">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" th:text = "#{left.sidebar.meter.reading}"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{users.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text = "#{left.sidebar.meter.reading}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div style="display: flex; justify-content: right; margin-bottom: 30px">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" th:text = "#{meter.reading.add}" onclick="entityAdd()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+
+                <div style="display: flex; justify-content: right">
+                    <button type="button" class="btn btn-light" style="height: 40px; display: flex"  onclick="clearFilters()"><h7 th:text="#{table.clear}"></h7><svg style="margin: auto; margin-left: 5px" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/></svg></button>
+                </div>
+            </div>
+            <div class="table-responsive" >
+
+                <table class="table table-striped table-bordered" style="margin-top: 15px">
+                    <thead>
+                    <tr>
+                        <th th:text="#{meter.reading.house}"></th>
+                        <th th:text="#{meter.reading.section}"></th>
+                        <th th:text="#{meter.reading.apartment}" style="max-width: 100px;"></th>
+                        <th th:text="#{meter.reading.service}" > </th>
+                        <th th:text="#{meter.reading.current.indicators}" style="max-width: 130px; word-wrap: break-word; white-space: normal"></th>
+                        <th th:text="#{meter.reading.unit}" ></th>
+                        <th style="min-width: 100px"></th>
+                    </tr>
+                    <tr id="searchApartmentTable">
+                        <form id="filter">
+                            <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                                <option selected=""></option>
+                            </select></td>
+                            <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
+                                <option selected=""></option>
+                            </select></td>
+                            <td>
+                                <input class="form-control" type="number" name="apartment" style="width: 100px">
+                            </td>
+                            <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="service" id="service">
+                                <option selected=""></option>
+                            </select></td>
+                            <td></td>
+                            <td></td>
+                        </form>
+                        <td>
+                        </td>
+                    </tr>
+                    </thead>
+                    <tbody id="table" style="min-height: 55px">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer pt-0 pb-0" style="margin-top: 15px">
+                <div style="display: none; justify-content: center; min-height: 100px" id="emptyTable" >
+                    <p style="display: flex; justify-content: center" th:text = "#{table.empty}"></p>
+                </div>
+                <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
+                        <div id="tableInfoShowing">
+
+                        </div>
+                        <div style="display: flex; margin-right: 10px" >
+                            <nav aria-label="Page navigation example" id = "pagination">
+                            </nav>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</th:block>
+<th:block layout:fragment="extra-alert">
+    <div id="liveAlertPlaceholder" style="right: 0; position: fixed; bottom: 0"></div>
+</th:block>
+<th:block layout:fragment="extra-modals">
+    <div class="modal fade" id="confirmDeleteApartment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteApartmentLabel">Delete Apartment Owner</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete apartment?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-success" onclick="apartmentDelete()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="extra-script">
+    <script>
+
+
+        function clearFilters(){
+            $('#searchApartmentTable input').val('');
+            $('#searchApartmentTable select').val(null).trigger("change");
+            var formData = new FormData();
+            formData.append("page", "0");
+            getAllApartment(formData);
+        }
+
+        var filterData = new FormData(document.getElementById("filter"));
+        function filter() {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            filterData = formData;
+            formData.append("page", "0");
+            getAllApartment(formData);
+        }
+
+
+
+
+        document.addEventListener("click", function () {
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            for (var pair of formData.entries()){
+                if (filterData.get(pair[0])!==pair[1]){
+                    filter();
+                }
+            }
+
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("filter");
+
+            const selectElements = form.querySelectorAll("select");
+
+            function handleSelectChange() {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            }
+            selectElements.forEach(function(select) {
+                select.addEventListener("change", handleSelectChange);
+            });
+        });
+
+
+        function select2(lang){
+            var defaultSelect = " ";
+            console.log(lang);
+            $("#service").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                ajax: {
+                    url: "/admin/system-service/get-services-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true,
+                },
+                placeholder: defaultSelect,
+                minimumResultsForSearch:5
+            });
+            $("#house").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                ajax: {
+                    url: "/admin/houses/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true,
+                },
+                placeholder: defaultSelect,
+                minimumResultsForSearch:5
+            });
+            $("#floor").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+            $("#section").select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                placeholder: defaultSelect,
+                minimumResultsForSearch: Infinity
+            });
+            $("#house").on("change", function (){
+                var idHouse = this.value;
+                        $("#section").select2({
+                            theme: 'bootstrap-5',
+                            language: lang,
+                            ajax: {
+                                url: "/admin/get-section/"+idHouse,
+                                data: function (param) {
+                                    return {
+                                        search: param.term || "",
+                                        page: param.page || 0
+                                    }
+                                },
+                                processResults: function (data, params) {
+                                    params.page = params.page || 0;
+                                    var mappedResults = data.map(function(item) {
+                                        return {
+                                            id: item.name,
+                                            text: item.name
+                                        };
+                                    });
+                                    return {
+                                        results: mappedResults,
+                                    }
+                                },
+                                cache: true
+                            },
+                            placeholder: defaultSelect,
+                            minimumResultsForSearch: Infinity
+                        });
+
+
+            })
+        }
+
+
+        $(document).ready(function (){
+            $('#house').on('select2:select', function () {
+                    var formData = new FormData(form);
+                    for (var pair of formData.entries()){
+                        if (filterData.get(pair[0])!==pair[1]){
+                            filter();
+                        }
+                    }
+            });
+            $('#section').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#service').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $.ajax({
+                url: "/admin/get-locale"
+            })
+                .done(function (response){
+                    select2(response);
+                }).fail(function () {
+                select2("en");
+            })
+
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", "0");
+            getAllApartment(formData);
+
+        });
+        function changePage(page,event){
+            event.preventDefault();
+            var form = document.getElementById("filter");
+            var formData = new FormData(form);
+            formData.append("page", page);
+            getAllApartment(formData);
+
+        }
+
+        function getAllApartment(formData) {
+
+            let page = parseInt(formData.get("page"));
+
+            var jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+            $.ajax({
+                method: "POST",
+                url: "/admin/meter-readings/get-all-meter-reading",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData)
+            })
+                .done(
+                    function (apartmentResponse) {
+                        const pagination = document.getElementById("pagination");
+                        pagination.innerHTML = "";
+                        const table = document.getElementById("table");
+                        table.innerHTML = "";
+                        if (apartmentResponse.content.length === 0) {
+                            const container = document.getElementById("emptyTable");
+                            container.style.display = "flex";
+                            const container1 = document.getElementById("tableInfo");
+                            container1.style.display = "none";
+                        } else {
+                            const container2 = document.getElementById("emptyTable");
+                            container2.style.display = "none";
+                            const container3 = document.getElementById("tableInfo");
+                            container3.style.display = "flex";
+                            $.each(apartmentResponse.content, function (index, apartment) {
+                                const container = document.getElementById("table");
+                                const newTr = document.createElement("tr");
+                                newTr.style.cursor = "pointer";
+                                newTr.innerHTML = " <td >" + apartment.house + "</td>\n" +
+                                    "          <td >" + apartment.section + "</td>\n" +
+                                    "          <td>" + apartment.apartment + "</td>\n" +
+                                    "          <td>" + apartment.service + "</td>\n" +
+                                    "          <td>" + apartment.count + "</td>\n" +
+                                    "          <td>" + apartment.unit + "</td>\n" +
+                                    "          <td style=\"\" >\n" +
+                                    "<a type='button' class=\"btn btn-sm btn-icon text-gray\" data-bs-toggle=\"tooltip\"  aria-label=\"Edit meter reading\" data-bs-original-title=\"Edit meter reading\" href='/admin/meter-readings/edit-meter-reading/"+apartment.id+"'>\n" +
+                                    "                        <span class=\"btn-inner\">\n" +
+                                    "                            <svg class=\"icon-20\" width=\"15\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"  viewBox=\"0 0 512 512\"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM288 96a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM256 416c35.3 0 64-28.7 64-64c0-17.4-6.9-33.1-18.1-44.6L366 161.7c5.3-12.1-.2-26.3-12.3-31.6s-26.3 .2-31.6 12.3L257.9 288c-.6 0-1.3 0-1.9 0c-35.3 0-64 28.7-64 64s28.7 64 64 64zM176 144a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zM96 288a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm352-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z\"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z\"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z\"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z\"/></svg>\n" +
+                                    "                        </span>\n" +
+                                    "                    </a>" +
+                                    "<a  class=\"btn btn-sm btn-icon text-gray\" data-bs-toggle=\"tooltip\"  aria-label=\"Open meter reading history\" data-bs-original-title=\"Open meter reading history\" href='/admin/meter-readings/meter-readings-by-apartment?idApartment="+apartment.idApartment+"&idService="+apartment.idService+"'>\n" +
+                                    "                        <span class=\"btn-inner\">\n" +
+                                    "                            <svg class=\"icon-20\" width=\"15\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\"  viewBox=\"0 0 576 512\"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z\"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z\"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z\"/></svg>\n" +
+                                    "                        </span>\n" +
+                                    "                    </a>" +
+                                    "           " +
+                                    "          </td>"
+                                container.appendChild(newTr);
+                            })
+
+                            if (apartmentResponse.totalPages >= 2 && apartmentResponse.totalPages<7) {
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'>❮</a></li>\n";
+                                var containerPagination = document.getElementById("pagination");
+                                const newUl = document.createElement("ul");
+                                newUl.id = "apartmentPaginationList";
+                                newUl.classList.add("pagination");
+                                for (var i = 0; i < apartmentResponse.totalPages; i++) {
+                                    var currentNum = i + 1;
+
+                                    addElements += "<li class=\"page-item " + checkCurrentPage(currentNum) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+i+','+'event'+")'>" + currentNum + "</a></li>\n"
+                                }
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>❯</a></li>\n"
+                                newUl.innerHTML = addElements
+                                containerPagination.appendChild(newUl);
+                            }
+                            else if (apartmentResponse.totalPages>=7) {
+                                let addElements = "  <li class=\"page-item  " + checkForDisabledPrev() + "\" " + checkForDisabledPrev() + "><a class=\"page-link\" href=\"#\" onclick='changePage("+(page-1)+','+'event'+")'>❮</a></li>\n";
+                                var containerPagination = document.getElementById("pagination");
+                                const newUl = document.createElement("ul");
+                                newUl.id = "apartmentPaginationList";
+                                newUl.classList.add("pagination");
+                                addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+'event'+")'> 1 </a></li>\n"
+                                if (page-2<0){
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+'event'+")'> 2 </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(3) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(2,"+'event'+")'> 3 </a></li>\n"
+                                }
+                                if(page-2>0) {
+                                    addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\">...</a></li>\n"
+                                }
+                                if (page-2>=0 && page+3<=apartmentResponse.totalPages){
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page-1) +','+'event'+")'> "+(page) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page) +','+'event'+")'> "+(page+1) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(page+2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(page+1) +','+'event'+")'> "+(page+2) +" </a></li>\n"
+
+                                }
+
+                                if (page+3<apartmentResponse.totalPages) {
+                                    addElements += "<li class=\"page-item disabled\" ><a class=\"page-link \" href=\"#\"'>...</a></li>\n"
+                                }
+                                if (page+3>apartmentResponse.totalPages) {
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(apartmentResponse.totalPages-2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(apartmentResponse.totalPages - 3)+','+'event'+")'> "+ (apartmentResponse.totalPages-2) +" </a></li>\n"
+                                    addElements+="<li class=\"page-item " + checkCurrentPage(apartmentResponse.totalPages-1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(apartmentResponse.totalPages - 2)+','+'event'+")'> "+ (apartmentResponse.totalPages-1) +" </a></li>\n"
+                                }
+
+                                addElements+="<li class=\"page-item " + checkCurrentPage(apartmentResponse.totalPages) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage("+(apartmentResponse.totalPages - 1)+','+'event'+")'> "+ apartmentResponse.totalPages +" </a></li>\n"
+                                addElements += "  <li class=\"page-item " + checkForDisabledNext() + " \" ><a class=\"page-link\" href=\"#\" onclick='changePage("+(page+1)+','+'event'+")'>❯</a></li>\n"
+                                newUl.innerHTML = addElements
+                                containerPagination.appendChild(newUl);
+                            }
+                            if (apartmentResponse.totalElements>0){
+                                const tableInfoDiv = document.getElementById("tableInfoShowing");
+                                let  text = " [[#{table.show.info.Showing}]] X - Y [[#{table.show.info.of}]] Z [[#{table.show.info.entries}]]";
+                                const newX = apartmentResponse.number * 10 + 1;
+                                const newY = apartmentResponse.content.length + apartmentResponse.number * 10;
+                                const newZ = apartmentResponse.totalElements;
+                                console.log(newX+" "+newY+" "+newZ);
+                                tableInfoDiv.innerHTML = text.replace('X', newX).replace('Y', newY).replace('Z', newZ);
+                            }
+
+
+                            function checkCurrentPage(currentNum) {
+                                if (currentNum - 1 === parseInt(page)) {
+                                    return "active";
+                                } else return "";
+                            }
+
+                            function checkForDisabledPrev() {
+                                if (parseInt(page) === 0) {
+                                    return "disabled";
+                                } else return "";
+                            }
+                            function checkForDisabledNext() {
+                                var currentNum = parseInt(page);
+                                if (currentNum+1 === apartmentResponse.totalPages) {
+                                    return "disabled";
+                                } else return "";
+                            }
+
+                            function checkBalance(balance){
+                                var intBalance = Number(balance);
+                                if (intBalance>=0){
+                                    return "style='color: green;'"
+                                }
+                                else {
+                                    return "style='color: red;'"
+                                }
+                            }
+
+
+
+                        }
+
+
+                    }
+                )
+        }
+        // function apartmentCard(id){
+        //     window.location.href = "/admin/apartment-card/"+id;
+        // }
+        // function apartmentEdit(id){
+        //     window.location.href = "/admin/edit-apartment/"+id;
+        // }
+        function entityAdd(){
+            window.location.href = "/admin/meter-readings/add-meter-reading";
+        }
+
+
+
+
+
+    </script>
+</th:block>
+</html>

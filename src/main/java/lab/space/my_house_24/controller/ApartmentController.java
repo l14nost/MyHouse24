@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("apartments")
 @RequiredArgsConstructor
 public class ApartmentController {
 
@@ -34,7 +35,7 @@ public class ApartmentController {
     private final BankBookValidator bankBookValidator;
     private final ApartmentValidator apartmentValidator;
 
-    @GetMapping("/apartments")
+    @GetMapping({"/",""})
     public String apartmentMain(Model model){
         model.addAttribute("houseList", houseService.houseListForTable());
         return "admin/pages/apartment/apartment-main";
@@ -142,7 +143,8 @@ public class ApartmentController {
 
     @GetMapping("/get-apartment")
     @ResponseBody
-    public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam Long idSection,@RequestParam Long idFloor){
+    public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam(required = false) Long idSection,@RequestParam(required = false) Long idFloor){
+        System.out.println(idFloor+" "+idHouse+" "+idSection);
         return apartmentService.apartmentForSelect(idHouse,idSection,idFloor);
 
     }

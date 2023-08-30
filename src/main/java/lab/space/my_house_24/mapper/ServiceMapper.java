@@ -3,6 +3,7 @@ package lab.space.my_house_24.mapper;
 import lab.space.my_house_24.entity.Service;
 import lab.space.my_house_24.model.service.ServiceRequest;
 import lab.space.my_house_24.model.service.ServiceResponse;
+import lab.space.my_house_24.model.service.ServiceResponseForSelect;
 
 public interface ServiceMapper {
     static ServiceResponse toSimpleDto(Service service) {
@@ -32,6 +33,13 @@ public interface ServiceMapper {
         return Service.builder()
                 .name(serviceRequest.name())
                 .isActive(serviceRequest.isActiv())
+                .build();
+    }
+
+    static ServiceResponseForSelect entityToDtoForSelect(Service service){
+        return ServiceResponseForSelect.builder()
+                .id(service.getId())
+                .name(service.getName())
                 .build();
     }
 }

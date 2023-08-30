@@ -4,13 +4,17 @@ import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.mapper.ServiceMapper;
 import lab.space.my_house_24.model.service.ServiceRequest;
 import lab.space.my_house_24.model.service.ServiceResponse;
+import lab.space.my_house_24.model.service.ServiceResponseForSelect;
 import lab.space.my_house_24.model.service.ServiceSaveRequest;
 import lab.space.my_house_24.repository.ServiceRepository;
 import lab.space.my_house_24.service.ServiceService;
 import lab.space.my_house_24.service.UnitService;
+import lab.space.my_house_24.specification.ServiceSpecificationForSelect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,5 +108,16 @@ public class ServiceServiceImpl implements ServiceService {
             log.error("Error delete Service");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
+    }
+
+    @Override
+    public Page<ServiceResponseForSelect> serviceResponseForSelect(Integer page, String search) {
+        ServiceSpecificationForSelect serviceSpecificationForSelect = ServiceSpecificationForSelect.builder().search(search).build();
+        return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(page,5)).map(ServiceMapper::entityToDtoForSelect);
+    }
+
+    @Override
+    public List<ServiceResponseForSelect> serviceListForTable() {
+        return serviceRepository.findAll().stream().map(ServiceMapper::entityToDtoForSelect).toList();
     }
 }

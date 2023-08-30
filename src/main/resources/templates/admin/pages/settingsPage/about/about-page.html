@@ -33,7 +33,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a th:href="@{/index}" th:text = "#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/statistics}" th:text = "#{global.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text = "#{global.breadcrumb.edit.page}"></li>
                     </ol>
                 </nav>
@@ -360,7 +360,7 @@
             formData.append("deleteAddGalleryList", deleteIdsAddGallery);
             formData.append("deleteDocumentList", deleteIds);
             $.ajax({
-                url: "/admin/site-about-save",
+                url: "/admin/site/about-save",
                 method: "PUT",
                 contentType: false,
                 processData: false,
@@ -427,7 +427,7 @@
                 })
         }
         function cancelAboutPage(){
-            window.location.href = "/admin/site-about"
+            window.location.href = "/admin/site/about"
         }
 
         function addPhoto(div){

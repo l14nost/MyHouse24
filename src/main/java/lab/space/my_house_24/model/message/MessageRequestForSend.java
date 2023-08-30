@@ -20,8 +20,8 @@ public record MessageRequestForSend(
         @NotNull(message = "{not.blank.message}")
         Long floor,
         @NotNull(message = "{not.blank.message}")
-        Long apartment,
-        @NotNull(message = "{not.blank.message}")
-        Long staff
+        Long apartment
+//        @NotNull(message = "{not.blank.message}")
+//        Long staff
 ) {
 }
