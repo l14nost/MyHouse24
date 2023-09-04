@@ -10,6 +10,7 @@ import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.specification.ApartmentSpecification;
+import lab.space.my_house_24.specification.ApartmentSpecificationForMailing;
 import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lab.space.my_house_24.specification.ApartmentSpecificationForMasterApplication;
 import lombok.RequiredArgsConstructor;
@@ -166,5 +167,12 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Long count() {
         return apartmentRepository.count();
     }
+
+    @Override
+    public List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment) {
+        ApartmentSpecificationForMailing apartmentSpecification = ApartmentSpecificationForMailing.builder().idApartment(apartment).idFloor(floor).idHouse(house).idSection(section).build();
+        return apartmentRepository.findAll(apartmentSpecification);
+    }
+
 
 }

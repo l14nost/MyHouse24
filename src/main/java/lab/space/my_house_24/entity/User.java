@@ -73,4 +73,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<MastersApplication> applicationList = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Message> messageList = new ArrayList<>();
+
 }

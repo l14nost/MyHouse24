@@ -19,14 +19,12 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
-    private final HouseService houseService;
-    private final SectionService sectionService;
-    private final FloorService floorService;
     private final ApartmentService apartmentService;
     private final StaffService staffService;
     @Override
@@ -50,63 +48,22 @@ public class MessageServiceImpl implements MessageService {
                 .description(messageRequestForSend.message())
                 .descriptionStyle(messageRequestForSend.messageStyle())
                 .title(messageRequestForSend.subject())
-                .apartmentList(new ArrayList<>())
-                .floorList(new ArrayList<>())
-                .houseList(new ArrayList<>())
-                .sectionList(new ArrayList<>())
                 .sendDate(LocalDateTime.now().withNano(0).atZone(ZoneId.systemDefault()).toInstant())
                 .staff(Staff.builder().id(staffService.getCurrentStaff()).build())
+                .users(new HashSet<>())
                 .build();
         if (messageRequestForSend.house()!=0){
-            message.addHouse(houseService.findById(messageRequestForSend.house()));
+            message.setHouse(House.builder().id(messageRequestForSend.house()).build());
             if (messageRequestForSend.section()!=0){
-                message.addSection(sectionService.findById(messageRequestForSend.section()));
-            }
-            else {
-                for (Section section: sectionService.findAllSectionByHouse(messageRequestForSend.house())){
-                    message.addSection(section);
-                }
+                message.setSection(Section.builder().id(messageRequestForSend.section()).build());
             }
             if (messageRequestForSend.floor()!=0){
-                message.addFloor(floorService.findById(messageRequestForSend.floor()));
-            }
-            else {
-                for (Floor floor: floorService.findAllFloorByHouse(messageRequestForSend.house())){
-                    message.addFloor(floor);
-                }
-            }
-            if (messageRequestForSend.apartment()!=0){
-                message.addApartment(apartmentService.findById(messageRequestForSend.apartment()));
-            }
-            else if (messageRequestForSend.apartment()==0&&messageRequestForSend.floor()!=0&&messageRequestForSend.section()==0){
-                for (Apartment apartment: apartmentService.findAllApartmentByFloor(messageRequestForSend.house())){
-                    message.addApartment(apartment);
-                }
-            }
-            else if (messageRequestForSend.apartment()==0&&messageRequestForSend.floor()==0&&messageRequestForSend.section()!=0){
-                for (Apartment apartment: apartmentService.findAllApartmentBySection(messageRequestForSend.house())){
-                    message.addApartment(apartment);
-                }
-            }
-            else if (messageRequestForSend.apartment()==0&&messageRequestForSend.floor()==0&&messageRequestForSend.section()==0){
-                for (Apartment apartment: apartmentService.findAllApartmentByHouse(messageRequestForSend.house())){
-                    message.addApartment(apartment);
-                }
+                message.setFloor(Floor.builder().id(messageRequestForSend.floor()).build());
             }
         }
-        else {
-            for (House house: houseService.findAll()){
-                for (Apartment apartment: house.getApartmentList()){
-                    message.addApartment(apartment);
-                }
-                for (Section section: house.getSectionList()){
-                    message.addSection(section);
-                }
-                for (Floor floor: house.getFloorList()){
-                    message.addFloor(floor);
-                }
-                message.addHouse(house);
-            }
+        List<Apartment> apartmentList = apartmentService.apartmentListForMessage(messageRequestForSend.house(), messageRequestForSend.section(), messageRequestForSend.floor(), messageRequestForSend.apartment());
+        for (Apartment apartment: apartmentList){
+            message.addApartment(apartment.getUser());
         }
         messageRepository.save(message);
 

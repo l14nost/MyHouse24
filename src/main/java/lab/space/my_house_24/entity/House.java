@@ -53,7 +53,5 @@ public class House {
     @ManyToMany(mappedBy = "houseList")
     private List<Staff> staffList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "houseList",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Message> messageList = new ArrayList<>();
 
 }

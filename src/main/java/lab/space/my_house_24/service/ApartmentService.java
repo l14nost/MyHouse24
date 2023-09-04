@@ -33,4 +33,6 @@ public interface ApartmentService {
     List<ApartmentResponseForTable> apartmentListForSelect();
 
     Long count();
+
+    List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment);
 }

@@ -136,7 +136,7 @@
             if (typeof flatpickr !== typeof undefined) {
                 flatpickr(elem, {
                     minDate: "today",
-                    dateFormat: "d.m.Y",
+                    dateFormat: "Y-m-d",
                 })
             }
         })
@@ -361,7 +361,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/meter-readings/edit-meter-reading/"+[[${meterReading.number()}]],
+                url: "/admin/meter-readings/edit-meter-reading/"+[[${id}]],
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

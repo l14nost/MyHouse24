@@ -85,25 +85,15 @@
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{user.add.date}"></label>
                                     <div class="input-group" id="dateResponse">
-                                        <input class="form-control" type="date"  name="date" id="date">
+                                        <input class="form-control" name="date" id="date" type="date">
+                                        <button class="input-group-text input-button pointer-event" disabled>
+                                            <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                 stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </button>
                                     </div>
-                                </div>
-                                <h4 th:text="#{user.add.contact.data}"></h4>
-                                <div class="form-group" style="margin-top: 10px">
-                                    <label class="form-label" th:text="#{user.add.number}"></label>
-                                    <input type="number" class="form-control" id="number"  name="number">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Telegram</label>
-                                    <input type="number" class="form-control" id="telegram"  name="telegram">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Viber</label>
-                                    <input type="number" class="form-control" id="viber" name="viber">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label" th:text="#{user.add.email}"></label>
-                                    <input type="text" class="form-control" id="email"  name="email">
                                 </div>
                             </div>
                         </div>
@@ -123,7 +113,33 @@
                                 <label class="form-label" th:text = "#{user.add.notes}"></label>
                                 <textarea class="form-control" aria-label="With textarea" name="notes" rows="16" id="notes"></textarea>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <h4 th:text="#{user.add.contact.data}"></h4>
+                            <hr class="hr-horizontal">
+                            <div class="form-group" style="margin-top: 10px">
+                                <label class="form-label" th:text="#{user.add.number}"></label>
+                                <input type="number" class="form-control" id="number"  name="number">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Telegram</label>
+                                <input type="number" class="form-control" id="telegram"  name="telegram">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Viber</label>
+                                <input type="number" class="form-control" id="viber" name="viber">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" th:text="#{user.add.email}"></label>
+                                <input type="text" class="form-control" id="email"  name="email">
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <h4 th:text="#{user.add.change.password}"></h4>
+                            <hr class="hr-horizontal">
                             <div class="form-group" style="margin-top: 10px">
                                 <label class="form-label" th:text="#{user.add.password}"></label>
                                 <div class="input-group" id="passwordResponse">
@@ -141,16 +157,16 @@
                                 <input type="password" class="form-control pass" id="confirmPassword"  name="confirmPassword">
                             </div>
                         </div>
+                    </div>
                         <div style="display: flex; justify-content: right;  margin-bottom: 10px">
                             <button onclick="cancelUser()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 105px" ></button>
                             <button onclick="saveUser()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 100px; margin-left: 10px" ></button>
                         </div>
-                    </div>
+
                 </form>
             </div>
         </div>
     </div>
-
 
 
 
@@ -171,7 +187,14 @@
 </th:block>
 <th:block layout:fragment="extra-script">
     <script>
-
+        const date_flatpickr = document.querySelectorAll('#date');
+        Array.from(date_flatpickr, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    dateFormat: "Y-m-d",
+                })
+            }
+        })
 
         function select2(lang) {
             var defaultSelect = " ";
@@ -218,6 +241,9 @@
                         var values = Object.values(errors)[i];
                         if (keys === 'password'){
                             validResponse("#"+keys,values,"#passwordResponse");
+                        }
+                        else if (keys === 'date'){
+                            validResponse("#"+keys,values,"#dateResponse");
                         }
                         else {
                             validResponse("#" + keys, values);

@@ -58,6 +58,7 @@ public class MeterReadingController {
         model.addAttribute("apartmentList", apartmentService.apartmentListForSelect());
         model.addAttribute("sectionList", sectionService.sectionListForTable());
         model.addAttribute("serviceList", serviceService.serviceListForTable());
+        model.addAttribute("id", id);
 
         return "/admin/pages/meterReading/meter-reading-edit";
     }

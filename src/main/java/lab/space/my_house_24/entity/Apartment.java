@@ -50,8 +50,6 @@ public class Apartment {
     @JoinColumn(name = "bank_book_id", nullable = true)
     private BankBook bankBook;
 
-    @ManyToMany(mappedBy = "apartmentList", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Message> messageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "apartment")
     private List<MastersApplication> mastersApplicationList = new ArrayList<>();

@@ -26,9 +26,6 @@ public class Section {
     @ManyToOne
     private House house;
 
-    @ManyToMany(mappedBy = "sectionList",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Message> messageList = new ArrayList<>();
-
     @OneToMany(mappedBy = "section")
     private List<Apartment> apartmentList = new ArrayList<>();
 

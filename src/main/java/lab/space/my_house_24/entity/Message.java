@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "message")
@@ -39,56 +41,28 @@ public class Message {
     @ManyToOne
     private Staff staff;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "message_apartment",
-            joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "apartment_id")
-    )
-    List<Apartment> apartmentList = new ArrayList<>();
+    @ManyToOne
+    private House house;
+
+    @ManyToOne
+    private Section section;
+
+    @ManyToOne
+    private Floor floor;
+
+    @ManyToOne
+    private Apartment apartment;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "message_house",
+            name = "message_user",
             joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "house_id")
+            inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    List<House> houseList = new ArrayList<>();
+    Set<User> users = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "message_floor",
-            joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "floor_id")
-    )
-    List<Floor> floorList = new ArrayList<>();
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "message_section",
-            joinColumns = @JoinColumn(name = "message_id"),
-            inverseJoinColumns = @JoinColumn(name = "section_id")
-    )
-    List<Section> sectionList = new ArrayList<>();
-
-
-    public void addHouse(House house){
-        houseList.add(house);
-        house.getMessageList().add(this);
-    }
-
-    public void addSection(Section section){
-        sectionList.add(section);
-        section.getMessageList().add(this);
-    }
-
-    public void addFloor(Floor floor){
-        floorList.add(floor);
-        floor.getMessageList().add(this);
-    }
-
-    public void addApartment(Apartment apartment){
-        apartmentList.add(apartment);
-        apartment.getMessageList().add(this);
+    public void addApartment(User user){
+        users.add(user);
+        user.getMessageList().add(this);
     }
 }

@@ -14,7 +14,7 @@ public class MessageMapper {
     public static MessageResponseForMain entityToDtoForMain(Message message){
         String recipient = "";
         Locale locale = LocaleContextHolder.getLocale();
-        if (message.getHouseList().size() != 1){
+        if (message.getHouse() == null){
             if (locale.toLanguageTag().equals("uk")) {
                 recipient = "Усім";
             }
@@ -23,16 +23,16 @@ public class MessageMapper {
             }
         }
         else {
-            recipient = message.getHouseList().get(0).getName();
+            recipient = message.getHouse().getName();
         }
-        if (message.getSectionList().size() == 1){
-            recipient+= ", "+message.getSectionList().get(0).getName();
+        if (message.getSection() != null){
+            recipient+= ", "+message.getSection().getName();
         }
-        if (message.getFloorList().size() == 1){
-            recipient+= ", "+message.getFloorList().get(0).getName();
+        if (message.getFloor() != null){
+            recipient+= ", "+message.getFloor().getName();
         }
-        if (message.getApartmentList().size() == 1){
-            recipient+= ", №"+message.getApartmentList().get(0).getNumber();
+        if (message.getApartment()!=null){
+            recipient+= ", №"+message.getApartment().getNumber();
         }
 
         return MessageResponseForMain.builder()
