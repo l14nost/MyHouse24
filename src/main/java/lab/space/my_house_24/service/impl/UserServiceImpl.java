@@ -6,6 +6,7 @@ import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.mapper.UserMapper;
 import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.repository.UserRepository;
+import lab.space.my_house_24.service.JwtServiceForUser;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.specification.UserSpecification;
 import lab.space.my_house_24.specification.UserSpecificationForTable;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -29,6 +31,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CustomMailSender customMailSender;
+    private final JwtServiceForUser jwtServiceForUser;
+    private final PasswordEncoder passwordEncoder;
+    private final String url = "http://localhost:8080/admin/";
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findUserByEmail(email).orElseThrow(()-> new EntityNotFoundException("User by email "+email+" is not found"));
@@ -77,7 +82,7 @@ public class UserServiceImpl implements UserService {
                 .number(userAddRequest.number())
                 .telegram(userAddRequest.telegram())
                 .viber(userAddRequest.viber())
-                .password(new BCryptPasswordEncoder().encode(userAddRequest.password()))
+                .password(passwordEncoder.encode(userAddRequest.password()))
                 .userStatus(userAddRequest.status())
                 .notes(userAddRequest.notes())
                 .duty(false)
@@ -106,7 +111,7 @@ public class UserServiceImpl implements UserService {
             FileHandler.deleteFile(filenameDelete);
         }
         if (!userEditRequest.password().isEmpty()){
-            user.setPassword(new BCryptPasswordEncoder().encode(userEditRequest.password()));
+            user.setPassword(passwordEncoder.encode(userEditRequest.password()));
             changePassword = true;
         }
         userRepository.save(user);
@@ -148,6 +153,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long countByStatus(UserStatus userStatus) {
         return userRepository.countByUserStatus(userStatus);
+    }
+
+    @Override
+    public void sendActivateLetter(String email) {
+        User user = getUserByEmail(email);
+        String token = jwtServiceForUser.generateToken(user.getEmail());
+        user.setToken(token);
+        user.setTokenUsage(false);
+        userRepository.save(user);
+        customMailSender.send(user.getEmail(), url + "users/activate/" + token, "Activate Account");
+    }
+
+    @Override
+    public String loadUserByToken(String token) {
+        return jwtServiceForUser.extractUsername(token);
+    }
+
+    @Override
+    public void activate(ForgotPassRequest forgotPassRequest, String token) {
+        User user = getUserByEmail(jwtServiceForUser.extractUsername(token));
+        user.setTokenUsage(true);
+        user.setUserStatus(UserStatus.ACTIVE);
+        user.setPassword(passwordEncoder.encode(forgotPassRequest.password()));
+        userRepository.save(user);
+        String textForSend = "Dear " + user.getLastname() + " " + user.getFirstname() + ", you was activated!\n";
+        customMailSender.send(user.getEmail(), textForSend, "Activate Account");
     }
 
 

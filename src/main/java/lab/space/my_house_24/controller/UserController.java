@@ -3,6 +3,7 @@ package lab.space.my_house_24.controller;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.service.HouseService;
+import lab.space.my_house_24.service.JwtServiceForUser;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.service.impl.HouseServiceImpl;
 import lab.space.my_house_24.service.impl.UserServiceImpl;
@@ -11,6 +12,7 @@ import lab.space.my_house_24.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final HouseService houseService;
     private final UserValidator userValidator;
+    private final JwtServiceForUser jwtServiceForUser;
 
     @GetMapping({"/",""})
     public String userMainPage(Model model){
@@ -129,4 +132,40 @@ public class UserController {
     public Page<UserResponseForTable> userForApartmentTable(@RequestParam Integer page, @RequestParam String search){
         return userService.userResponseForTables(page,search);
     }
+    @PostMapping("/invite-send")
+    public ResponseEntity sendForgot(@RequestParam String email){
+        if (email.isBlank()) {
+            if (!userValidator.existByEmail(email, "email")){
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        userService.sendActivateLetter(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/activate/{token}")
+    public String activePage(@PathVariable String token, Model model){
+        String email = userService.loadUserByToken(token);
+        if (!jwtServiceForUser.isTokenValid(
+                token,
+                email,
+                userService.getUserByEmail(email))) {
+            return "/admin/pages/users/activate-error";
+        } else {
+            model.addAttribute("token", token);
+            return "/admin/pages/users/activate";
+        }
+    }
+
+    @PutMapping("/activate/{token}")
+    public ResponseEntity<?> forgotPasswordStaff(@PathVariable String token, @Valid @RequestBody ForgotPassRequest forgotPassRequest,
+                                                 BindingResult bindingResult) {
+        userValidator.passwordMatch(forgotPassRequest.password(), forgotPassRequest.confirmPassword(), bindingResult, "ForgotPassRequest");
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
+        userService.activate(forgotPassRequest, token);
+        return ResponseEntity.ok().build();
+    }
+
 }

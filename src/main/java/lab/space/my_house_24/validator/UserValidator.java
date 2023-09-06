@@ -1,7 +1,9 @@
 package lab.space.my_house_24.validator;
 
 import lab.space.my_house_24.entity.User;
+import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.repository.UserRepository;
+import lab.space.my_house_24.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserValidator {
     private final UserRepository userRepository;
+    private final UserService userService;
     public void uniqueEmail(String email, Long id, BindingResult result, String object){
         Locale locale = LocaleContextHolder.getLocale();
         String emailResponse;
@@ -70,6 +73,29 @@ public class UserValidator {
                 result.addError(new FieldError(object, "confirmPassword", passwordLengthResponse));
             }
         }
+    }
+
+    public void existByEmail(String email, BindingResult result, String object){
+        if (!userRepository.existsByEmail(email)){
+            result.addError(new FieldError(object, "email", "This email doesn't exist"));
+        }
+
+    }
+
+    public boolean existByEmail(String email, String object){
+        if (!userRepository.existsByEmail(email)){
+            return true;
+        }
+        return false;
+
+    }
+
+    public void checkStatus(String email, BindingResult result, String object){
+        User user = userService.getUserByEmail(email);
+        if (!user.getUserStatus().equals(UserStatus.ACTIVE)){
+            result.addError(new FieldError(object, "email", "User must be activated"));
+        }
+
     }
 
 

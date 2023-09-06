@@ -22,7 +22,6 @@ public class CustomMailSender {
         mailMessage.setTo(to);
         mailMessage.setSubject(subject);
         mailMessage.setText(text);
-
         javaMailSender.send(mailMessage);
     }
 

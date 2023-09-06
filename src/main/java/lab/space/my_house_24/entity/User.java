@@ -67,11 +67,8 @@ public class User {
     @Column(length = 250, name = "token")
     private String token;
 
-    @Column
-    private Boolean forgotTokenUsage;
-
-    @Column
-    private Boolean activeTokenUsage;
+    @Column(name = "token_usage")
+    private Boolean tokenUsage;
 
     @OneToMany(mappedBy = "user")
     private List<Apartment> apartmentList = new ArrayList<>();

@@ -4,6 +4,7 @@ import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.model.user.*;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -30,4 +31,10 @@ public interface UserService {
     List<UserResponseForMastersApplication> getAllUsersForMastersApplication();
 
     Long countByStatus(UserStatus userStatus);
+
+    void sendActivateLetter(String email);
+
+    String loadUserByToken(String token);
+
+    void activate(ForgotPassRequest forgotPassRequest, String token);
 }
