@@ -43,7 +43,6 @@ public class ApartmentController {
 
     @PostMapping("/get-all-apartments")
     public ResponseEntity allApartment(@RequestBody ApartmentRequestForMainPage apartmentRequestForMainPage){
-        System.out.println(apartmentRequestForMainPage.toString());
         return ResponseEntity.ok().body(apartmentService.findAllForMainPage(apartmentRequestForMainPage));
     }
 
@@ -105,7 +104,6 @@ public class ApartmentController {
 
     @PostMapping("/edit-apartment/{id}")
     public ResponseEntity editApartment(@PathVariable Long id, @RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result){
-        System.out.println(apartmentAddRequest.toString());
         if (apartmentAddRequest.bankBook()!=null) {
             bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","update",id);
         }
@@ -144,7 +142,6 @@ public class ApartmentController {
     @GetMapping("/get-apartment")
     @ResponseBody
     public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam(required = false) Long idSection,@RequestParam(required = false) Long idFloor){
-        System.out.println(idFloor+" "+idHouse+" "+idSection);
         return apartmentService.apartmentForSelect(idHouse,idSection,idFloor);
 
     }

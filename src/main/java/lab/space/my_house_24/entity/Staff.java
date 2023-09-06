@@ -10,9 +10,7 @@ import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "staff")
@@ -73,7 +71,7 @@ public class Staff implements UserDetails {
             joinColumns = @JoinColumn(name = "staff_id"),
             inverseJoinColumns = @JoinColumn(name = "house_id")
     )
-    private List<House> houseList = new ArrayList<>();
+    private Set<House> houseList = new HashSet<>();
 
     @OneToMany(mappedBy = "staff")
     private List<MastersApplication> applicationList = new ArrayList<>();
@@ -107,4 +105,5 @@ public class Staff implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

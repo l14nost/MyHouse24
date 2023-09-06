@@ -51,6 +51,7 @@ public class MessageServiceImpl implements MessageService {
                 .sendDate(LocalDateTime.now().withNano(0).atZone(ZoneId.systemDefault()).toInstant())
                 .staff(Staff.builder().id(staffService.getCurrentStaff()).build())
                 .users(new HashSet<>())
+                .isCheck(false)
                 .build();
         if (messageRequestForSend.house()!=0){
             message.setHouse(House.builder().id(messageRequestForSend.house()).build());

@@ -36,7 +36,7 @@ public class User {
     @Column(length = 100,nullable = false)
     private String email;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20)
     private String number;
 
     @Column(length = 20,nullable = false)
@@ -55,7 +55,7 @@ public class User {
     @Column(length = 150)
     private String filename;
 
-    @Column(nullable = false)
+    @Column
     private Instant date;
 
     @Column(nullable = false)
@@ -63,6 +63,15 @@ public class User {
 
     @Column(nullable = false)
     private Boolean duty;
+
+    @Column(length = 250, name = "token")
+    private String token;
+
+    @Column
+    private Boolean forgotTokenUsage;
+
+    @Column
+    private Boolean activeTokenUsage;
 
     @OneToMany(mappedBy = "user")
     private List<Apartment> apartmentList = new ArrayList<>();

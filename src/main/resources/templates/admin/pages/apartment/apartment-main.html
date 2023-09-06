@@ -96,10 +96,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer pt-0 pb-0" style="margin-top: 15px">
-                <div style="display: none; justify-content: center; min-height: 100px" id="emptyTable" >
-                    <p style="display: flex; justify-content: center" th:text = "#{table.empty}"></p>
-                </div>
+            <div class="card-footer pt-0 pb-0" style="margin-top: 15px" id="card-footer">
                 <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
                         <div id="tableInfoShowing">
 
@@ -409,15 +406,14 @@
                         const table = document.getElementById("table");
                         table.innerHTML = "";
                         if (apartmentResponse.content.length === 0) {
-                            const container = document.getElementById("emptyTable");
-                            container.style.display = "flex";
-                            const container1 = document.getElementById("tableInfo");
-                            container1.style.display = "none";
+                            $("#card-footer").attr('hidden', true);
+                            const container = document.getElementById("table");
+                            const newTr = document.createElement("tr");
+                            newTr.style.cursor = "pointer";
+                            newTr.innerHTML = "<td colspan=\"7\" class=\"align-middle text-center no-data\">"+"[[#{table.empty}]]"+"</td>"
+                            container.appendChild(newTr);
                         } else {
-                            const container2 = document.getElementById("emptyTable");
-                            container2.style.display = "none";
-                            const container3 = document.getElementById("tableInfo");
-                            container3.style.display = "flex";
+                            $("#card-footer").attr('hidden', false);
                             $.each(apartmentResponse.content, function (index, apartment) {
                                 const container = document.getElementById("table");
                                 const newTr = document.createElement("tr");

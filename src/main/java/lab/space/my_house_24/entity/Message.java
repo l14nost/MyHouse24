@@ -35,6 +35,9 @@ public class Message {
     @Column(name = "is_active")
     private Boolean isActive;
 
+    @Column(name = "is_check")
+    private Boolean isCheck;
+
     @Column(name = "send_date")
     private Instant sendDate;
 

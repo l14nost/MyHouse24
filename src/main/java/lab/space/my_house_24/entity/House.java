@@ -6,8 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "house")
@@ -50,8 +49,46 @@ public class House {
     @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Floor> floorList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "houseList")
-    private List<Staff> staffList = new ArrayList<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        House house = (House) o;
+
+        if (!Objects.equals(id, house.id)) return false;
+        if (!Objects.equals(name, house.name)) return false;
+        if (!Objects.equals(address, house.address)) return false;
+        if (!Objects.equals(image1, house.image1)) return false;
+        if (!Objects.equals(image2, house.image2)) return false;
+        if (!Objects.equals(image3, house.image3)) return false;
+        if (!Objects.equals(image4, house.image4)) return false;
+        return Objects.equals(image5, house.image5);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (image1 != null ? image1.hashCode() : 0);
+        result = 31 * result + (image2 != null ? image2.hashCode() : 0);
+        result = 31 * result + (image3 != null ? image3.hashCode() : 0);
+        result = 31 * result + (image4 != null ? image4.hashCode() : 0);
+        result = 31 * result + (image5 != null ? image5.hashCode() : 0);
+        return result;
+    }
+
+    @ManyToMany(mappedBy = "houseList")
+    private Set<Staff> staffList = new HashSet<>();
+
+    public void removeStaff(Staff staff){
+        staffList.remove(staff);
+        staff.getHouseList().remove(this);
+    }
+    public void addStaff(Staff staff){
+        staffList.add(staff);
+        staff.getHouseList().add(this);
+    }
 
 }

@@ -73,17 +73,13 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public void save(HouseRequestForAddPage houseRequestForAddPage) {
-        Set<Long> staffSet = new HashSet<>();
-        for (int i = 0;i<houseRequestForAddPage.userList().size();i++){
-            staffSet.add(houseRequestForAddPage.userList().get(i));
-        }
-        List<Long> staffList = new ArrayList<>();
-        for (Long i: staffSet){
-            staffList.add(i);
-        }
+
+//        Set<Long> staffSet = new HashSet<>(houseRequestForAddPage.userList());
+//        List<Long> staffList = new ArrayList<>(staffSet);
         House house = House.builder()
                 .address(houseRequestForAddPage.address())
                 .name(houseRequestForAddPage.name())
+                .staffList(new HashSet<>())
                 .build();
 
         if (!houseRequestForAddPage.image1().isEmpty()){
@@ -114,16 +110,13 @@ public class HouseServiceImpl implements HouseService {
         for (int i = 0;i<houseRequestForAddPage.sectionNameList().size();i++){
             sectionList.add(Section.builder().name(houseRequestForAddPage.sectionNameList().get(i)).house(house).build());
         }
-        List<Staff> staffListForAdd = new ArrayList<>();
-        for (int i = 0;i<staffList.size();i++){
-            Staff staff = staffService.getStaffById(staffList.get(i));
-            staff.getHouseList().add(house);
-            staffListForAdd.add(staff);
+        for (int i = 0;i<houseRequestForAddPage.userList().size();i++){
+            Staff staff = staffService.getStaffById(houseRequestForAddPage.userList().get(i));
+            house.addStaff(staff);
         }
 
         house.setFloorList(floorList);
         house.setSectionList(sectionList);
-        house.setStaffList(staffListForAdd);
 
         houseRepository.save(house);
     }
@@ -154,17 +147,7 @@ public class HouseServiceImpl implements HouseService {
             }
         }
         for (int i = 0; i<houseRequestForEditPage.deleteStaffList().size();i++){
-            for (int j = 0; j<house.getStaffList().size();j++){
-                if (house.getStaffList().get(j).getId().equals(houseRequestForEditPage.deleteStaffList().get(i))){
-                    house.getStaffList().remove(j);
-                    Staff staff = staffService.getStaffById(houseRequestForEditPage.deleteStaffList().get(i));
-                    for (int k = 0; k<staff.getHouseList().size(); k++){
-                        if (staff.getHouseList().get(k).getId().equals(id)){
-                            staff.getHouseList().remove(k);
-                        }
-                    }
-                }
-            }
+            house.removeStaff(staffService.getStaffById(houseRequestForEditPage.deleteStaffList().get(i)));
         }
 
         if (!houseRequestForEditPage.image1().isEmpty()){
@@ -203,42 +186,11 @@ public class HouseServiceImpl implements HouseService {
             }
         }
 
-        List<Long> currentStaffList = new ArrayList<>();
-
-        for (Staff staff: house.getStaffList()){
-            currentStaffList.add(staff.getId());
-        }
-
-        for (int i = 0; i<houseRequestForEditPage.userList().size();i++){
-            boolean check = false;
-            for (int j = 0; j<currentStaffList.size();j++){
-                if (currentStaffList.get(j).equals(houseRequestForEditPage.userList().get(i))){
-                    check = true;
-                }
-            }
-            if (!check && i>=currentStaffList.size()){
-                Staff staff = staffService.getStaffById(houseRequestForEditPage.userList().get(i));
-                staff.getHouseList().add(house);
-                house.getStaffList().add(staff);
-            }
-            else if (!check && i<currentStaffList.size()){
-                Staff oldStaff = staffService.getStaffById(currentStaffList.get(i));
-                for (int k = 0; k<oldStaff.getHouseList().size();k++){
-                    if (oldStaff.getHouseList().get(k).getId().equals(id)){
-                        oldStaff.getHouseList().remove(k);
-                    }
-                }
-
-                Staff staff = staffService.getStaffById(houseRequestForEditPage.userList().get(i));
-                house.getStaffList().set(i, staff);
-                staff.getHouseList().add(house);
-            }
+        for (Long idStaff: houseRequestForEditPage.userList()){
+            house.addStaff(staffService.getStaffById(idStaff));
         }
 
         houseRepository.save(house);
-
-
-
     }
 
     @Override
