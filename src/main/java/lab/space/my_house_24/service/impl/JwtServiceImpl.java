@@ -38,14 +38,16 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean isTokenValid(String token, UserDetails userDetails, Staff staff) {
+    public boolean isTokenValid(String token, UserDetails userDetails, Staff staff, String url) {
         try {
             JWT.require(getSignInAlgorithm()).withSubject(userDetails.getUsername()).build().verify(token);
-            if (staff.getToken().equals(token)) {
+            if (staff.getToken().equals(token) && url.equals("activate")) {
                 return !staff.getTokenUsage() && staff.getForgotTokenUsage();
             }
-            return staff.getTokenUsage() && !staff.getForgotTokenUsage();
-
+            if (staff.getForgotToken().equals(token) && url.equals("forgot")) {
+                return staff.getTokenUsage() && !staff.getForgotTokenUsage();
+            }
+            return false;
         } catch (JWTVerificationException e) {
             log.warn(e.getMessage());
             return false;
