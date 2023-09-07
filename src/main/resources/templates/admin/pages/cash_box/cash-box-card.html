@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+  <title th:text="#{cash_box.card.title}"></title>
+  <style>
+    .form-control:disabled {
+      background-color: #fdfdfd;
+    }
+  </style>
+</head>
+
+<th:block layout:fragment="content">
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+          <h4 class="card-title" id="breadcrumb-title"></h4>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb" id="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{cash_box.breadcrumb}"></li>
+          </ol>
+        </nav>
+      </div>
+      <div class="card-body px-0">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+      <div class="form-group">
+        <div class="input-group" id="passwordResponse">
+          <button class="btn btn-gray disabled" type="button">№</button>
+          <input type="text" class="form-control pass" id="number" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto mt-2 pe-0" th:text="#{masters_call.card.time.at}"></div>
+    <div class="col-3">
+      <div class="input-group">
+        <input class="form-control" id="date" type="date"
+               th:placeholder="#{masters_call.save.date.placeholder}" disabled>
+        <button class="input-group-text input-button pointer-event" disabled>
+          <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table  table-hover table-bordered table-md mb-0" style="margin-top: 15px;max-width: 100%">
+          <thead>
+          <div><h4 id="table-breadcrumb"></h4></div>
+          <div class="text-end">
+            <button type="button" class="btn btn-light"
+                    style="margin-top: 15px; margin-right: 15px" onclick="copyCashBox()" th:text="#{cash_box.card.button.copy}"></button>
+            <button type="button" class="btn btn-light" id="delete-button"
+                    style="margin-top: 15px; margin-right: 15px" th:text="#{cash_box.card.button.delete}"></button>
+            <button type="button" class="btn btn-primary"
+                    style="margin-top: 15px; margin-right: 15px" onclick="editCashBox()" th:text="#{cash_box.card.button.edit}"></button>
+            <button type="button" class="btn btn-light"
+                    style="margin-top: 15px; margin-right: 15px" th:text="#{global.dropdown.button.excel}"></button>
+          </div>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="col-3" th:text="#{cash_box.card.owner}"></td>
+            <td id="owner"></td>
+          </tr>
+          <tr>
+            <td th:text="#{cash_box.card.bank_book}"></td>
+            <td id="bank-book"></td>
+          </tr>
+          <tr>
+            <td th:text="#{cash_box.card.article}"></td>
+            <td id="article"></td>
+          </tr>
+          <tr>
+            <td th:text="#{cash_box.card.draft}"></td>
+            <td class="h5" id="draft"></td>
+          </tr>
+          <tr>
+            <td th:text="#{cash_box.card.manager}"></td>
+            <td id="manager"></td>
+          </tr>
+          <tr>
+            <td th:text="#{cash_box.card.sum}"></td>
+            <td id="sum"></td>
+          </tr>
+          <tr>
+            <td th:text="#{cash_box.card.comment}"></td>
+            <td id="comment"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+  <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+  <script>
+    let cashBoxId = undefined;
+
+    $(document).ready(function () {
+      cashBoxId = new URL(window.location.href).pathname.split("-").pop()
+      getCahBoxResponse(cashBoxId);
+    });
+
+    $(document).on('click', '#delete-button', function () {
+      billId = $(this).data('id');
+      $('#confirmDelete').modal('show');
+    });
+
+    function getCahBoxResponse(id) {
+      $.ajax({
+        method: "GET",
+        url: "/admin/cash-box/get-cash-box-" + id,
+        dataType: 'json'
+      }).done(function (response) {
+        console.log(response)
+
+        cashBoxId = response?.id;
+        $("#number").val(response?.number);
+        $("#date").val(response?.createAt);
+        $("#sum").html(addColorIncomeExpense(response?.type, response?.price));
+        $("#draft").html(addBadgeBillDraft(response?.draft?.name === 'true'));
+        $("#comment").html(response?.comment);
+
+        $("#manager").html(response?.staff?.fullName);
+        $("#article").html(response?.article?.name);
+
+        $("#bank-book").html(response?.bankBook ? bankBookInfo(response?.bankBook) : '-');
+        $("#owner").html(response?.bankBook ? ownerInfo(response?.bankBook?.apartment?.owner) : '-');
+
+        if (response?.type){
+          $("#breadcrumb-title").append('[[#{cash_box.card.income.breadcrumb}]]');
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number));
+        }else {
+          $("#breadcrumb-title").append('[[#{cash_box.card.expense.breadcrumb}]]');
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number));
+        }
+
+        const deleteButton = document.getElementById("delete-button");
+        deleteButton.setAttribute("data-toggle", "modal");
+        deleteButton.setAttribute("data-target", "#confirmDelete");
+        deleteButton.setAttribute("data-id", cashBoxId);
+
+      }).fail(function () {
+        window.location.href = "/admin/error";
+      });
+    }
+
+    function ownerInfo(owner){
+      let onclickAdd = 'onclick="ownerCard(' + owner.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + owner.fullName + '</a>';
+    }
+
+    function bankBookInfo(bankBook){
+      let onclickAdd = 'onclick="bankBookCard(' + bankBook.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + bankBook.number + '</a>';
+    }
+
+    function ownerCard(id) {
+      window.location.href = '/admin/users/user-card/' + id;
+    }
+
+    function bankBookCard(id) {
+      window.location.href = '/admin/bank-books/card-' + id;
+    }
+
+    function editCashBox() {
+      window.location.href = '/admin/cash-box/update-' + cashBoxId;
+    }
+
+    function copyCashBox() {
+      window.location.href = '/admin/cash-box/add-copy-' + cashBoxId;
+    }
+
+    const date_flatpickr = document.querySelectorAll('#date');
+    Array.from(date_flatpickr, (elem) => {
+      if (typeof flatpickr !== typeof undefined) {
+        flatpickr(elem, {
+          minDate: "01.01.2014",
+          dateFormat: "d.m.Y"
+        })
+      }
+    })
+
+    function deleteEntity() {
+      $.ajax({
+        method: "DELETE",
+        url: "/admin/cash-box/delete-cash-box/" + cashBoxId,
+        contentType: 'application/json'
+      }).done(function () {
+        $('#confirmDelete').modal('hide');
+        showToast('success');
+        setTimeout(function (){
+          window.location.href = "/admin/cash-box";
+        },3000);
+      }).fail(function (response) {
+        console.log(response);
+        $('#confirmDelete').modal('hide');
+        $('#custom-toast').text(response?.responseText)
+        showToast('custom');
+      })
+    }
+
+
+  </script>
+
+</th:block>
+
+</html>

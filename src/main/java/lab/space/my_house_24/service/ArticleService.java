@@ -17,6 +17,9 @@ public interface ArticleService {
     ResponseEntity<?> getArticleDtoById(Long id);
 
     Page<ArticleResponse> getAllArticleDto(ArticleRequest request);
+
+    List<ArticleResponse> getAllArticleResponseByType(Boolean type);
+
     List<EnumResponse> getAllType();
 
     void saveArticle(Article article);
