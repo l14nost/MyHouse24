@@ -19,6 +19,8 @@ public interface BankBookService {
 
     List<BankBookResponseForTable> bankBookListForTable();
 
+    List<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Long userId);
+
     Page<BankBookResponse> getAllBankBookResponse(BankBookRequest request);
 
     List<EnumResponse> getAllBalanceStatus();
@@ -32,7 +34,6 @@ public interface BankBookService {
     void saveBankBook(BankBook bankBook);
 
     void deleteBankBookById(Long id) throws EntityNotFoundException;
-    void update(Long id,BankBook bankBook);
 
     Long count();
 }

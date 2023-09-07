@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+  <title th:text="#{bills.card.title}"></title>
+  <style>
+    .form-control:disabled {
+      background-color: #fdfdfd;
+    }
+  </style>
+</head>
+
+<th:block layout:fragment="content">
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <div class="header-title">
+          <h4 class="card-title" id="breadcrumb-title" th:text="#{bills.card.breadcrumb}"></h4>
+        </div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb" id="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+            <li class="breadcrumb-item active" aria-current="page"
+                th:text="#{bills.breadcrumb}"></li>
+          </ol>
+        </nav>
+      </div>
+      <div class="card-body px-0">
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+      <div class="form-group">
+        <div class="input-group" id="passwordResponse">
+          <button class="btn btn-gray disabled" type="button">№</button>
+          <input type="text" class="form-control pass" id="number" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto mt-2 pe-0" th:text="#{masters_call.card.time.at}"></div>
+    <div class="col-3">
+      <div class="input-group">
+        <input class="form-control" id="date" type="date"
+               th:placeholder="#{masters_call.save.date.placeholder}" disabled>
+        <button class="input-group-text input-button pointer-event" disabled>
+          <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table  table-hover table-bordered table-md mb-0" style="margin-top: 15px;max-width: 100%">
+          <thead>
+          <div class="text-end">
+            <button type="button" class="btn btn-light"
+                    style="margin-top: 15px; margin-right: 15px" th:text="#{bills.card.button.print}"></button>
+            <button type="button" class="btn btn-light"
+                    style="margin-top: 15px; margin-right: 15px" th:text="#{bills.card.button.send_email}"></button>
+            <button type="button" class="btn btn-primary"
+                    style="margin-top: 15px; margin-right: 15px" onclick="editBill()" th:text="#{bills.card.button.add_bill}"></button>
+          </div>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="col-3" th:text="#{bills.card.draft}"></td>
+            <td class="h5" id="draft"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.status}"></td>
+            <td class="h5" id="status"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.month}"></td>
+            <td id="month"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.owner}"></td>
+            <td id="owner"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.bank_book}"></td>
+            <td id="bank-book"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.phone}"></td>
+            <td id="phone"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.house}"></td>
+            <td id="house"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.apartment}"></td>
+            <td id="apartment"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.section}"></td>
+            <td id="section"></td>
+          </tr>
+          <tr>
+            <td th:text="#{bills.card.rate}"></td>
+            <td id="rate"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table  table-hover table-bordered table-md my-0" style="margin-top: 15px;max-width: 100%" id="service-table">
+          <thead>
+          <tr>
+            <td class="col-auto">#</td>
+            <td th:text="#{bills.card.service}"></td>
+            <td th:text="#{bills.card.count}"></td>
+            <td th:text="#{bills.card.unit}"></td>
+            <td th:text="#{bills.card.price_per_unit}"></td>
+            <td th:text="#{bills.card.price}"></td>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="5"></td>
+            <td>[[#{bills.card.total_price}]]: <a id="total-price"></a></td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+  <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+  <script>
+
+    let billId = undefined;
+
+    $(document).ready(function () {
+      billId = new URL(window.location.href).pathname.split("-").pop()
+      getBillResponse(billId);
+    });
+
+    function getBillResponse(id) {
+      $.ajax({
+        method: "GET",
+        url: "/admin/bills/get-bill-" + id,
+        dataType: 'json'
+      }).done(function (response) {
+        console.log(response)
+
+        $("#number").val(response?.number);
+        $("#date").val(response?.createAt);
+        $("#status").html(addBadgeBillStatus(response?.status));
+        $("#draft").html(addBadgeBillDraft(response?.draft));
+        $("#month").html(response?.month);
+        $("#owner").html(ownerInfo(response?.bankBook?.apartment?.owner));
+        $("#bank-book").html(bankBookInfo(response?.bankBook));
+        $("#phone").html(response?.bankBook?.apartment?.owner?.phone);
+        $("#house").html(houseInfo(response?.bankBook?.apartment?.house));
+        $("#apartment").html(apartmentInfo(response?.bankBook?.apartment));
+        $("#section").html(response?.bankBook?.apartment?.section?.name);
+        $("#total-price").html(response?.totalPrice);
+        $("#rate").html(response?.rate ? rateInfo(response?.rate) : '-');
+
+        const SERVICE_BODY = createTableService('#service-table', response?.services.length)
+        $.each(response?.services, function (index, service) {
+          $(SERVICE_BODY).append(
+                  '<tr>' +
+                  '    <td>' + (index + 1) + '</td>' +
+                  '    <td>' + service?.service?.name + '</td>' +
+                  '    <td>' + service?.count + '</td>' +
+                  '    <td>' + service?.service?.unit?.name + '</td>' +
+                  '    <td>' + service?.price + '</td>' +
+                  '    <td>' + service?.totalPrice + '</td>' +
+                  '</tr>'
+          );
+        });
+
+        $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number));
+      }).fail(function (){
+        window.location.href = "/admin/error";
+      });
+    }
+
+    function ownerInfo(owner){
+      let onclickAdd = 'onclick="ownerCard(' + owner.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + owner.fullName + '</a>';
+    }
+
+    function houseInfo(house){
+      let onclickAdd = 'onclick="houseCard(' + house.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + house.name + '</a>';
+    }
+
+    function apartmentInfo(apartment){
+      let onclickAdd = 'onclick="apartmentCard(' + apartment.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + apartment.number + '</a>';
+    }
+
+    function bankBookInfo(bankBook){
+      let onclickAdd = 'onclick="bankBookCard(' + bankBook.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + bankBook.number + '</a>';
+    }
+
+    function rateInfo(rate){
+      let onclickAdd = 'onclick="rateCard(' + rate.id + ')"';
+      return '<a ' + onclickAdd + ' type="button" class="link">' + rate.name + '</a>';
+    }
+
+    function rateCard(id) {
+      window.location.href = '/admin/rates/card-' + id;
+    }
+
+    function ownerCard(id) {
+      window.location.href = '/admin/users/user-card/' + id;
+    }
+
+    function apartmentCard(id) {
+      window.location.href = '/admin/apartments/apartment-card/' + id;
+    }
+
+    function houseCard(id) {
+      window.location.href = '/admin/houses/house-card/' + id;
+    }
+
+    function bankBookCard(id) {
+      window.location.href = '/admin/bank-books/card-' + id;
+    }
+
+    function editBill() {
+      window.location.href = '/admin/bills/update-' + billId;
+    }
+
+    const date_flatpickr = document.querySelectorAll('#date');
+    Array.from(date_flatpickr, (elem) => {
+      if (typeof flatpickr !== typeof undefined) {
+        flatpickr(elem, {
+          minDate: "01.01.2014",
+          dateFormat: "d.m.Y"
+        })
+      }
+    })
+
+    function createTableService(tableSelector, itemsCount) {
+      const TABLE_DIV = $(tableSelector);
+      const TABLE_HEAD = $(TABLE_DIV).find('thead');
+      const TABLE_BODY = $(TABLE_DIV).find('tbody');
+      const TABLE_COLUMNS_COUNT = $(TABLE_HEAD).find('th').length;
+
+      $(TABLE_BODY).empty();
+      if (itemsCount <= 0) {
+        $(TABLE_BODY).append(
+                '<tr>' +
+                '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
+                '[[#{table.empty}]]' +
+                '    </td>' +
+                '</tr>'
+        );
+      }
+
+      return TABLE_BODY;
+    }
+
+
+  </script>
+
+</th:block>
+
+</html>

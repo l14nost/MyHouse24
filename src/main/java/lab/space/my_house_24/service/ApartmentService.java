@@ -26,6 +26,12 @@ public interface ApartmentService {
 
     List<ApartmentResponseForBankBook> getAllApartmentResponseByHouseIdAndSectionId(Long houseId, Long sectionId);
 
+    List<ApartmentResponseForBill> getAllApartmentResponseByHouseIdForBill(Long id);
+
+    List<ApartmentResponseForBill> getAllApartmentResponseByHouseIdAndSectionIdForBill(Long houseId, Long sectionId);
+
+    List<ApartmentResponseForBill> getAllApartmentResponseForBill();
+
     List<ApartmentResponseForBankBook> getAllApartmentResponse();
 
     List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor);

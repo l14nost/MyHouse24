@@ -111,13 +111,14 @@
     <script>
 
         let bankBookId = undefined;
+        let apartmentId = undefined;
 
         $(document).ready(function () {
             bankBookId = new URL(window.location.href).pathname.split("-").pop()
-            getMastersApplicationResponse(bankBookId);
+            getBankBookResponse(bankBookId);
         });
 
-        function getMastersApplicationResponse(id) {
+        function getBankBookResponse(id) {
             $.ajax({
                 method: "GET",
                 url: "/admin/bank-books/get-bank-book-" + id,
@@ -127,6 +128,8 @@
 
                 $("#number").val(response?.number);
                 $("#status").html(addBadgeBankBookStatus(response?.status));
+
+                apartmentId = response?.apartment?.id;
 
                 $("#house").html(response?.apartment?.house ? houseInfo(response?.apartment?.house) : '-');
                 $("#section").html(response?.apartment?.section?.name ? response?.apartment?.section?.name : '-');
@@ -157,15 +160,15 @@
         }
 
         function ownerCard(id) {
-            window.location.href = '/admin/user-card/' + id;
+            window.location.href = '/admin/users/user-card/' + id;
         }
 
         function apartmentCard(id) {
-            window.location.href = '/admin/apartment-card/' + id;
+            window.location.href = '/admin/apartments/apartment-card/' + id;
         }
 
         function houseCard(id) {
-            window.location.href = '/admin/house-card/' + id;
+            window.location.href = '/admin/houses/house-card/' + id;
         }
 
         function editBankBook() {
@@ -173,7 +176,8 @@
         }
 
         function createBill() {
-            window.location.href = '/admin/bills/add';
+            if (apartmentId) window.location.href = '/admin/bills/add-copy-bank-book-' + bankBookId;
+            else window.location.href = '/admin/bills/add';
         }
 
     </script>

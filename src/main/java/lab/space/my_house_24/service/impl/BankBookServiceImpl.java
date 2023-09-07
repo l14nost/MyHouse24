@@ -18,12 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -58,6 +58,11 @@ public class BankBookServiceImpl implements BankBookService {
     @Override
     public List<BankBookResponseForTable> bankBookListForTable() {
         return bankBookRepository.findAllByApartmentIsNull().stream().map(BankBookMapper::entityToDtoForTable).toList();
+    }
+
+    @Override
+    public List<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Long userId) {
+        return bankBookRepository.findAll(bankBookSpecification.getBankBookByUser(userId)).stream().map(BankBookMapper::toBankBookResponseForCashBox).toList();
     }
 
     @Override
@@ -96,12 +101,12 @@ public class BankBookServiceImpl implements BankBookService {
         log.info("Try to Update BankBook by Request");
         if (nonNull(request.apartmentId())) {
             saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateRandomString())),
+                    ((nonNull(request.number()) ? request.number() : generateNumber())),
                     getBankBookById(request.id()),
                     getApartmentById(request.apartmentId())));
         } else {
             saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateRandomString())),
+                    ((nonNull(request.number()) ? request.number() : generateNumber())),
                     getBankBookById(request.id()),
                     null));
         }
@@ -113,11 +118,11 @@ public class BankBookServiceImpl implements BankBookService {
         log.info("Try to Save BankBook by Request");
         if (nonNull(request.apartmentId())) {
             saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateRandomString())),
+                    ((nonNull(request.number()) ? request.number() : generateNumber())),
                     getApartmentById(request.apartmentId())));
         } else {
             saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateRandomString())), null));
+                    ((nonNull(request.number()) ? request.number() : generateNumber())), null));
         }
         log.info("Success Save BankBook by Request");
     }
@@ -142,13 +147,34 @@ public class BankBookServiceImpl implements BankBookService {
                 .orElseThrow(() -> new EntityNotFoundException("Apartment not found by id " + id));
     }
 
-    private static String generateRandomString() {
-        Random random = new Random();
+    private String generateNumber() {
+        log.info("Try to generate Number");
+        List<BankBook> bankBookList = bankBookRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        if (bankBookList.isEmpty()){
+            log.warn("Bank books not found");
+            return String.format("%05d-%05d", 0, 1);
+        }
+        BankBook bankBook = bankBookList.get(0);
 
-        int firstPart = random.nextInt(100000);
-        int secondPart = random.nextInt(100000);
+        String number = bankBook.getNumber();
+        String[] parts;
 
-        return String.format("%05d-%05d", firstPart, secondPart);
+        int firstPart;
+        int secondPart;
+
+        do {
+            parts = number.split("-");
+            firstPart = Integer.parseInt(parts[0]);
+            secondPart = Integer.parseInt(parts[1]);
+            secondPart++;
+            if (secondPart > 99999) {
+                firstPart++;
+                secondPart = 1;
+            }
+            number = String.format("%05d-%05d", firstPart, secondPart);
+        } while (bankBookRepository.existsByNumber(number));
+        log.info("Success generate Number");
+        return number;
     }
 
     @Override

@@ -52,7 +52,24 @@ public class BankBookSpecification {
             if (nonNull(request.balanceQuery())) {
 
             }
-            query.orderBy(criteriaBuilder.asc(root.get("id")));
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public Specification<BankBook> getBankBookByUser(Long id) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (nonNull(id)) {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.equal(root.get("apartment").get("user").get("id"), id)
+                ));
+            } else {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.isNotNull(root.get("apartment"))
+                ));
+            }
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

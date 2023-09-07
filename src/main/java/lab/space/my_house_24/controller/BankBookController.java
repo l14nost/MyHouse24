@@ -13,7 +13,9 @@ import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.model.user.UserResponseForTable;
 import lab.space.my_house_24.service.*;
 import lab.space.my_house_24.util.ErrorMapper;
+import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,7 @@ import java.util.List;
 public class BankBookController {
 
     private final BankBookService bankBookService;
+    private final BankBookValidator bankBookValidator;
     private final ApartmentService apartmentService;
     private final SectionService sectionService;
     private final HouseService houseService;
@@ -117,6 +120,8 @@ public class BankBookController {
     @PutMapping("/update-bank-book")
     public ResponseEntity<?> updateBankBook(@Valid @RequestBody BankBookUpdateRequest request,
                                             BindingResult bindingResult) {
+        bankBookValidator.isNumberUniqueValidationWithId(request.id(), request.number(), bindingResult,
+                "BankBookUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -131,6 +136,8 @@ public class BankBookController {
     @PostMapping("/save-bank-book")
     public ResponseEntity<?> saveBankBook(@Valid @RequestBody BankBookSaveRequest request,
                                           BindingResult bindingResult) {
+        bankBookValidator.isNumberUniqueValidation(request.number(), bindingResult,
+                "BankBookSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }

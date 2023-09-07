@@ -3,11 +3,11 @@ package lab.space.my_house_24.mapper;
 import lab.space.my_house_24.entity.MeterReading;
 import lab.space.my_house_24.model.meterReading.MeterReadingResponseEdit;
 import lab.space.my_house_24.model.meterReading.MeterReadingResponseForApartment;
+import lab.space.my_house_24.model.meterReading.MeterReadingResponseForBill;
 import lab.space.my_house_24.model.meterReading.MeterReadingResponseForMain;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 public class MeterReadingMapper {
 
@@ -49,6 +49,21 @@ public class MeterReadingMapper {
                 .count(meterReading.getCount())
                 .service(ServiceMapper.entityToDtoForSelect(meterReading.getService()))
                 .date(meterReading.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .build();
+    }
+
+    public static MeterReadingResponseForBill toMeterReadingResponseForBill(MeterReading meterReading){
+        return MeterReadingResponseForBill.builder()
+                .id(meterReading.getId())
+                .number(String.format("%010d", meterReading.getId()))
+                .status(meterReading.getStatus().getMeterReadingStatus(LocaleContextHolder.getLocale()))
+                .date(meterReading.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .month(meterReading.getDate().atZone(ZoneId.systemDefault()).getMonth() + ", " + meterReading.getDate().atZone(ZoneId.systemDefault()).getYear())
+                .house(meterReading.getApartment().getHouse().getName())
+                .section(meterReading.getApartment().getSection().getName())
+                .apartment(meterReading.getApartment().getNumber().toString())
+                .service(ServiceMapper.toSimpleDto(meterReading.getService()))
+                .count(meterReading.getCount())
                 .build();
     }
 }

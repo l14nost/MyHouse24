@@ -91,4 +91,16 @@ public class ApartmentMapper {
                 .build();
 
     }
+
+    public static ApartmentResponseForBill entityToResponseForBill(Apartment apartment) {
+        return ApartmentResponseForBill.builder()
+                .id(apartment.getId())
+                .number(String.valueOf(apartment.getNumber()))
+                .house(HouseMapper.entityToDtoForTable(apartment.getHouse()))
+                .section(SectionMapper.entityToDtoForTable(apartment.getSection()))
+                .owner(UserMapper.entityToResponseForMastersApplication(apartment.getUser()))
+                .bankBook(BankBookMapper.toSimpleBankBookResponse(apartment.getBankBook()))
+                .build();
+
+    }
 }

@@ -35,7 +35,7 @@ public class Staff implements UserDetails {
 
     @Column(length = 25, nullable = false)
     private String lastname;
-    
+
     @Column(length = 25, nullable = false)
     private String phone;
 

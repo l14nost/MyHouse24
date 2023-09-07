@@ -36,6 +36,8 @@ public interface StaffService {
 
     List<StaffResponse> getAllStaffMaster(StaffMasterRequest request);
 
+    List<StaffResponse> getAllStaffManager();
+
     Page<StaffResponse> getAllStaffDto(StaffRequest request);
 
     ResponseEntity<?> updateStaff(StaffUpdateRequest staffUpdateRequest);

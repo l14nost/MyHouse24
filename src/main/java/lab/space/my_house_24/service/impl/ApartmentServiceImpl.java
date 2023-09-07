@@ -146,9 +146,36 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
+    public List<ApartmentResponseForBill> getAllApartmentResponseByHouseIdForBill(Long id) {
+        log.info("Get all Apartment by HouseId and convert in Response for Bill");
+        return findAllApartmentByHouse(id)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBill)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBill> getAllApartmentResponseByHouseIdAndSectionIdForBill(Long houseId, Long sectionId) {
+        log.info("Get all Apartment by HouseId and SectionId, and convert in Response for Bill");
+        return apartmentRepository.findAllByHouse_IdAndSection_IdOrderById(houseId,sectionId)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBill)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBill> getAllApartmentResponseForBill() {
+        log.info("Get all Apartment and convert in Response for BankBook");
+        return apartmentRepository.findAll(Sort.by(Sort.Direction.DESC,"id"))
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBill)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ApartmentResponseForBankBook> getAllApartmentResponse() {
         log.info("Get all Apartment and convert in Response for BankBook");
-        return apartmentRepository.findAll(Sort.by(Sort.Direction.ASC,"id"))
+        return apartmentRepository.findAll(Sort.by(Sort.Direction.DESC,"id"))
                 .stream()
                 .map(ApartmentMapper::entityToResponseForBankBook)
                 .collect(Collectors.toList());

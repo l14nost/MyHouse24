@@ -21,32 +21,32 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 25, nullable = false)
     private String firstname;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 25, nullable = false)
     private String lastname;
 
-    @Column(length = 25,nullable = false)
+    @Column(length = 25, nullable = false)
     private String surname;
 
-    @Column(length = 100,nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 100,nullable = false)
+    @Column(length = 100, nullable = false)
     private String email;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String number;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String viber;
 
-    @Column(length = 20,nullable = false)
+    @Column(length = 20, nullable = false)
     private String telegram;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50,nullable = false, name = "status")
+    @Column(length = 50, nullable = false, name = "status")
     private UserStatus userStatus;
 
     @Column(length = 1000)
@@ -66,9 +66,6 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Apartment> apartmentList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<CashBox> cashBoxList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<MastersApplication> applicationList = new ArrayList<>();

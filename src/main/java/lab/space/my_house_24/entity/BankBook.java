@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "bank_book")
 @Data
@@ -27,6 +30,12 @@ public class BankBook {
     @Column(name = "status", length = 50, nullable = false)
     private BankBookStatus bankBookStatus;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     private Apartment apartment;
+
+    @OneToMany(mappedBy = "bankBook", cascade = CascadeType.ALL)
+    private List<Bill> bill = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bankBook")
+    private List<CashBox> cashBoxes = new ArrayList<>();
 }

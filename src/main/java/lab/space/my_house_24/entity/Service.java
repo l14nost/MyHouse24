@@ -31,7 +31,7 @@ public class Service {
     @ManyToOne
     private Unit unit;
 
-    @OneToMany
+    @OneToMany(mappedBy = "service")
     private List<MeterReading> meterReadingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "service")
