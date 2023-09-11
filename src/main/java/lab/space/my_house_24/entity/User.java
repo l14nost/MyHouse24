@@ -70,6 +70,9 @@ public class User {
     @Column(name = "token_usage")
     private Boolean tokenUsage;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Token> tokenList = new ArrayList<>();
+
     @OneToMany(mappedBy = "user")
     private List<Apartment> apartmentList = new ArrayList<>();
 

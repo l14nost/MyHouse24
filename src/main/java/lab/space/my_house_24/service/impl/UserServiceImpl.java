@@ -156,6 +156,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponseForHeader> usersByStatus(UserStatus userStatus) {
+        return userRepository.findAllByUserStatus(userStatus).stream().map(UserMapper::entityToHeaderDto).toList();
+    }
+
+    @Override
     public void sendActivateLetter(String email) {
         User user = getUserByEmail(email);
         String token = jwtServiceForUser.generateToken(user.getEmail());

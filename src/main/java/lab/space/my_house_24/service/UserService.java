@@ -37,4 +37,6 @@ public interface UserService {
     String loadUserByToken(String token);
 
     void activate(ForgotPassRequest forgotPassRequest, String token);
+
+    List<UserResponseForHeader> usersByStatus(UserStatus userStatus);
 }

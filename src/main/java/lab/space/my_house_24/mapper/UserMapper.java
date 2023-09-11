@@ -8,9 +8,11 @@ import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.user.*;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class UserMapper {
@@ -42,6 +44,10 @@ public class UserMapper {
 
 
     public  static UserCardResponse entityToCardDto(User user){
+        LocalDate localDate = null;
+        if (user.getDate()!=null){
+            localDate = user.getDate().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
         UserCardResponse userResponse = UserCardResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -51,15 +57,18 @@ public class UserMapper {
                 .status(EnumMapper.toSimpleDto(user.getUserStatus().name(), user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale())))
                 .number(user.getNumber())
                 .filename(user.getFilename())
-                .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .date(localDate)
                 .viber(user.getViber())
                 .telegram(user.getTelegram())
                 .build();
-
         return userResponse;
     }
 
     public  static UserEditResponse entityToEditDto(User user){
+        LocalDate localDate = null;
+        if (user.getDate()!=null){
+            localDate = user.getDate().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
         UserEditResponse userResponse = UserEditResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -69,7 +78,7 @@ public class UserMapper {
                 .status(user.getUserStatus())
                 .number(user.getNumber())
                 .filename(user.getFilename())
-                .date(user.getDate().atZone(ZoneId.systemDefault()).toLocalDate())
+                .date(localDate)
                 .viber(user.getViber())
                 .telegram(user.getTelegram())
                 .notes(user.getNotes())
@@ -89,6 +98,13 @@ public class UserMapper {
                 .id(user.getId())
                 .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
                 .phone(user.getNumber())
+                .build();
+    }
+
+    public static UserResponseForHeader entityToHeaderDto(User user) {
+        return UserResponseForHeader.builder()
+                .id(user.getId())
+                .fullName(user.getLastname()+" "+user.getFirstname())
                 .build();
     }
 }

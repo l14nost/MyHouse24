@@ -140,4 +140,11 @@ public interface StaffMapper {
                 .fullName(staff.getLastname()+" "+staff.getFirstname())
                 .build();
     }
+
+    static  StaffResponseForHeader entityToDtoForHeader(Staff staff){
+        return StaffResponseForHeader.builder()
+                .fullName(staff.getLastname()+" "+staff.getFirstname())
+                .email(staff.getEmail())
+                .build();
+    }
 }

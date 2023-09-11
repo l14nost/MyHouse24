@@ -147,6 +147,11 @@ public class StaffController {
         return ResponseEntity.ok().body(staffService.getCurrentStaff());
     }
 
+    @GetMapping("/get-current-staff-for-header")
+    public ResponseEntity getCurrentStaffForHeader(){
+        return ResponseEntity.ok().body(staffService.getCurrentStaffForHeader());
+    }
+
 
 
 }

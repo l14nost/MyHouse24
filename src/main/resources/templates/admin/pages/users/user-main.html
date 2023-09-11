@@ -520,7 +520,11 @@
                 function (){
                     $('#confirmDeleteUser').modal('hide');
                     userId = undefined;
-                    getAllUser(0);
+                    var form = document.getElementById("filter");
+                    var formData = new FormData(form);
+                    formData.append("page", 0);
+                    getAllUser(formData);
+                    newUserCount();
                     showToast('success');
                 }
             ).fail(

@@ -351,8 +351,65 @@
         }
     });
 
+    function newUserCount(){
+        $.ajax({
+            url: "/admin/users/get-users-for-header"
+        })
+            .done(function(response) {
+                let countUsers = document.getElementById("countUsers");
+                countUsers.innerHTML = "";
+                let newUsersContainer = document.getElementById("newUsersContainer");
+                newUsersContainer.innerHTML = "";
 
+                if (response.length>0) {
+                    $("#countUsers").text(response.length)
+                }
+                else {
+                    let summaryContainer = document.getElementById("newUsersContainer");
+                    let newLi = document.createElement("a");
+                    newLi.classList.add("iq-sub-card")
+                    newLi.innerHTML = "<div class=\"d-flex align-items-center\" >\n" +
+                        "            <div class=\"ms-3 text-center\" style='width: 100%'>\n" +
+                        "                <h6>"+"[[#{table.empty}]]"+"</h6>\n" +
+                        "            </div>\n" +
+                        "        </div>"
+                    summaryContainer.appendChild(newLi);
+                }
+                $.each(response, function (index, entity) {
+                    let summaryContainer = document.getElementById("newUsersContainer");
+                    let newLi = document.createElement("a");
+                    newLi.classList.add("iq-sub-card")
+                    newLi.href = "/admin/users/user-card/"+entity.id
+                    newLi.innerHTML = "<div class=\"d-flex align-items-center\" >\n" +
+                        "            <div class=\"ms-3 d-flex justify-content-between\" style='width: 100%'>\n" +
+                        "                <h6>"+entity.fullName+"</h6>\n" +
+                        "                                <i class=\"icon\">\n" +
+                        "                                    <svg class=\"icon-10\" xmlns=\"http://www.w3.org/2000/svg\" width=\"10\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n" +
+                        "                                        <g>\n" +
+                        "                                            <circle cx=\"12\" cy=\"12\" r=\"8\" fill=\"currentColor\"></circle>\n" +
+                        "                                        </g>\n" +
+                        "                                    </svg>\n" +
+                        "                                </i>\n" +
+                        "            </div>\n" +
+                        "        </div>"
+                    summaryContainer.appendChild(newLi);
+
+                })
+
+            });
+    }
     $(document).ready ( function(){
+        $.ajax({
+            url: "/admin/staff/get-current-staff-for-header"
+        })
+            .done(function(response) {
+                $("#fullName-staff").text(response.fullName)
+                $("#email-staff").text(response.email)
+            });
+
+
+      newUserCount();
+
         function getTheme() {
             $.ajax({
                 url: "/admin/get-theme"

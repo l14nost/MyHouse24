@@ -1,6 +1,7 @@
 package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
+import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.model.user.*;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.JwtServiceForUser;
@@ -158,7 +159,7 @@ public class UserController {
     }
 
     @PutMapping("/activate/{token}")
-    public ResponseEntity<?> forgotPasswordStaff(@PathVariable String token, @Valid @RequestBody ForgotPassRequest forgotPassRequest,
+    public ResponseEntity<?> active(@PathVariable String token, @Valid @RequestBody ForgotPassRequest forgotPassRequest,
                                                  BindingResult bindingResult) {
         userValidator.passwordMatch(forgotPassRequest.password(), forgotPassRequest.confirmPassword(), bindingResult, "ForgotPassRequest");
         if (bindingResult.hasErrors()) {
@@ -168,4 +169,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/get-users-for-header")
+    public ResponseEntity getUserForHeader(){
+        return ResponseEntity.ok(userService.usersByStatus(UserStatus.NEW));
+    }
 }

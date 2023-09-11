@@ -332,6 +332,12 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
+    public StaffResponseForHeader getCurrentStaffForHeader() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return StaffMapper.entityToDtoForHeader(getStaffByEmail(authentication.getName()));
+    }
+
+    @Override
     public void changeTheme(Boolean theme) {
         Staff staff = getStaffById(getCurrentStaff());
         staff.setTheme(theme);
