@@ -240,12 +240,12 @@
                         '<tr  data-href="/admin/cash-box/card-' + cashBox.id + '" data-key="' + cashBox.id + '">' +
                         '    <td>' + cashBox?.number + '</td>' +
                         '    <td>' + cashBox?.createAt + '</td>' +
-                        '    <td>' + cashBox?.draft?.value + '</td>' +
+                        '    <td class="h5">' + addBadgeBillDraft(cashBox?.draft?.name === 'true') + '</td>' +
                         '    <td>' + cashBox?.article?.name + '</td>' +
                         '    <td>' + (cashBox?.bankBook ? cashBox?.bankBook?.apartment?.owner?.fullName : '-') + '</td>' +
                         '    <td>' + (cashBox?.bankBook ? cashBox?.bankBook?.number : '-') + '</td>' +
                         '    <td>' + addColorTextIncomeExpense(cashBox?.article?.type) + '</td>' +
-                        '    <td>' + addColorIncomeExpense(cashBox?.type, cashBox?.price) + '</td>' +
+                        '    <td>' + addColorIncomeExpense(cashBox?.type, cashBox?.price.toFixed(2)) + '</td>' +
                         '    <td data-actions="data-actions">' + $edit + $deleteBtn + '</td>' +
                         '</tr>'
                     );

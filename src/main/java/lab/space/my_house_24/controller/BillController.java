@@ -176,10 +176,14 @@ public class BillController {
                                         BindingResult bindingResult) {
         billValidator.isNumberUniqueValidationWithId(request.id(), request.number(), bindingResult,
                 "BillUpdateRequest", LocaleContextHolder.getLocale());
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
-        }
+        billValidator.isPayedAndStatusEqualValidation(request.payed(), request.totalPrice(), request.status(), bindingResult,
+                "BillUpdateRequest", LocaleContextHolder.getLocale());
         try {
+            billValidator.isPayedCashBoxAndPayedValidationWithId(request.id(), request.payed(), request.totalPrice(), bindingResult,
+                    "BillUpdateRequest", LocaleContextHolder.getLocale());
+            if (bindingResult.hasErrors()) {
+                return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+            }
             billService.updateBillByRequest(request);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -191,6 +195,8 @@ public class BillController {
     public ResponseEntity<?> saveBill(@Valid @RequestBody BillSaveRequest request,
                                       BindingResult bindingResult) {
         billValidator.isNumberUniqueValidation(request.number(), bindingResult,
+                "BillSaveRequest", LocaleContextHolder.getLocale());
+        billValidator.isPayedAndStatusEqualValidation(request.payed(), request.totalPrice(), request.status(), bindingResult,
                 "BillSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
@@ -223,7 +229,8 @@ public class BillController {
             billService.deleteBillByRequest(bills);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException | IllegalArgumentException e) {
-            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

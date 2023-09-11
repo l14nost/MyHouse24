@@ -275,12 +275,12 @@
         let badgeClasses = '';
         let badgeText = '';
 
-        if (value !== 0 && value !== '0'){
+        if (parseInt(value) !== 0 && value !== '0'){
             if (type) {
                 badgeText += value;
                 badgeClasses += 'text-success';
             }else {
-                badgeText += '-' + value;
+                badgeText += (value.includes('-') ? '' : '-') + value;
                 badgeClasses += 'text-danger';
             }
         }else {

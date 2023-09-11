@@ -86,13 +86,13 @@
             </div>
             <div class="card-footer">
                     <div class="col form-label">
-                        <a th:href="@{meter-reading}" type="link" role="button" th:text="#{bank_book.card.url.meter_reading}"></a>
+                        <a th:href="@{/meter-reading}" type="link" role="button" th:text="#{bank_book.card.url.meter_reading}"></a>
                     </div>
                     <div class="col form-label">
-                        <a th:href="@{cash-box}" type="link" role="button" th:text="#{bank_book.card.url.income}"></a>
+                        <a th:href="@{/cash-box}" type="link" role="button" th:text="#{bank_book.card.url.income}"></a>
                     </div>
                     <div class="col form-label">
-                        <a th:href="@{bills}" type="link" role="button" th:text="#{bank_book.card.url.bill}"></a>
+                        <a th:href="@{/bills}" type="link" role="button" th:text="#{bank_book.card.url.bill}"></a>
                     </div>
             </div>
         </div>
@@ -135,7 +135,7 @@
                 $("#section").html(response?.apartment?.section?.name ? response?.apartment?.section?.name : '-');
                 $("#apartment").html(response?.apartment ? apartmentInfo(response?.apartment) : '-');
                 $("#owner").html(response?.apartment?.owner ? ownerInfo(response?.apartment?.owner) : '-');
-                $("#balance").html(response?.apartment?.house?.balance ? response?.apartment?.house?.balance : '-');
+                $("#balance").html(response?.totalPrice.toFixed(2));
 
                 $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]]');
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));

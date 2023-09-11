@@ -8,6 +8,7 @@ import lab.space.my_house_24.model.bill.BillSaveRequest;
 import lab.space.my_house_24.model.bill.BillUpdateRequest;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -34,6 +35,7 @@ public interface BillMapper {
                 .rate(nonNull(bill.getRate()) ? RateMapper.toRateResponseForBill(bill.getRate()) : null)
                 .draft(bill.getDraft())
                 .totalPrice(bill.getTotalPrice())
+                .payed(bill.getPayed())
                 .bankBook(BankBookMapper.toBankBookResponse(bill.getBankBook()))
                 .periodOf(bill.getPeriodOf().atZone(ZoneId.systemDefault()).toLocalDate())
                 .periodTo(bill.getPeriodTo().atZone(ZoneId.systemDefault()).toLocalDate())
@@ -55,6 +57,10 @@ public interface BillMapper {
                 .periodOf(request.periodOf().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime())
                 .periodTo(request.periodTo().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime())
                 .isActive(request.draft())
+                .autoPayed(false)
+                .payedCashBox(BigDecimal.ZERO)
+                .historyPayedCashBox(BigDecimal.ZERO)
+                .payed(request.payed())
                 .build();
     }
 
@@ -67,6 +73,7 @@ public interface BillMapper {
                 .setStatus(request.status())
                 .setRate(rate)
                 .setTotalPrice(request.totalPrice())
+                .setPayed(request.payed())
                 .setPeriodOf(request.periodOf().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime())
                 .setPeriodTo(request.periodTo().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime());
 

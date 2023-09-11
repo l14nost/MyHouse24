@@ -34,12 +34,19 @@ public class CashBox {
     @Column(nullable = false)
     private Boolean type;
 
+    @Column(nullable = false)
     private Boolean isActive;
 
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(length = 1000, nullable = false)
+    @Column(nullable = false)
+    private BigDecimal historyMoneyUsed;
+
+    @Column(nullable = false)
+    private BigDecimal moneyUsed;
+
+    @Column(length = 1000)
     private String comment;
 
     @ManyToOne

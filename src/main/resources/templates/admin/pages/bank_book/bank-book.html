@@ -255,7 +255,7 @@
                         '    <td>' + (bankBook?.apartment ? bankBook?.apartment?.house?.name : '-') + '</td>' +
                         '    <td>' + (bankBook?.apartment ? bankBook?.apartment?.section?.name : '-') + '</td>' +
                         '    <td>' + (bankBook?.apartment ? bankBook?.apartment?.owner?.fullName : '-') + '</td>' +
-                        '    <td>' + (bankBook?.apartment?.balance ? bankBook?.apartment?.balance : '-') + '</td>' +
+                        '    <td>' + addColorIncomeExpense(bankBook?.totalPrice.toFixed(2) >= 0 ,bankBook?.totalPrice.toFixed(2)) + '</td>' +
                         '    <td data-actions="data-actions">' + $edit + $deleteBtn + '</td>' +
                         '</tr>'
                     );
@@ -420,7 +420,8 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                showToast('error');
+                $('#custom-toast').text(response?.responseText)
+                showToast('custom');
                 bankBookId = undefined;
             })
         }

@@ -2,10 +2,12 @@ package lab.space.my_house_24.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.BankBook;
+import lab.space.my_house_24.entity.Bill;
 import lab.space.my_house_24.model.bankBook.*;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +34,10 @@ public interface BankBookService {
     void saveBankBookByRequest(BankBookSaveRequest request) throws EntityNotFoundException;
 
     void saveBankBook(BankBook bankBook);
+
+    void calculateBankBook(Long id, BigDecimal price, BigDecimal historyPrice, Bill bill);
+
+    void calculateBankBook(Long id, BigDecimal price, Boolean type, Bill bill);
 
     void deleteBankBookById(Long id) throws EntityNotFoundException;
 

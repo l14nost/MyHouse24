@@ -34,6 +34,9 @@ public record BillSaveRequest(
         @NotNull(message = "{not.blank.message}")
         BigDecimal totalPrice,
 
+        @NotNull(message = "{not.blank.message}")
+        BigDecimal payed,
+
         @Valid
         @NotEmpty
         List<ServiceBillRequest> serviceBillList,

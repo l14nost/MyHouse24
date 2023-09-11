@@ -23,6 +23,8 @@ public record BillResponse(
 
         BigDecimal totalPrice,
 
+        BigDecimal payed,
+
         Boolean draft,
 
         BankBookResponse bankBook,

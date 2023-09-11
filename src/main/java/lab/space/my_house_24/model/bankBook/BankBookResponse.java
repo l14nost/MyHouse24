@@ -5,6 +5,8 @@ import lab.space.my_house_24.model.apartment.ApartmentResponseForBankBook;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lombok.Builder;
 
+import java.math.BigDecimal;
+
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record BankBookResponse(
@@ -13,6 +15,8 @@ public record BankBookResponse(
         String number,
 
         EnumResponse status,
+
+        BigDecimal totalPrice,
 
         ApartmentResponseForBankBook apartment
 ) {

@@ -28,6 +28,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 
@@ -84,22 +85,30 @@ public class CashBoxServiceImpl implements CashBoxService {
     @Override
     public void updateCashBoxByRequest(CashBoxUpdateRequest request) throws EntityNotFoundException {
         log.info("Try to update CashBox by Request");
-        saveCashBox(
+        CashBox cashBox = getCashBoxById(request.id());
+        CashBox newCashBox = new CashBox()
+                .setBankBook(cashBox.getBankBook())
+                .setDraft(cashBox.getDraft())
+                .setPrice(cashBox.getPrice());
+        CashBox saveCashBox = saveCashBox(
                 CashBoxMapper.toCashBox(
-                        getCashBoxById(request.id()),
+                        cashBox,
                         request,
                         nonNull(request.bankBookId()) ? bankBookService.getBankBookById(request.bankBookId()) : null,
                         staffService.getStaffById(request.staffId()),
                         articleService.getArticleById(request.articleId())
                 )
         );
+        if (nonNull(saveCashBox.getBankBook()) && saveCashBox.getType()) {
+            CashBoxCalculate(newCashBox, saveCashBox);
+        }
         log.info("Success update CashBox by Request");
     }
 
     @Override
     public void saveCashBoxByRequest(CashBoxSaveRequest request) throws EntityNotFoundException {
         log.info("Try to save CashBox by Request");
-        saveCashBox(
+        CashBox saveCashBox = saveCashBox(
                 CashBoxMapper.toCashBox(
                         request,
                         nonNull(request.bankBookId()) ? bankBookService.getBankBookById(request.bankBookId()) : null,
@@ -107,32 +116,67 @@ public class CashBoxServiceImpl implements CashBoxService {
                         articleService.getArticleById(request.articleId())
                 )
         );
+        if (nonNull(saveCashBox.getBankBook()) && saveCashBox.getType()) {
+            CashBoxCalculate(saveCashBox);
+        }
         log.info("Success save CashBox by Request");
     }
 
+    private void CashBoxCalculate(CashBox cashBox, CashBox saveCashBox) {
+        log.info("Try to Calculate CashBox by Update");
+        if (Objects.equals(cashBox.getBankBook().getId(), saveCashBox.getBankBook().getId())) {
+            if (!cashBox.getDraft() && saveCashBox.getDraft()) {
+                bankBookService.calculateBankBook(saveCashBox.getBankBook().getId(), saveCashBox.getPrice(), true, null);
+            } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
+                bankBookService.calculateBankBook(saveCashBox.getBankBook().getId(), saveCashBox.getPrice(), false, null);
+            } else if (saveCashBox.getDraft() && !Objects.equals(cashBox.getPrice(), saveCashBox.getPrice())) {
+                bankBookService.calculateBankBook(
+                        saveCashBox.getBankBook().getId(),
+                        saveCashBox.getPrice().subtract(cashBox.getPrice()),
+                        true,
+                        null
+                );
+            }
+        } else {
+            bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), false, null);
+            bankBookService.calculateBankBook(saveCashBox.getBankBook().getId(), saveCashBox.getPrice(), true, null);
+        }
+        log.info("Success Calculate CashBox by Update");
+    }
+
+    private void CashBoxCalculate(CashBox cashBox) {
+        log.info("Try to Calculate CashBox by Save");
+        if (cashBox.getDraft()) {
+            bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), true, null);
+        }
+        log.info("Success Calculate CashBox by Save");
+    }
+
     @Override
-    public void saveCashBox(CashBox cashBox) {
+    public CashBox saveCashBox(CashBox cashBox) {
         log.info("Try to save CashBox");
         cashBoxRepository.save(cashBox);
         log.info("Success save CashBox");
+        return cashBox;
     }
 
     @Override
     public void deleteCashBoxById(Long id) throws EntityNotFoundException {
         log.info("Try to Delete CashBox");
         CashBox cashBox = getCashBoxById(id);
-        if (!cashBox.getDraft() && !cashBox.getIsActive()){
-            cashBoxRepository.delete(cashBox);
-            log.info("Success Delete CashBox");
-        }else {
+        if (cashBox.getDraft() && cashBox.getIsActive()) {
             String e;
             if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                e = "Відомість використовується/використовувалася в розрахунках, її неможливо видалити.(id-" + id +")";
+                e = "Відомість використовується/використовувалася в розрахунках, її неможливо видалити.(id-" + id + ")";
             } else {
-                e = "Statement is/was used in calculations, it cannot be deleted.(id-" + id +")";
+                e = "Statement is/was used in calculations, it cannot be deleted.(id-" + id + ")";
             }
             log.warn("CashBox cannot be deleted");
             throw new IllegalArgumentException(e);
+
+        } else {
+            cashBoxRepository.delete(cashBox);
+            log.info("Success Delete CashBox");
         }
     }
 

@@ -26,7 +26,6 @@ public record CashBoxSaveRequest(
         @Min(value = 1, message = "{price.min}" + " {value}")
         BigDecimal price,
 
-        @NotBlank(message = "{not.blank.message}")
         @Size(max = 1000, message = "{size.less.message}" + " {max}")
         String comment,
 
