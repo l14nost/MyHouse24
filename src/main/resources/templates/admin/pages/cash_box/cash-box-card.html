@@ -142,9 +142,9 @@
         cashBoxId = response?.id;
         $("#number").val(response?.number);
         $("#date").val(response?.createAt);
-        $("#sum").html(addColorIncomeExpense(response?.type, response?.price));
+        $("#sum").html(addColorIncomeExpense(response?.type, response?.price.toFixed(2)));
         $("#draft").html(addBadgeBillDraft(response?.draft?.name === 'true'));
-        $("#comment").html(response?.comment);
+        $("#comment").html(response?.comment ? response?.comment : '-');
 
         $("#manager").html(response?.staff?.fullName);
         $("#article").html(response?.article?.name);

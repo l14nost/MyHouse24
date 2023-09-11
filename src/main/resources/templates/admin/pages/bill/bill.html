@@ -98,6 +98,7 @@
             <th th:text="#{bills.apartment}"></th>
             <th th:text="#{bills.owner}"></th>
             <th th:text="#{bills.draft}"></th>
+            <th th:text="#{bills.payed}"></th>
             <th th:text="#{bills.sum}"></th>
             <th></th>
           </tr>
@@ -134,6 +135,7 @@
                 <option value=""></option>
               </select>
             </td>
+            <td></td>
             <td></td>
             <td></td>
           </tr>
@@ -286,7 +288,8 @@
                   '    <td>' + (bill?.bankBook?.apartment?.number + ', ' + bill?.bankBook?.apartment?.house?.name) + '</td>' +
                   '    <td>' + bill?.bankBook?.apartment?.owner?.fullName + '</td>' +
                   '    <td class="h5">' + addBadgeBillDraft(bill?.draft) + '</td>' +
-                  '    <td>' + bill?.totalPrice + '</td>' +
+                  '    <td>' + bill?.payed.toFixed(2) + '</td>' +
+                  '    <td>' + bill?.totalPrice.toFixed(2) + '</td>' +
                   '    <td data-actions="data-actions">' + $copy + $edit + $deleteBtn + '</td>' +
                   '</tr>'
           );

@@ -6,11 +6,13 @@ import lab.space.my_house_24.model.bankBook.BankBookRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import static java.util.Objects.nonNull;
+import static lab.space.my_house_24.enums.BalanceStatus.NO_DEBT;
 
 @Component
 public class BankBookSpecification {
@@ -50,6 +52,15 @@ public class BankBookSpecification {
                 ));
             }
             if (nonNull(request.balanceQuery())) {
+                if (request.balanceQuery().equals(NO_DEBT)){
+                    predicates.add(criteriaBuilder.or(
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("totalPrice"), BigDecimal.ZERO)
+                    ));
+                }else {
+                    predicates.add(criteriaBuilder.or(
+                            criteriaBuilder.lessThan(root.get("totalPrice"), BigDecimal.ZERO)
+                    ));
+                }
 
             }
             query.orderBy(criteriaBuilder.desc(root.get("id")));

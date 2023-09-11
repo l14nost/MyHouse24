@@ -10,6 +10,7 @@ import lab.space.my_house_24.model.cash_box.CashBoxSaveRequest;
 import lab.space.my_house_24.model.cash_box.CashBoxUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -54,6 +55,8 @@ public interface CashBoxMapper {
                 .staff(staff)
                 .articles(article)
                 .isActive(request.draft())
+                .moneyUsed(BigDecimal.ZERO)
+                .historyMoneyUsed(BigDecimal.ZERO)
                 .build();
     }
 

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class BankBook {
     @Column(length = 20, nullable = false)
     private String number;
 
+    @Column(nullable = false)
+    private BigDecimal totalPrice;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 50, nullable = false)
     private BankBookStatus bankBookStatus;
@@ -38,4 +42,15 @@ public class BankBook {
 
     @OneToMany(mappedBy = "bankBook")
     private List<CashBox> cashBoxes = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "BankBook{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", bankBookStatus=" + bankBookStatus +
+                ", apartment=" + apartment.getId() +
+                '}';
+    }
 }

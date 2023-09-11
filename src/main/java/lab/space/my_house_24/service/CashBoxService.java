@@ -25,7 +25,7 @@ public interface CashBoxService {
 
     void saveCashBoxByRequest(CashBoxSaveRequest request) throws EntityNotFoundException;
 
-    void saveCashBox(CashBox cashBox);
+    CashBox saveCashBox(CashBox cashBox);
 
     void deleteCashBoxById(Long id) throws EntityNotFoundException, IllegalArgumentException;
 

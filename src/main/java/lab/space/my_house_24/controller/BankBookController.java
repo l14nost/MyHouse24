@@ -154,8 +154,9 @@ public class BankBookController {
         try {
             bankBookService.deleteBankBookById(id);
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

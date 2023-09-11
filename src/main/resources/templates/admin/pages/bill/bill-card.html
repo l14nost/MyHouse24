@@ -81,6 +81,10 @@
             <td class="h5" id="status"></td>
           </tr>
           <tr>
+            <td th:text="#{bills.card.payed}"></td>
+            <td id="payed"></td>
+          </tr>
+          <tr>
             <td th:text="#{bills.card.month}"></td>
             <td id="month"></td>
           </tr>
@@ -183,7 +187,8 @@
         $("#house").html(houseInfo(response?.bankBook?.apartment?.house));
         $("#apartment").html(apartmentInfo(response?.bankBook?.apartment));
         $("#section").html(response?.bankBook?.apartment?.section?.name);
-        $("#total-price").html(response?.totalPrice);
+        $("#total-price").html(response?.totalPrice.toFixed(2));
+        $("#payed").html(response?.payed.toFixed(2));
         $("#rate").html(response?.rate ? rateInfo(response?.rate) : '-');
 
         const SERVICE_BODY = createTableService('#service-table', response?.services.length)
@@ -194,8 +199,8 @@
                   '    <td>' + service?.service?.name + '</td>' +
                   '    <td>' + service?.count + '</td>' +
                   '    <td>' + service?.service?.unit?.name + '</td>' +
-                  '    <td>' + service?.price + '</td>' +
-                  '    <td>' + service?.totalPrice + '</td>' +
+                  '    <td>' + service?.price.toFixed(2) + '</td>' +
+                  '    <td>' + service?.totalPrice.toFixed(2) + '</td>' +
                   '</tr>'
           );
         });

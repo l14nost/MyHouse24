@@ -30,7 +30,6 @@ public record CashBoxUpdateRequest(
         @NotNull(message = "{not.blank.message}")
         Boolean type,
 
-        @NotBlank(message = "{not.blank.message}")
         @Size(max = 1000, message = "{size.less.message}" + " {max}")
         String comment,
 

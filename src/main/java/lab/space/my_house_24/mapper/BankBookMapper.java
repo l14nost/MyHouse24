@@ -5,6 +5,8 @@ import lab.space.my_house_24.entity.BankBook;
 import lab.space.my_house_24.model.bankBook.*;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.math.BigDecimal;
+
 import static java.util.Objects.nonNull;
 
 
@@ -32,6 +34,7 @@ public interface BankBookMapper {
                         bankBook.getBankBookStatus().getBankBookStatus(LocaleContextHolder.getLocale()))
                 )
                 .apartment(nonNull(bankBook.getApartment()) ? ApartmentMapper.entityToResponseForBankBook(bankBook.getApartment()) : null)
+                .totalPrice(bankBook.getTotalPrice())
                 .build();
     }
 
@@ -48,6 +51,7 @@ public interface BankBookMapper {
                 .number(number)
                 .bankBookStatus(request.status())
                 .apartment(apartment)
+                .totalPrice(BigDecimal.ZERO)
                 .build();
     }
 

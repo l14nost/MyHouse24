@@ -41,6 +41,18 @@ public class Bill {
     private Boolean isActive;
 
     @Column(nullable = false)
+    private Boolean autoPayed;
+
+    @Column(nullable = false)
+    private BigDecimal payedCashBox;
+
+    @Column(nullable = false)
+    private BigDecimal historyPayedCashBox;
+
+    @Column(nullable = false)
+    private BigDecimal payed;
+
+    @Column(nullable = false)
     private Boolean draft;
 
     @ManyToOne
@@ -59,4 +71,23 @@ public class Bill {
     @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL)
     List<ServiceBill> serviceBillList = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", createAt=" + createAt +
+                ", status=" + status +
+                ", totalPrice=" + totalPrice +
+                ", isActive=" + isActive +
+                ", autoPayed=" + autoPayed +
+                ", payedCashBox=" + payedCashBox +
+                ", payed=" + payed +
+                ", draft=" + draft +
+                ", bankBook=" + bankBook.getId() +
+                ", periodOf=" + periodOf +
+                ", periodTo=" + periodTo +
+                ", rate=" + rate.getId() +
+                '}';
+    }
 }
