@@ -45,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ResponseEntity<?> getArticleDtoById(Long id) {
         try {
             log.info("Try to convert Article in dto by id" + id);
-            return ResponseEntity.ok(ArticleMapper.toSimpleDto(getArticleById(id)));
+            return ResponseEntity.ok(ArticleMapper.toArticleResponse(getArticleById(id)));
         } catch (EntityNotFoundException e) {
             log.error("Error update Article after request");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
@@ -54,9 +54,20 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<ArticleResponse> getAllArticleDto(ArticleRequest request) {
+        log.info("Try to get all ArticleResponse by Request");
         final int DEFAULT_PAGE_SIZE = 10;
         return articleRepository.findAll(articleSpecification.getArticleByRequest(request),
-                PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(ArticleMapper::toSimpleDto);
+                PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(ArticleMapper::toArticleResponse);
+    }
+
+    @Override
+    public List<ArticleResponse> getAllArticleResponseByType(Boolean type) {
+        log.info("Try to get all ArticleResponse by type");
+        return articleRepository
+                .findAll(articleSpecification.getArticleByRequest(ArticleRequest.builder().typeQuery(type).build()))
+                .stream()
+                .map(ArticleMapper::toSimpleDto)
+                .toList();
     }
 
     @Override

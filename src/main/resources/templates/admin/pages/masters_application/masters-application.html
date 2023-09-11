@@ -136,32 +136,30 @@
                         window.location.href = href;
                     }
                 }
-
-                $('#number-application, #time, #description, #apartment, #phone').on('input', function () {
-                    clearTimeout(filterTimeout);
-                    filterTimeout = setTimeout(function () {
-                        updateMastersApplicationsRequestAndSend();
-                    }, 1000);
-                });
-
-                $('#type-master').on('select2:select', function () {
-                    updateMastersApplicationsRequestAndSend();
-                });
-
-                $('#apartment-owner').on('select2:select', function () {
-                    updateMastersApplicationsRequestAndSend();
-                });
-
-                $('#master').on('select2:select', function () {
-                    updateMastersApplicationsRequestAndSend();
-                });
-
-                $('#status').on('select2:select', function () {
-                    updateMastersApplicationsRequestAndSend();
-                });
             });
+        });
 
+        $('#number-application, #time, #description, #apartment, #phone').on('input', function () {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(function () {
+                updateMastersApplicationsRequestAndSend();
+            }, 1000);
+        });
 
+        $('#type-master').on('select2:select', function () {
+            updateMastersApplicationsRequestAndSend();
+        });
+
+        $('#apartment-owner').on('select2:select', function () {
+            updateMastersApplicationsRequestAndSend();
+        });
+
+        $('#master').on('select2:select', function () {
+            updateMastersApplicationsRequestAndSend();
+        });
+
+        $('#status').on('select2:select', function () {
+            updateMastersApplicationsRequestAndSend();
         });
 
         $(document).on('click', '.text-danger', function () {

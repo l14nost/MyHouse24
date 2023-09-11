@@ -12,9 +12,14 @@ public interface RateService {
 
     Page<RateResponse> getAllRatesResponse(RateRequest rateRequest);
 
+    List<RateResponse> getAllRatesForBill();
+
     Rate getRateById(Long id);
 
     ResponseEntity<?> getRateByIdDto(Long id);
+
+    ResponseEntity<?> getRateByIdResponseForBill(Long id);
+
     ResponseEntity<?> getRateByIdWithUpdateAt(Long id);
 
     ResponseEntity<?> updateRateByRequest(RateUpdateRequest rateUpdateRequest);

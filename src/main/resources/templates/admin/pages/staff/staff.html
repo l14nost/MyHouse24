@@ -114,24 +114,22 @@
                         window.location.href = href;
                     }
                 }
-
-                $('#id, #fullName, #phone, #email').on('input', function () {
-                    clearTimeout(filterTimeout);
-                    filterTimeout = setTimeout(function () {
-                        updateStaffRequestAndSend();
-                    }, 1000);
-                });
-
-                $('#status').on('select2:select', function () {
-                    updateStaffRequestAndSend();
-                });
-
-                $('#role').on('select2:select', function () {
-                    updateStaffRequestAndSend();
-                });
             });
+        });
 
+        $('#id, #fullName, #phone, #email').on('input', function () {
+            clearTimeout(filterTimeout);
+            filterTimeout = setTimeout(function () {
+                updateStaffRequestAndSend();
+            }, 1000);
+        });
 
+        $('#status').on('select2:select', function () {
+            updateStaffRequestAndSend();
+        });
+
+        $('#role').on('select2:select', function () {
+            updateStaffRequestAndSend();
         });
 
         $(document).on('click', '.text-danger', function () {

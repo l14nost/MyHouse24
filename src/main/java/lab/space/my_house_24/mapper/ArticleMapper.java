@@ -12,6 +12,13 @@ public interface ArticleMapper {
         return ArticleResponse.builder()
                 .id(article.getId())
                 .name(article.getName())
+                .build();
+    }
+
+    static ArticleResponse toArticleResponse(Article article) {
+        return ArticleResponse.builder()
+                .id(article.getId())
+                .name(article.getName())
                 .type(EnumMapper.toSimpleDto(
                         article.getType().name(),
                         article.getType().getArticleType(LocaleContextHolder.getLocale()))

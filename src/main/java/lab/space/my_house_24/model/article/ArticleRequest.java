@@ -4,6 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record ArticleRequest (
-        Integer pageIndex
+        Integer pageIndex,
+
+        Boolean typeQuery
 ){
 }

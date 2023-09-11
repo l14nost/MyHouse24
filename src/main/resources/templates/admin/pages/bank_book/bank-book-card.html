@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title th:text="#{bank_book.card.title}"></title>
+    <style>
+        .form-control:disabled {
+            background-color: #fdfdfd;
+        }
+    </style>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page"
+                            th:text="#{bank_book.breadcrumb}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+
+        <div class="col-3 pb-3">
+            <div class="form-group" id="password-col">
+                <div class="input-group" id="passwordResponse">
+                    <button class="btn btn-gray disabled" type="button">№</button>
+                    <input type="text" class="form-control pass" id="number" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  table-hover table-bordered table-md mb-0" style="margin-top: 15px;max-width: 100%">
+                    <thead>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-light"
+                                style="margin-top: 15px; margin-right: 15px" onclick="editBankBook()" th:text="#{bank_book.card.button.payment}"></button>
+                        <button type="button" class="btn btn-light"
+                                style="margin-top: 15px; margin-right: 15px" onclick="createBill()" th:text="#{bank_book.card.button.bill}"></button>
+                        <button type="button" class="btn btn-primary"
+                                style="margin-top: 15px; margin-right: 15px" onclick="editBankBook()" th:text="#{bank_book.card.button.edit}"></button>
+                    </div>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="col-3" th:text="#{bank_book.card.status}"></td>
+                        <td class="h5" id="status"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{bank_book.card.house}"></td>
+                        <td id="house"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{bank_book.card.section}"></td>
+                        <td id="section"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{bank_book.card.apartment}"></td>
+                        <td id="apartment"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{bank_book.card.owner}"></td>
+                        <td id="owner"></td>
+                    </tr>
+                    <tr>
+                        <td th:text="#{bank_book.card.balance}"></td>
+                        <td id="balance"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                    <div class="col form-label">
+                        <a th:href="@{meter-reading}" type="link" role="button" th:text="#{bank_book.card.url.meter_reading}"></a>
+                    </div>
+                    <div class="col form-label">
+                        <a th:href="@{cash-box}" type="link" role="button" th:text="#{bank_book.card.url.income}"></a>
+                    </div>
+                    <div class="col form-label">
+                        <a th:href="@{bills}" type="link" role="button" th:text="#{bank_book.card.url.bill}"></a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+
+        let bankBookId = undefined;
+        let apartmentId = undefined;
+
+        $(document).ready(function () {
+            bankBookId = new URL(window.location.href).pathname.split("-").pop()
+            getBankBookResponse(bankBookId);
+        });
+
+        function getBankBookResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/bank-books/get-bank-book-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                $("#number").val(response?.number);
+                $("#status").html(addBadgeBankBookStatus(response?.status));
+
+                apartmentId = response?.apartment?.id;
+
+                $("#house").html(response?.apartment?.house ? houseInfo(response?.apartment?.house) : '-');
+                $("#section").html(response?.apartment?.section?.name ? response?.apartment?.section?.name : '-');
+                $("#apartment").html(response?.apartment ? apartmentInfo(response?.apartment) : '-');
+                $("#owner").html(response?.apartment?.owner ? ownerInfo(response?.apartment?.owner) : '-');
+                $("#balance").html(response?.apartment?.house?.balance ? response?.apartment?.house?.balance : '-');
+
+                $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]]');
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));
+            }).fail(function (){
+                window.location.href = "/admin/error";
+            });
+        }
+
+        function ownerInfo(owner){
+            let onclickAdd = 'onclick="ownerCard(' + owner.id + ')"';
+            return '<a ' + onclickAdd + ' type="button" class="link">' + owner.fullName + '</a>';
+        }
+
+        function houseInfo(house){
+            let onclickAdd = 'onclick="houseCard(' + house.id + ')"';
+            return '<a ' + onclickAdd + ' type="button" class="link">' + house.name + '</a>';
+        }
+
+        function apartmentInfo(apartment){
+            let onclickAdd = 'onclick="apartmentCard(' + apartment.id + ')"';
+            return '<a ' + onclickAdd + ' type="button" class="link">' + apartment.number + '</a>';
+        }
+
+        function ownerCard(id) {
+            window.location.href = '/admin/users/user-card/' + id;
+        }
+
+        function apartmentCard(id) {
+            window.location.href = '/admin/apartments/apartment-card/' + id;
+        }
+
+        function houseCard(id) {
+            window.location.href = '/admin/houses/house-card/' + id;
+        }
+
+        function editBankBook() {
+            window.location.href = '/admin/bank-books/update-' + bankBookId;
+        }
+
+        function createBill() {
+            if (apartmentId) window.location.href = '/admin/bills/add-copy-bank-book-' + bankBookId;
+            else window.location.href = '/admin/bills/add';
+        }
+
+    </script>
+
+</th:block>
+
+</html>

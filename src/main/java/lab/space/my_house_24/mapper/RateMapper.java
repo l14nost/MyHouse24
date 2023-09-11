@@ -24,12 +24,22 @@ public interface RateMapper {
                 .build();
     }
 
+    static RateResponse toRateResponseForBill(Rate rate) {
+        return RateResponse.builder()
+                .id(rate.getId())
+                .name(rate.getName())
+                .priceRate(rate.getPriceRateList()
+                        .stream()
+                        .map(PriceRateMapper::toPriceRateResponse)
+                        .collect(Collectors.toList())
+                )
+                .build();
+    }
+
     static RateResponse toRateResponseWithUpdateAt(Rate rate) {
         return RateResponse.builder()
                 .id(rate.getId())
                 .name(rate.getName())
-                .description(rate.getDescription())
-                .date(rate.getUpdateAt().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .priceRate(rate.getPriceRateList()
                         .stream()
                         .map(PriceRateMapper::toPriceRateResponse)

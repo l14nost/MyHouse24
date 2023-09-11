@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/fragments/layout}">
+
+<head>
+    <title th:text="#{bills.save.title}"></title>
+    <style>
+        .form-control:disabled {
+            background-color: #fdfdfd;
+        }
+    </style>
+</head>
+
+<th:block layout:fragment="content">
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item active" aria-current="page"
+                            th:text="#{bills.breadcrumb}"></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <div class="form-group">
+                <div class="input-group" id="passwordResponse">
+                    <button class="btn btn-gray disabled" type="button">№</button>
+                    <input type="text" class="form-control pass" id="number" oninput="applyMask(this);" disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto mt-2 pe-0" th:text="#{masters_call.card.time.at}"></div>
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" id="date" type="date"
+                       th:placeholder="#{masters_call.save.date.placeholder}">
+                <button class="input-group-text input-button pointer-event" disabled>
+                    <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row pb-3">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bills.save.inp.house}"></label>
+                            <select id="house" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bills.save.inp.section}"></label>
+                            <select id="section" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bills.save.inp.apartment}"></label>
+                            <select id="apartment" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bank-book" class="form-label" th:text="#{bills.save.inp.bank_book}"></label>
+                            <input type="text" class="form-control" id="bank-book" disabled>
+                        </div>
+                        <div class="form-group" id="owner">
+                        </div>
+                        <div class="form-group" id="phone">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group" style="padding-top: 32px">
+                            <input type="checkbox" class="btn-check" id="draft" autocomplete="off">
+                            <label class="btn btn-outline-success" for="draft" th:text="#{bills.save.inp.draft}"></label><br>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bills.save.inp.status}"></label>
+                            <select id="status" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{bills.save.inp.rate}"></label>
+                            <select id="rate" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <label class="form-label" th:text="#{bills.save.inp.period}"></label>
+                        <div class="input-group">
+                            <input class="form-control" id="range" type="text" data-id="range" readonly="readonly">
+                            <button class="input-group-text input-button pointer-event" disabled>
+                                <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-bordered" id="service-table"
+                           style="margin-top: 15px; max-width: 100%">
+                        <thead>
+                        <tr>
+                            <th style="min-width: 230px" th:text="#{bills.save.service.table.service}"></th>
+                            <th th:text="#{bills.save.service.table.unit}"></th>
+                            <th th:text="#{bills.save.service.table.price_per_unit}"></th>
+                            <th th:text="#{bills.save.service.table.count}"></th>
+                            <th th:text="#{bills.save.service.table.pirce}"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <button id="add-button" type="button" class="btn btn-light"
+                                        onclick="addEmptyServiceRow()" th:text="#{bills.save.service.table.button.add_service}">
+                                </button>
+                                <button type="button" class="btn btn-light" onclick="addRateServices()" th:text="#{bills.save.service.table.button.add_rate}">
+                                </button>
+                                <button type="button" class="btn btn-light" onclick="addMeterReading()" th:text="#{bills.save.service.table.button.add_meter_reading}">
+                                </button>
+                            </td>
+                            <td colspan="2">[[#{bills.save.service.table.total}]]: <a id="total-price">0.00</a></td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer py-0">
+                <div class="col text-end m-3">
+                    <a th:href="@{/bills}" type="button" class="btn btn-light"
+                       th:text="#{global.button.cancel}"></a>
+                    <button type="button" class="btn btn-success"
+                            style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}"
+                            onclick="saveBill()">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h5 class="card-title" th:text="#{bills.save.meter_reading.table.title}"></h5>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered" id="meter-reading-table"
+                       style="margin-top: 15px; max-width: 100%">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th th:text="#{bills.save.meter_reading.table.status}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.date}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.month}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.house}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.section}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.apartment}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.service}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.meter_reading}"></th>
+                        <th th:text="#{bills.save.meter_reading.table.unit}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="row" style="display: flex; justify-content: space-between">
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<!-- Extra Modals -->
+<th:block layout:fragment="extra-modals">
+
+    <!-- put extra modals here for only this page -->
+
+</th:block>
+
+<th:block layout:fragment="extra-script">
+
+    <script>
+
+        let breadcrumbCount = 0;
+        let itemsCountServiceTable = 0;
+        let SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+        let serviceSelectCount = 1;
+        let meterReadingTable;
+
+        let priceRate;
+        let rateId = undefined;
+        let houseId = undefined;
+        let sectionId = undefined;
+        let bankBookId = undefined;
+        let billId = undefined
+        let serviceBillId = undefined;
+
+        let meterReadingRequest = {};
+
+        meterReadingRequest.pageIndex = 0;
+        meterReadingRequest.apartmentId = undefined;
+        meterReadingRequest.sectionId = undefined;
+        meterReadingRequest.houseId = undefined;
+
+        $(document).ready(function () {
+
+            selectStatus();
+            selectRates();
+
+
+            if (new URL(window.location.href).pathname.split("/").pop() === "add") {
+                getNewBillResponse();
+                getAllMeterReading();
+
+                newOwnerContent('-');
+                newPhoneContent('-');
+                selectHouse();
+            } else {
+                const url = new URL(window.location.href).pathname.split("-");
+                console.log(url)
+                const id = url.pop();
+                console.log(url)
+                const splitUrl = url.pop().split("/").pop()
+                console.log(splitUrl)
+                if (splitUrl === 'update') {
+                    billId = id;
+                    getBillResponse(billId);
+                }else if(splitUrl === 'copy'){
+                    getCopyBillResponse(id);
+                    getNewBillResponse();
+                } else {
+                    getNewBillResponse();
+                    getBankBookResponse(id);
+                }
+
+            }
+        });
+
+        $(document).on('click', '.text-danger.service', function () {
+            serviceBillId = $(this).data('id');
+            $('#confirmDelete').modal('show');
+        });
+
+        function deleteRow(button) {
+            button.closest('tr').remove();
+            calculateTotalPrice();
+            itemsCountServiceTable--;
+            if (itemsCountServiceTable === 0) {
+                createTableService('#service-table', itemsCountServiceTable)
+            }
+        }
+
+        function getBankBookResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/bills/get-bank-book-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                $("#bank-book").val(response?.number);
+                bankBookId = response?.id;
+
+                selectHouse(response?.apartment?.house)
+                houseId = response?.apartment?.house?.id;
+                selectSection(houseId, response?.apartment?.section);
+                sectionId = response?.apartment?.section?.id;
+                selectApartment(response?.apartment);
+
+                newOwnerContent(response?.apartment?.owner?.fullName);
+                newPhoneContent(response?.apartment?.owner?.phone);
+                selectHouse();
+
+                meterReadingRequest.apartmentId = response?.apartment?.id;
+                getAllMeterReading();
+
+                serviceSelectCount++;
+            }).fail(function (response) {
+                console.log(response)
+                window.location.href = "/admin/bills/add";
+            });
+        }
+
+        function getCopyBillResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/bills/get-bill-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                $("#range").val(response?.periodOf + ' to ' + response?.periodTo);
+                $("#bank-book").val(response?.bankBook?.number);
+                $("#total-price").text(response?.totalPrice);
+                bankBookId = response?.bankBook?.id;
+                $("#status").append('<option selected value="' + response?.status?.name + '">' + response?.status?.value + '</option>');
+                $("#draft").prop('checked', response?.draft);
+
+                if (response?.rate){
+                    priceRate = response?.rate?.priceRate;
+                    $("#rate").append('<option selected value="' + response?.rate?.id + '">' + response?.rate?.name + '</option>');
+                }
+
+                addCopyResponseServices(response?.services);
+
+                selectHouse(response?.bankBook?.apartment?.house)
+                houseId = response?.bankBook?.apartment?.house?.id;
+                selectSection(houseId, response?.bankBook?.apartment?.section);
+                sectionId = response?.bankBook?.apartment?.section?.id;
+                selectApartment(response?.bankBook?.apartment);
+
+                newOwnerContent(response?.bankBook?.apartment?.owner?.fullName);
+                newPhoneContent(response?.bankBook?.apartment?.owner?.phone);
+                selectHouse();
+
+                meterReadingRequest.apartmentId = response?.bankBook?.apartment?.id;
+                getAllMeterReading();
+
+                serviceSelectCount++;
+            }).fail(function () {
+                window.location.href = "/admin/error";
+            });
+        }
+
+        function getBillResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/admin/bills/get-bill-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                $("#number").val(response?.number);
+                $("#date").val(response?.createAt);
+                $("#range").val(response?.periodOf + ' to ' + response?.periodTo);
+                $("#bank-book").val(response?.bankBook?.number);
+                $("#total-price").text(response?.totalPrice);
+                bankBookId = response?.bankBook?.id;
+                $("#status").append('<option selected value="' + response?.status?.name + '">' + response?.status?.value + '</option>');
+                $("#draft").prop('checked', response?.draft);
+
+                if (response?.rate){
+                    priceRate = response?.rate?.priceRate;
+                    $("#rate").append('<option selected value="' + response?.rate?.id + '">' + response?.rate?.name + '</option>');
+                }
+
+                addResponseServices(response?.services);
+
+                selectHouse(response?.bankBook?.apartment?.house)
+                houseId = response?.bankBook?.apartment?.house?.id;
+                selectSection(houseId, response?.bankBook?.apartment?.section);
+                sectionId = response?.bankBook?.apartment?.section?.id;
+                selectApartment(response?.bankBook?.apartment);
+
+                newOwnerContent(response?.bankBook?.apartment?.owner?.fullName);
+                newPhoneContent(response?.bankBook?.apartment?.owner?.phone);
+                selectHouse();
+
+                meterReadingRequest.apartmentId = response?.bankBook?.apartment?.id;
+                getAllMeterReading();
+
+                if (breadcrumbCount === 0){
+                    $("#breadcrumb-title").append('[[#{bills.card.breadcrumb}]] №' + response?.number);
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+                    breadcrumbCount++;
+                }
+                serviceSelectCount++;
+            }).fail(function () {
+                window.location.href = "/admin/error";
+            });
+        }
+
+        function addCopyResponseServices(services) {
+            if (services === undefined) {
+                itemsCountServiceTable = 0;
+                createTableService('#service-table', itemsCountServiceTable);
+            } else if (itemsCountServiceTable === 0) {
+                itemsCountServiceTable++;
+                serviceSelectCount = 1;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            } else if (serviceSelectCount > 1) {
+                itemsCountServiceTable = 1;
+                serviceSelectCount = 1;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            }
+
+            if (services !== undefined) {
+                $.each(services, function (index, service) {
+                    $(SERVICE_BODY).append(
+                        '<tr class="service-row">\n' +
+                        '                            <th>\n' +
+                        '                                <select id="service-' + service?.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
+                        '                                    <option value=""></option>\n' +
+                        '                                </select>\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="unit-' + service?.id + '" disabled>\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="pricePerUnit-' + service?.id + '">\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="count-' + service?.id + '">\n' +
+                        '                            </th>\n' +
+                        '                            <th><input type="text" class="form-control" id="price-' + service?.id + '" disabled></th>\n' +
+                        '                            <th>\n' +
+                        '                                <button class="btn btn-sm btn-icon text-danger btn-delete service"\n' +
+                        '                                        data-bs-toggle="tooltip" aria-label="Delete Service" data-toggle="modal"\n' +
+                        '                                        data-bs-original-title="Delete User" data-target="#confirmDelete" data-id="' + service?.id + '">\n' +
+                        '                                                <span class="btn-inner">\n' +
+                        '                                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"\n' +
+                        '                                                              xmlns="http://www.w3.org/2000/svg"\n' +
+                        '                                                              stroke="currentColor">\n' +
+                        '                                                             <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"\n' +
+                        '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                        '                                                                   stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                             <path d="M20.708 6.23975H3.75" stroke="currentColor"\n' +
+                        '                                                                   stroke-width="1.5" stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                             <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"\n' +
+                        '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                        '                                                                   stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                        </svg>\n' +
+                        '                                                </span>\n' +
+                        '                                </button>\n' +
+                        '                            </th>\n' +
+                        '                        </tr>'
+                    );
+                    clearErrorMessages();
+                    serviceSelectCount = service.id;
+                    selectService(serviceSelectCount, service.service, service.service.unit);
+                    $('#service-' + serviceSelectCount).on('select2:select', function (e) {
+                        let selectedService = e.params.data;
+                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                    });
+                    $('#pricePerUnit-' + serviceSelectCount).val(service.price);
+                    $('#serviceBillId-' + serviceSelectCount).val(service.id);
+                    $('#count-' + serviceSelectCount).val(service.count);
+                    $('#price-' + serviceSelectCount).val(service.totalPrice);
+                    itemsCountServiceTable++;
+                });
+
+            }
+        }
+
+        function addResponseServices(services) {
+            if (services === undefined) {
+                itemsCountServiceTable = 0;
+                createTableService('#service-table', itemsCountServiceTable);
+            } else if (itemsCountServiceTable === 0) {
+                itemsCountServiceTable++;
+                serviceSelectCount = 1;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            } else if (serviceSelectCount > 1) {
+                itemsCountServiceTable = 1;
+                serviceSelectCount = 1;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            }
+
+            if (services !== undefined) {
+                $.each(services, function (index, service) {
+                    $(SERVICE_BODY).append(
+                        '<tr class="service-row">\n' +
+                        '                            <th>\n' +
+                        '                                <select id="service-' + service?.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
+                        '                                    <option value=""></option>\n' +
+                        '                                </select>\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="unit-' + service?.id + '" disabled>\n' +
+                        '                                <input type="text" class="form-control" id="serviceBillId-' + service?.id + '" disabled hidden>\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="pricePerUnit-' + service?.id + '">\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="count-' + service?.id + '">\n' +
+                        '                            </th>\n' +
+                        '                            <th><input type="text" class="form-control" id="price-' + service?.id + '" disabled></th>\n' +
+                        '                            <th>\n' +
+                        '                                <button class="btn btn-sm btn-icon text-danger btn-delete service"\n' +
+                        '                                        data-bs-toggle="tooltip" aria-label="Delete Service" data-toggle="modal"\n' +
+                        '                                        data-bs-original-title="Delete User" data-target="#confirmDelete" data-id="' + service?.id + '">\n' +
+                        '                                                <span class="btn-inner">\n' +
+                        '                                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"\n' +
+                        '                                                              xmlns="http://www.w3.org/2000/svg"\n' +
+                        '                                                              stroke="currentColor">\n' +
+                        '                                                             <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"\n' +
+                        '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                        '                                                                   stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                             <path d="M20.708 6.23975H3.75" stroke="currentColor"\n' +
+                        '                                                                   stroke-width="1.5" stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                             <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"\n' +
+                        '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                        '                                                                   stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                        </svg>\n' +
+                        '                                                </span>\n' +
+                        '                                </button>\n' +
+                        '                            </th>\n' +
+                        '                        </tr>'
+                    );
+                    clearErrorMessages();
+                    serviceSelectCount = service.id;
+                    selectService(serviceSelectCount, service.service, service.service.unit);
+                    $('#service-' + serviceSelectCount).on('select2:select', function (e) {
+                        let selectedService = e.params.data;
+                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                    });
+                    $('#pricePerUnit-' + serviceSelectCount).val(service.price);
+                    $('#serviceBillId-' + serviceSelectCount).val(service.id);
+                    $('#count-' + serviceSelectCount).val(service.count);
+                    $('#price-' + serviceSelectCount).val(service.totalPrice);
+                    itemsCountServiceTable++;
+                });
+
+            }
+        }
+
+        function getNewBillResponse() {
+            $.ajax({
+                method: "GET",
+                url: "/admin/bills/get-new-bill",
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+                $('#number').val(response?.number);
+                $('#date').val(response?.createAt);
+
+                $("#breadcrumb-title").append('[[#{bills.save.breadcrumb}]]');
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+            });
+        }
+
+        function collectServiceData() {
+            let unitData = [];
+            $('.service-row').each(function () {
+                let id = $(this).find('.form-control[id^="serviceBillId-"]').val();
+                let serviceId = $(this).find('.form-select[id^="service-"]').val();
+                let price = $(this).find('.form-control[id^="pricePerUnit-"]').val();
+                let totalPrice = $(this).find('.form-control[id^="price-"]').val();
+                let count = $(this).find('.form-control[id^="count-"]').val();
+                unitData.push({
+                    id: id || null,
+                    serviceId: serviceId || null,
+                    price: price || null,
+                    totalPrice: totalPrice || null,
+                    count: count || null
+                });
+            });
+            console.log(unitData)
+            return unitData;
+        }
+
+        function saveBill() {
+            let billRequest = {
+                id: undefined,
+                number: undefined,
+                createAt: undefined,
+                bankBookId: undefined,
+                draft: undefined,
+                status: undefined,
+                rateId: undefined,
+                totalPrice: undefined,
+                periodOf: undefined,
+                periodTo: undefined,
+                serviceBillList: collectServiceData()
+            };
+            billRequest.id = billId;
+            billRequest.bankBookId = bankBookId;
+            if ($("#number").val() !== '') billRequest.number = $("#number").val();
+            if ($("#date").val() !== '') billRequest.createAt = getTrueDate($("#date").val());
+            if ($("#draft").val() !== '') billRequest.draft = $('#draft').prop('checked');
+            if ($("#status").val() !== '') billRequest.status = $("#status").val();
+            if ($("#rate").val() !== '') billRequest.rateId = $("#rate").val();
+            if ($("#range").val() !== '') {
+                const period = getTrueDateFromRange($("#range").val());
+                billRequest.periodOf = period[0];
+                billRequest.periodTo = period[1] === 0 ? null : period[1];
+            }
+            billRequest.totalPrice = $("#total-price").text();
+            console.log(billRequest);
+            $.ajax({
+                method: billRequest.id ? 'PUT' : "POST",
+                url: billRequest.id ? '/admin/bills/update-bill' : '/admin/bills/save-bill',
+                contentType: 'application/json',
+                data: JSON.stringify(billRequest),
+                beforeSend: function () {
+                    clearValidMessages();
+                    clearErrorMessages();
+                }
+            }).done(function () {
+                window.location.href = "/admin/bills";
+            }).fail(function (response) {
+                const errors = response.responseJSON;
+                console.log(response);
+                if (errors?.status) validResponse($('#status'), errors.status, 'div');
+                if (errors?.number) validResponse($('#number'), errors.number, 'div');
+                if (errors?.bankBookId) validResponse($('#apartment'), errors.bankBookId, 'div');
+                if (errors?.rateId) validResponse($('#rate'), errors.rateId, 'div');
+                if (errors?.periodOf) validResponse($('#range'), errors.periodOf, 'div');
+                if (errors?.serviceBillList) errorResponse($('#add-button'), errors.serviceBillList, 'div');
+            })
+        }
+
+        function addEmptyServiceRow() {
+            if (itemsCountServiceTable === 0) {
+                itemsCountServiceTable++;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            } else {
+                itemsCountServiceTable++;
+            }
+            $(SERVICE_BODY).append(
+                '<tr class="service-row">\n' +
+                '                            <th>\n' +
+                '                                <select id="service-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
+                '                                    <option value=""></option>\n' +
+                '                                </select>\n' +
+                '                            </th>\n' +
+                '                            <th>\n' +
+                '                                <input type="text" class="form-control" id="unit-' + serviceSelectCount + '" disabled>\n' +
+                '                            </th>\n' +
+                '                            <th>\n' +
+                '                                <input type="text" class="form-control" id="pricePerUnit-' + serviceSelectCount + '">\n' +
+                '                            </th>\n' +
+                '                            <th>\n' +
+                '                                <input type="text" class="form-control" id="count-' + serviceSelectCount + '">\n' +
+                '                            </th>\n' +
+                '                            <th><input type="text" class="form-control" id="price-' + serviceSelectCount + '" disabled></th>\n' +
+                '                            <th>\n' +
+                '                                <button class="btn btn-sm btn-icon text-danger btn-delete"\n' +
+                '                                        data-bs-toggle="tooltip" href="#" aria-label="Delete Service"\n' +
+                '                                        data-bs-original-title="Delete User" onclick="deleteRow(this)">\n' +
+                '                                                <span class="btn-inner">\n' +
+                '                                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"\n' +
+                '                                                              xmlns="http://www.w3.org/2000/svg"\n' +
+                '                                                              stroke="currentColor">\n' +
+                '                                                             <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"\n' +
+                '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                '                                                                   stroke-linecap="round"\n' +
+                '                                                                   stroke-linejoin="round"></path>\n' +
+                '                                                             <path d="M20.708 6.23975H3.75" stroke="currentColor"\n' +
+                '                                                                   stroke-width="1.5" stroke-linecap="round"\n' +
+                '                                                                   stroke-linejoin="round"></path>\n' +
+                '                                                             <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"\n' +
+                '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                '                                                                   stroke-linecap="round"\n' +
+                '                                                                   stroke-linejoin="round"></path>\n' +
+                '                                                        </svg>\n' +
+                '                                                </span>\n' +
+                '                                </button>\n' +
+                '                            </th>\n' +
+                '                        </tr>'
+            )
+            clearErrorMessages();
+            selectService(serviceSelectCount);
+            $('#service-' + serviceSelectCount).on('select2:select', function (e) {
+                let selectedService = e.params.data;
+                $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+            });
+            $('#pricePerUnit-' + serviceSelectCount).val('0.00');
+            $('#count-' + serviceSelectCount).val('0.00');
+            $('#price-' + serviceSelectCount).val('0.00');
+            serviceSelectCount++;
+        }
+
+        $(document).on('input', 'input[id^="pricePerUnit-"], input[id^="count-"]', function () {
+            let inputValue = $(this).val();
+            let numericValue = inputValue.replace(/[^\d.,]/g, '');
+
+            if (numericValue === '') {
+                numericValue = '0.00';
+            }
+
+            $(this).val(numericValue);
+
+            calculate(this.id.split('-').pop());
+        });
+
+        function calculate(id) {
+            let pricePerUnitId = id;
+            let pricePerUnitValue = $('#pricePerUnit-' + pricePerUnitId).val();
+            let countValue = $('#count-' + pricePerUnitId).val();
+
+
+            let numericPricePerUnit = parseFloat(pricePerUnitValue.replace(',', '.'));
+            let numericCount = parseFloat(countValue.replace(',', '.'));
+
+            let totalPrice = numericPricePerUnit * numericCount;
+
+            $('#price-' + pricePerUnitId).val(totalPrice.toFixed(2));
+            calculateTotalPrice();
+        }
+
+        function calculateTotalPrice(){
+            let totalSum = 0;
+            $('input[id^="price-"]').each(function () {
+                let price = parseFloat($(this).val().replace(',', '.'));
+                if (!isNaN(price)) {
+                    totalSum += price;
+                }
+            });
+
+            $('#total-price').text(totalSum.toFixed(2));
+        }
+
+        function addRateServices() {
+            const rateVal = $('#rate').val();
+            if (priceRate === undefined) {
+                itemsCountServiceTable = 0;
+                createTableService('#service-table', itemsCountServiceTable);
+            } else if (itemsCountServiceTable === 0) {
+                itemsCountServiceTable++;
+                serviceSelectCount = 1;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            } else if (serviceSelectCount > 1) {
+                itemsCountServiceTable = 1;
+                serviceSelectCount = 1;
+                SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
+            }
+
+            if (priceRate !== undefined) {
+                $.each(priceRate, function (index, priceRate) {
+                    $(SERVICE_BODY).append(
+                        '<tr class="service-row">\n' +
+                        '                            <th>\n' +
+                        '                                <select id="service-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
+                        '                                    <option value=""></option>\n' +
+                        '                                </select>\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="unit-' + serviceSelectCount + '" disabled>\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="pricePerUnit-' + serviceSelectCount + '">\n' +
+                        '                            </th>\n' +
+                        '                            <th>\n' +
+                        '                                <input type="text" class="form-control" id="count-' + serviceSelectCount + '">\n' +
+                        '                            </th>\n' +
+                        '                            <th><input type="text" class="form-control" id="price-' + serviceSelectCount + '" disabled></th>\n' +
+                        '                            <th>\n' +
+                        '                                <button class="btn btn-sm btn-icon text-danger btn-delete"\n' +
+                        '                                        data-bs-toggle="tooltip" href="#" aria-label="Delete Service"\n' +
+                        '                                        data-bs-original-title="Delete User" onclick="deleteRow(this)">\n' +
+                        '                                                <span class="btn-inner">\n' +
+                        '                                                         <svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none"\n' +
+                        '                                                              xmlns="http://www.w3.org/2000/svg"\n' +
+                        '                                                              stroke="currentColor">\n' +
+                        '                                                             <path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826"\n' +
+                        '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                        '                                                                   stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                             <path d="M20.708 6.23975H3.75" stroke="currentColor"\n' +
+                        '                                                                   stroke-width="1.5" stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                             <path d="M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973"\n' +
+                        '                                                                   stroke="currentColor" stroke-width="1.5"\n' +
+                        '                                                                   stroke-linecap="round"\n' +
+                        '                                                                   stroke-linejoin="round"></path>\n' +
+                        '                                                        </svg>\n' +
+                        '                                                </span>\n' +
+                        '                                </button>\n' +
+                        '                            </th>\n' +
+                        '                        </tr>'
+                    );
+                    clearErrorMessages();
+                    selectService(serviceSelectCount, priceRate.service, priceRate.service.unit);
+                    $('#service-' + serviceSelectCount).on('select2:select', function (e) {
+                        let selectedService = e.params.data;
+                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                    });
+                    $('#pricePerUnit-' + serviceSelectCount).val(priceRate.price);
+                    $('#count-' + serviceSelectCount).val('0.00');
+                    $('#price-' + serviceSelectCount).val('0.00');
+                    calculateTotalPrice();
+                    serviceSelectCount++;
+                    itemsCountServiceTable++;
+                });
+            }
+
+            if (priceRate === undefined && rateId !== rateVal){
+                console.warn("Rate !== RateId")
+                rateId =  rateVal ;
+                if(rateId !== ''){
+                    $.ajax({
+                        method: "GET",
+                        url: "/admin/bills/get-rate-" + rateId ,
+                        contentType: 'application/json',
+                        beforeSend : function (){
+                            clearValidMessages();
+                        }
+                    }).done(function (response) {
+                        console.log(response)
+                        priceRate = response?.priceRate;
+                        addRateServices();
+                        showToast('success');
+                    }).fail(function (response) {
+                        console.log(response);
+                        showToast('error');
+                    })
+                }
+            }
+        }
+
+        $('#rate').on('select2:select', function (e) {
+            rateId = e.params.data.id;
+            priceRate = e.params.data.priceRate;
+        });
+
+        function deleteEntity() {
+            $.ajax({
+                method: "DELETE",
+                url: "/admin/bills/delete-service-bill/" + serviceBillId ,
+                contentType: 'application/json',
+                beforeSend : function (){
+                    clearValidMessages();
+                }
+            }).done(function () {
+                $('#confirmDelete').modal('hide');
+                getBillResponse(billId);
+                serviceBillId = undefined;
+                showToast('success');
+            }).fail(function (response) {
+                console.log(response);
+                $('#confirmDelete').modal('hide');
+                showToast('error');
+                console.log(serviceBillId)
+                if (response) validResponse($('#service-row-' + serviceBillId), response.responseText);
+                serviceBillId = undefined;
+            })
+        }
+
+        function addMeterReading() {
+            let setCountId = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
+            let serviceSelect = $('#service-table').find('tbody').find('tr').find('th:eq(0) select option:selected')
+            let serviceInput = $('#service-table').find('tbody').find('tr').find('th:eq(3) input')
+            if (itemsCountServiceTable > 0) {
+                $.each(meterReadingTable?.content, function (meterIndex, meterReading) {
+                    $.each(serviceSelect, function (serviceIndex, service) {
+                        if (service.value !== '' && service.text === meterReading.service.name && checkId(serviceIndex)) {
+                            $('#' + serviceInput[serviceIndex].id + '').val(meterReading.count);
+                            setCountId[meterIndex] = serviceIndex;
+                            calculate(serviceInput[serviceIndex].id.split('-').pop());
+                            return false;
+                        }
+                    })
+
+                })
+            }
+
+            function checkId(id) {
+                let response = true;
+                $.each(setCountId, function (index, countId) {
+                    if (countId === id) {
+                        response = false;
+                        return response;
+
+                    }
+                })
+                return response;
+            }
+        }
+
+        function selectService(id, service, unit) {
+            $('#service-' + id).select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bills/get-all-services',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        console.log(data)
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name,
+                                    unit: item.unit
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (service) {
+                $('#service-' + id).append('<option selected value="' + service?.id + '">' + service?.name + '</option>');
+            }
+            if (unit) {
+                $('#unit-' + id).val(unit.name);
+            }
+        }
+
+        function selectStatus() {
+            $('#status').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bills/get-all-status',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
+        function selectRates() {
+            $('#rate').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bills/get-all-rates',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name,
+                                    priceRate: item.priceRate
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
+        function selectHouse(house) {
+            $('#house').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bills/get-all-house',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (house) {
+                $('#house').append('<option selected value="' + house?.id + '">' + house?.name + '</option>');
+            }
+        }
+
+        function selectSection(houseId, section) {
+            $('#section').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/admin/bills/get-section/' + houseId,
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (section) {
+                $('#section').append('<option selected value="' + section?.id + '">' + section?.name + '</option>');
+            }
+        }
+
+        $('#apartment').select2({
+            theme: 'bootstrap-5',
+            minimumResultsForSearch: -1,
+            ajax: {
+                method: 'GET',
+                url: '/admin/bills/get-all-apartment',
+                cache: true,
+                delay: 1000,
+                processResults: function (data) {
+                    return {
+                        results: data.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.number,
+                                owner: item.owner,
+                                house: item.house,
+                                section: item.section,
+                                bankBook: item.bankBook
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        function selectApartment(apartment) {
+            $('#apartment').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: sectionId ? '/admin/bills/get-all-apartment-' + houseId + '/' + sectionId : '/admin/bills/get-all-apartment-' + houseId,
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.number,
+                                    owner: item.owner,
+                                    house: item.house,
+                                    section: item.section,
+                                    bankBook: item.bankBook
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+            if (apartment) {
+                $('#apartment').append('<option selected value="' + apartment?.id + '">' + apartment?.number + '</option>');
+            }
+        }
+
+        $('#house').on('select2:select', function (e) {
+            let selectedUser = e.params.data;
+            houseId = selectedUser.id;
+            sectionId = undefined;
+
+            $('#section').val('').trigger('change');
+            $('#section option').remove();
+            $('#apartment').val('').trigger('change');
+            $('#apartment option').remove();
+            $('#bank-book').val('');
+            bankBookId = undefined;
+            selectSection(houseId);
+            selectApartment();
+
+            meterReadingRequest.houseId = houseId;
+            if (meterReadingRequest.sectionId !== undefined) {
+                meterReadingRequest.sectionId = undefined;
+            }
+            if (meterReadingRequest.apartmentId !== undefined) {
+                meterReadingRequest.apartmentId = undefined;
+            }
+
+            getAllMeterReading();
+        });
+
+        $('#section').on('select2:select', function (e) {
+            let selectedUser = e.params.data;
+            sectionId = selectedUser.id;
+            $('#apartment').val('').trigger('change');
+            $('#apartment option').remove();
+            $('#bank-book').val('');
+            bankBookId = undefined;
+            selectApartment();
+            meterReadingRequest.sectionId = sectionId;
+            if (meterReadingRequest.apartmentId !== undefined) {
+                meterReadingRequest.apartmentId = undefined;
+            }
+            getAllMeterReading();
+
+        });
+
+        $('#apartment').on('select2:select', function (e) {
+            let selectedApartment = e.params.data;
+            if (!houseId) {
+                selectHouse(selectedApartment.house);
+            }
+            if (!sectionId) {
+                selectSection(selectedApartment.house.id, selectedApartment.section);
+            }
+            houseId = selectedApartment.house.id;
+            sectionId = selectedApartment.section.id;
+
+            meterReadingRequest.apartmentId = selectedApartment.id;
+
+            console.log(selectedApartment)
+
+            $('#bank-book').val(selectedApartment?.bankBook?.number);
+            bankBookId = selectedApartment?.bankBook?.id;
+
+            getAllMeterReading();
+            newOwnerContent(selectedApartment.owner.fullName);
+            newPhoneContent(selectedApartment.owner.phone);
+        });
+
+        function newPhoneContent(phone) {
+            document.getElementById('phone').innerHTML = '<label class="form-label">[[#{bills.save.label.phone}]]: <a>' + phone + '</a></label>';
+        }
+
+        function newOwnerContent(house) {
+            document.getElementById('owner').innerHTML = '<label class="form-label">[[#{bills.save.label.owner}]]: <a>' + house + '</a></label>';
+        }
+
+        function applyMask(input) {
+            let value = input.value.replace(/\D/g, "");
+
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+
+            input.value = value;
+        }
+
+        const date_flatpickr = document.querySelectorAll('#date');
+        Array.from(date_flatpickr, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    minDate: "01.01.2014",
+                    dateFormat: "d.m.Y"
+                })
+            }
+        })
+
+        const range_flatpicker = document.querySelectorAll('#range')
+        Array.from(range_flatpicker, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    mode: "range",
+                    minDate: "01.01.2014",
+                    dateFormat: "d.m.Y"
+                })
+            }
+        })
+
+        function getTrueDateFromRange(date) {
+            let trueDate = [0, 0];
+            let split = date.split(" to ");
+            $.each(split, function (index, spl) {
+                trueDate[index] = getTrueDate(spl);
+            })
+            return trueDate;
+        }
+
+        function getTrueDate(date) {
+            let trueDate = '';
+            let split = date.split(".");
+            trueDate = split[2] + '-' + split[1] + '-' + split[0];
+            return trueDate;
+        }
+
+        function createTableService(tableSelector, itemsCount) {
+            const TABLE_DIV = $(tableSelector);
+            const TABLE_HEAD = $(TABLE_DIV).find('thead');
+            const TABLE_BODY = $(TABLE_DIV).find('tbody');
+            const TABLE_COLUMNS_COUNT = $(TABLE_HEAD).find('th').length;
+
+            $(TABLE_BODY).empty();
+            if (itemsCount <= 0) {
+                $(TABLE_BODY).append(
+                    '<tr>' +
+                    '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
+                    '[[#{table.empty}]]' +
+                    '    </td>' +
+                    '</tr>'
+                );
+            }
+
+            return TABLE_BODY;
+        }
+
+        function getAllMeterReading() {
+            $.ajax({
+                method: "POST",
+                url: "/admin/bills/get-all-meter-reading",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(meterReadingRequest)
+            }).done(function (meterReadingResponse) {
+                console.info(meterReadingResponse)
+                meterReadingTable = meterReadingResponse;
+                const TABLE_BODY = createTable('#meter-reading-table', meterReadingResponse?.totalElements, meterReadingResponse?.totalPages, meterReadingRequest?.pageIndex);
+                $.each(meterReadingResponse?.content, function (index, meterReading) {
+                    $(TABLE_BODY).append(
+                        '<tr>' +
+                        '    <td>' + meterReading.number + '</td>' +
+                        '    <td>' + meterReading?.status + '</td>' +
+                        '    <td>' + meterReading?.date + '</td>' +
+                        '    <td>' + meterReading?.month + '</td>' +
+                        '    <td>' + meterReading?.house + '</td>' +
+                        '    <td>' + meterReading?.section + '</td>' +
+                        '    <td>' + meterReading?.apartment + '</td>' +
+                        '    <td>' + meterReading?.service?.name + '</td>' +
+                        '    <td>' + meterReading?.count + '</td>' +
+                        '    <td>' + meterReading?.service?.unit?.name + '</td>' +
+                        '</tr>'
+                    );
+                });
+            });
+
+            function createTable(tableSelector, itemsCount, pagesCount, pageIndex) {
+                const TABLE_DIV = $(tableSelector);
+                const TABLE_HEAD = $(TABLE_DIV).find('thead');
+                const TABLE_BODY = $(TABLE_DIV).find('tbody');
+                const TABLE_COLUMNS_COUNT = $(TABLE_HEAD).find('th').length;
+                const TABLE_PAGINATION_ROW = $(TABLE_DIV).parents('div.card').find('div.card-footer').find('div.row');
+
+                $(TABLE_BODY).empty();
+                $(TABLE_PAGINATION_ROW).empty();
+                if (itemsCount <= 0) {
+                    $(TABLE_DIV).parents('div.card').find('div.card-footer').attr('hidden', true);
+                    $(TABLE_BODY).append(
+                        '<tr>' +
+                        '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
+                        '[[#{table.empty}]]' +
+                        '    </td>' +
+                        '</tr>'
+                    );
+                } else {
+                    $(TABLE_DIV).parents('div.card').find('div.card-footer').attr('hidden', false);
+                    createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount);
+                }
+
+                return TABLE_BODY;
+            }
+
+            function createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount) {
+                const colDiv = '<div class="col-sm-12 col-md-6"></div>';
+                const paginationList =
+                    '<ul class="pagination pagination-sm mb-0 justify-content-center justify-content-md-end align-items-center">' +
+                    '</ul>';
+                const collapsedPageBtn =
+                    '   <li class="page-item">' +
+                    '       <a class="page-link disabled" role="button">...</a>' +
+                    '   </li>';
+                pagesCount = Number(pagesCount);
+                pageIndex = Number(pageIndex) + 1;
+                itemsCount = Number(itemsCount);
+                if (itemsCount > 0) {
+                    $(TABLE_PAGINATION_ROW).append(
+                        $($(colDiv).addClass('pagination-info').addClass('text-black'))
+                            .append('[[#{staff.table.footer.shown}]] X-Y [[#{staff.table.footer.of}]] Z [[#{staff.table.footer.records}]]'
+                                .replace('X', ((pageIndex - 1) * 10 + 1))
+                                .replace('Y', Math.min(pageIndex * 10, itemsCount))
+                                .replace('Z', itemsCount))
+                    );
+                }
+
+                $(TABLE_PAGINATION_ROW).append($(colDiv).append(paginationList));
+                const paginationListPath = $(TABLE_PAGINATION_ROW).find('ul.pagination');
+
+                // pagination logic
+                if (pagesCount > 1) {
+                    if (pageIndex !== 1) {
+                        $(paginationListPath).append(createPrevNextPageBtn(false, true));
+                        $(paginationListPath).append(createPageBtn(1, false));
+                    } else {
+                        $(paginationListPath).append(createPrevNextPageBtn(true, true));
+                        $(paginationListPath).append(createPageBtn(1, true));
+                    }
+
+                    if (pagesCount > 7) {
+                        if (pageIndex >= 5) {
+                            $(paginationListPath).append(collapsedPageBtn);
+                        }
+
+                        let start;
+                        let finish;
+                        if (pageIndex < 5) {
+                            start = 2;
+                            finish = 5;
+                        } else if (pagesCount - pageIndex < 4) {
+                            start = pagesCount - 4;
+                            finish = pagesCount - 1;
+                        } else {
+                            start = pageIndex - 1;
+                            finish = pageIndex + 1;
+                        }
+                        for (let i = start; i <= finish; i++) {
+                            if (i > 1 && i <= pagesCount - 1) {
+                                if (pageIndex === i) {
+                                    $(paginationListPath).append(createPageBtn(i, true));
+                                } else {
+                                    $(paginationListPath).append(createPageBtn(i, false));
+                                }
+                            }
+                        }
+
+                        if (pagesCount - pageIndex >= 4) {
+                            $(paginationListPath).append(collapsedPageBtn);
+                        }
+                    } else {
+                        for (let i = 2; i <= pagesCount - 1; i++) {
+                            if (pageIndex === i) {
+                                $(paginationListPath).append(createPageBtn(i, true));
+                            } else {
+                                $(paginationListPath).append(createPageBtn(i, false));
+                            }
+                        }
+                    }
+
+                    if (pageIndex !== pagesCount) {
+                        $(paginationListPath).append(createPageBtn(pagesCount, false));
+                        $(paginationListPath).append(createPrevNextPageBtn(false, false));
+                    } else {
+                        $(paginationListPath).append(createPageBtn(pagesCount, true));
+                        $(paginationListPath).append(createPrevNextPageBtn(true, false));
+                    }
+                }
+                // end of pagination logic
+            }
+
+            //  Create Next previous triangle Btn
+            function createPrevNextPageBtn(isDisabled, isPrev) {
+                return '' +
+                    '   <li class="page-item ' + (isPrev ? 'prev' : 'next') + (isDisabled ? ' disabled' : '') + '">' +
+                    '       <a class="page-link" role="button">' +
+                    (isPrev ? '<span aria-hidden="true">❮</span>' : '<span aria-hidden="true">❯</span>') +
+                    '       </a>' +
+                    '   </li>';
+            }
+
+            //  Create Pagination Btn
+            function createPageBtn(pageNumber, isActive) {
+                return '' +
+                    '<li class="page-item ' + (isActive ? 'active' : '') + '">' +
+                    '   <a class="page-link" role="button">' + pageNumber + '</a>' +
+                    '</li>';
+            }
+
+
+        }
+
+        $(document).on('click', 'a.page-link', function () {
+            const pageBtn = $(this);
+            if ($(pageBtn).parent('li.page-item').hasClass('prev')) {
+                meterReadingRequest.pageIndex = --meterReadingRequest.pageIndex;
+            } else if ($(pageBtn).parent('li.page-item').hasClass('next')) {
+                meterReadingRequest.pageIndex = ++meterReadingRequest.pageIndex;
+            } else {
+                meterReadingRequest.pageIndex = Number($(pageBtn).text()) - 1;
+            }
+            getAllMeterReading();
+        });
+
+        function errorResponse(divId, message, afterDiv) {
+            $(divId).addClass('is-invalid');
+            if (afterDiv) {
+                $(divId).parents(afterDiv).append('<div class="invalid-feedback">' + message + '</div>');
+                $(divId).removeClass('btn-light');
+                $(divId).addClass('btn-danger');
+            } else {
+                $(divId).after('<div class="invalid-feedback">' + message + '</div>');
+                $(divId).removeClass('btn-light');
+                $(divId).addClass('btn-danger');
+            }
+
+        }
+
+        function clearErrorMessages() {
+            $('.btn-danger').addClass('btn-light');
+            $('.btn-danger').removeClass('btn-danger');
+            $('.invalid-feedback').remove();
+        }
+
+    </script>
+
+</th:block>
+
+</html>

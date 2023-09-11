@@ -165,6 +165,15 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
+    public List<StaffResponse> getAllStaffManager() {
+        log.info("Get all Staff and convert in Response for MastersApplication");
+        return staffRepository.findAll(staffSpecification.getStaffManager())
+                .stream()
+                .map(StaffMapper::toStaffResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Page<StaffResponse> getAllStaffDto(StaffRequest request) {
         log.info("Search all Staff and convert in DTO");
         final int DEFAULT_PAGE_SIZE = 10;

@@ -48,5 +48,33 @@ public class BankBookValidator {
         }
     }
 
+    public void isNumberUniqueValidation(String number, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            String numberResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                numberResponse = "Такий особистий рахунок вже існує";
+            } else {
+                numberResponse = "Such bank book already exists";
+            }
+            if (bankBookRepository.existsByNumber(number)) {
+                bindingResult.addError(new FieldError(object, "number", numberResponse));
+            }
+        }
+    }
+
+    public void isNumberUniqueValidationWithId(Long id, String number, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            String numberResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                numberResponse = "Такий особистий рахунок вже існує";
+            } else {
+                numberResponse = "Such bank book already exists";
+            }
+            if (bankBookRepository.existsByNumber(number)
+                    && !bankBookRepository.getReferenceById(id).getNumber().equalsIgnoreCase(number)) {
+                bindingResult.addError(new FieldError(object, "number", numberResponse));
+            }
+        }
+    }
 
 }

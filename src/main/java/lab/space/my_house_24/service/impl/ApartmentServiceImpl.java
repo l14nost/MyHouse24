@@ -13,16 +13,17 @@ import lab.space.my_house_24.specification.ApartmentSpecification;
 import lab.space.my_house_24.specification.ApartmentSpecificationForMailing;
 import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lab.space.my_house_24.specification.ApartmentSpecificationForMasterApplication;
+import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +94,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest) {
         Apartment apartment = findById(id);
+        Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
         apartment.setArea(apartmentAddRequest.area());
         apartment.setHouse(House.builder().id(apartmentAddRequest.house()).build());
         apartment.setNumber(apartmentAddRequest.number());
@@ -100,19 +102,17 @@ public class ApartmentServiceImpl implements ApartmentService {
         apartment.setRate(Rate.builder().id(apartmentAddRequest.rate()).build());
         apartment.setFloor(Floor.builder().id(apartmentAddRequest.floor()).build());
         apartment.setSection(Section.builder().id(apartmentAddRequest.section()).build());
-        if (apartmentAddRequest.bankBook()!=null && !apartmentAddRequest.bankBook().isEmpty()) {
-            Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
-            if (bankBookOptional.isEmpty()) {
-                apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
-            } else {
-                BankBook bankBook = bankBookOptional.get();
-                if (!bankBook.getId().equals(apartment.getBankBook().getId())) {
-                    apartment.getBankBook().setApartment(null);
-                }
-                bankBook.setApartment(apartment);
-                apartment.setBankBook(bankBook);
-
+        if (bankBookOptional.isEmpty()){
+            apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
+        }
+        else {
+            BankBook bankBook = bankBookOptional.get();
+            if (!bankBook.getId().equals(apartment.getBankBook().getId())){
+                apartment.getBankBook().setApartment(null);
             }
+            bankBook.setApartment(apartment);
+            apartment.setBankBook(bankBook);
+
         }
         apartmentRepository.save(apartment);
     }
@@ -128,6 +128,60 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepository.findAll(apartmentSpecificationForMasterApplication.getApartmentByUserId(request))
                 .stream()
                 .map(ApartmentMapper::entityToResponseForMastersApplication)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBankBook> getAllApartmentResponseByHouseId(Long id) {
+        log.info("Get all Apartment by HouseId and convert in Response for BankBook");
+        return findAllApartmentByHouse(id)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBankBook)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBankBook> getAllApartmentResponseByHouseIdAndSectionId(Long houseId, Long sectionId) {
+        log.info("Get all Apartment by HouseId and SectionId, and convert in Response for BankBook");
+        return apartmentRepository.findAllByHouse_IdAndSection_IdOrderById(houseId,sectionId)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBankBook)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBill> getAllApartmentResponseByHouseIdForBill(Long id) {
+        log.info("Get all Apartment by HouseId and convert in Response for Bill");
+        return findAllApartmentByHouse(id)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBill)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBill> getAllApartmentResponseByHouseIdAndSectionIdForBill(Long houseId, Long sectionId) {
+        log.info("Get all Apartment by HouseId and SectionId, and convert in Response for Bill");
+        return apartmentRepository.findAllByHouse_IdAndSection_IdOrderById(houseId,sectionId)
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBill)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBill> getAllApartmentResponseForBill() {
+        log.info("Get all Apartment and convert in Response for BankBook");
+        return apartmentRepository.findAll(Sort.by(Sort.Direction.DESC,"id"))
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBill)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ApartmentResponseForBankBook> getAllApartmentResponse() {
+        log.info("Get all Apartment and convert in Response for BankBook");
+        return apartmentRepository.findAll(Sort.by(Sort.Direction.DESC,"id"))
+                .stream()
+                .map(ApartmentMapper::entityToResponseForBankBook)
                 .collect(Collectors.toList());
     }
 

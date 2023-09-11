@@ -3,19 +3,18 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Apartment;
 import lab.space.my_house_24.entity.MeterReading;
-import lab.space.my_house_24.enums.MeterReadingStatus;
 import lab.space.my_house_24.mapper.MeterReadingMapper;
 import lab.space.my_house_24.model.meterReading.*;
 import lab.space.my_house_24.repository.MeterReadingRepository;
 import lab.space.my_house_24.service.MeterReadingService;
 import lab.space.my_house_24.specification.MeterReadingApartmentSpecification;
 import lab.space.my_house_24.specification.MeterReadingSpecification;
+import lab.space.my_house_24.specification.MeterReadingSpecificationForBill;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -23,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeterReadingServiceImpl implements MeterReadingService {
     private final MeterReadingRepository meterReadingRepository;
+    private final MeterReadingSpecificationForBill meterReadingSpecificationForBill;
     @Override
     public Page<MeterReadingResponseForMain> findAllForMain(MeterReadingRequestForMainPage meterReadingRequestForMainPage) {
         MeterReadingSpecification meterReadingSpecification = MeterReadingSpecification.builder().meterReadingRequestForMainPage(meterReadingRequestForMainPage).build();
@@ -96,5 +96,11 @@ public class MeterReadingServiceImpl implements MeterReadingService {
     @Override
     public void delete(Long id) {
         meterReadingRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<MeterReadingResponseForBill> getAllMeterReadingResponseByRequest(MeterReadingRequestForBill request) {
+        return meterReadingRepository.findAll(meterReadingSpecificationForBill.getMeterReadingByRequest(request),
+                PageRequest.of(request.pageIndex(), 10)).map(MeterReadingMapper::toMeterReadingResponseForBill);
     }
 }

@@ -46,17 +46,35 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
+    public List<RateResponse> getAllRatesForBill() {
+        log.info("Try to get all RatesResponse");
+        return rateRepository.findAll().stream().map(RateMapper::toRateResponseForBill).toList();
+    }
+
+    @Override
     public Rate getRateById(Long id) throws EntityNotFoundException {
         log.info("Try to find Rate");
         return rateRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Rate not found by id " + id));
     }
 
+
     @Override
     public ResponseEntity<?> getRateByIdDto(Long id) {
         try {
             log.info("Try to get RateResponse");
             return ResponseEntity.ok(RateMapper.toRateResponse(getRateById(id)));
+        } catch (EntityNotFoundException e) {
+            log.error("Error get RateResponse");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getRateByIdResponseForBill(Long id) {
+        try {
+            log.info("Try to get RateResponse");
+            return ResponseEntity.ok(RateMapper.toRateResponseForBill(getRateById(id)));
         } catch (EntityNotFoundException e) {
             log.error("Error get RateResponse");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);

@@ -4,8 +4,6 @@ import lab.space.my_house_24.entity.MeterReading;
 import lab.space.my_house_24.model.meterReading.*;
 import org.springframework.data.domain.Page;
 
-import java.util.List;
-
 public interface MeterReadingService {
     Page<MeterReadingResponseForMain> findAllForMain(MeterReadingRequestForMainPage meterReadingRequestForMainPage);
     Page<MeterReadingResponseForApartment> findAllForApartment(MeterReadingRequestForApartmentPage meterReadingRequestForApartmentPage);
@@ -20,4 +18,6 @@ public interface MeterReadingService {
     MeterReading findById(Long id);
 
     void delete(Long id);
+
+    Page<MeterReadingResponseForBill> getAllMeterReadingResponseByRequest(MeterReadingRequestForBill request);
 }

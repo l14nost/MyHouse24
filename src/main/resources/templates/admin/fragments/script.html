@@ -134,6 +134,7 @@
 
     const toastSuccess = bootstrap.Toast.getOrCreateInstance(document.getElementById('successUpdateRole'));
     const toastError = bootstrap.Toast.getOrCreateInstance(document.getElementById('errorUpdateRole'));
+    const toastCustom = bootstrap.Toast.getOrCreateInstance(document.getElementById('errorCustomToast'));
 
     function showToast(toast) {
         switch (toast) {
@@ -142,6 +143,9 @@
                 break;
             case "error":
                 toastError.show();
+                break;
+            case "custom":
+                toastCustom.show();
                 break;
             default:
                 console.log("Unknown Toast");
@@ -220,6 +224,45 @@
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
 
+    function addBadgeBankBookStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'ACTIVE') badgeClasses += ' bg-success';
+        if (status?.name === 'INACTIVE') badgeClasses += ' bg-danger';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
+    function addBadgeBillDraft(value){
+
+        let badgeClasses = 'badge rounded-pill';
+
+        if (value) {
+            badgeClasses += ' bg-success';
+            return '<span class="' + badgeClasses + '">[[#{bills.card.draft}]]</span>';
+        }
+        else {
+            badgeClasses += ' bg-danger';
+            return '<span class="' + badgeClasses + '">[[#{bills.card.not_draft}]]</span>';
+        }
+
+
+    }
+
+    function addBadgeBillStatus(status){
+
+        let badgeClasses = 'badge rounded-pill';
+        let badgeText = status?.value;
+
+        if (status?.name === 'PAID') badgeClasses += ' bg-success';
+        if (status?.name === 'PARTLY_PAID') badgeClasses += ' bg-warning';
+        if (status?.name === 'UNPAID') badgeClasses += ' bg-danger';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
     function addColorTextIncomeExpense(type){
 
         let badgeClasses = '';
@@ -227,6 +270,26 @@
 
         if (type?.name === 'INCOME') badgeClasses += 'text-success';
         if (type?.name === 'EXPENSE') badgeClasses += 'text-danger';
+
+        return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
+    }
+
+    function addColorIncomeExpense(type, value){
+
+        let badgeClasses = '';
+        let badgeText = '';
+
+        if (value !== 0 && value !== '0'){
+            if (type) {
+                badgeText += value;
+                badgeClasses += 'text-success';
+            }else {
+                badgeText += '-' + value;
+                badgeClasses += 'text-danger';
+            }
+        }else {
+            badgeText += value;
+        }
 
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }

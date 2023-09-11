@@ -36,29 +36,29 @@ public class UserServiceImpl implements UserService {
     private final String url = "http://localhost:8080/admin/";
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(()-> new EntityNotFoundException("User by email "+email+" is not found"));
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("User by email " + email + " is not found"));
     }
 
     @Override
     public Page<UserResponse> getAllUserDto(UserMainPageRequest userMainPageRequest) {
 
         UserSpecification userSpecification = UserSpecification.builder().userMainPageRequest(userMainPageRequest).build();
-        return userRepository.findAll(userSpecification, PageRequest.of(userMainPageRequest.page(),10)).map(UserMapper::entityToMainPageDto);
+        return userRepository.findAll(userSpecification, PageRequest.of(userMainPageRequest.page(), 10)).map(UserMapper::entityToMainPageDto);
     }
 
     @Override
     public UserCardResponse findById(Long id) {
-        return UserMapper.entityToCardDto(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User by id "+id+" is not found")));
+        return UserMapper.entityToCardDto(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User by id " + id + " is not found")));
     }
 
     @Override
     public UserEditResponse findByIdEdit(Long id) {
-        return UserMapper.entityToEditDto(userRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("User by id "+id+" is not found")));
+        return UserMapper.entityToEditDto(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User by id " + id + " is not found")));
     }
 
     @Override
     public void deleteById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("User by id "+id+" is not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User by id " + id + " is not found"));
         FileHandler.deleteFile(user.getFilename());
         userRepository.deleteById(id);
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findEntityById(Long id) {
-        return userRepository.findById(id).orElseThrow(()->new EntityNotFoundException("User by id "+id+" is not found"));
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User by id " + id + " is not found"));
     }
 
     @Override
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserEditRequest userEditRequest,Long id) {
+    public void update(UserEditRequest userEditRequest, Long id) {
         boolean changePassword = false;
         User user = findEntityById(id);
         String filenameDelete = user.getFilename();
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         String textForSend = "Dear friend,\n" +
                 "We cordially invite you to join us.\n" +
                 "We will be glad to see you in our application!";
-        customMailSender.send(userInviteRequest.email(),textForSend,"Invite");
+        customMailSender.send(userInviteRequest.email(), textForSend, "Invite");
     }
 
     @Override
@@ -136,9 +136,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponseForTable> userResponseForTables(Integer page, String search){
+    public Page<UserResponseForTable> userResponseForTables(Integer page, String search) {
         UserSpecificationForTable userSpecificationForTable = UserSpecificationForTable.builder().search(search).build();
-        return userRepository.findAll(userSpecificationForTable, PageRequest.of(page,5)).map(UserMapper::entityToDtoForTable);
+        return userRepository.findAll(userSpecificationForTable, PageRequest.of(page, 5)).map(UserMapper::entityToDtoForTable);
     }
 
     @Override

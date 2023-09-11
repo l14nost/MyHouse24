@@ -31,7 +31,9 @@ public class AuthController {
         if (!jwtService.isTokenValid(
                 token,
                 userDetails,
-                staffService.getStaffByEmail(userDetails.getUsername()))) {
+                staffService.getStaffByEmail(userDetails.getUsername()),
+                "activate"
+        )) {
             return "/admin/pages/staff/staff-activate-error";
         } else {
             return "/admin/pages/staff/staff-activate";

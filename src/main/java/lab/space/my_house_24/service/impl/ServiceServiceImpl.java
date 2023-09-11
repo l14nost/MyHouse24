@@ -48,10 +48,10 @@ public class ServiceServiceImpl implements ServiceService {
 
     @Override
     public List<ServiceResponse> getAllServicesByIsActiveDto() {
-        log.info("Try to get All Service and convert in Dto");
+        log.info("Try to get All Active Service and convert in Dto");
         return serviceRepository.findAllByIsActiveOrderById(true)
                 .stream()
-                .map(ServiceMapper::toSimpleDto).collect(Collectors.toList());
+                .map(ServiceMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
