@@ -176,8 +176,8 @@ public class CashBoxServiceImpl implements CashBoxService {
         for (int i = 1; i<13;i++){
             BigDecimal sum = BigDecimal.ZERO;
             for (CashBox cashBox : all){
-                if (cashBox.getDate().atZone(ZoneId.systemDefault()).getMonth().getValue() == i){
-                    sum=sum.add(cashBox.getSum());
+                if (cashBox.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i){
+                    sum=sum.add(cashBox.getPrice());
                 }
             }
             allSumByMonths.add(sum);
@@ -191,12 +191,12 @@ public class CashBoxServiceImpl implements CashBoxService {
         List<CashBox> allCosts = cashBoxRepository.findAllByType(false);
         BigDecimal sumComing = BigDecimal.ZERO;
         for (CashBox cashBox : allComing){
-            sumComing=sumComing.add(cashBox.getSum());
+            sumComing=sumComing.add(cashBox.getPrice());
 
         }
         BigDecimal sumCosts = BigDecimal.ZERO;
         for (CashBox cashBox : allCosts){
-            sumCosts=sumCosts.add(cashBox.getSum());
+            sumCosts=sumCosts.add(cashBox.getPrice());
 
         }
         return sumComing.subtract(sumCosts);
@@ -207,7 +207,7 @@ public class CashBoxServiceImpl implements CashBoxService {
         List<CashBox> cashBoxes = cashBoxRepository.findAllByType(true);
         BigDecimal cashBoxSum = BigDecimal.ZERO;
         for (CashBox cashBox: cashBoxes){
-            cashBoxSum = cashBoxSum.add(cashBox.getSum());
+            cashBoxSum = cashBoxSum.add(cashBox.getPrice());
         }
         return cashBoxSum.subtract(billsSum);
     }
