@@ -1,24 +1,32 @@
 package lab.space.my_house_24;
 
+import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Role;
 import lab.space.my_house_24.entity.SecurityLevel;
 import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.entity.settingsPage.*;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.Page;
 import lab.space.my_house_24.enums.UserStatus;
-import lab.space.my_house_24.service.RoleService;
-import lab.space.my_house_24.service.SecurityLevelService;
-import lab.space.my_house_24.service.StaffService;
+import lab.space.my_house_24.service.*;
+import lab.space.my_house_24.service.impl.AboutServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class Init implements CommandLineRunner {
     private final StaffService staffService;
+    private final MainPageService mainPageService;
+    private final AboutService aboutService;
+    private final ContactService contactService;
+    private final ServicePageService servicePageService;
     private final SecurityLevelService securityLevelService;
     private final RoleService roleService;
 
@@ -138,6 +146,95 @@ public class Init implements CommandLineRunner {
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
             );
         } else log.info("Staff found");
+
+
+        try{
+            log.info("Try to find main page");
+            mainPageService.findById(1L);
+        }
+        catch (EntityNotFoundException e){
+            log.warn("Create custom main page");
+            mainPageService.save(
+                    MainPage.builder()
+                            .id(1L)
+                            .title("title")
+                            .description("description")
+                            .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                            .links(true)
+                            .bannerList(new ArrayList<>(List.of(
+                                    Banner.builder().name("name1").image("").description("descr1").build(),
+                                    Banner.builder().name("name2").image("").description("descr2").build(),
+                                    Banner.builder().name("name3").image("").description("descr3").build(),
+                                    Banner.builder().name("name4").image("").description("descr4").build(),
+                                    Banner.builder().name("name5").image("").description("descr5").build(),
+                                    Banner.builder().name("name6").image("").description("descr6").build()
+                            )))
+                            .slide1("")
+                            .slide2("")
+                            .slide3("")
+                            .build()
+            );
+        }
+
+        try{
+            log.info("Try to find about page");
+            aboutService.findById(1L);
+        }
+        catch (EntityNotFoundException e){
+            log.warn("Create custom about page");
+            aboutService.save(
+                    About.builder()
+                            .id(1L)
+                            .title("title")
+                            .titleAdd("titleAdd")
+                            .description("description")
+                            .descriptionAdd("descriptionAdd")
+                            .documentList(new ArrayList<>())
+                            .photoList(new ArrayList<>())
+                            .imageDirector("")
+                            .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                            .build()
+            );
+        }
+
+        try{
+            log.info("Try to find contact page");
+            contactService.findById(1L);
+        }
+        catch (EntityNotFoundException e){
+            log.warn("Create custom contact page");
+            contactService.save(
+                    Contact.builder()
+                            .id(1L)
+                            .title("title")
+                            .description("description")
+                            .fullName("")
+                            .url("")
+                            .email("")
+                            .codeMap("")
+                            .location("")
+                            .address("")
+                            .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                            .build()
+            );
+        }
+
+        try{
+            log.info("Try to find service page");
+            servicePageService.findById(1L);
+        }
+        catch (EntityNotFoundException e){
+            log.warn("Create custom service page");
+            servicePageService.save(
+                    ServicePage.builder()
+                            .id(1L)
+                            .bannerList(new ArrayList<>())
+                            .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                            .build()
+            );
+        }
+
+
         log.info("################## FINISH OF INITIALIZATION ##################");
     }
 

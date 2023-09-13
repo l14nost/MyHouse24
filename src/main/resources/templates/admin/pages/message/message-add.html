@@ -158,6 +158,8 @@
                 allowClear: true
             });
             $("#house").on("change", function (){
+                var checkbox = document.getElementById("debt");
+                var isCheck = checkbox.checked;
                 $('#floor').val(0).trigger("change");
                 $('#section').val(0).trigger("change");
                 $('#apartment').val(0).trigger("change");
@@ -231,7 +233,8 @@
                         data:{
                           idHouse: idHouse,
                           idSection: idSection,
-                          idFloor: idFloor
+                          idFloor: idFloor,
+                          duty: isCheck
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
@@ -254,6 +257,8 @@
 
             })
             $("#section").on("change", function (){
+                var checkbox = document.getElementById("debt");
+                var isCheck = checkbox.checked;
                 $('#apartment').val(0).trigger("change");
                 var idSection = this.value;
                 var idHouse = $("#house").val();
@@ -266,7 +271,8 @@
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
-                            idFloor: idFloor
+                            idFloor: idFloor,
+                            duty: isCheck
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
@@ -289,6 +295,8 @@
 
             })
             $("#floor").on("change", function (){
+                var checkbox = document.getElementById("debt");
+                var isCheck = checkbox.checked;
                 $('#apartment').val(0).trigger("change");
                 var idFloor = this.value;
                 var idHouse = $("#house").val();
@@ -301,7 +309,8 @@
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
-                            idFloor: idFloor
+                            idFloor: idFloor,
+                            duty: isCheck
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
@@ -327,6 +336,16 @@
         }
 
         $(document).ready(function (){
+            var checkbox = document.getElementById("debt");
+
+            checkbox.addEventListener("change", function() {
+                $('#house').val(0).trigger("change");
+                $('#floor').val(0).trigger("change");
+                $('#section').val(0).trigger("change");
+                $('#apartment').val(0).trigger("change");
+            });
+
+
             var pathAndQuery = window.location.pathname + window.location.search;
             if (pathAndQuery === "/admin/messages/add-message-debt"){
                 var checkbox = document.getElementById("debt");

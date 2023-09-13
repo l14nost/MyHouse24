@@ -34,7 +34,7 @@ public interface ApartmentService {
 
     List<ApartmentResponseForBankBook> getAllApartmentResponse();
 
-    List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor);
+    List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor,Boolean duty);
 
     List<Apartment> findAllApartmentByHouse(Long house);
     List<Apartment> findAllApartmentByFloor(Long floor);
@@ -44,5 +44,5 @@ public interface ApartmentService {
 
     Long count();
 
-    List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment);
+    List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment, Boolean debt);
 }

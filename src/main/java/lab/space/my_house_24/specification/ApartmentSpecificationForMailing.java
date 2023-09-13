@@ -7,6 +7,7 @@ import lab.space.my_house_24.entity.House;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class ApartmentSpecificationForMailing implements Specification<Apartment
     private Long idSection;
     private Long idFloor;
     private Long idApartment;
+    private Boolean debt;
 
 
     @Override
@@ -37,6 +39,9 @@ public class ApartmentSpecificationForMailing implements Specification<Apartment
         }
         if (idApartment!=null&&idApartment>0L){
             predicates.add(criteriaBuilder.equal(root.get("id"), idApartment));
+        }
+        if (debt){
+            predicates.add(criteriaBuilder.lessThan(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO));
         }
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         return predicate;

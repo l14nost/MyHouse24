@@ -12,25 +12,30 @@ import lab.space.my_house_24.service.BannerService;
 import lab.space.my_house_24.service.ServicePageService;
 import lab.space.my_house_24.util.FileHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ServicePageServiceImpl implements ServicePageService {
     private final ServicePageRepository servicePageRepository;
     private final BannerService bannerService;
     @Override
     public ServicePage findById(Long id) {
+        log.info("Try to find service page by id: "+id);
         return servicePageRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Service by id "+id+" is not found"));
     }
 
     @Override
     public ServicePageResponse findByIdResponse(Long id) {
+        log.info("Try to find service page dto by id: "+id);
         return ServicePageMapper.entityToResponseDto(servicePageRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Service by id "+id+" is not found")));
     }
 
     @Override
     public void update(ServicePageRequest servicePageRequest) {
+        log.info("Try to update service page");
         ServicePage servicePage = findById(1L);
         if (!servicePageRequest.deleteBlockList().isEmpty()){
             for (int i = 0 ; i< servicePageRequest.deleteBlockList().size();i++){
@@ -48,7 +53,7 @@ public class ServicePageServiceImpl implements ServicePageService {
                         servicePage.getBannerList().add(Banner.builder().image(FileHandler.saveFile(servicePageRequest.imageList().get(i))).name(servicePageRequest.blockTitleList().get(i)).description(servicePageRequest.blockDescriptionList().get(i)).servicePage(servicePage).build());
                     }
                 } else {
-                    if (i < servicePageRequest.imageList().size()) {
+                    if (i < servicePage.getBannerList().size()) {
                         servicePage.getBannerList().get(i).setName(servicePageRequest.blockTitleList().get(i));
                         servicePage.getBannerList().get(i).setDescription(servicePageRequest.blockDescriptionList().get(i));
                     } else {
@@ -62,5 +67,13 @@ public class ServicePageServiceImpl implements ServicePageService {
         servicePage.getSeo().setKeyWords(servicePageRequest.seoKeyWords());
         servicePage.getSeo().setDescription(servicePageRequest.seoDescription());
         servicePageRepository.save(servicePage);
+        log.info("Service page was update");
+    }
+
+    @Override
+    public void save(ServicePage build) {
+        log.info("Try to save new service page");
+        servicePageRepository.save(build);
+        log.info("Service page was save");
     }
 }

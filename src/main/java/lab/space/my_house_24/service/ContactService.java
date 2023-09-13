@@ -10,4 +10,6 @@ public interface ContactService {
     ContactResponse findByIdResponse(Long id);
 
     void update(ContactRequest contactRequest);
+
+    void save(Contact build);
 }

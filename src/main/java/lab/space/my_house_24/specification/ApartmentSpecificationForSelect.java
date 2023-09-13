@@ -6,6 +6,7 @@ import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class ApartmentSpecificationForSelect implements Specification<Apartment>
     private Long idHouse;
     private Long idSection;
     private Long idFloor;
+    private Boolean duty;
 
 
     @Override
@@ -32,6 +34,9 @@ public class ApartmentSpecificationForSelect implements Specification<Apartment>
         if (idSection!=null&&idSection>0L){
             Join<Apartment, Floor> sectionJoin = root.join("section", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(sectionJoin.get("id"),idSection));
+        }
+        if (duty!=null&& duty) {
+            predicates.add(criteriaBuilder.lessThan(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO));
         }
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         return predicate;

@@ -9,4 +9,5 @@ public interface AboutService {
     AboutResponse findByIdResponse(Long id);
     About findById(Long id);
     void update(AboutRequest aboutRequest);
+    void save(About about);
 }

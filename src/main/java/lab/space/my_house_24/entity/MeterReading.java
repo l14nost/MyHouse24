@@ -24,9 +24,6 @@ public class MeterReading {
 
     @Enumerated(EnumType.STRING)
     private MeterReadingStatus status;
-//Id its number?
-//    @Column(nullable = false)
-//    private Long number;
 
     @Column(nullable = false)
     private Double count;

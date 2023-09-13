@@ -14,6 +14,7 @@ import lab.space.my_house_24.service.DocumentService;
 import lab.space.my_house_24.service.PhotoService;
 import lab.space.my_house_24.util.FileHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,22 +24,26 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AboutServiceImpl implements AboutService {
     private final AboutRepository aboutRepository;
     private final PhotoService photoService;
     private final DocumentService documentService;
     @Override
     public AboutResponse findByIdResponse(Long id) {
-        return AboutMapper.entityToDto(aboutRepository.findById(id).orElseThrow(()->new EntityNotFoundException("About by id "+id+" is not found")));
+        log.info("Try to find about dto by id: "+id);
+        return AboutMapper.entityToDto(findById(id));
     }
 
     @Override
     public About findById(Long id) {
+        log.info("Try to find about by id: "+id);
         return aboutRepository.findById(id).orElseThrow(()->new EntityNotFoundException("About by id "+id+" is not found"));
     }
 
     @Override
     public void update(AboutRequest aboutRequest) {
+        log.info("Try to update about page");
         About about = findById(1L);
         if (!aboutRequest.deleteAddGalleryList().isEmpty()){
             for (int i = 0 ; i< aboutRequest.deleteAddGalleryList().size();i++){
@@ -108,5 +113,12 @@ public class AboutServiceImpl implements AboutService {
             about.setImageDirector(FileHandler.saveFile(aboutRequest.directImage()));
         }
         aboutRepository.save(about);
+        log.info("Success update");
+    }
+    @Override
+    public void save(About build) {
+        log.info("Try to save new about page");
+        aboutRepository.save(build);
+        log.info("About page was save");
     }
 }

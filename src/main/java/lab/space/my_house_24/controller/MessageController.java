@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.message.MessageMainPageRequest;
 import lab.space.my_house_24.model.message.MessageRequestForSend;
@@ -18,7 +19,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("messages")
-
 @RequiredArgsConstructor
 public class MessageController {
     private final MessageService messageService;
@@ -43,7 +43,12 @@ public class MessageController {
 
     @GetMapping("/get-message-by-id/{id}")
     public ResponseEntity getMessageById(@PathVariable Long id){
-        return ResponseEntity.ok().body(messageService.findByIdForCard(id));
+        try{
+            return ResponseEntity.ok().body(messageService.findByIdForCard(id));
+        }
+        catch (EntityNotFoundException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete-message/{id}")
@@ -53,7 +58,7 @@ public class MessageController {
     }
 
     @GetMapping("/add-message")
-    public String addMessagePage(Model model){
+    public String addMessagePage(){
         return "/admin/pages/message/message-add";
     }
 
@@ -75,38 +80,8 @@ public class MessageController {
         return ResponseEntity.ok().build();
     }
 
-
-    @GetMapping("/add-message-for-user/{idUser}")
-    public String addMessageForUserPage(@PathVariable Long idUser,Model model){
-        return "/admin/pages/message/message-add-for-user";
-    }
-
-
-    @PostMapping("/add-message-for-user/{idUser}")
-    public ResponseEntity addMessageForUser(@PathVariable Long idUser, @RequestBody @Valid MessageRequestForSend messageRequestForSend, BindingResult result){
-        System.out.println(messageRequestForSend);
-        if (result.hasErrors()){
-            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
-        }
-        messageService.sendMessage(messageRequestForSend);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/add-message-debt")
-    public String addMessageDebtPage(Model model){
+    public String addMessageDebtPage(){
         return "/admin/pages/message/message-add";
     }
-
-
-    @PostMapping("/add-message-debt")
-    public ResponseEntity addMessageDebt(@RequestBody @Valid MessageRequestForSend messageRequestForSend, BindingResult result){
-        if (result.hasErrors()){
-            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
-        }
-        messageService.sendMessage(messageRequestForSend);
-        return ResponseEntity.ok().build();
-    }
-
-
-
 }

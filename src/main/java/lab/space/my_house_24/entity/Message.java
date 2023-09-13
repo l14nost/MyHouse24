@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -64,7 +62,7 @@ public class Message {
     )
     Set<User> users = new HashSet<>();
 
-    public void addApartment(User user){
+    public void addUser(User user){
         users.add(user);
         user.getMessageList().add(this);
     }

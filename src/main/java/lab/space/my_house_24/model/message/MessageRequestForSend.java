@@ -21,7 +21,5 @@ public record MessageRequestForSend(
         Long floor,
         @NotNull(message = "{not.blank.message}")
         Long apartment
-//        @NotNull(message = "{not.blank.message}")
-//        Long staff
 ) {
 }

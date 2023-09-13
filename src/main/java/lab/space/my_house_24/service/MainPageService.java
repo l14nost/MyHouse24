@@ -10,4 +10,6 @@ public interface MainPageService {
     MainPage findById(Long id);
 
     void update(MainPageRequest mainPageRequest);
+
+    void save(MainPage build);
 }
