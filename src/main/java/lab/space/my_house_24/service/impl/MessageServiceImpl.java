@@ -62,7 +62,7 @@ public class MessageServiceImpl implements MessageService {
                 message.setFloor(Floor.builder().id(messageRequestForSend.floor()).build());
             }
         }
-        List<Apartment> apartmentList = apartmentService.apartmentListForMessage(messageRequestForSend.house(), messageRequestForSend.section(), messageRequestForSend.floor(), messageRequestForSend.apartment());
+        List<Apartment> apartmentList = apartmentService.apartmentListForMessage(messageRequestForSend.house(), messageRequestForSend.section(), messageRequestForSend.floor(), messageRequestForSend.apartment(), messageRequestForSend.debt());
         for (Apartment apartment: apartmentList){
             message.addApartment(apartment.getUser());
         }

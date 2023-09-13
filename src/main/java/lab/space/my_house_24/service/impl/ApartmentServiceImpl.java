@@ -187,11 +187,12 @@ public class ApartmentServiceImpl implements ApartmentService {
 
 
     @Override
-    public List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor) {
+    public List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor, Boolean duty) {
         ApartmentSpecificationForSelect apartmentSpecificationForSelect = ApartmentSpecificationForSelect.builder()
                 .idFloor(idFloor)
                 .idHouse(idHouse)
                 .idSection(idSection)
+                .duty(duty)
                 .build();
         return apartmentRepository.findAll(apartmentSpecificationForSelect).stream().map(ApartmentMapper::entityToDtoForTable).toList();
 
@@ -223,8 +224,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment) {
-        ApartmentSpecificationForMailing apartmentSpecification = ApartmentSpecificationForMailing.builder().idApartment(apartment).idFloor(floor).idHouse(house).idSection(section).build();
+    public List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment, Boolean debt) {
+        ApartmentSpecificationForMailing apartmentSpecification = ApartmentSpecificationForMailing.builder().idApartment(apartment).idFloor(floor).idHouse(house).idSection(section).debt(debt).build();
         return apartmentRepository.findAll(apartmentSpecification);
     }
 
