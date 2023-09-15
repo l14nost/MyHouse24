@@ -35,6 +35,7 @@ public class CashBoxController {
     private final BankBookService bankBookService;
     private final ArticleService articleService;
     private final CashBoxValidator cashBoxValidator;
+
     @GetMapping({"/", ""})
     public String showCashBoxPage() {
         return "admin/pages/cash_box/cash-box";
@@ -116,11 +117,11 @@ public class CashBoxController {
 
     @PutMapping("/update-cash-box")
     public ResponseEntity<?> updateCashBox(@Valid @RequestBody CashBoxUpdateRequest request,
-                                        BindingResult bindingResult) {
-        cashBoxValidator.isBankBookValidation(request.bankBookId() ,bindingResult,request.type() ,
+                                           BindingResult bindingResult) {
+        cashBoxValidator.isBankBookValidation(request.bankBookId(), bindingResult, request.type(),
                 "CashBoxUpdateRequest", LocaleContextHolder.getLocale());
-        cashBoxValidator.isNumberUniqueValidationWithId(request.id(),request.number(),
-                bindingResult,request.type(),"CashBoxUpdateRequest", LocaleContextHolder.getLocale());
+        cashBoxValidator.isNumberUniqueValidationWithId(request.id(), request.number(),
+                bindingResult, request.type(), "CashBoxUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -134,11 +135,11 @@ public class CashBoxController {
 
     @PostMapping("/save-cash-box")
     public ResponseEntity<?> saveCashBox(@Valid @RequestBody CashBoxSaveRequest request,
-                                      BindingResult bindingResult) {
-        cashBoxValidator.isBankBookValidation(request.bankBookId() ,bindingResult,request.type() ,
+                                         BindingResult bindingResult) {
+        cashBoxValidator.isBankBookValidation(request.bankBookId(), bindingResult, request.type(),
                 "CashBoxSaveRequest", LocaleContextHolder.getLocale());
         cashBoxValidator.isNumberUniqueValidation(request.number(),
-                bindingResult,request.type(),"CashBoxSaveRequest", LocaleContextHolder.getLocale());
+                bindingResult, request.type(), "CashBoxSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -163,12 +164,12 @@ public class CashBoxController {
     }
 
     @GetMapping("/get-statistics-for-coming")
-    public ResponseEntity getStatisticsForComing(){
+    public ResponseEntity getStatisticsForComing() {
         return ResponseEntity.ok(cashBoxService.statisticSumByType(true));
     }
 
     @GetMapping("/get-statistics-for-costs")
-    public ResponseEntity getStatisticsForCosts(){
+    public ResponseEntity getStatisticsForCosts() {
         return ResponseEntity.ok(cashBoxService.statisticSumByType(false));
     }
 }

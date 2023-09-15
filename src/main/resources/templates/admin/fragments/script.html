@@ -88,6 +88,18 @@
 </script>
 <script>
 
+    function getStatistic() {
+        $.ajax({
+            method: "GET",
+            url: "/admin/statistics/get-statistic",
+            dataType: 'json',
+            contentType: 'application/json'
+        }).done(function (response) {
+            $("#cash-box-state").html(response?.cashBoxState.toFixed(2));
+            $("#bank-book-balance").html(response?.bankBookBalance.toFixed(2));
+            $("#bank-book-expense").html(response?.bankBookExpense.toFixed(2));
+        });
+    }
 
     function getCurrentURLWithoutParams() {
 

@@ -1,10 +1,7 @@
 package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import lab.space.my_house_24.entity.Apartment;
-import lab.space.my_house_24.entity.BankBook;
-import lab.space.my_house_24.entity.Bill;
-import lab.space.my_house_24.entity.CashBox;
+import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.enums.BalanceStatus;
 import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.enums.BillStatus;
@@ -17,6 +14,7 @@ import lab.space.my_house_24.repository.BankBookRepository;
 import lab.space.my_house_24.repository.BillRepository;
 import lab.space.my_house_24.repository.CashBoxRepository;
 import lab.space.my_house_24.service.BankBookService;
+import lab.space.my_house_24.service.StatisticService;
 import lab.space.my_house_24.specification.BankBookSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +46,7 @@ public class BankBookServiceImpl implements BankBookService {
     private final BillRepository billRepository;
     private final CashBoxRepository cashBoxRepository;
     private final MessageSource message;
+    private final StatisticService statisticService;
 
     @Override
     public BankBook getBankBookById(Long id) throws EntityNotFoundException {
@@ -84,6 +83,13 @@ public class BankBookServiceImpl implements BankBookService {
         return bankBookRepository.findAll(
                 bankBookSpecification.getBankBookByRequest(request),
                 PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(BankBookMapper::toBankBookResponse);
+    }
+
+    @Override
+    public List<BankBook> getAllBankBookIsActive() {
+        log.info("Try to get all BankBook is active ");
+        return bankBookRepository.findAll(
+                bankBookSpecification.getBankBookByRequest(BankBookRequest.builder().statusQuery(BankBookStatus.ACTIVE).build()));
     }
 
     @Override
@@ -258,8 +264,59 @@ public class BankBookServiceImpl implements BankBookService {
         log.info("Try to add sum to BankBook");
         if (type) {
             totalPrice = totalPrice.add(price);
+            statisticService.updateStatistic(
+                    Statistic.builder()
+                            .cashBoxState(BigDecimal.ZERO)
+                            .bankBookBalance(price)
+                            .bankBookExpense(BigDecimal.ZERO)
+                            .build()
+            );
         } else {
             totalPrice = totalPrice.subtract(price);
+            statisticService.updateStatistic(
+                    Statistic.builder()
+                            .cashBoxState(BigDecimal.ZERO)
+                            .bankBookBalance(BigDecimal.ZERO.subtract(price))
+                            .bankBookExpense(BigDecimal.ZERO)
+                            .build()
+            );
+        }
+        if (bankBook.getTotalPrice().compareTo(totalPrice) > 0){
+            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO)
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(price)
+                                .build()
+                );
+            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) > 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO)
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(totalPrice.abs())
+                                .build()
+                );
+            }
+        }else if (bankBook.getTotalPrice().compareTo(totalPrice) < 0){
+            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO)
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO.subtract(price))
+                                .build()
+                );
+            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) >= 0){
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO)
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(bankBook.getTotalPrice())
+                                .build()
+                );
+            }
         }
         bankBook.setTotalPrice(totalPrice);
         saveBankBook(bankBook);

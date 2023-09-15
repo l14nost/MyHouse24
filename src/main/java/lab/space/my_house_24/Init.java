@@ -1,18 +1,17 @@
 package lab.space.my_house_24;
 
-import lab.space.my_house_24.entity.Role;
-import lab.space.my_house_24.entity.SecurityLevel;
-import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.Page;
 import lab.space.my_house_24.enums.UserStatus;
-import lab.space.my_house_24.service.RoleService;
-import lab.space.my_house_24.service.SecurityLevelService;
-import lab.space.my_house_24.service.StaffService;
+import lab.space.my_house_24.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +20,9 @@ public class Init implements CommandLineRunner {
     private final StaffService staffService;
     private final SecurityLevelService securityLevelService;
     private final RoleService roleService;
+    private final BankBookService bankBookService;
+    private final StatisticService statisticService;
+    private final CashBoxService cashBoxService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -138,6 +140,27 @@ public class Init implements CommandLineRunner {
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
             );
         } else log.info("Staff found");
+
+        log.info("Try to find statistic");
+        if (statisticService.getAllStatistics().isEmpty()) {
+            log.warn("Create custom statistic");
+            List<CashBox> cashBoxes = cashBoxService.getAllCashBoxIsActive();
+            List<BankBook> bankBooks = bankBookService.getAllBankBookIsActive();
+            Statistic statistic = new Statistic()
+                    .setCashBoxState(BigDecimal.ZERO)
+                    .setBankBookBalance(BigDecimal.ZERO)
+                    .setBankBookExpense(BigDecimal.ZERO);
+
+            if (!cashBoxes.isEmpty()){
+                statistic.setCashBoxState(cashBoxes.stream().map(CashBox::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
+            }
+            if (!bankBooks.isEmpty()){
+                statistic.setBankBookBalance(bankBooks.stream().map(BankBook::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
+                statistic.setBankBookExpense(bankBooks.stream().map(BankBook::getTotalPrice).filter(totalPrice -> totalPrice.compareTo(BigDecimal.ZERO) < 0).reduce(BigDecimal.ZERO, BigDecimal::add));
+            }
+            statisticService.saveStatistic(statistic);
+        } else log.info("Statistic found");
+
         log.info("################## FINISH OF INITIALIZATION ##################");
     }
 

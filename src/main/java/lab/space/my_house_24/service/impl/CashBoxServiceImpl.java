@@ -2,6 +2,7 @@ package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.CashBox;
+import lab.space.my_house_24.entity.Statistic;
 import lab.space.my_house_24.enums.ArticleType;
 import lab.space.my_house_24.mapper.CashBoxMapper;
 import lab.space.my_house_24.mapper.EnumMapper;
@@ -42,6 +43,7 @@ public class CashBoxServiceImpl implements CashBoxService {
     private final StaffService staffService;
     private final BankBookService bankBookService;
     private final BillService billService;
+    private final StatisticService statisticService;
 
     @Override
     public CashBox getCashBoxById(Long id) throws EntityNotFoundException {
@@ -63,6 +65,13 @@ public class CashBoxServiceImpl implements CashBoxService {
         return cashBoxRepository.findAll(
                 cashBoxSpecification.getCashBoxByRequest(request),
                 PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(this::getCashBoxResponse);
+    }
+
+    @Override
+    public List<CashBox> getAllCashBoxIsActive() {
+        log.info("Try to get all CashBox is active ");
+        return cashBoxRepository.findAll(
+                cashBoxSpecification.getCashBoxByRequest(CashBoxRequest.builder().draftQuery(true).build()));
     }
 
     private CashBoxResponse getCashBoxResponse(CashBox cashBox) {
@@ -102,6 +111,7 @@ public class CashBoxServiceImpl implements CashBoxService {
         if (nonNull(saveCashBox.getBankBook()) && saveCashBox.getType()) {
             CashBoxCalculate(newCashBox, saveCashBox);
         }
+        CashBoxCalculateStatistic(newCashBox,saveCashBox);
         log.info("Success update CashBox by Request");
     }
 
@@ -119,7 +129,76 @@ public class CashBoxServiceImpl implements CashBoxService {
         if (nonNull(saveCashBox.getBankBook()) && saveCashBox.getType()) {
             CashBoxCalculate(saveCashBox);
         }
+        CashBoxCalculateStatistic(saveCashBox);
         log.info("Success save CashBox by Request");
+    }
+
+    private void CashBoxCalculateStatistic(CashBox cashBox, CashBox saveCashBox) {
+        log.info("Try to Calculate Statistic CashBox by Update");
+        if (saveCashBox.getType()) {
+            if (!cashBox.getDraft() && saveCashBox.getDraft()) {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(saveCashBox.getPrice())
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
+            } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO.subtract(saveCashBox.getPrice()))
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
+            }
+
+        } else {
+            if (!cashBox.getDraft() && saveCashBox.getDraft()) {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO.subtract(saveCashBox.getPrice()))
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
+            } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(saveCashBox.getPrice())
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
+            }
+
+        }
+        log.info("Success Calculate Statistic CashBox by Update");
+    }
+
+    private void CashBoxCalculateStatistic(CashBox cashBox) {
+        log.info("Try to Calculate Statistic CashBox by Save");
+        if (cashBox.getDraft()) {
+            if (cashBox.getType()) {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(cashBox.getPrice())
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
+            } else {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(BigDecimal.ZERO.subtract(cashBox.getPrice()))
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
+            }
+        }
+        log.info("Success Calculate Statistic CashBox by Update");
     }
 
     private void CashBoxCalculate(CashBox cashBox, CashBox saveCashBox) {
@@ -137,8 +216,17 @@ public class CashBoxServiceImpl implements CashBoxService {
                         null
                 );
             }
-        } else {
+        } else if (!cashBox.getDraft() && saveCashBox.getDraft()) {
+            cashBox.setBankBook(saveCashBox.getBankBook());
+            CashBoxCalculate(cashBox, saveCashBox);
+        } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
             bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), false, null);
+        } else if (saveCashBox.getDraft()) {
+            if (cashBox.getPrice().compareTo(saveCashBox.getPrice()) != 0) {
+                bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), false, null);
+            } else {
+                bankBookService.calculateBankBook(cashBox.getBankBook().getId(), saveCashBox.getPrice(), false, null);
+            }
             bankBookService.calculateBankBook(saveCashBox.getBankBook().getId(), saveCashBox.getPrice(), true, null);
         }
         log.info("Success Calculate CashBox by Update");
@@ -217,11 +305,11 @@ public class CashBoxServiceImpl implements CashBoxService {
     public List<BigDecimal> statisticSumByType(Boolean type) {
         List<CashBox> all = cashBoxRepository.findAllByType(type);
         List<BigDecimal> allSumByMonths = new ArrayList<>();
-        for (int i = 1; i<13;i++){
+        for (int i = 1; i < 13; i++) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (CashBox cashBox : all){
-                if (cashBox.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i){
-                    sum=sum.add(cashBox.getPrice());
+            for (CashBox cashBox : all) {
+                if (cashBox.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i) {
+                    sum = sum.add(cashBox.getPrice());
                 }
             }
             allSumByMonths.add(sum);
@@ -234,23 +322,24 @@ public class CashBoxServiceImpl implements CashBoxService {
         List<CashBox> allComing = cashBoxRepository.findAllByType(true);
         List<CashBox> allCosts = cashBoxRepository.findAllByType(false);
         BigDecimal sumComing = BigDecimal.ZERO;
-        for (CashBox cashBox : allComing){
-            sumComing=sumComing.add(cashBox.getPrice());
+        for (CashBox cashBox : allComing) {
+            sumComing = sumComing.add(cashBox.getPrice());
 
         }
         BigDecimal sumCosts = BigDecimal.ZERO;
-        for (CashBox cashBox : allCosts){
-            sumCosts=sumCosts.add(cashBox.getPrice());
+        for (CashBox cashBox : allCosts) {
+            sumCosts = sumCosts.add(cashBox.getPrice());
 
         }
         return sumComing.subtract(sumCosts);
     }
+
     @Override
-    public BigDecimal statisticAccountBalance(){
+    public BigDecimal statisticAccountBalance() {
         BigDecimal billsSum = billService.sumOfAllBills();
         List<CashBox> cashBoxes = cashBoxRepository.findAllByType(true);
         BigDecimal cashBoxSum = BigDecimal.ZERO;
-        for (CashBox cashBox: cashBoxes){
+        for (CashBox cashBox : cashBoxes) {
             cashBoxSum = cashBoxSum.add(cashBox.getPrice());
         }
         return cashBoxSum.subtract(billsSum);

@@ -1,9 +1,11 @@
 package lab.space.my_house_24.controller;
 
+import lab.space.my_house_24.entity.Statistic;
 import lab.space.my_house_24.enums.MastersApplicationStatus;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ public class StatisticController {
     private final MastersApplicationService mastersApplicationService;
     private final ApartmentService apartmentService;
     private final CashBoxService cashBoxService;
+    private final StatisticService statisticService;
 
     @GetMapping({"/", ""})
     public String showMastersApplicationPage(Model model) {
@@ -31,5 +34,10 @@ public class StatisticController {
         model.addAttribute("cashStatement",cashBoxService.statisticCashStatement());
         model.addAttribute("accountBalance",cashBoxService.statisticAccountBalance());
         return "admin/pages/statistic/statistic";
+    }
+
+    @GetMapping("/get-statistic")
+    public ResponseEntity<Statistic> getStatistic() {
+        return ResponseEntity.ok(statisticService.getAllStatistics().get(0));
     }
 }

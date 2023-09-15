@@ -25,6 +25,8 @@ public interface BankBookService {
 
     Page<BankBookResponse> getAllBankBookResponse(BankBookRequest request);
 
+    List<BankBook> getAllBankBookIsActive();
+
     List<EnumResponse> getAllBalanceStatus();
 
     List<EnumResponse> getAllBankBookStatus();

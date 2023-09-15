@@ -35,8 +35,8 @@
           <div class="card">
             <div class="card-body p-3">
               <div class="text-center">
-                <h1 class="counter mb-2" style="visibility: visible;">1011001.00K</h1>
-                <p class="mb-0">CashBox</p>
+                <h1 class="counter mb-2" style="visibility: visible;" id="cash-box-state"></h1>
+                <p class="mb-0" th:text="#{statistics.cash_box_statement}"></p>
               </div>
             </div>
           </div>
@@ -45,8 +45,8 @@
           <div class="card">
             <div class="card-body p-3">
               <div class="text-center">
-                <h1 class="counter mb-2" style="visibility: visible;">-108.56K</h1>
-                <p class="mb-0">Balance</p>
+                <h1 class="counter mb-2" style="visibility: visible;" id="bank-book-balance"></h1>
+                <p class="mb-0" th:text="#{statistics.bank_book_balance}"></p>
               </div>
             </div>
           </div>
@@ -55,8 +55,8 @@
           <div class="card">
             <div class="card-body p-3">
               <div class="text-center">
-                <h1 class="counter mb-2" style="visibility: visible;">777777.56K</h1>
-                <p class="mb-0">Debt</p>
+                <h1 class="counter mb-2" style="visibility: visible;" id="bank-book-expense"></h1>
+                <p class="mb-0" th:text="#{statistics.bank_book_expense}"></p>
               </div>
             </div>
           </div>
@@ -170,6 +170,7 @@
     let filterTimeout;
 
     $(document).ready(function () {
+      getStatistic();
       getAllBill();
       $(document.body).on("click", "tr", function (e) {
         if (!($(e.target).attr("data-actions") === "data-actions") && !$(e.target).is("svg") && !$(e.target).is("a") && !$(e.target).is("path") && !$(e.target).is("input")) {
@@ -242,7 +243,6 @@
         showToast('custom');
       })
     }
-
 
     function getAllBill() {
       $.ajax({

@@ -18,6 +18,7 @@ public interface CashBoxService {
     CashBoxResponse getCashBoxResponseById(Long id) throws EntityNotFoundException;
 
     Page<CashBoxResponse> getAllCashBoxResponse(CashBoxRequest request);
+    List<CashBox> getAllCashBoxIsActive();
 
     List<EnumResponse> getDraft();
 
