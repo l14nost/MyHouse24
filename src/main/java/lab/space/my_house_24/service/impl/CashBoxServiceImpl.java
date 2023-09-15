@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -135,7 +136,7 @@ public class CashBoxServiceImpl implements CashBoxService {
 
     private void CashBoxCalculateStatistic(CashBox cashBox, CashBox saveCashBox) {
         log.info("Try to Calculate Statistic CashBox by Update");
-        if (saveCashBox.getType()) {
+        if (nonNull(cashBox.getBankBook()) && Objects.equals(cashBox.getBankBook().getId(), saveCashBox.getBankBook().getId())) {
             if (!cashBox.getDraft() && saveCashBox.getDraft()) {
                 statisticService.updateStatistic(
                         Statistic.builder()
@@ -152,9 +153,16 @@ public class CashBoxServiceImpl implements CashBoxService {
                                 .bankBookExpense(BigDecimal.ZERO)
                                 .build()
                 );
+            } else if (saveCashBox.getDraft() && !Objects.equals(cashBox.getPrice(), saveCashBox.getPrice())) {
+                statisticService.updateStatistic(
+                        Statistic.builder()
+                                .cashBoxState(saveCashBox.getPrice().subtract(cashBox.getPrice()))
+                                .bankBookBalance(BigDecimal.ZERO)
+                                .bankBookExpense(BigDecimal.ZERO)
+                                .build()
+                );
             }
-
-        } else {
+        } else if (isNull(cashBox.getBankBook())) {
             if (!cashBox.getDraft() && saveCashBox.getDraft()) {
                 statisticService.updateStatistic(
                         Statistic.builder()
@@ -172,7 +180,17 @@ public class CashBoxServiceImpl implements CashBoxService {
                                 .build()
                 );
             }
-
+        } else if (!cashBox.getDraft() && saveCashBox.getDraft()) {
+            cashBox.setBankBook(saveCashBox.getBankBook());
+            CashBoxCalculateStatistic(cashBox, saveCashBox);
+        } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
+            statisticService.updateStatistic(
+                    Statistic.builder()
+                            .cashBoxState(BigDecimal.ZERO.subtract(cashBox.getPrice()))
+                            .bankBookBalance(BigDecimal.ZERO)
+                            .bankBookExpense(BigDecimal.ZERO)
+                            .build()
+            );
         }
         log.info("Success Calculate Statistic CashBox by Update");
     }
