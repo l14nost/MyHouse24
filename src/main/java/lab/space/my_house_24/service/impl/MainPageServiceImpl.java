@@ -9,25 +9,30 @@ import lab.space.my_house_24.repository.MainPageRepository;
 import lab.space.my_house_24.service.MainPageService;
 import lab.space.my_house_24.util.FileHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MainPageServiceImpl implements MainPageService {
     private final MainPageRepository mainPageRepository;
 
     @Override
     public MainPageResponse findByIdResponse(Long id) {
+        log.info("Try to find main page dto by id: "+id);
         return MainPageMapper.entityToResponse(mainPageRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Main page by id "+id+" is not found")));
     }
 
     @Override
     public MainPage findById(Long id) {
+        log.info("Try to find main page by id: "+id);
         return mainPageRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Main page by id "+id+" is not found"));
     }
 
     @Override
     public void update(MainPageRequest mainPageRequest) {
+        log.info("Try to update main page");
         MainPage mainPage = findById(1L);
         mainPage.getSeo().setDescription(mainPageRequest.seoDescription());
         mainPage.getSeo().setTitle(mainPageRequest.seoTitle());
@@ -60,7 +65,15 @@ public class MainPageServiceImpl implements MainPageService {
 
         }
         mainPageRepository.save(mainPage);
-
-
+        log.info("Main page was update");
     }
+
+    @Override
+    public void save(MainPage build) {
+        log.info("Try to save new main page");
+        mainPageRepository.save(build);
+        log.info("Main page was save");
+    }
+
+
 }

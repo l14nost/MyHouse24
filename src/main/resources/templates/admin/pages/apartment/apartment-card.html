@@ -135,7 +135,7 @@
         })
             .done(function (response){
                 console.log(response);
-                $("#bankBook").html("<a href=\"/admin/bank-book-card/ "+ response.bankBook.id + "\">"+ response.bankBook.number  +"</a>");
+                $("#bankBook").html("<a href=\"/admin/bank-books/card-"+ response.bankBook.id + "\">"+ response.bankBook.number  +"</a>");
                 $("#number").text(response.number);
                 $("#area").text(response.area);
                 $("#house").html("<a href=\"/admin/house-card/ "+ response.house.id + "\">"+ response.house.name  +"</a>");

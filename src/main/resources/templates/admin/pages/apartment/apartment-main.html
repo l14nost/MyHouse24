@@ -423,7 +423,7 @@
                                     "          <td onclick='apartmentCard("+apartment.id+")'>" + apartment.section + "</td>\n" +
                                     "          <td onclick='apartmentCard("+apartment.id+")'>" + apartment.floor + "</td>\n" +
                                     "          <td onclick='apartmentCard("+apartment.id+")'>" + apartment.owner + "</td>\n" +
-                                    "          <td onclick='apartmentCard("+apartment.id+")' "+ checkBalance(apartment.balance) +">" + apartment.balance + "</td>\n" +
+                                    "          <td onclick='apartmentCard("+apartment.id+")' ><span class='"+ checkBalance(apartment.balance) +"'>"  + apartment.balance + "</span></td>\n" +
                                     "          <td style=\"\" >\n" +
                                     "             <a class=\"btn btn-sm btn-icon text-primary flex-end\" data-bs-toggle=\"tooltip\" href=\"#\" aria-label=\"Edit User\" data-bs-original-title=\"Edit User\" onclick='apartmentEdit(" + apartment.id + ")'>\n" +
                                     "                                        <span class=\"btn-inner\">\n" +
@@ -529,10 +529,10 @@
                             function checkBalance(balance){
                                 var intBalance = Number(balance);
                                 if (intBalance>=0){
-                                    return "style='color: green;'"
+                                    return "text-success"
                                 }
                                 else {
-                                    return "style='color: red;'"
+                                    return "text-danger"
                                 }
                             }
 

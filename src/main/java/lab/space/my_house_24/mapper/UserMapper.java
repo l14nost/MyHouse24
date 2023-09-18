@@ -8,6 +8,7 @@ import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.user.*;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -20,16 +21,23 @@ public class UserMapper {
     public  static UserResponse entityToMainPageDto(User user){
         List<ApartmentResponseForTable> apartments = new ArrayList<>();
         List<HouseResponseForTable> houses = new ArrayList<>();
+        Boolean duty = false;
         if (user.getApartmentList()!=null){
             for (Apartment apartment : user.getApartmentList() ){
+                if (apartment.getBankBook()!=null){
+                    if (apartment.getBankBook().getTotalPrice().compareTo(BigDecimal.ZERO)<0){
+                        duty = true;
+                    }
+                }
                 apartments.add(ApartmentMapper.entityToDtoForTable(apartment));
                 houses.add(HouseMapper.entityToDtoForTable(apartment.getHouse()));
             }
         }
+
         UserResponse userResponse = UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .duty(user.getDuty())
+                .duty(duty)
                 .fullName(user.getLastname() + " " + user.getFirstname() + " " + user.getSurname())
                 .status(EnumResponse.builder().value(user.getUserStatus().getUserStatus(LocaleContextHolder.getLocale())).name(user.getUserStatus().name()).build())
                 .number(user.getNumber())

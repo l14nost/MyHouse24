@@ -246,4 +246,13 @@ public class BillController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/get-sum-of-all-bills")
+    public ResponseEntity getSumOfAllBills(){
+        return ResponseEntity.ok(billService.sumOffAllBillsByMonths());
+    }
+    @GetMapping("/get-sum-of-all-paid-bills")
+    public ResponseEntity getSumOfAllPaidBills(){
+        return ResponseEntity.ok(billService.sumOffAllPaidBillsByMonths());
+    }
 }

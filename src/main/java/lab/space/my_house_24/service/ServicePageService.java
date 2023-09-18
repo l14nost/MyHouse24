@@ -8,4 +8,6 @@ public interface ServicePageService {
     ServicePage findById(Long id);
     ServicePageResponse findByIdResponse(Long id);
     void update(ServicePageRequest servicePageRequest);
+
+    void save(ServicePage build);
 }

@@ -336,24 +336,19 @@
     let firstArray = [];
     let secondArray = [];
     await $.ajax({
-      url: "/admin/receipt/get-sum-of-all-paid-bills",
+      url: "/admin/bills/get-sum-of-all-paid-bills",
       success: function (responseJSON) {
         firstArray = responseJSON;
-      },
-      error: function (error) {
-        firstArray = null;
       }
     });
     await $.ajax({
-      url: "/admin/receipt/get-sum-of-all-bills",
+      url: "/admin/bills/get-sum-of-all-bills",
       success: function (responseJSON) {
         secondArray = responseJSON;
-      },
-      error: function (error) {
-        secondArray = null;
       }
     });
-
+    console.log(firstArray)
+    console.log(secondArray)
     extraChart1(firstArray,secondArray);
 
 
@@ -368,18 +363,12 @@
       url: "/admin/cash-box/get-statistics-for-coming",
       success: function (responseJSON) {
         firstArray = responseJSON;
-      },
-      error: function (error) {
-        firstArray = null;
       }
     });
     await $.ajax({
       url: "/admin/cash-box/get-statistics-for-costs",
       success: function (responseJSON) {
         secondArray = responseJSON;
-      },
-      error: function (error) {
-        secondArray = null;
       }
     });
 
