@@ -130,6 +130,7 @@ public class StaffController {
 
         return staffService.deleteStaff(id);
     }
+
     @GetMapping("/get-all-staff-for-house")
     @ResponseBody
     public List<StaffResponseForHouseAdd> getAllStaffForHousePage() {
@@ -143,15 +144,14 @@ public class StaffController {
     }
 
     @GetMapping("/get-current-staff")
-    public ResponseEntity getCurrentStaff(){
+    public ResponseEntity getCurrentStaff() {
         return ResponseEntity.ok().body(staffService.getCurrentStaff());
     }
 
     @GetMapping("/get-current-staff-for-header")
-    public ResponseEntity getCurrentStaffForHeader(){
+    public ResponseEntity getCurrentStaffForHeader() {
         return ResponseEntity.ok().body(staffService.getCurrentStaffForHeader());
     }
-
 
 
 }

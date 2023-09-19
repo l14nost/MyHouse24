@@ -30,4 +30,12 @@ public class SecurityLevel {
     @ManyToMany(mappedBy = "securityLevelList")
     private List<Role> role;
 
+    @Override
+    public String toString() {
+        return "SecurityLevel{" +
+                "id=" + id +
+                ", page=" + page +
+                ", roles size=" + role.size() +
+                '}';
+    }
 }

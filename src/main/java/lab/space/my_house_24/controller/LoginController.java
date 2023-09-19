@@ -31,7 +31,7 @@ public class LoginController {
     public String showLogin() {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User){
-            return "redirect:/staff";
+            return "redirect:/statistics";
         }else {
             return "/admin/pages/login/login";
         }

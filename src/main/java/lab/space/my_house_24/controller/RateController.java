@@ -78,7 +78,7 @@ public class RateController {
 
     @PutMapping("/update-rate")
     public ResponseEntity<?> updateRate(@Valid @RequestBody RateUpdateRequest rateUpdateRequest,
-                                            BindingResult bindingResult) {
+                                        BindingResult bindingResult) {
         rateValidator.isNameUniqueValidationWithIdRate(rateUpdateRequest.id(), rateUpdateRequest.name(), bindingResult,
                 "RateUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
@@ -89,8 +89,8 @@ public class RateController {
 
     @PostMapping("/save-rate")
     public ResponseEntity<?> saveRate(@Valid @RequestBody RateSaveRequest rateSaveRequest,
-                                          BindingResult bindingResult) {
-        rateValidator.isNameUniqueValidationRate( rateSaveRequest.name(), bindingResult,
+                                      BindingResult bindingResult) {
+        rateValidator.isNameUniqueValidationRate(rateSaveRequest.name(), bindingResult,
                 "RateSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));

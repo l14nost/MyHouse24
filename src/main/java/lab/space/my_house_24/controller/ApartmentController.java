@@ -5,12 +5,10 @@ import lab.space.my_house_24.model.apartment.ApartmentAddRequest;
 import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForEdit;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForTable;
-import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.service.ApartmentService;
 import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.RateService;
-import lab.space.my_house_24.service.impl.*;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.ApartmentValidator;
 import lab.space.my_house_24.validator.BankBookValidator;
@@ -35,19 +33,19 @@ public class ApartmentController {
     private final BankBookValidator bankBookValidator;
     private final ApartmentValidator apartmentValidator;
 
-    @GetMapping({"/",""})
-    public String apartmentMain(Model model){
+    @GetMapping({"/", ""})
+    public String apartmentMain(Model model) {
         model.addAttribute("houseList", houseService.houseListForTable());
         return "admin/pages/apartment/apartment-main";
     }
 
     @PostMapping("/get-all-apartments")
-    public ResponseEntity allApartment(@RequestBody ApartmentRequestForMainPage apartmentRequestForMainPage){
+    public ResponseEntity allApartment(@RequestBody ApartmentRequestForMainPage apartmentRequestForMainPage) {
         return ResponseEntity.ok().body(apartmentService.findAllForMainPage(apartmentRequestForMainPage));
     }
 
     @DeleteMapping("/delete-apartment/{id}")
-    public ResponseEntity deleteApartment(@PathVariable Long id){
+    public ResponseEntity deleteApartment(@PathVariable Long id) {
         apartmentService.deleteApartment(id);
         return ResponseEntity.ok().build();
 
@@ -55,7 +53,7 @@ public class ApartmentController {
 
 
     @GetMapping("/apartment-card/{id}")
-    public String apartmentCard(@PathVariable Long id, Model model){
+    public String apartmentCard(@PathVariable Long id, Model model) {
         model.addAttribute("apartment", apartmentService.findByIdForCard(id));
         model.addAttribute("id", id);
         return "admin/pages/apartment/apartment-card";
@@ -63,12 +61,12 @@ public class ApartmentController {
 
 
     @GetMapping("/get-apartment-by-id/{id}")
-    public ResponseEntity getApartmentById(@PathVariable Long id){
+    public ResponseEntity getApartmentById(@PathVariable Long id) {
         return ResponseEntity.ok(apartmentService.findByIdForCard(id));
     }
 
     @GetMapping("/add-apartment")
-    public String addApartmentPage(Model model){
+    public String addApartmentPage(Model model) {
         model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
@@ -77,14 +75,14 @@ public class ApartmentController {
 
 
     @PostMapping("/add-apartment-save")
-    public ResponseEntity addApartment(@RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result){
-        if (apartmentAddRequest.bankBook()!=null) {
-            bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","add",0L);
+    public ResponseEntity addApartment(@RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result) {
+        if (apartmentAddRequest.bankBook() != null) {
+            bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest", "add", 0L);
         }
-        if (apartmentAddRequest.number()!=null && apartmentAddRequest.house()!=null){
-            apartmentValidator.checkUniqueApartmentNumber(apartmentAddRequest.number(),"add",0L,apartmentAddRequest.house(),"ApartmentAddRequest",result);
+        if (apartmentAddRequest.number() != null && apartmentAddRequest.house() != null) {
+            apartmentValidator.checkUniqueApartmentNumber(apartmentAddRequest.number(), "add", 0L, apartmentAddRequest.house(), "ApartmentAddRequest", result);
         }
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
         apartmentService.saveApartment(apartmentAddRequest);
@@ -93,7 +91,7 @@ public class ApartmentController {
     }
 
     @GetMapping("/edit-apartment/{id}")
-    public String editApartmentPage(@PathVariable Long id,Model model){
+    public String editApartmentPage(@PathVariable Long id, Model model) {
         model.addAttribute("apartment", apartmentService.findByIdApartment(id));
         model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("rateList", rateService.rateListForTable());
@@ -103,26 +101,26 @@ public class ApartmentController {
     }
 
     @PostMapping("/edit-apartment/{id}")
-    public ResponseEntity editApartment(@PathVariable Long id, @RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result){
-        if (apartmentAddRequest.bankBook()!=null) {
-            bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest","update",id);
+    public ResponseEntity editApartment(@PathVariable Long id, @RequestBody @Valid ApartmentAddRequest apartmentAddRequest, BindingResult result) {
+        if (apartmentAddRequest.bankBook() != null) {
+            bankBookValidator.busyBankBook(apartmentAddRequest.bankBook(), result, "ApartmentAddRequest", "update", id);
         }
-        if (apartmentAddRequest.number()!=null && apartmentAddRequest.house()!=null){
-            apartmentValidator.checkUniqueApartmentNumber(apartmentAddRequest.number(),"update",id,apartmentAddRequest.house(),"ApartmentAddRequest",result);
+        if (apartmentAddRequest.number() != null && apartmentAddRequest.house() != null) {
+            apartmentValidator.checkUniqueApartmentNumber(apartmentAddRequest.number(), "update", id, apartmentAddRequest.house(), "ApartmentAddRequest", result);
         }
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
-        apartmentService.updateApartment(id,apartmentAddRequest);
+        apartmentService.updateApartment(id, apartmentAddRequest);
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/edit-add-apartment/{id}")
-    public String editAddApartmentPage(@PathVariable Long id,Model model){
+    public String editAddApartmentPage(@PathVariable Long id, Model model) {
         ApartmentResponseForEdit apartmentResponseForEdit = apartmentService.findByIdApartment(id);
         ApartmentResponseForEdit apartmentResponseForEdit1 = ApartmentResponseForEdit.builder()
-                .number(apartmentResponseForEdit.number()+1)
+                .number(apartmentResponseForEdit.number() + 1)
                 .rate(apartmentResponseForEdit.rate())
                 .floor(apartmentResponseForEdit.floor())
                 .area(apartmentResponseForEdit.area())

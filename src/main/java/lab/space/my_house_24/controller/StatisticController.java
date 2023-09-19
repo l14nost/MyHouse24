@@ -25,14 +25,14 @@ public class StatisticController {
 
     @GetMapping({"/", ""})
     public String showMastersApplicationPage(Model model) {
-        model.addAttribute("owner",userService.countByStatus(UserStatus.ACTIVE));
-        model.addAttribute("apartment",apartmentService.count());
-        model.addAttribute("house",houseService.count());
-        model.addAttribute("bankBook",bankBookService.count());
-        model.addAttribute("masterApplicationAtWork",mastersApplicationService.countByStatus(MastersApplicationStatus.IN_PROCESS));
-        model.addAttribute("masterApplicationNew",mastersApplicationService.countByStatus(MastersApplicationStatus.NEW));
-        model.addAttribute("cashStatement",cashBoxService.statisticCashStatement());
-        model.addAttribute("accountBalance",cashBoxService.statisticAccountBalance());
+        model.addAttribute("owner", userService.countByStatus(UserStatus.ACTIVE));
+        model.addAttribute("apartment", apartmentService.count());
+        model.addAttribute("house", houseService.count());
+        model.addAttribute("bankBook", bankBookService.count());
+        model.addAttribute("masterApplicationAtWork", mastersApplicationService.countByStatus(MastersApplicationStatus.IN_PROCESS));
+        model.addAttribute("masterApplicationNew", mastersApplicationService.countByStatus(MastersApplicationStatus.NEW));
+        model.addAttribute("cashStatement", cashBoxService.statisticCashStatement());
+        model.addAttribute("accountBalance", cashBoxService.statisticAccountBalance());
         return "admin/pages/statistic/statistic";
     }
 
