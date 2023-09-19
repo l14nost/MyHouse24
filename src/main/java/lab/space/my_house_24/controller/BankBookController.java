@@ -58,48 +58,49 @@ public class BankBookController {
     }
 
     @GetMapping("/get-all-balance-status")
-    public ResponseEntity<List<EnumResponse>> getAllBalanceStatus(){
+    public ResponseEntity<List<EnumResponse>> getAllBalanceStatus() {
         return ResponseEntity.ok(bankBookService.getAllBalanceStatus());
     }
 
     @GetMapping("/get-all-owner")
-    public ResponseEntity<List<UserResponseForTable>> getAllUser(){
+    public ResponseEntity<List<UserResponseForTable>> getAllUser() {
         return ResponseEntity.ok(userService.userListForTable());
     }
 
     @GetMapping("/get-all-section")
-    public ResponseEntity<List<SectionResponseForTable>> getAllSection(){
+    public ResponseEntity<List<SectionResponseForTable>> getAllSection() {
         return ResponseEntity.ok(sectionService.sectionListForTable());
     }
 
     @GetMapping("/get-all-status")
-    public ResponseEntity<List<EnumResponse>> getAllBankBookStatus(){
+    public ResponseEntity<List<EnumResponse>> getAllBankBookStatus() {
         return ResponseEntity.ok(bankBookService.getAllBankBookStatus());
     }
 
     @GetMapping("/get-all-house")
-    public ResponseEntity<List<HouseResponseForTable>> getAllHouse(){
+    public ResponseEntity<List<HouseResponseForTable>> getAllHouse() {
         return ResponseEntity.ok(houseService.houseListForTable());
     }
 
     @GetMapping("/get-section/{houseId}")
-    public ResponseEntity<List<SectionResponseForTable>> getSectionByHouse(@PathVariable Long houseId){
+    public ResponseEntity<List<SectionResponseForTable>> getSectionByHouse(@PathVariable Long houseId) {
         return ResponseEntity.ok(sectionService.sectionByHouse(houseId));
 
     }
 
     @GetMapping("/get-all-apartment-{houseId}")
-    public ResponseEntity<List<ApartmentResponseForBankBook>> getAllApartmentByHouse(@PathVariable Long houseId){
+    public ResponseEntity<List<ApartmentResponseForBankBook>> getAllApartmentByHouse(@PathVariable Long houseId) {
         return ResponseEntity.ok(apartmentService.getAllApartmentResponseByHouseId(houseId));
     }
 
     @GetMapping("/get-all-apartment-{houseId}/{sectionId}")
     public ResponseEntity<List<ApartmentResponseForBankBook>> getAllApartmentByHouseAndSection(@PathVariable("houseId") Long houseId,
-                                                                                               @PathVariable("sectionId") Long sectionId){
+                                                                                               @PathVariable("sectionId") Long sectionId) {
         return ResponseEntity.ok(apartmentService.getAllApartmentResponseByHouseIdAndSectionId(houseId, sectionId));
     }
+
     @GetMapping("/get-all-apartment")
-    public ResponseEntity<List<ApartmentResponseForBankBook>> getAllApartment(){
+    public ResponseEntity<List<ApartmentResponseForBankBook>> getAllApartment() {
         return ResponseEntity.ok(apartmentService.getAllApartmentResponse());
     }
 
@@ -155,7 +156,8 @@ public class BankBookController {
             bankBookService.deleteBankBookById(id);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException | IllegalArgumentException e) {
-            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

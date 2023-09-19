@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import static java.util.Objects.nonNull;
+
 @Entity
 @Table(name = "cash_box")
 @Data
@@ -60,4 +62,22 @@ public class CashBox {
     @ManyToOne
     private BankBook bankBook;
 
+    @Override
+    public String toString() {
+        return "CashBox{" +
+                "id=" + id +
+                ", createAt=" + createAt +
+                ", number='" + number + '\'' +
+                ", draft=" + draft +
+                ", type=" + type +
+                ", isActive=" + isActive +
+                ", price=" + price +
+                ", historyMoneyUsed=" + historyMoneyUsed +
+                ", moneyUsed=" + moneyUsed +
+                ", comment='" + comment + '\'' +
+                ", staff=" + staff.getId() +
+                ", articles=" + articles.getId() +
+                ", bankBook=" + (nonNull(bankBook) ? bankBook.getId() : null) +
+                '}';
+    }
 }

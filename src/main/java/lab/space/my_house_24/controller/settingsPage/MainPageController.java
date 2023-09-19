@@ -21,14 +21,14 @@ public class MainPageController {
     private final MainPageService mainPageService;
 
     @GetMapping("/main-page")
-    public String mainPage(Model model){
-        model.addAttribute("mainPage",mainPageService.findByIdResponse(1L));
+    public String mainPage(Model model) {
+        model.addAttribute("mainPage", mainPageService.findByIdResponse(1L));
         return "/admin/pages/settingsPage/mainPage/main-page";
     }
 
     @PutMapping("/main-page-save")
-    public ResponseEntity saveMainPage(@ModelAttribute @Valid MainPageRequest mainPageRequest, BindingResult result){
-        if (result.hasErrors()){
+    public ResponseEntity saveMainPage(@ModelAttribute @Valid MainPageRequest mainPageRequest, BindingResult result) {
+        if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
         mainPageService.update(mainPageRequest);

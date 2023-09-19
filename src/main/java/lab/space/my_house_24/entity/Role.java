@@ -27,7 +27,7 @@ public class Role {
     @Column(name = "job_title", length = 50, nullable = false)
     private JobTitle jobTitle;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "security_level_role",
             joinColumns = @JoinColumn(name = "role_id"),
@@ -37,4 +37,14 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private List<Staff> staffList = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", jobTitle=" + jobTitle +
+                ", securityLevelList=" + securityLevelList +
+                ", staffListSize=" + staffList.size() +
+                '}';
+    }
 }

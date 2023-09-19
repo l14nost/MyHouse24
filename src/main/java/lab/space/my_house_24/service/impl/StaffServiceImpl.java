@@ -32,7 +32,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -319,7 +322,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserDetails userDetails = getStaffByEmail(email);
         return new org.springframework.security.core.userdetails.User(
-                userDetails.getUsername(), userDetails.getPassword(), new ArrayList<>()
+                userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities()
         );
     }
 

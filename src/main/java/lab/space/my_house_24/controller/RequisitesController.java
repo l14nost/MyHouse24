@@ -20,15 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RequisitesController {
     private final RequisitesService requisitesService;
 
-    @GetMapping({"/",""})
-    public String requisitesPage(Model model){
+    @GetMapping({"/", ""})
+    public String requisitesPage(Model model) {
         model.addAttribute("requisites", requisitesService.findByIdResponse(1L));
         return "/admin/pages/requisites/requisites-page";
     }
 
     @PutMapping("/payment-details-save")
-    public ResponseEntity requisitesSave(@RequestBody @Valid RequisitesRequest requisitesRequest, BindingResult result){
-        if (result.hasErrors()){
+    public ResponseEntity requisitesSave(@RequestBody @Valid RequisitesRequest requisitesRequest, BindingResult result) {
+        if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
         }
         requisitesService.update(requisitesRequest);

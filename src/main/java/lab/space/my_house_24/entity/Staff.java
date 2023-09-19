@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
@@ -77,8 +78,36 @@ public class Staff implements UserDetails {
     private List<MastersApplication> applicationList = new ArrayList<>();
 
     @Override
+    public String toString() {
+        return "Staff{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", token='" + token + '\'' +
+                ", forgotToken='" + forgotToken + '\'' +
+                ", theme=" + theme +
+                ", tokenUsage=" + tokenUsage +
+                ", forgotTokenUsage=" + forgotTokenUsage +
+                ", staffStatus=" + staffStatus +
+                ", role=" + role +
+                ", cashBoxList=" + cashBoxList +
+                ", houseListSize=" + houseList.size() +
+                ", applicationList=" + applicationList +
+                '}';
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+            List<GrantedAuthority> authorities
+                    = new ArrayList<>();
+            List<SecurityLevel> securityLevels = getRole().getSecurityLevelList();
+            for (SecurityLevel securityLevel : securityLevels) {
+                authorities.add(new SimpleGrantedAuthority(securityLevel.getPage().name()));
+            }
+            return authorities;
     }
 
     @Override

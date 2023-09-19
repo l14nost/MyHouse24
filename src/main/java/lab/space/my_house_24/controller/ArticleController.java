@@ -28,27 +28,28 @@ public class ArticleController {
     private final ArticleService articleService;
     private final ArticleValidator articleValidator;
 
-    @GetMapping({"/",""})
-    public String showArticlePage(){
+    @GetMapping({"/", ""})
+    public String showArticlePage() {
         return "admin/pages/article/article";
     }
 
     @GetMapping("/add")
-    public String showArticleSavePage(){
+    public String showArticleSavePage() {
         return "admin/pages/article/article-save";
     }
+
     @GetMapping("/update-{id}")
-    public String showArticleUpdatePage(@PathVariable Long id){
+    public String showArticleUpdatePage(@PathVariable Long id) {
         return "admin/pages/article/article-save";
     }
 
     @GetMapping("/all-article-type")
-    public ResponseEntity<List<EnumResponse>> getAllArticleType(){
+    public ResponseEntity<List<EnumResponse>> getAllArticleType() {
         return ResponseEntity.ok(articleService.getAllType());
     }
 
-    @PostMapping ("/get-all-article")
-    public ResponseEntity<Page<ArticleResponse>> getAllArticle(@RequestBody ArticleRequest articleRequest){
+    @PostMapping("/get-all-article")
+    public ResponseEntity<Page<ArticleResponse>> getAllArticle(@RequestBody ArticleRequest articleRequest) {
         return ResponseEntity.ok(articleService.getAllArticleDto(articleRequest));
     }
 
@@ -64,7 +65,7 @@ public class ArticleController {
     public ResponseEntity<?> saveStaff(@Valid @RequestBody ArticleSaveRequest articleSaveRequest,
                                        BindingResult bindingResult) {
         articleValidator.isNameUniqueValidation(articleSaveRequest.name(),
-                bindingResult,"ArticleSaveRequest",LocaleContextHolder.getLocale());
+                bindingResult, "ArticleSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -76,9 +77,9 @@ public class ArticleController {
     @PutMapping("/update-article")
     public ResponseEntity<?> updateStaffById(@Valid @RequestBody ArticleUpdateRequest articleUpdateRequest,
                                              BindingResult bindingResult) {
-        articleValidator.isNameUniqueValidationWithId( articleUpdateRequest.id(),
+        articleValidator.isNameUniqueValidationWithId(articleUpdateRequest.id(),
                 articleUpdateRequest.name(), bindingResult,
-                "ArticleUpdateRequest",LocaleContextHolder.getLocale());
+                "ArticleUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
