@@ -70,7 +70,7 @@
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" th:href="@{/cash-box/add-income}" th:text="#{cash_box.dropdown.income}"></a></li>
                 <li><a class="dropdown-item" th:href="@{/cash-box/add-expensive}" th:text="#{cash_box.dropdown.expense}"></a></li>
-                <li><a class="dropdown-item" th:text="#{global.dropdown.button.excel}"></a></li>
+                <li><a class="dropdown-item" onclick="getExcel()" href="#" th:text="#{global.dropdown.button.excel}"></a></li>
             </ul>
         </div>
     </div>
@@ -207,6 +207,23 @@
             cashBoxId = $(this).data('id');
             $('#confirmDelete').modal('show');
         });
+
+        function getExcel(){
+            $.ajax({
+                method: "POST",
+                url: "/admin/cash-box/get-excel-cash-boxes",
+                contentType: 'application/json',
+                data: JSON.stringify(cashBoxRequest),
+                xhrFields: {
+                    responseType: 'blob'
+                },
+            }).done(function (blob, status, xhr) {
+                getFileFromResponse(blob, status, xhr)
+            }).fail(function (response){
+                console.log(response)
+                showToast('error');
+            });
+        }
 
         function getAllCashBox() {
             $.ajax({

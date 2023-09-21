@@ -310,6 +310,43 @@
         return '<li class="breadcrumb-item active" aria-current="page">' + title + '</li>';
     }
 
+    function getFileFromResponse(blob, status, xhr) {
+        let filename = "";
+        let disposition = xhr.getResponseHeader('Content-Disposition');
+        if (disposition && disposition.indexOf('attachment') !== -1) {
+            let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            let matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+        }
+
+        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+            window.navigator.msSaveBlob(blob, filename);
+        } else {
+            let URL = window.URL || window.webkitURL;
+            let downloadUrl = URL.createObjectURL(blob);
+
+            if (filename) {
+                // use HTML5 a[download] attribute to specify filename
+                let a = document.createElement("a");
+                // safari doesn't support this yet
+                if (typeof a.download === 'undefined') {
+                    window.location.href = downloadUrl;
+                } else {
+                    a.href = downloadUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                }
+            } else {
+                window.location.href = downloadUrl;
+            }
+
+            setTimeout(function () {
+                URL.revokeObjectURL(downloadUrl);
+            }, 100);
+        }
+    }
+
     function handleScreenWidthChange() {
         const screenWidth = window.innerWidth;
         if (screenWidth<1200){

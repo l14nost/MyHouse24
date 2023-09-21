@@ -14,17 +14,25 @@ import lab.space.my_house_24.repository.BankBookRepository;
 import lab.space.my_house_24.repository.BillRepository;
 import lab.space.my_house_24.repository.CashBoxRepository;
 import lab.space.my_house_24.service.BankBookService;
+import lab.space.my_house_24.service.ExcelService;
 import lab.space.my_house_24.service.StatisticService;
 import lab.space.my_house_24.specification.BankBookSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,6 +55,7 @@ public class BankBookServiceImpl implements BankBookService {
     private final CashBoxRepository cashBoxRepository;
     private final MessageSource message;
     private final StatisticService statisticService;
+    private final ExcelService excelService;
 
     @Override
     public BankBook getBankBookById(Long id) throws EntityNotFoundException {
@@ -150,6 +159,31 @@ public class BankBookServiceImpl implements BankBookService {
         log.info("Try to Save BankBook");
         bankBookRepository.save(bankBook);
         log.info("Success Save BankBook");
+    }
+
+    @Override
+    @Transactional
+    public InputStreamResource getExcel(BankBookRequest request)  throws IOException{
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            List<BankBookResponse> bankBookResponses = getAllBankBookResponse(request).stream().toList();
+            String[] header = {
+                    "№",
+                    message.getMessage("bank_book.status", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bank_book.apartment", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bank_book.house", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bank_book.section", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bank_book.owner", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bank_book.balance", null, LocaleContextHolder.getLocale())
+            };
+
+            excelService.getExcelForBankBookTable(workbook, header, bankBookResponses);
+            workbook.write(out);
+
+            return new InputStreamResource(new ByteArrayInputStream(out.toByteArray()));
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to import data to Excel file: " + e.getMessage());
+        }
     }
 
     @Override

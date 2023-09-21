@@ -5,8 +5,10 @@ import lab.space.my_house_24.entity.BankBook;
 import lab.space.my_house_24.entity.Bill;
 import lab.space.my_house_24.model.bankBook.*;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +38,8 @@ public interface BankBookService {
     void saveBankBookByRequest(BankBookSaveRequest request) throws EntityNotFoundException;
 
     void saveBankBook(BankBook bankBook);
+
+    InputStreamResource getExcel(BankBookRequest request) throws IOException;
 
     void calculateBankBook(Long id, BigDecimal price, BigDecimal historyPrice, Bill bill);
 

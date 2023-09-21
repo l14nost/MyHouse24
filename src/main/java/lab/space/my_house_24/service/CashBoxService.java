@@ -7,8 +7,10 @@ import lab.space.my_house_24.model.cash_box.CashBoxResponse;
 import lab.space.my_house_24.model.cash_box.CashBoxSaveRequest;
 import lab.space.my_house_24.model.cash_box.CashBoxUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -31,6 +33,10 @@ public interface CashBoxService {
     void deleteCashBoxById(Long id) throws EntityNotFoundException, IllegalArgumentException;
 
     CashBoxResponse getNewCashBoxResponse(Boolean type);
+
+    InputStreamResource getExcel(CashBoxRequest request) throws IOException;
+
+    InputStreamResource getExcel(Long id) throws IOException;
 
     List<BigDecimal> statisticSumByType(Boolean type);
     BigDecimal statisticCashStatement();

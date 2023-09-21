@@ -4,8 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Bill;
 import lab.space.my_house_24.model.bill.*;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -29,6 +32,11 @@ public interface BillService {
     void deleteBillById(Long id) throws EntityNotFoundException, IllegalArgumentException;
 
     List<EnumResponse> getAllBillStatus();
+
+    InputStreamResource getExcel(BillRequest request)  throws IOException;
+
+    @Transactional
+    InputStreamResource getExcel(Long id) throws IOException;
 
     BillResponse getNewBillResponse();
 

@@ -71,6 +71,7 @@
       </button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item" th:href="@{/bills/add}" th:text="#{bills.dropdown.add_bill}"></a></li>
+        <li><a class="dropdown-item" onclick="getExcel()" href="#" th:text="#{global.dropdown.button.excel}"></a></li>
         <li><a class="dropdown-item" type="button" onclick="deleteBills()" th:text="#{bills.dropdown.delete}"></a></li>
       </ul>
     </div>
@@ -212,6 +213,23 @@
         this.checked = value;
       });
     });
+
+    function getExcel(){
+      $.ajax({
+        method: "POST",
+        url: "/admin/bills/get-excel-bills",
+        contentType: 'application/json',
+        data: JSON.stringify(billRequest),
+        xhrFields: {
+          responseType: 'blob'
+        },
+      }).done(function (blob, status, xhr) {
+        getFileFromResponse(blob, status, xhr)
+      }).fail(function (response){
+        console.log(response)
+        showToast('error');
+      });
+    }
 
     function collectCheckboxData() {
       const checkboxData = [];

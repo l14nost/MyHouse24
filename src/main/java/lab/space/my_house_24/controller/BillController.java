@@ -18,13 +18,19 @@ import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.BillValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -86,6 +92,36 @@ public class BillController {
     @PostMapping("/get-all-bills")
     public ResponseEntity<Page<BillResponse>> getAllMastersApplication(@RequestBody BillRequest request) {
         return ResponseEntity.ok(billService.getAllBillResponse(request));
+    }
+
+    @PostMapping("/get-excel-bills")
+    public ResponseEntity<?> getExcel(@RequestBody BillRequest request) {
+        try {
+            InputStreamResource file = billService.getExcel(request);
+
+            String filename = "bills" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(file);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-excel-bill/{id}")
+    public ResponseEntity<?> getExcel(@PathVariable Long id) {
+        try {
+            InputStreamResource file = billService.getExcel(id);
+
+            String filename = "bill" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(file);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
+        }
     }
 
     @GetMapping("/get-bank-book-{id}")

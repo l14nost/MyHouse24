@@ -8,20 +8,24 @@ import lab.space.my_house_24.mapper.EnumMapper;
 import lab.space.my_house_24.model.bill.*;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.repository.BillRepository;
-import lab.space.my_house_24.service.BankBookService;
-import lab.space.my_house_24.service.BillService;
-import lab.space.my_house_24.service.RateService;
-import lab.space.my_house_24.service.ServiceBillService;
+import lab.space.my_house_24.service.*;
 import lab.space.my_house_24.specification.BillSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -42,6 +46,7 @@ public class BillServiceImpl implements BillService {
     private final RateService rateService;
     private final BillSpecification billSpecification;
     private final MessageSource message;
+    private final ExcelService excelService;
 
     @Override
     public Bill getBillById(Long id) throws EntityNotFoundException {
@@ -193,6 +198,72 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    @Transactional
+    public InputStreamResource getExcel(BillRequest request) throws IOException {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            List<BillResponse> billResponses = getAllBillResponse(request).stream().toList();
+            String[] header = {
+                    "№",
+                    message.getMessage("bills.status", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.date", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.month", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.apartment", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.owner", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.draft", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.payed", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.sum", null, LocaleContextHolder.getLocale())
+            };
+
+            excelService.getExcelForBillTable(workbook, header, billResponses);
+            workbook.write(out);
+
+            return new InputStreamResource(new ByteArrayInputStream(out.toByteArray()));
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to import data to Excel file: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public InputStreamResource getExcel(Long id) throws IOException {
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            BillResponse billResponse = getBillResponseById(id);
+            String[] titles = {
+                    "№",
+                    message.getMessage("bills.date", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.draft", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.status", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.payed", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.month", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.owner", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.bank_book", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.phone", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.house", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.apartment", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.section", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.rate", null, LocaleContextHolder.getLocale())
+            };
+
+            String[] extraHeader = {
+                    "#",
+                    message.getMessage("bills.card.service", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.count", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.unit", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.price_per_unit", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("bills.card.price", null, LocaleContextHolder.getLocale())
+            };
+
+            excelService.getExcelForBillCard(workbook, titles, extraHeader, billResponse);
+            workbook.write(out);
+
+            return new InputStreamResource(new ByteArrayInputStream(out.toByteArray()));
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to import data to Excel file: " + e.getMessage());
+        }
+    }
+
+    @Override
     public BillResponse getNewBillResponse() {
         return BillMapper.toBillResponse(generateNumber(), getTodayDate());
     }
@@ -289,7 +360,7 @@ public class BillServiceImpl implements BillService {
     public BigDecimal sumOfAllBills() {
         List<Bill> all = billRepository.findAll();
         BigDecimal totalSum = BigDecimal.ZERO;
-        for (Bill bill: all){
+        for (Bill bill : all) {
             totalSum = totalSum.add(bill.getTotalPrice());
         }
         return totalSum;
@@ -298,10 +369,10 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<BigDecimal> sumOffAllBillsByMonths() {
         List<BigDecimal> bigDecimalList = new ArrayList<>();
-        for (int i = 1; i<13;i++){
+        for (int i = 1; i < 13; i++) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (Bill bill: billRepository.findAll()){
-                if (bill.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i){
+            for (Bill bill : billRepository.findAll()) {
+                if (bill.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i) {
                     sum = sum.add(bill.getTotalPrice());
                 }
             }
@@ -314,10 +385,10 @@ public class BillServiceImpl implements BillService {
     public List<BigDecimal> sumOffAllPaidBillsByMonths() {
         List<BigDecimal> bigDecimalList = new ArrayList<>();
         List<Bill> bills = billRepository.findAllByStatus(BillStatus.PAID);
-        for (int i = 1; i<13;i++){
+        for (int i = 1; i < 13; i++) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (Bill bill: bills){
-                if (bill.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i){
+            for (Bill bill : bills) {
+                if (bill.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i) {
                     sum = sum.add(bill.getTotalPrice());
                 }
             }

@@ -16,12 +16,19 @@ import lab.space.my_house_24.service.*;
 import lab.space.my_house_24.specification.CashBoxSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -45,6 +52,7 @@ public class CashBoxServiceImpl implements CashBoxService {
     private final BankBookService bankBookService;
     private final BillService billService;
     private final StatisticService statisticService;
+    private final ExcelService excelService;
 
     @Override
     public CashBox getCashBoxById(Long id) throws EntityNotFoundException {
@@ -112,7 +120,7 @@ public class CashBoxServiceImpl implements CashBoxService {
         if (nonNull(saveCashBox.getBankBook()) && saveCashBox.getType()) {
             CashBoxCalculate(newCashBox, saveCashBox);
         }
-        CashBoxCalculateStatistic(newCashBox,saveCashBox);
+        CashBoxCalculateStatistic(newCashBox, saveCashBox);
         log.info("Success update CashBox by Request");
     }
 
@@ -289,6 +297,59 @@ public class CashBoxServiceImpl implements CashBoxService {
     @Override
     public CashBoxResponse getNewCashBoxResponse(Boolean type) {
         return CashBoxMapper.toCashBoxResponse(generateNumber(type), getTodayDate());
+    }
+
+    @Override
+    @Transactional
+    public InputStreamResource getExcel(CashBoxRequest request) {
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            List<CashBoxResponse> cashBoxResponses = getAllCashBoxResponse(request).stream().toList();
+            String[] header = {
+                    "№",
+                    message.getMessage("cash_box.date", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.status", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.article", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.owner", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.bank_book", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.type", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.sum", null, LocaleContextHolder.getLocale())
+            };
+
+            excelService.getExcelForCashBoxTable(workbook, header, cashBoxResponses);
+            workbook.write(out);
+
+            return new InputStreamResource(new ByteArrayInputStream(out.toByteArray()));
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to import data to Excel file: " + e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public InputStreamResource getExcel(Long id) {
+
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            CashBoxResponse cashBoxResponse = getCashBoxResponseById(id);
+            String[] header = {
+                    "№",
+                    message.getMessage("cash_box.date", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.owner", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.bank_book", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.article", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.draft", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.manager", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.sum", null, LocaleContextHolder.getLocale()),
+                    message.getMessage("cash_box.card.comment", null, LocaleContextHolder.getLocale())
+            };
+
+            excelService.getExcelForCashBoxCard(workbook, header, cashBoxResponse);
+            workbook.write(out);
+
+            return new InputStreamResource(new ByteArrayInputStream(out.toByteArray()));
+        } catch (IOException e) {
+            throw new RuntimeException("Fail to import data to Excel file: " + e.getMessage());
+        }
     }
 
     private String generateNumber(Boolean type) {

@@ -71,7 +71,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" th:href="@{/bank-books/add}" th:text="#{bank_book.dropdown.button.add}"></a></li>
-                <li><a class="dropdown-item" href="#" th:text="#{global.dropdown.button.excel}"></a></li>
+                <li><a class="dropdown-item" onclick="getExcel()" href="#" th:text="#{global.dropdown.button.excel}"></a></li>
             </ul>
         </div>
     </div>
@@ -218,6 +218,23 @@
             bankBookId = $(this).data('id');
             $('#confirmDelete').modal('show');
         });
+
+        function getExcel(){
+            $.ajax({
+                method: "POST",
+                url: "/admin/bank-books/get-excel-bank-books",
+                contentType: 'application/json',
+                data: JSON.stringify(bankBookRequest),
+                xhrFields: {
+                    responseType: 'blob'
+                },
+            }).done(function (blob, status, xhr) {
+                getFileFromResponse(blob, status, xhr)
+            }).fail(function (response){
+                console.log(response)
+                showToast('error');
+            });
+        }
 
         function getAllBankBook() {
             $.ajax({

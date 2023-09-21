@@ -16,13 +16,19 @@ import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -116,6 +122,21 @@ public class BankBookController {
     @PostMapping("/get-all-bank-book")
     public ResponseEntity<Page<BankBookResponse>> getAllMastersApplication(@RequestBody BankBookRequest request) {
         return ResponseEntity.ok(bankBookService.getAllBankBookResponse(request));
+    }
+
+    @PostMapping("/get-excel-bank-books")
+    public ResponseEntity<?> getExcel(@RequestBody BankBookRequest request) {
+        try {
+            InputStreamResource file = bankBookService.getExcel(request);
+
+            String filename = "bank-books" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(file);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
+        }
     }
 
     @PutMapping("/update-bank-book")
