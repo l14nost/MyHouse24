@@ -2,6 +2,7 @@ package lab.space.my_house_24.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Role;
+import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.mapper.RoleMapper;
 import lab.space.my_house_24.model.role.PageResponse;
@@ -9,6 +10,7 @@ import lab.space.my_house_24.model.role.RoleResponse;
 import lab.space.my_house_24.model.role.RoleSimpleResponse;
 import lab.space.my_house_24.model.role.RoleUpdateRequest;
 import lab.space.my_house_24.repository.RoleRepository;
+import lab.space.my_house_24.repository.StaffRepository;
 import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.service.SecurityLevelService;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +31,7 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+    private final StaffRepository staffRepository;
     private final SecurityLevelService securityLevelService;
 
     @Override
@@ -65,6 +71,10 @@ public class RoleServiceImpl implements RoleService {
         log.info("Try to update Role");
         roleRepository.save(RoleMapper.toRole(pageResponse, getRoleByJobTitle(jobTitle), securityLevelService));
         log.info("Success update Role");
+
+        Staff staff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(staff.getEmail(), staff.getPassword(),staff.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override
@@ -81,5 +91,11 @@ public class RoleServiceImpl implements RoleService {
             log.error("Error update Roles");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
+    }
+
+    private Staff getStaffByEmail(String email) {
+        log.info("Try to search Staff by email " + email);
+        return staffRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("Staff not found by email " + email));
     }
 }
