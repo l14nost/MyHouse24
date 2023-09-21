@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -151,7 +152,10 @@ public class ExcelServiceImpl extends ExcelCustomizeAbstract implements ExcelSer
 
         Row row = createInitialRows(workbook, sheet, extraHeader.length, INITIAL_INDEX_OF_ROW + 1);
         row.getCell(5).setCellValue(message.getMessage("bills.card.total_price", null, LocaleContextHolder.getLocale()) + ": " + billResponse.totalPrice().toString());
+        row.getCell(5).setCellStyle(getHeaderStyle(workbook));
 
         autoSizeAllColumns(sheet, title.length);
+        INITIAL_INDEX_OF_ROW++;
+        sheet.addMergedRegion(new CellRangeAddress(INITIAL_INDEX_OF_ROW, INITIAL_INDEX_OF_ROW,0,4));
     }
 }
