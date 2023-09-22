@@ -14,6 +14,7 @@ import lab.space.my_house_24.specification.HouseSpecification;
 import lab.space.my_house_24.specification.HouseSpecificationForSelect;
 import lab.space.my_house_24.util.FileHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,28 +26,38 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HouseServiceImpl implements HouseService {
     private final HouseRepository houseRepository;
     private final StaffService staffService;
 
 
     @Override
+    public List<House> findAll() {
+        return houseRepository.findAll();
+    }
+
+    @Override
     public List<HouseResponseForTable> houseListForTable() {
+        log.info("Try to get house dto for table");
         return houseRepository.findAll().stream().map(HouseMapper::entityToDtoForTable).toList();
     }
     @Override
     public House findById(Long id){
+        log.info("Try to get house by id: "+id);
         return houseRepository.findById(id).orElseThrow(()->new EntityNotFoundException("House by id "+id+" is not found"));
     }
 
     @Override
-    public Page<HouseResponseForMain> finaAllForMain(HouseRequestForMainPage houseRequestForMainPage) {
+    public Page<HouseResponseForMain> findAllForMain(HouseRequestForMainPage houseRequestForMainPage) {
+        log.info("Try to find all house dto for main page");
         HouseSpecification houseSpecification = HouseSpecification.builder().houseRequestForMainPage(houseRequestForMainPage).build();
         return houseRepository.findAll(houseSpecification, PageRequest.of(houseRequestForMainPage.page(),10)).map(HouseMapper::entityToDtoForMain);
     }
 
     @Override
     public void deleteById(Long id) {
+        log.info("Try to delete by id: "+id);
         House house = findById(id);
         if (house.getImage1()!=null){
             FileHandler.deleteFile(house.getImage1());
@@ -64,18 +75,18 @@ public class HouseServiceImpl implements HouseService {
             FileHandler.deleteFile(house.getImage5());
         }
         houseRepository.deleteById(id);
+        log.info("House was delete ");
     }
 
     @Override
     public HouseResponseForCard findByIdForCard(Long id) {
+        log.info("Try to find house dto for card page by id: "+id);
         return HouseMapper.entityToDtoForCard(findById(id));
     }
 
     @Override
     public void save(HouseRequestForAddPage houseRequestForAddPage) {
-
-//        Set<Long> staffSet = new HashSet<>(houseRequestForAddPage.userList());
-//        List<Long> staffList = new ArrayList<>(staffSet);
+        log.info("Try to save new house");
         House house = House.builder()
                 .address(houseRequestForAddPage.address())
                 .name(houseRequestForAddPage.name())
@@ -119,15 +130,25 @@ public class HouseServiceImpl implements HouseService {
         house.setSectionList(sectionList);
 
         houseRepository.save(house);
+        log.info("House was save");
+    }
+
+    @Override
+    public void save(House house) {
+        log.info("Try to save house");
+        houseRepository.save(house);
+        log.info("House was saved");
     }
 
     @Override
     public HouseResponseForEdit findByIdForEdit(Long id) {
+        log.info("Try to find house dto for edit page by id: "+id);
         return HouseMapper.entityToDtoForEditPage(findById(id));
     }
 
     @Override
     public void update(HouseRequestForEditPage houseRequestForEditPage, Long id) {
+        log.info("Try to update house by id: "+id);
         House house = findById(id);
         house.setName(houseRequestForEditPage.name());
         house.setAddress(houseRequestForEditPage.address());
@@ -191,21 +212,18 @@ public class HouseServiceImpl implements HouseService {
         }
 
         houseRepository.save(house);
+        log.info("House was update");
     }
 
     @Override
     public Page<HouseResponseForTable> houseResponseForSelect(Integer page, String search) {
+        log.info("Try to find all house dto for select");
         HouseSpecificationForSelect houseSpecificationForSelect = HouseSpecificationForSelect.builder().search(search).build();
         return houseRepository.findAll(houseSpecificationForSelect,PageRequest.of(page,5)).map(HouseMapper::entityToDtoForTable);
     }
-
-    @Override
-    public List<House> findAll() {
-        return houseRepository.findAll();
-    }
-
     @Override
     public Long count() {
+        log.info("Try to get count of all houses");
         return houseRepository.count();
     }
 }

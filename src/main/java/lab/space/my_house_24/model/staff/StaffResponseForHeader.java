@@ -4,6 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record StaffResponseForHeader(
+        Long id,
         String fullName,
         String email
 ) {

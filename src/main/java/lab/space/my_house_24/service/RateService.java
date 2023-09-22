@@ -29,4 +29,6 @@ public interface RateService {
     Rate saveRate(Rate priceRate);
 
     ResponseEntity<?> deleteRateById(Long id);
+
+    List<Rate> getAllRate();
 }

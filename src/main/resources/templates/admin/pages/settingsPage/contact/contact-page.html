@@ -195,8 +195,7 @@
                 data:JSON.stringify(jsonData)
             })
                 .done(function (response){
-                    clearValidMessages();
-                    showToast("success");
+                    window.location.href = "/admin/site/contact-page"
                 })
                 .fail( function(response){
                     clearValidMessages();

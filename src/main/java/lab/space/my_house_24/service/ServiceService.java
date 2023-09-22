@@ -13,7 +13,7 @@ public interface ServiceService {
     Service getServiceById(Long id);
     List<ServiceResponse> getAllServicesDto();
     List<ServiceResponse> getAllServicesByIsActiveDto();
-
+    List<Service> getAllService();
     void saveService(Service service);
 
     ResponseEntity<?> saveServiceByRequest(ServiceSaveRequest serviceSaveRequest);

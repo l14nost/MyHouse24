@@ -332,34 +332,39 @@
         var pathSplit = pathAndQuery.split("/");
         var chapter = pathSplit[2];
 
+        var idsSystem = ["payment-details","payment-items","staf","rol","rates","system-service"]
+
         var ids = [];
         for (var i = 0; i < navLinks.length; i++) {
             ids.push(navLinks[i].id);
         }
         for (var i =0; i< ids.length; i++){
-            if (chapter.includes(ids[i]) && !chapter.includes("site") && !chapter.includes("system")){
-                var targetLinks = document.getElementById(ids[i]);
-                targetLinks.classList.add("active")
-            }
-            else{
-                if (pathSplit.length>3){
-                    var chapter1 = pathSplit[3];
-                    if (chapter1.includes(ids[i]) && chapter.includes("site")) {
-                        var targetLinksSite = document.getElementById(ids[i]);
-                        targetLinksSite.classList.add("active")
-                        var targetUlSite = document.getElementById("sidebar-special");
-                        var linkElement = document.getElementById('special-a');
-                        linkElement.setAttribute('aria-expanded', 'true');
-                        targetUlSite.classList.add("show");
+            for (var j =0; j< idsSystem.length; j++){
+                if (!chapter.includes(idsSystem[j])) {
+                    if (chapter.includes(ids[i]) && !chapter.includes("site")) {
+                        var targetLinks = document.getElementById(ids[i]);
+                        targetLinks.classList.add("active")
+                    } else {
+                        if (pathSplit.length > 3) {
+                            var chapter1 = pathSplit[3];
+                            if (chapter1.includes(ids[i]) && chapter.includes("site")) {
+                                var targetLinksSite = document.getElementById(ids[i]);
+                                targetLinksSite.classList.add("active")
+                                var targetUlSite = document.getElementById("sidebar-special");
+                                var linkElement = document.getElementById('special-a');
+                                linkElement.setAttribute('aria-expanded', 'true');
+                                targetUlSite.classList.add("show");
+                            }
+                        }
                     }
-                    else if(chapter1.includes(ids[i]) && chapter.includes("system")){
-                        var targetLinksSystem = document.getElementById(ids[i]);
-                        targetLinksSystem.classList.add("active")
-                        var targetUlSystem = document.getElementById("sidebar-icons");
-                        var linkElement1  = document.getElementById('icons-a');
-                        linkElement1.setAttribute('aria-expanded', 'true');
-                        targetUlSystem.classList.add("show");
-                    }
+                }
+                else {
+                    var targetLinksSystem = document.getElementById(idsSystem[j]);
+                    targetLinksSystem.classList.add("active")
+                    var targetUlSystem = document.getElementById("sidebar-icons");
+                    var linkElement1 = document.getElementById('icons-a');
+                    linkElement1.setAttribute('aria-expanded', 'true');
+                    targetUlSystem.classList.add("show");
                 }
             }
         }
@@ -480,6 +485,7 @@
             .done(function(response) {
                 $("#fullName-staff").text(response.fullName)
                 $("#email-staff").text(response.email)
+                $("#profile-page").attr("href","/admin/staff/card-"+response.id)
             });
 
 
@@ -502,6 +508,40 @@
         }
 
         getTheme();
+    });
+
+
+    function changePhotoError(id){
+        var photo = document.getElementById(id);
+        photo.src = "/admin/static/assets/images/default.jpg";
+    }
+    //mask for bank-book number
+    function applyMask(input) {
+        let value = input.value.replace(/\D/g, "");
+
+        if (value.length > 5) {
+            value = value.substring(0, 5) + "-" + value.substring(5, 10);
+        }
+
+        input.value = value;
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        var errorImages = document.querySelectorAll(".error-photo");
+        errorImages.forEach(function(image) {
+            var testImage = new Image();
+            testImage.src = image.src;
+            testImage.addEventListener("error", function() {
+                image.src = "/admin/static/assets/images/default.jpg";
+            });
+        });
+
+        $('.error-photo').bind('error', function() {
+            var fieldID = $(this).attr('id');
+            var photo = document.getElementById(fieldID);
+            photo.src = "/admin/static/assets/images/default.jpg";
+        });
     });
 </script>
 <script>
@@ -528,6 +568,8 @@
             }
         });
     });
+
+
 </script>
 
 

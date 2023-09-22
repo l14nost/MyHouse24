@@ -40,7 +40,7 @@ public class House {
     @Column(length = 150)
     private String image5;
 
-    @OneToMany(mappedBy = "house")
+    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL)
     private List<Apartment> apartmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)

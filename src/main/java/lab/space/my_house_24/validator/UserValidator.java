@@ -82,7 +82,7 @@ public class UserValidator {
 
     }
 
-    public boolean existByEmail(String email, String object){
+    public boolean existByEmail(String email){
         if (!userRepository.existsByEmail(email)){
             return true;
         }

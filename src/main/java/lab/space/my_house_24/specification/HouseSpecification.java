@@ -5,6 +5,7 @@ import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
 import lab.space.my_house_24.model.house.HouseRequestForMainPage;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 
 @Builder
+@EqualsAndHashCode
 public class HouseSpecification implements Specification<House> {
     private HouseRequestForMainPage houseRequestForMainPage;
 

@@ -7,14 +7,17 @@ import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.model.user.UserMainPageRequest;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.parameters.P;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Builder
+@EqualsAndHashCode
 public class UserSpecification implements Specification<User> {
     private UserMainPageRequest userMainPageRequest;
 
@@ -54,9 +57,21 @@ public class UserSpecification implements Specification<User> {
             Join<User, Apartment> apartmentJoin = root.join("apartmentList", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(apartmentJoin.get("number"),userMainPageRequest.apartmentNumber()));
         }
-
         if (userMainPageRequest.duty()!=null){
-            predicates.add(criteriaBuilder.equal(root.get("duty"),userMainPageRequest.duty()));
+            Subquery<User> subquery = query.subquery(User.class);
+            Root<Apartment> subqueryRoot = subquery.from(Apartment.class);
+            subquery.select(subqueryRoot.get("user"))
+                    .where(criteriaBuilder.and(
+                            criteriaBuilder.equal(subqueryRoot.get("user"), root),
+                            criteriaBuilder.lessThan(subqueryRoot.get("bankBook").get("totalPrice"), BigDecimal.ZERO)
+                    ));
+            if (userMainPageRequest.duty()){
+                predicates.add(criteriaBuilder.exists(subquery));
+            }
+            else {
+                predicates.add(criteriaBuilder.not(criteriaBuilder.exists(subquery)));
+            }
+
         }
         if (userMainPageRequest.status()!=null && !userMainPageRequest.status().isEmpty()){
             predicates.add(criteriaBuilder.equal(root.get("userStatus"), UserStatus.valueOf(userMainPageRequest.status())));

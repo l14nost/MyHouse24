@@ -9,4 +9,6 @@ public interface RequisitesService {
     Requisites findById(Long id);
     RequisitesResponse findByIdResponse(Long id);
     void update(RequisitesRequest requisitesRequest);
+
+    void save(Requisites requisites);
 }

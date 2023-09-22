@@ -17,6 +17,17 @@ public interface BankBookMapper {
         }
         else return BankBookResponseForTable.builder().build();
     }
+    static BankBookResponseForApartmentCard entityToDtoForApartmentCard(BankBook bankBook) {
+
+        if (bankBook!=null) {
+            Long idCashBox = 0L;
+            if (!bankBook.getCashBoxes().isEmpty()){
+                idCashBox = bankBook.getCashBoxes().get(bankBook.getCashBoxes().size()-1).getId();
+            }
+            return BankBookResponseForApartmentCard.builder().number(bankBook.getNumber()).id(bankBook.getId()).idCashBox(idCashBox).build();
+        }
+        else return BankBookResponseForApartmentCard.builder().build();
+    }
 
     static BankBookResponse toSimpleBankBookResponse(BankBook bankBook) {
         return BankBookResponse.builder()

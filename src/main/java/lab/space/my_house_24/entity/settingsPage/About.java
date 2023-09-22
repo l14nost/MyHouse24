@@ -35,7 +35,7 @@ public class About {
     @Column(length = 1000, nullable = false)
     private String descriptionAdd;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Seo seo;
 
     @OneToMany(mappedBy = "about", cascade = CascadeType.ALL)

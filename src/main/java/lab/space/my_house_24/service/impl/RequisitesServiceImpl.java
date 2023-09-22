@@ -38,4 +38,9 @@ public class RequisitesServiceImpl implements RequisitesService {
         requisitesRepository.save(requisites);
         log.info("Requisites was update");
     }
+
+    @Override
+    public void save(Requisites requisites) {
+        requisitesRepository.save(requisites);
+    }
 }

@@ -32,7 +32,7 @@ public class ApartmentMapper {
                 .id(apartment.getId())
                 .title("№" + apartment.getNumber() + "," + apartment.getHouse().getName())
                 .area(apartment.getArea())
-                .bankBook(BankBookMapper.entityToDtoForTable(apartment.getBankBook()))
+                .bankBook(BankBookMapper.entityToDtoForApartmentCard(apartment.getBankBook()))
                 .rate(RateMapper.entityToDtoForTable(apartment.getRate()))
                 .section(apartment.getSection().getName())
                 .floor(apartment.getFloor().getName())

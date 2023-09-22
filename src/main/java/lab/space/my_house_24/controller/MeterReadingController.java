@@ -45,7 +45,6 @@ public class MeterReadingController {
         if (bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
         meterReadingService.save(meterReadingRequestForAdd);
         return ResponseEntity.ok().build();
     }
@@ -63,7 +62,7 @@ public class MeterReadingController {
         return "/admin/pages/meterReading/meter-reading-edit";
     }
     @PostMapping("/edit-meter-reading/{id}")
-    public ResponseEntity addMeterReading(@PathVariable Long id, @RequestBody @Valid MeterReadingRequestForEdit meterReadingRequestForEdit, BindingResult bindingResult){
+    public ResponseEntity editMeterReading(@PathVariable Long id, @RequestBody @Valid MeterReadingRequestForEdit meterReadingRequestForEdit, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }

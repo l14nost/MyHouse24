@@ -10,5 +10,4 @@ public interface SectionService {
     List<SectionResponseForTable> sectionListForTable();
     List<SectionResponseForTable> sectionByHouse(Long id);
     List<Section> findAllSectionByHouse(Long id);
-    Section findById(Long id);
 }

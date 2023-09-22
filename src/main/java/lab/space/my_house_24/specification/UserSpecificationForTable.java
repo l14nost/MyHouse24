@@ -7,6 +7,7 @@ import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.model.user.UserMainPageRequest;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 
 @Builder
+@EqualsAndHashCode
 public class UserSpecificationForTable implements Specification<User> {
     private String search;
 

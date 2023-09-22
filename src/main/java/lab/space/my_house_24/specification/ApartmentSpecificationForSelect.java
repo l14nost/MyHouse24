@@ -4,6 +4,7 @@ import jakarta.persistence.criteria.*;
 import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.model.apartment.ApartmentRequestForMainPage;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ import java.util.List;
 
 
 @Builder
+@EqualsAndHashCode
 public class ApartmentSpecificationForSelect implements Specification<Apartment> {
     private Long idHouse;
     private Long idSection;

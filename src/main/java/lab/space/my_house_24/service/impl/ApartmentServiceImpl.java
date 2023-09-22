@@ -11,7 +11,6 @@ import lab.space.my_house_24.service.BankBookService;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.specification.ApartmentSpecification;
 import lab.space.my_house_24.specification.ApartmentSpecificationForMailing;
-import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lab.space.my_house_24.specification.ApartmentSpecificationForMasterApplication;
 import lab.space.my_house_24.specification.ApartmentSpecificationForSelect;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +36,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public Page<ApartmentResponse> findAllForMainPage(ApartmentRequestForMainPage apartmentRequestForMainPage) {
+        log.info("Try to get all apartment dto for main page");
         if (apartmentRequestForMainPage.house()!=null && !apartmentRequestForMainPage.house().isEmpty()) {
             ApartmentRequestForMainPage apartmentRequestForMainPage1 = ApartmentRequestForMainPage.builder()
                     .page(apartmentRequestForMainPage.page())
@@ -53,17 +54,20 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
     @Override
     public void deleteApartment(Long id) {
+        log.info("Try to delete apartment by id: "+id);
         apartmentRepository.deleteById(id);
+        log.info("Apartment was delete");
     }
 
     @Override
     public ApartmentResponseForCard findByIdForCard(Long id) {
+        log.info("Try to find apartment dto for card page by id: "+id);
         return ApartmentMapper.entityToDtoForCard(apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found")));
     }
 
     @Override
     public void saveApartment(ApartmentAddRequest apartmentAddRequest) {
-
+        log.info("Try to save new apartment");
         Apartment apartment = Apartment.builder()
                 .number(apartmentAddRequest.number())
                 .area(apartmentAddRequest.area())
@@ -76,7 +80,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (apartmentAddRequest.bankBook()!=null && !apartmentAddRequest.bankBook().isEmpty()) {
             Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
             if (bankBookOptional.isEmpty()) {
-                apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).bankBookStatus(BankBookStatus.INACTIVE).build());
+                log.info("Try to create new bank book");
+                apartment.setBankBook(BankBook.builder().apartment(apartment).number(apartmentAddRequest.bankBook()).totalPrice(BigDecimal.ZERO).bankBookStatus(BankBookStatus.ACTIVE).build());
             } else {
                 BankBook bankBook = bankBookOptional.get();
                 bankBook.setApartment(apartment);
@@ -84,15 +89,18 @@ public class ApartmentServiceImpl implements ApartmentService {
             }
         }
         apartmentRepository.save(apartment);
+        log.info("Apartment was save");
     }
 
     @Override
     public ApartmentResponseForEdit findByIdApartment(Long id) {
+        log.info("Try to find apartment dto for edit page by id: "+ id);
         return ApartmentMapper.entityToDtoForEdit(apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found")));
     }
 
     @Override
     public void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest) {
+        log.info("Try to update apartment");
         Apartment apartment = findById(id);
         Optional<BankBook> bankBookOptional = bankBookService.findByNumber(apartmentAddRequest.bankBook());
         apartment.setArea(apartmentAddRequest.area());
@@ -115,10 +123,12 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         }
         apartmentRepository.save(apartment);
+        log.info("Apartment was update");
     }
 
     @Override
     public Apartment findById(Long id) {
+        log.info("Try to find apartment by id: "+id);
         return apartmentRepository.findById(id).orElseThrow(()->new EntityNotFoundException("Apartment by id "+id+" is not found"));
     }
 
@@ -188,6 +198,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor, Boolean duty) {
+        log.info("Try to get apartments dto for select");
         ApartmentSpecificationForSelect apartmentSpecificationForSelect = ApartmentSpecificationForSelect.builder()
                 .idFloor(idFloor)
                 .idHouse(idHouse)
@@ -200,31 +211,24 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     @Override
     public List<Apartment> findAllApartmentByHouse(Long house) {
+        log.info("Try to get all apartments by house");
         return apartmentRepository.findAllByHouse_Id(house);
     }
-
-    @Override
-    public List<Apartment> findAllApartmentByFloor(Long floor) {
-        return apartmentRepository.findAllByHouse_Id(floor);
-    }
-
-    @Override
-    public List<Apartment> findAllApartmentBySection(Long section) {
-        return apartmentRepository.findAllByHouse_Id(section);
-    }
-
     @Override
     public List<ApartmentResponseForTable> apartmentListForSelect() {
+        log.info("Try to find apartments dto for select without filters");
         return apartmentRepository.findAll().stream().map(ApartmentMapper::entityToDtoForTable).toList();
     }
 
     @Override
     public Long count() {
+        log.info("Try to get count of all apartments");
         return apartmentRepository.count();
     }
 
     @Override
     public List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment, Boolean debt) {
+        log.info("Try to get apartment list");
         ApartmentSpecificationForMailing apartmentSpecification = ApartmentSpecificationForMailing.builder().idApartment(apartment).idFloor(floor).idHouse(house).idSection(section).debt(debt).build();
         return apartmentRepository.findAll(apartmentSpecification);
     }

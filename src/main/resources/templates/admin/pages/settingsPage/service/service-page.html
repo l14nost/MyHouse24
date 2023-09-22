@@ -54,7 +54,7 @@
                                 <hr class="hr-horizontal">
                                 <div class="col-md-4" th:each="block, blockStat:${service.bannerResponseList()}" th:id="${'blockDiv'+block.id()}">
                                     <h5 class="name-service" th:text="#{settings.page.service.page.service} +' '+ ${(blockStat.index+1)}"> </h5>
-                                    <img th:src="${'/admin/files/'+block.image()}"  alt="" class="main-page-slide" th:id="${'block'+(blockStat.index+1)}">
+                                    <img th:src="${'/admin/files/'+block.image()}"  alt="" class="main-page-slide error-photo" th:id="${'block'+(blockStat.index+1)}">
                                     <div class="form-group mb-30">
                                         <label class="control-label block-img" th:text="#{settings.page.main.size}"></label>
                                         <input type="file" class="form-control form-control-lg for-valid-img" name="imageList" accept=".jpg,.jpeg,.png" th:id="${'blockInput'+(blockStat.index+1)}" onchange="handleFileChange(event)">
@@ -226,13 +226,11 @@
                 data:formData
             })
                 .done(function (response){
-                    clearValidMessages();
-                    showToast("success");
+                    window.location.href = "/admin/site/service-page"
                 })
                 .fail( function(response){
                     clearValidMessages();
                     let errors = response.responseJSON;
-                    console.log(errors);
                     for (var i =0; i<Object.keys(errors).length; i++){
                         var keys = Object.keys(errors)[i];
                         var values = Object.values(errors)[i];
@@ -304,7 +302,7 @@
 
 
 
-            var images = document.querySelectorAll('img[class="main-page-slide add"]');
+            var images = document.querySelectorAll('img[class="main-page-slide add error-photo"]');
             let i;
             if (images.length>0){
                 var lastImage = images[images.length - 1];
@@ -323,7 +321,7 @@
             imgDiv.id = "newBlockDiv"+i;
             imgDiv.classList.add("col-md-4");
             imgDiv.innerHTML = " <h5 class=\"name-service\">"+ h5Text +" </h5>\n" +
-                "                                    <img src=\"/admin/static/assets/images/default.jpg\"  alt=\"\" class=\"main-page-slide add\" id=\"newBlock"+i+"\">\n" +
+                "                                    <img src=\"/admin/static/assets/images/default.jpg\"  alt=\"\" class=\"main-page-slide add error-photo\" id=\"newBlock"+i+"\">\n" +
                 "                                    <div class=\"form-group mb-30\">\n" +
                 "                                        <label class=\"control-label block-img\">"+imgBlock+"</label>\n" +
                 "                                        <input type=\"file\" class=\"form-control form-control-lg for-valid-img\" name=\"imageList\" accept=\".jpg,.jpeg,.png\" onchange=\"handleFileChange(event)\" id=\"newBlockInput"+i+"\">\n" +

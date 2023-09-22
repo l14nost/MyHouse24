@@ -73,7 +73,7 @@
                                 <div class="col-md-4">
                                     <h5 th:text="#{settings.page.about.page.direct.photo}"></h5>
                                     <div style="display: flex; justify-content: center">
-                                        <img th:src="${'/admin/files/'+about.imageDirector()}" alt="" class="main-page-slide" id="directImageSrc" style="height: 300px; width: 100%;">
+                                        <img th:src="${'/admin/files/'+about.imageDirector()}" alt="" class="main-page-slide error-photo" id="directImageSrc" style="height: 300px; width: 100%;">
                                     </div>
                                     <div class="form-group mb-30">
                                         <label class="control-label" th:text="#{settings.page.about.page.size} + ' (250x310)'"></label>
@@ -95,7 +95,7 @@
                                 <hr class="hr-horizontal">
                                 <div class="row" id="galleryContainer">
                                     <div class="col-md-4" th:each="gallery:${about.photoList()}" th:id="${'galleryDiv'+gallery.id()}">
-                                        <img th:src="${'/admin/files/'+gallery.image()}"  alt="" class="main-page-slide" th:id="${'galleryImg'+gallery.id()}">
+                                        <img th:src="${'/admin/files/'+gallery.image()}"  alt="" class="main-page-slide error-photo" th:id="${'galleryImg'+gallery.id()}">
                                         <div class="form-group mb-30">
                                             <label class="control-label" th:text="#{settings.page.about.page.size} + ' (1200x1200)'"></label>
                                             <input type="file" class="form-control form-control-lg for-valid-img" name="galleryList" accept=".jpg,.jpeg,.png" th:id="${'galleryInput'+gallery.id()}">
@@ -144,7 +144,7 @@
                                 <hr class="hr-horizontal">
                                 <div class="row" id="addGalleryContainer">
                                     <div class="col-md-4" th:each="gallery:${about.addPhotoList()}" th:id="${'addGalleryDiv'+gallery.id()}">
-                                        <img  th:src="${'/admin/files/'+gallery.image()}" alt="" class="main-page-slide-1" th:id="${'addGalleryImg'+gallery.id()}">
+                                        <img  th:src="${'/admin/files/'+gallery.image()}" alt="" class="main-page-slide-1 error-photo" th:id="${'addGalleryImg'+gallery.id()}">
                                         <div class="form-group mb-30">
                                             <label class="control-label" th:text="#{settings.page.about.page.size} + ' (1200x1200)'"></label>
                                             <input type="file" class="form-control form-control-lg for-valid-img-add" name="addGalleryList" accept=".jpg,.jpeg,.png" th:id="${'addGalleryInput'+gallery.id()}">
@@ -373,9 +373,7 @@
                 data:formData
             })
                 .done(function (response){
-                    clearValidMessages();
-                    showToast("success");
-                    console.log(response);
+                    window.location.href = "/admin/site/about"
                 })
                 .fail( function(response){
                     clearValidMessages();
@@ -452,7 +450,7 @@
             })
         }
         function createPhoto(div, lang){
-            var images = document.querySelectorAll('img[class="main-page-slide add"]');
+            var images = document.querySelectorAll('img[class="main-page-slide add error-photo"]');
             let i;
             if (images.length>0){
                 var lastImage = images[images.length - 1];
@@ -474,7 +472,7 @@
             const imgDiv = document.createElement("div");
             imgDiv.id = "newGalleryDiv"+i;
             imgDiv.classList.add("col-md-4");
-            imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide add\" id=\"newGalleryImg"+i+"\">\n" +
+            imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide add error-photo\" id=\"newGalleryImg"+i+"\">\n" +
                 "                                        <div class=\"form-group mb-30\">\n" +
                 "                                            <label class=\"control-label\">"+ lang +" (1200x1200)</label>\n" +
                 "                                            <input type=\"file\" class=\"form-control form-control-lg for-valid-img\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
@@ -582,7 +580,7 @@
             })
         }
         function createPhotoForAdd(lang){
-            var images = document.querySelectorAll('img[class="main-page-slide-1 add"]');
+            var images = document.querySelectorAll('img[class="main-page-slide-1 add error-photo"]');
             let i;
             if (images.length>0){
                 var lastImage = images[images.length - 1];
@@ -599,7 +597,7 @@
             const imgDiv = document.createElement("div");
             imgDiv.id = "newAddGalleryDiv"+i;
             imgDiv.classList.add("col-md-4");
-            imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide-1 add\" id=\"newAddGalleryImg" + i + "\">\n" +
+            imgDiv.innerHTML = "<img src='/admin/static/assets/images/default.jpg'   alt=\"\" class=\"main-page-slide-1 add error-photo\" id=\"newAddGalleryImg" + i + "\">\n" +
                 "                                        <div class=\"form-group mb-30\">\n" +
                 "                                            <label class=\"control-label\">"+ lang +" (1200x1200)</label>\n" +
                 "                                            <input type=\"file\" class=\"form-control form-control-lg for-valid-img-add\" name=\""+nameImg+"\" accept=\".jpg,.jpeg,.png\" id=\"newAddGalleryInput"+i+"\" onchange=\"handleFileChange(event)\">\n" +
@@ -632,11 +630,7 @@
 
             container.appendChild(imgDiv);
         }
-
-
-
-
-
     </script>
+
 </th:block>
 </html>

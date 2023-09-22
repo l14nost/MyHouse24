@@ -68,6 +68,7 @@ public class UserMapper {
                 .date(localDate)
                 .viber(user.getViber())
                 .telegram(user.getTelegram())
+                .notes(user.getNotes())
                 .build();
         return userResponse;
     }

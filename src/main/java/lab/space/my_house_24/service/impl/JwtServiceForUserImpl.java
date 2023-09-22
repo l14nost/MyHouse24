@@ -7,6 +7,7 @@ import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.service.JwtServiceForUser;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Setter
 public class JwtServiceForUserImpl implements JwtServiceForUser {
     @Value("${app.jwt.secret}")
     private String JWT_SECRET;

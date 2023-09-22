@@ -2,7 +2,6 @@ package lab.space.my_house_24.controller;
 
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.house.*;
-import lab.space.my_house_24.model.user.UserResponseForTable;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
@@ -29,7 +28,7 @@ public class HouseController {
 
     @PostMapping("/get-all-house")
     public ResponseEntity getAllHouse(@RequestBody HouseRequestForMainPage houseRequestForMainPage){
-        return ResponseEntity.ok().body(houseService.finaAllForMain(houseRequestForMainPage));
+        return ResponseEntity.ok().body(houseService.findAllForMain(houseRequestForMainPage));
     }
 
     @DeleteMapping("/delete-house/{id}")
@@ -75,8 +74,7 @@ public class HouseController {
     }
 
     @PutMapping("/edit-house/{id}")
-    public ResponseEntity addHouse(@PathVariable Long id, @ModelAttribute @Valid HouseRequestForEditPage houseRequestForEditPage, BindingResult result){
-        System.out.println(houseRequestForEditPage);
+    public ResponseEntity editHouse(@PathVariable Long id, @ModelAttribute @Valid HouseRequestForEditPage houseRequestForEditPage, BindingResult result){
         if (houseRequestForEditPage.userList()!=null){
             if (!houseRequestForEditPage.userList().isEmpty()) {
                 houseValidator.uniqueStaffForHouse(houseRequestForEditPage.userList(), result);
