@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -66,7 +68,7 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
             saveMastersApplication(MastersApplicationMapper.toMastersApplication(
                     request,
                     getMastersApplicationById(request.id()),
-                    staffService.getStaffById(request.staffId()),
+                    nonNull(request.staffId()) ? staffService.getStaffById(request.staffId()) : null,
                     userService.findEntityById(request.userId()),
                     apartmentService.findById(request.apartmentId()))
             );
@@ -84,7 +86,7 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
             log.info("Try to save MastersApplication by Save Request");
             saveMastersApplication(MastersApplicationMapper.toMastersApplication(
                     request,
-                    staffService.getStaffById(request.staffId()),
+                    nonNull(request.staffId()) ? staffService.getStaffById(request.staffId()) : null,
                     userService.findEntityById(request.userId()),
                     apartmentService.findById(request.apartmentId()))
             );

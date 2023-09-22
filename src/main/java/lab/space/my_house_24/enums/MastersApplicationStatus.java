@@ -8,7 +8,7 @@ import java.util.Locale;
 public enum MastersApplicationStatus {
     NEW("New", "Новий"),
     IN_PROCESS("In process", "У процесі"),
-    COMPLETED("Completed", "Закінчено");
+    COMPLETED("Completed", "Виконано");
     private final String nameEn;
     private final String nameUk;
 
