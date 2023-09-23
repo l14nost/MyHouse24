@@ -52,28 +52,27 @@
                         <th></th>
                     </tr>
                     <tr id="search">
-                        <td>
+                        <th>
                             <input class="form-control" type="text" id="id">
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <input class="form-control" type="text" id="fullName">
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <select id="role" class="mb-1 form-select form-select" aria-label=".form-select-lg example" style="width: 160px; height: 40px">
                                 <option value=""></option>
                             </select>
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             <input class="form-control" type="text" id="phone">
-                        </td>
-                        <td><input class="form-control" type="text" id="email"></td>
-                        <td>
+                        </th>
+                        <th><input class="form-control" type="text" id="email"></th>
+                        <th>
                             <select id="status" class="mb-1 form-select form-select" aria-label=".form-select-lg example" style="width: 160px; height: 40px">
                                 <option value=""></option>
                             </select>
-                        </td>
-                        <td>
-                        </td>
+                        </th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -225,112 +224,6 @@
 
                 return TABLE_BODY;
             }
-
-            function createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount) {
-                const colDiv = '<div class="col-sm-12 col-md-6"></div>';
-                const paginationList =
-                    '<ul class="pagination pagination-sm mb-0 justify-content-center justify-content-md-end align-items-center">' +
-                    '</ul>';
-                const collapsedPageBtn =
-                    '   <li class="page-item">' +
-                    '       <a class="page-link disabled" role="button">...</a>' +
-                    '   </li>';
-                pagesCount = Number(pagesCount);
-                pageIndex = Number(pageIndex) + 1;
-                itemsCount = Number(itemsCount);
-                if (itemsCount > 0) {
-                    $(TABLE_PAGINATION_ROW).append(
-                        $($(colDiv).addClass('pagination-info').addClass('text-black'))
-                            .append('[[#{staff.table.footer.shown}]] X-Y [[#{staff.table.footer.of}]] Z [[#{staff.table.footer.records}]]'
-                                .replace('X', ((pageIndex - 1) * 10 + 1))
-                                .replace('Y', Math.min(pageIndex * 10, itemsCount))
-                                .replace('Z', itemsCount))
-                    );
-                }
-
-                $(TABLE_PAGINATION_ROW).append($(colDiv).append(paginationList));
-                const paginationListPath = $(TABLE_PAGINATION_ROW).find('ul.pagination');
-
-                // pagination logic
-                if (pagesCount > 1) {
-                    if (pageIndex !== 1) {
-                        $(paginationListPath).append(createPrevNextPageBtn(false, true));
-                        $(paginationListPath).append(createPageBtn(1, false));
-                    } else {
-                        $(paginationListPath).append(createPrevNextPageBtn(true, true));
-                        $(paginationListPath).append(createPageBtn(1, true));
-                    }
-
-                    if (pagesCount > 7) {
-                        if (pageIndex >= 5) {
-                            $(paginationListPath).append(collapsedPageBtn);
-                        }
-
-                        let start;
-                        let finish;
-                        if (pageIndex < 5) {
-                            start = 2;
-                            finish = 5;
-                        } else if (pagesCount - pageIndex < 4) {
-                            start = pagesCount - 4;
-                            finish = pagesCount - 1;
-                        } else {
-                            start = pageIndex - 1;
-                            finish = pageIndex + 1;
-                        }
-                        for (let i = start; i <= finish; i++) {
-                            if (i > 1 && i <= pagesCount - 1) {
-                                if (pageIndex === i) {
-                                    $(paginationListPath).append(createPageBtn(i, true));
-                                } else {
-                                    $(paginationListPath).append(createPageBtn(i, false));
-                                }
-                            }
-                        }
-
-                        if (pagesCount - pageIndex >= 4) {
-                            $(paginationListPath).append(collapsedPageBtn);
-                        }
-                    } else {
-                        for (let i = 2; i <= pagesCount - 1; i++) {
-                            if (pageIndex === i) {
-                                $(paginationListPath).append(createPageBtn(i, true));
-                            } else {
-                                $(paginationListPath).append(createPageBtn(i, false));
-                            }
-                        }
-                    }
-
-                    if (pageIndex !== pagesCount) {
-                        $(paginationListPath).append(createPageBtn(pagesCount, false));
-                        $(paginationListPath).append(createPrevNextPageBtn(false, false));
-                    } else {
-                        $(paginationListPath).append(createPageBtn(pagesCount, true));
-                        $(paginationListPath).append(createPrevNextPageBtn(true, false));
-                    }
-                }
-                // end of pagination logic
-            }
-
-            //  Create Next previous triangle Btn
-            function createPrevNextPageBtn(isDisabled, isPrev) {
-                return '' +
-                    '   <li class="page-item ' + (isPrev ? 'prev' : 'next') + (isDisabled ? ' disabled' : '') + '">' +
-                    '       <a class="page-link" role="button">' +
-                    (isPrev ? '<span aria-hidden="true">❮</span>' : '<span aria-hidden="true">❯</span>') +
-                    '       </a>' +
-                    '   </li>';
-            }
-
-            //  Create Pagination Btn
-            function createPageBtn(pageNumber, isActive) {
-                return '' +
-                    '<li class="page-item ' + (isActive ? 'active' : '') + '">' +
-                    '   <a class="page-link" role="button">' + pageNumber + '</a>' +
-                    '</li>';
-            }
-
-
         }
 
         $(document).on('click', 'a.page-link', function () {
@@ -365,8 +258,8 @@
 
 
         function clearInput(){
-            $('#search td select').val('').trigger('change');
-            $('#search td select option').remove();
+            $('#search th select').val('').trigger('change');
+            $('#search th select option').remove();
             $('#search input').val('');
             updateStaffRequestAndSend();
             showToast('success')

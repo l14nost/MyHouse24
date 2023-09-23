@@ -79,7 +79,7 @@ public class MastersApplicationSpecification {
                         criteriaBuilder.equal(root.get("mastersApplicationStatus"), request.statusQuery())
                 ));
             }
-            query.orderBy(criteriaBuilder.asc(root.get("id")));
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

@@ -25,7 +25,7 @@ public interface MastersApplicationMapper {
                         mastersApplication.getMaster().getMaster(LocaleContextHolder.getLocale())))
                 .mastersApplicationStatus(EnumMapper.toSimpleDto(mastersApplication.getMastersApplicationStatus().name(),
                         mastersApplication.getMastersApplicationStatus().getMastersApplicationStatus(LocaleContextHolder.getLocale())))
-                .staff(StaffMapper.toStaffResponse(mastersApplication.getStaff()))
+                .staff(nonNull(mastersApplication.getStaff()) ? StaffMapper.toStaffResponse(mastersApplication.getStaff()) : null)
                 .date(mastersApplication.getDateTime())
                 .time(mastersApplication.getDateTime())
                 .apartment(ApartmentMapper.entityToResponseForMastersApplication(mastersApplication.getApartment()))
