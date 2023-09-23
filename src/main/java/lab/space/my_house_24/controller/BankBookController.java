@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -44,23 +45,23 @@ public class BankBookController {
     private final UserService userService;
 
     @GetMapping({"/", ""})
-    public String showBankBookPage() {
-        return "admin/pages/bank_book/bank-book";
+    public ModelAndView showBankBookPage() {
+        return new ModelAndView("admin/pages/bank_book/bank-book");
     }
 
     @GetMapping("/card-{id}")
-    public String showBankBookCardById(@PathVariable("id") Long id) {
-        return "admin/pages/bank_book/bank-book-card";
+    public ModelAndView showBankBookCardById(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/bank_book/bank-book-card");
     }
 
     @GetMapping("/add")
-    public String showBankBookSavePage() {
-        return "admin/pages/bank_book/bank-book-save";
+    public ModelAndView showBankBookSavePage() {
+        return new ModelAndView("admin/pages/bank_book/bank-book-save");
     }
 
     @GetMapping("/update-{id}")
-    public String showBankBookUpdatePage(@PathVariable Long id) {
-        return "admin/pages/bank_book/bank-book-save";
+    public ModelAndView showBankBookUpdatePage(@PathVariable Long id) {
+        return new ModelAndView("admin/pages/bank_book/bank-book-save");
     }
 
     @GetMapping("/get-all-balance-status")

@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("login")
@@ -28,18 +29,33 @@ public class LoginController {
     private final JwtService jwtService;
 
     @GetMapping({"/", ""})
-    public String showLogin() {
+    public ModelAndView showLogin() {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User){
-            return "redirect:/statistics";
-        }else {
-            return "/admin/pages/login/login";
+            return new ModelAndView("redirect:/statistics");
+        } else {
+            return new ModelAndView("admin/pages/login/login");
         }
     }
 
     @GetMapping("/forgot-password")
-    public String showForgotPasswordPage() {
-        return "/admin/pages/login/forgot-password";
+    public ModelAndView showForgotPasswordPage() {
+        return new ModelAndView("admin/pages/login/forgot-password");
+    }
+
+    @GetMapping("/forgot-password/{token}")
+    public ModelAndView showForgotPasswordChangePage(@PathVariable String token) {
+        UserDetails userDetails = staffService.loadUserByToken(token);
+        if (!jwtService.isTokenValid(
+                token,
+                userDetails,
+                staffService.getStaffByEmail(userDetails.getUsername()),
+                "forgot"
+        )) {
+            return new ModelAndView("admin/pages/staff/staff-activate-error");
+        } else {
+            return new ModelAndView("admin/pages/staff/staff-activate");
+        }
     }
 
     @PostMapping("/send-forgot-password-staff")
@@ -54,21 +70,6 @@ public class LoginController {
         }
         staffService.sendForgotPasswordUrl(request.email());
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/forgot-password/{token}")
-    public String showForgotPasswordChangePage(@PathVariable String token) {
-        UserDetails userDetails = staffService.loadUserByToken(token);
-        if (!jwtService.isTokenValid(
-                token,
-                userDetails,
-                staffService.getStaffByEmail(userDetails.getUsername()),
-                "forgot"
-        )) {
-            return "/admin/pages/staff/staff-activate-error";
-        } else {
-            return "/admin/pages/staff/staff-activate";
-        }
     }
 
     @PutMapping("/forgot-password-staff-change")

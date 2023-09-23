@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("auth")
@@ -26,7 +27,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @GetMapping("/activate-staff/{token}")
-    public String showActivateStaffPage(@PathVariable String token) {
+    public ModelAndView showActivateStaffPage(@PathVariable String token) {
         UserDetails userDetails = staffService.loadUserByToken(token);
         if (!jwtService.isTokenValid(
                 token,
@@ -34,9 +35,9 @@ public class AuthController {
                 staffService.getStaffByEmail(userDetails.getUsername()),
                 "activate"
         )) {
-            return "/admin/pages/staff/staff-activate-error";
+            return new ModelAndView("admin/pages/staff/staff-activate-error");
         } else {
-            return "/admin/pages/staff/staff-activate";
+            return new ModelAndView("admin/pages/staff/staff-activate");
         }
     }
 

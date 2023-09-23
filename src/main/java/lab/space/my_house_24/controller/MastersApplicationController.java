@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -37,23 +38,23 @@ public class MastersApplicationController {
     private final UserService userService;
 
     @GetMapping({"/", ""})
-    public String showMastersApplicationPage() {
-        return "admin/pages/masters_application/masters-application";
+    public ModelAndView showMastersApplicationPage() {
+        return new ModelAndView("admin/pages/masters_application/masters-application");
     }
 
     @GetMapping("/card-{id}")
-    public String showMastersApplicationCardById(@PathVariable("id") Long id) {
-        return "admin/pages/masters_application/masters-application-card";
+    public ModelAndView showMastersApplicationCardById(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/masters_application/masters-application-card");
     }
 
     @GetMapping("/add")
-    public String showMastersApplicationSavePage() {
-        return "admin/pages/masters_application/masters-application-save";
+    public ModelAndView showMastersApplicationSavePage() {
+        return new ModelAndView("admin/pages/masters_application/masters-application-save");
     }
 
     @GetMapping("/update-{id}")
-    public String showMastersApplicationUpdatePage(@PathVariable Long id) {
-        return "admin/pages/masters_application/masters-application-save";
+    public ModelAndView showMastersApplicationUpdatePage(@PathVariable Long id) {
+        return new ModelAndView("admin/pages/masters_application/masters-application-save");
     }
 
     @GetMapping("/get-masters-application-{id}")

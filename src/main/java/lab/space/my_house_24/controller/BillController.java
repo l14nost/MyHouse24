@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -50,33 +51,33 @@ public class BillController {
     private final UserService userService;
 
     @GetMapping({"/", ""})
-    public String showBillPage() {
-        return "admin/pages/bill/bill";
+    public ModelAndView showBillPage() {
+        return new ModelAndView("admin/pages/bill/bill");
     }
 
     @GetMapping("/card-{id}")
-    public String showBillCardById(@PathVariable("id") Long id) {
-        return "admin/pages/bill/bill-card";
+    public ModelAndView showBillCardById(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/bill/bill-card");
     }
 
     @GetMapping("/add")
-    public String showBillSavePage() {
-        return "admin/pages/bill/bill-save";
+    public ModelAndView showBillSavePage() {
+        return new ModelAndView("admin/pages/bill/bill-save");
     }
 
     @GetMapping("/add-copy-bank-book-{id}")
-    public String showRateCopySavePage(@PathVariable("id") Long id) {
-        return "admin/pages/bill/bill-save";
+    public ModelAndView showRateCopySavePage(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/bill/bill-save");
     }
 
     @GetMapping("/add-copy-{id}")
-    public String showBillCopySavePage(@PathVariable("id") Long id) {
-        return "admin/pages/bill/bill-save";
+    public ModelAndView showBillCopySavePage(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/bill/bill-save");
     }
 
     @GetMapping("/update-{id}")
-    public String showBillUpdatePage(@PathVariable Long id) {
-        return "admin/pages/bill/bill-save";
+    public ModelAndView showBillUpdatePage(@PathVariable Long id) {
+        return new ModelAndView("admin/pages/bill/bill-save");
     }
 
     @GetMapping("/get-all-owner")

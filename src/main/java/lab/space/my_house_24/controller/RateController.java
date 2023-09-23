@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -32,28 +33,28 @@ public class RateController {
     private final ServiceService serviceService;
 
     @GetMapping({"/", ""})
-    public String showRatesPage() {
-        return "admin/pages/rate/rates";
+    public ModelAndView showRatesPage() {
+        return new ModelAndView("admin/pages/rate/rates");
     }
 
     @GetMapping("/card-{id}")
-    public String showRateCardById(@PathVariable("id") Long id) {
-        return "admin/pages/rate/rate-card";
+    public ModelAndView showRateCardById(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/rate/rate-card");
     }
 
     @GetMapping("/add")
-    public String showRateSavePage() {
-        return "admin/pages/rate/rate-save";
+    public ModelAndView showRateSavePage() {
+        return new ModelAndView("admin/pages/rate/rate-save");
     }
 
     @GetMapping("/add-copy-{id}")
-    public String showRateCopySavePage(@PathVariable("id") Long id) {
-        return "admin/pages/rate/rate-save";
+    public ModelAndView showRateCopySavePage(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/rate/rate-save");
     }
 
     @GetMapping("/update-{id}")
-    public String showRateUpdatePage(@PathVariable Long id) {
-        return "admin/pages/rate/rate-save";
+    public ModelAndView showRateUpdatePage(@PathVariable Long id) {
+        return new ModelAndView("admin/pages/rate/rate-save");
     }
 
     @GetMapping("/get-rate-{id}")

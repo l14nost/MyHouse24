@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -29,18 +30,18 @@ public class ArticleController {
     private final ArticleValidator articleValidator;
 
     @GetMapping({"/", ""})
-    public String showArticlePage() {
-        return "admin/pages/article/article";
+    public ModelAndView showArticlePage() {
+        return new ModelAndView("admin/pages/article/article");
     }
 
     @GetMapping("/add")
-    public String showArticleSavePage() {
-        return "admin/pages/article/article-save";
+    public ModelAndView showArticleSavePage() {
+        return new ModelAndView("admin/pages/article/article-save");
     }
 
     @GetMapping("/update-{id}")
-    public String showArticleUpdatePage(@PathVariable Long id) {
-        return "admin/pages/article/article-save";
+    public ModelAndView showArticleUpdatePage(@PathVariable Long id) {
+        return new ModelAndView("admin/pages/article/article-save");
     }
 
     @GetMapping("/all-article-type")

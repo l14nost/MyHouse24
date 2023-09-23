@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("role")
@@ -20,8 +21,8 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping({"/", ""})
-    public String showLogin() {
-        return "/admin/pages/role/role";
+    public ModelAndView showLogin() {
+        return new ModelAndView("admin/pages/role/role");
     }
 
     @GetMapping("/get-all-roles")

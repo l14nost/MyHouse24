@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -34,8 +35,8 @@ public class ServiceController {
     private final ServiceValidator serviceValidator;
 
     @GetMapping({"/", ""})
-    public String showServicesPage() {
-        return "admin/pages/system-service/service";
+    public ModelAndView showServicesPage() {
+        return new ModelAndView("admin/pages/system-service/service");
     }
 
     @GetMapping("/get-all-services")

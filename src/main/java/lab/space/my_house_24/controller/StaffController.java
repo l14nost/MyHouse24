@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -28,23 +29,23 @@ public class StaffController {
     private final StaffValidator staffValidator;
 
     @GetMapping({"/", ""})
-    public String showStaff() {
-        return "admin/pages/staff/staff";
+    public ModelAndView showStaff() {
+        return new ModelAndView("admin/pages/staff/staff");
     }
 
     @GetMapping("/card-{id}")
-    public String showStaffCardById(@PathVariable("id") Long id) {
-        return "admin/pages/staff/staff-card";
+    public ModelAndView showStaffCardById(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/staff/staff-card");
     }
 
     @GetMapping("/{id}")
-    public String showStaffEdit(@PathVariable("id") Long id) {
-        return "admin/pages/staff/staff-save";
+    public ModelAndView showStaffEdit(@PathVariable("id") Long id) {
+        return new ModelAndView("admin/pages/staff/staff-save");
     }
 
     @GetMapping("/add")
-    public String showStaffSave() {
-        return "admin/pages/staff/staff-save";
+    public ModelAndView showStaffSave() {
+        return new ModelAndView("admin/pages/staff/staff-save");
     }
 
 
