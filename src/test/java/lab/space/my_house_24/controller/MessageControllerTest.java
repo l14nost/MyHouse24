@@ -42,7 +42,7 @@ class MessageControllerTest {
     void messageMainPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/messages"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/message/message-main"));
+                .andExpect(view().name("admin/pages/message/message-main"));
     }
 
     @Test
@@ -61,7 +61,7 @@ class MessageControllerTest {
     void messageCardPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/messages/message-card/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/message/message-card"));
+                .andExpect(view().name("admin/pages/message/message-card"));
     }
 
     @Test
@@ -94,7 +94,7 @@ class MessageControllerTest {
     void addMessagePage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/messages/add-message"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/message/message-add"));
+                .andExpect(view().name("admin/pages/message/message-add"));
     }
 
     @Test
@@ -128,7 +128,7 @@ class MessageControllerTest {
     void addMessageDebtPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/messages/add-message-debt"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/message/message-add"));
+                .andExpect(view().name("admin/pages/message/message-add"));
     }
 
 }

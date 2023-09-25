@@ -36,7 +36,7 @@ class AboutPageControllerTest {
         when(aboutService.findByIdResponse(1L)).thenReturn(AboutResponse.builder().build());
         mockMvc.perform(MockMvcRequestBuilders.get("/site/about"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/settingsPage/about/about-page"));
+                .andExpect(view().name("admin/pages/settingsPage/about/about-page"));
 
     }
 

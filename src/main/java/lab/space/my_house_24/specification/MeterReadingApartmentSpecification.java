@@ -6,6 +6,7 @@ import lab.space.my_house_24.enums.MeterReadingStatus;
 import lab.space.my_house_24.model.meterReading.MeterReadingRequestForApartmentPage;
 import lab.space.my_house_24.model.meterReading.MeterReadingRequestForMainPage;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ import java.util.List;
 
 
 @Builder
+@EqualsAndHashCode
 public class MeterReadingApartmentSpecification implements Specification<MeterReading> {
     private MeterReadingRequestForApartmentPage meterReadingRequestForApartmentPage;
 

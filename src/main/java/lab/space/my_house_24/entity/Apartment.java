@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,14 +49,19 @@ public class Apartment {
     private Rate rate;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "bank_book_id", nullable = true)
+    @JoinColumn(name = "bank_book_id")
     private BankBook bankBook;
 
 
-    @OneToMany(mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private List<MastersApplication> mastersApplicationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "apartment")
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private List<MeterReading> meterReadingList = new ArrayList<>();
+
+    @PreRemove
+    public void bankBookSetNull(){
+        bankBook.setApartment(null);
+    }
 
 }

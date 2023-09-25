@@ -10,7 +10,8 @@ import java.util.UUID;
 @Slf4j
 public class FileHandler {
 
-    private static final String upload = "C:/Users/Amir Banov/files";
+    private static final String upload = "/files";
+//    private static final String upload = "C:/Users/Amir Banov/files";
     public  static  String saveFile(MultipartFile image){
         File uploadDirGallery = new File(upload);
         if (!uploadDirGallery.exists()) {

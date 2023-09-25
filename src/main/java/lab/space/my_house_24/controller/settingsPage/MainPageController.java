@@ -21,9 +21,9 @@ public class MainPageController {
     private final MainPageService mainPageService;
 
     @GetMapping("/main-page")
-    public String mainPage(Model model) {
-        model.addAttribute("mainPage", mainPageService.findByIdResponse(1L));
-        return "/admin/pages/settingsPage/mainPage/main-page";
+    public String mainPage(Model model){
+        model.addAttribute("mainPage",mainPageService.findByIdResponse(1L));
+        return "admin/pages/settingsPage/mainPage/main-page";
     }
 
     @PutMapping("/main-page-save")

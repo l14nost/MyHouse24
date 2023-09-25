@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/admin/fragments/layout}">
+      layout:decorate="~{admin/fragments/layout}">
 
 <head>
     <meta charset="UTF-8">
@@ -87,15 +87,12 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer pt-0 pb-0" style="margin-top: 15px" id="card-footer">
-                <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
-                        <div id="tableInfoShowing">
-
-                        </div>
-                        <div style="display: flex; margin-right: 10px" >
-                            <nav aria-label="Page navigation example" id = "pagination">
-                            </nav>
-
+                <div class="card-footer" id="card-footer">
+                    <div class="row" style="display: flex; justify-content: space-between" id="tableInfo">
+                        <div class="col-sm-12 col-md-6 pagination-info" id="tableInfoShowing"></div>
+                        <div class="col-sm-12 col-md-6" id="pagination">
+<!--                            <ul class="pagination pagination-sm mb-0 justify-content-center justify-content-md-end align-items-center" id="pagination">-->
+<!--                            </ul>-->
                         </div>
                     </div>
                 </div>
@@ -307,6 +304,11 @@
                                 const newUl = document.createElement("ul");
                                 newUl.id = "apartmentPaginationList";
                                 newUl.classList.add("pagination");
+                                newUl.classList.add("pagination-sm")
+                                newUl.classList.add("mb-0")
+                                newUl.classList.add("justify-content-center")
+                                newUl.classList.add("justify-content-md-end")
+                                newUl.classList.add("align-items-center")
                                 for (var i = 0; i < response.totalPages; i++) {
                                     var currentNum = i + 1;
 

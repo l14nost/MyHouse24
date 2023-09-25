@@ -4,7 +4,6 @@ import lab.space.my_house_24.entity.User;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.model.user.*;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -20,13 +19,14 @@ public interface UserService {
     User findEntityById(Long id);
 
     void save(UserAddRequest userAddRequest);
+    void save(User user);
 
     void update(UserEditRequest userEditRequest,Long id);
 
     void inviteUser(UserInviteRequest userInviteRequest);
 
     List<UserResponseForTable> userListForTable();
-    Page<UserResponseForTable> userResponseForTables(Integer page, String search);
+    Page<UserResponseForTable> userResponseForSelect(Integer page, String search);
 
     List<UserResponseForMastersApplication> getAllUsersForMastersApplication();
 
@@ -39,4 +39,6 @@ public interface UserService {
     void activate(ForgotPassRequest forgotPassRequest, String token);
 
     List<UserResponseForHeader> usersByStatus(UserStatus userStatus);
+
+    List<User> findAll();
 }

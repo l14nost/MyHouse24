@@ -6,18 +6,28 @@ import lab.space.my_house_24.entity.Role;
 import lab.space.my_house_24.entity.SecurityLevel;
 import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.entity.settingsPage.*;
+import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.Page;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.service.*;
 import lab.space.my_house_24.service.impl.AboutServiceImpl;
 import lab.space.my_house_24.service.*;
+import lab.space.my_house_24.service.impl.HouseServiceImpl;
+import lab.space.my_house_24.service.impl.UnitServiceImpl;
+import lab.space.my_house_24.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import java.math.BigDecimal;
@@ -37,6 +47,14 @@ public class Init implements CommandLineRunner {
     private final BankBookService bankBookService;
     private final StatisticService statisticService;
     private final CashBoxService cashBoxService;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
+    private final RequisitesService requisitesService;
+    private final UnitService unitService;
+    private final ServiceService serviceService;
+    private final HouseService houseService;
+    private final RateService rateService;
+    private final ArticleService articleService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -150,8 +168,10 @@ public class Init implements CommandLineRunner {
                             .setFirstname("Admin")
                             .setLastname("Admin")
                             .setPhone("123123123")
+                            .setTheme(true)
                             .setStaffStatus(UserStatus.ACTIVE)
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
+                            .setHouseList(new HashSet<>())
             );
         } else log.info("Staff found");
 
@@ -183,26 +203,24 @@ public class Init implements CommandLineRunner {
         }
         catch (EntityNotFoundException e){
             log.warn("Create custom main page");
-            mainPageService.save(
-                    MainPage.builder()
-                            .id(1L)
-                            .title("title")
-                            .description("description")
-                            .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
-                            .links(true)
-                            .bannerList(new ArrayList<>(List.of(
-                                    Banner.builder().name("name1").image("").description("descr1").build(),
-                                    Banner.builder().name("name2").image("").description("descr2").build(),
-                                    Banner.builder().name("name3").image("").description("descr3").build(),
-                                    Banner.builder().name("name4").image("").description("descr4").build(),
-                                    Banner.builder().name("name5").image("").description("descr5").build(),
-                                    Banner.builder().name("name6").image("").description("descr6").build()
-                            )))
-                            .slide1("")
-                            .slide2("")
-                            .slide3("")
-                            .build()
-            );
+            MainPage mainPage =  MainPage.builder()
+                    .id(1L)
+                    .title("title")
+                    .description("description")
+                    .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                    .links(true)
+                    .bannerList(new ArrayList<>())
+                    .slide1("")
+                    .slide2("")
+                    .slide3("")
+                    .build();
+            mainPage.addBanner(Banner.builder().name("name1").image("").description("descr1").mainPage(MainPage.builder().id(1L).build()).build());
+            mainPage.addBanner(Banner.builder().name("name2").image("").description("descr2").mainPage(MainPage.builder().id(1L).build()).build());
+            mainPage.addBanner(Banner.builder().name("name3").image("").description("descr3").mainPage(MainPage.builder().id(1L).build()).build());
+            mainPage.addBanner(Banner.builder().name("name4").image("").description("descr4").mainPage(MainPage.builder().id(1L).build()).build());
+            mainPage.addBanner(Banner.builder().name("name5").image("").description("descr5").mainPage(MainPage.builder().id(1L).build()).build());
+            mainPage.addBanner(Banner.builder().name("name6").image("").description("descr6").mainPage(MainPage.builder().id(1L).build()).build());
+            mainPageService.save(mainPage);
         }
 
         try{
@@ -243,6 +261,7 @@ public class Init implements CommandLineRunner {
                             .codeMap("")
                             .location("")
                             .address("")
+                            .number("")
                             .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
                             .build()
             );
@@ -254,17 +273,153 @@ public class Init implements CommandLineRunner {
         }
         catch (EntityNotFoundException e){
             log.warn("Create custom service page");
+            ServicePage servicePage =  ServicePage.builder()
+                    .id(1L)
+                    .bannerList(new ArrayList<>())
+                    .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                    .build();
+            servicePage.addBanner(Banner.builder().name("name1").image("").description("descr1").servicePage(ServicePage.builder().id(1L).build()).build());
             servicePageService.save(
-                    ServicePage.builder()
+                   servicePage
+            );
+        }
+        try{
+            log.info("Try to find requisites");
+            requisitesService.findById(1L);
+        }
+        catch (EntityNotFoundException e){
+            log.warn("Create custom requisites");
+           requisitesService.save(Requisites.builder()
+                  .info("Info")
+                  .name("Name")
+                  .id(1L).build());
+        }
+        log.info("Try to find user");
+        if (userService.findAll().isEmpty()){
+            log.info("Create custom user");
+            User user = User.builder()
+                    .userStatus(UserStatus.ACTIVE)
+                    .firstname("Bob")
+                    .lastname("Sponge")
+                    .surname("Squarepants")
+                    .password(passwordEncoder.encode("pass"))
+                    .filename("")
+                    .number("0633333333")
+                    .telegram("0633333333")
+                    .viber("0633333333")
+                    .date(LocalDate.of(2005, 12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                    .addDate(Instant.now())
+                    .email("testUser@gmail.com")
+                    .applicationList(new ArrayList<>())
+                    .messageList(new ArrayList<>())
+                    .apartmentList(new ArrayList<>())
+                    .build();
+            userService.save(user);
+        }
+        log.info("Try to find unit");
+        if (unitService.getAllUnitDto().isEmpty()){
+            log.info("Create custom unit");
+            unitService.saveUnit(Unit.builder()
+                            .name("L")
+                            .serviceList(new ArrayList<>())
                             .id(1L)
-                            .bannerList(new ArrayList<>())
-                            .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
+                    .build());
+        }
+
+        log.info("Try to find service");
+        if (serviceService.getAllService().isEmpty()){
+            log.info("Create custom service");
+            serviceService.saveService(Service.builder()
+                            .unit(Unit.builder().id(1L).build())
+                            .isActive(true)
+                            .id(1L)
+                            .meterReadingList(new ArrayList<>())
+                            .serviceBillList(new ArrayList<>())
+                            .name("Water")
+                    .build());
+        }
+
+        log.info("Try to find rate");
+        if (rateService.getAllRate().isEmpty()){
+            log.info("Create custom service");
+            Rate rate = Rate.builder()
+                    .id(1L)
+                    .name("Economy")
+                    .description("Economy rate for apartments 1-2 rooms")
+                    .apartmentList(new ArrayList<>())
+                    .billList(new ArrayList<>())
+                    .updateAt(Instant.now())
+                    .priceRateList(new ArrayList<>())
+                    .build();
+            rate.getPriceRateList().add(
+                    PriceRate.builder()
+                            .price(new BigDecimal(100))
+                            .service(Service.builder().id(1L).build())
+                            .rate(rate)
                             .build()
             );
+            rateService.saveRate(rate);
         }
 
 
+        log.info("Try to find house");
+        if (houseService.findAll().isEmpty()){
+            log.info("Create custom house with floor, section && apartment");
+            House house = House.builder()
+                    .name("The Joinery")
+                    .image1("")
+                    .image2("")
+                    .image3("")
+                    .image4("")
+                    .image5("")
+                    .staffList(new HashSet<>())
+                    .floorList(new ArrayList<>())
+                    .sectionList(new ArrayList<>())
+                    .address("St. Serednofontanska 100-g ")
+                    .sectionList(new ArrayList<>())
+                    .id(1L)
+                    .apartmentList(new ArrayList<>())
+                    .build();
+            Floor floor = Floor.builder()
+                    .house(house)
+                    .name("1")
+                    .apartmentList(new ArrayList<>())
+                    .build();
+            Section section = Section.builder()
+                    .name("1")
+                    .house(house)
+                    .apartmentList(new ArrayList<>())
+                    .build();
+            Apartment apartment = Apartment.builder()
+                    .house(house)
+                    .number(100)
+                    .user(User.builder().id(1L).build())
+                    .section(section)
+                    .floor(floor)
+                    .rate(Rate.builder().id(1L).build())
+                    .area(50.5)
+                    .build();
+            apartment.setBankBook(BankBook.builder().bankBookStatus(BankBookStatus.ACTIVE).apartment(apartment).cashBoxes(new ArrayList<>())
+                            .totalPrice(BigDecimal.ZERO)
+                            .bill(new ArrayList<>())
+                            .number("00000-00001")
+                    .build());
+            floor.getApartmentList().add(apartment);
+            section.getApartmentList().add(apartment);
+            house.getFloorList().add(floor);
+            house.getSectionList().add(section);
+            house.getApartmentList().add(apartment);
+            houseService.save(house);
+        }
+
+
+
+
+
         log.info("################## FINISH OF INITIALIZATION ##################");
+
+
+
     }
 
 }

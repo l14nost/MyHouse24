@@ -7,24 +7,24 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface HouseService {
+    List<House> findAll();
     List<HouseResponseForTable> houseListForTable();
     House findById(Long id);
 
-    Page<HouseResponseForMain> finaAllForMain(HouseRequestForMainPage houseRequestForMainPage);
+    Page<HouseResponseForMain> findAllForMain(HouseRequestForMainPage houseRequestForMainPage);
 
     void deleteById(Long id);
 
     HouseResponseForCard findByIdForCard(Long id);
 
     void save(HouseRequestForAddPage houseRequestForAddPage);
+    void save(House house);
 
     HouseResponseForEdit findByIdForEdit(Long id);
 
     void update(HouseRequestForEditPage houseRequestForEditPage,Long id);
 
     Page<HouseResponseForTable> houseResponseForSelect(Integer page, String search);
-
-    List<House> findAll();
 
     Long count();
 }

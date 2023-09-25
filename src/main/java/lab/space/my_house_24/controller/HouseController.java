@@ -5,6 +5,7 @@ import lab.space.my_house_24.model.house.HouseRequestForAddPage;
 import lab.space.my_house_24.model.house.HouseRequestForEditPage;
 import lab.space.my_house_24.model.house.HouseRequestForMainPage;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
+import lab.space.my_house_24.model.house.*;
 import lab.space.my_house_24.service.HouseService;
 import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
@@ -24,15 +25,14 @@ public class HouseController {
     private final HouseService houseService;
     private final HouseValidator houseValidator;
     private final StaffService staffService;
-
     @GetMapping({"/", ""})
-    public String mainPage() {
-        return "/admin/pages/houses/house-main";
+    public String mainPage(){
+        return "admin/pages/houses/house-main";
     }
 
     @PostMapping("/get-all-house")
-    public ResponseEntity getAllHouse(@RequestBody HouseRequestForMainPage houseRequestForMainPage) {
-        return ResponseEntity.ok().body(houseService.finaAllForMain(houseRequestForMainPage));
+    public ResponseEntity getAllHouse(@RequestBody HouseRequestForMainPage houseRequestForMainPage){
+        return ResponseEntity.ok().body(houseService.findAllForMain(houseRequestForMainPage));
     }
 
     @DeleteMapping("/delete-house/{id}")
@@ -44,7 +44,7 @@ public class HouseController {
     @GetMapping("/house-card/{id}")
     public String houseCard(@PathVariable Long id, Model model) {
         model.addAttribute("id", id);
-        return "/admin/pages/houses/house-card";
+        return "admin/pages/houses/house-card";
     }
 
     @GetMapping("/get-house-by-id/{id}")
@@ -53,8 +53,8 @@ public class HouseController {
     }
 
     @GetMapping("/add-house")
-    public String addHousePage() {
-        return "/admin/pages/houses/house-add";
+    public String addHousePage(){
+        return "admin/pages/houses/house-add";
     }
 
     @PostMapping("/add-house")
@@ -74,13 +74,12 @@ public class HouseController {
     public String editHousePage(@PathVariable Long id, Model model) {
         model.addAttribute("house", houseService.findByIdForEdit(id));
         model.addAttribute("staffList", staffService.getAllStaffDtoForHouse());
-        return "/admin/pages/houses/house-edit";
+        return "admin/pages/houses/house-edit";
     }
 
     @PutMapping("/edit-house/{id}")
-    public ResponseEntity addHouse(@PathVariable Long id, @ModelAttribute @Valid HouseRequestForEditPage houseRequestForEditPage, BindingResult result) {
-        System.out.println(houseRequestForEditPage);
-        if (houseRequestForEditPage.userList() != null) {
+    public ResponseEntity editHouse(@PathVariable Long id, @ModelAttribute @Valid HouseRequestForEditPage houseRequestForEditPage, BindingResult result){
+        if (houseRequestForEditPage.userList() != null ){
             if (!houseRequestForEditPage.userList().isEmpty()) {
                 houseValidator.uniqueStaffForHouse(houseRequestForEditPage.userList(), result);
             }

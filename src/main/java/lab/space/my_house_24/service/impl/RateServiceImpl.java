@@ -156,4 +156,9 @@ public class RateServiceImpl implements RateService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
     }
+
+    @Override
+    public List<Rate> getAllRate() {
+        return rateRepository.findAll();
+    }
 }

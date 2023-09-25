@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.Root;
 import lab.space.my_house_24.entity.House;
 import lab.space.my_house_24.model.house.HouseRequestForMainPage;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 
 @Builder
+@EqualsAndHashCode
 public class HouseSpecificationForSelect implements Specification<House> {
     private String search;
 

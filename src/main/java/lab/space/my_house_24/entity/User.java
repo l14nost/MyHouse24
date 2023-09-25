@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -39,10 +41,10 @@ public class User {
     @Column(length = 20)
     private String number;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String viber;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20)
     private String telegram;
 
     @Enumerated(EnumType.STRING)
@@ -61,9 +63,6 @@ public class User {
     @Column(nullable = false)
     private Instant addDate;
 
-    @Column(nullable = false)
-    private Boolean duty;
-
     @Column(length = 250, name = "token")
     private String token;
 
@@ -73,13 +72,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Token> tokenList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Apartment> apartmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<MastersApplication> applicationList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "users",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "users",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Message> messageList = new ArrayList<>();
 
 }

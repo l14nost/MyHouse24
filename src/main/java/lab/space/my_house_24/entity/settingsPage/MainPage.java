@@ -44,4 +44,9 @@ public class MainPage {
     @OneToMany(mappedBy = "mainPage", cascade = CascadeType.ALL)
     private List<Banner> bannerList = new ArrayList<>();
 
+
+    public void addBanner(Banner banner){
+        bannerList.add(banner);
+        banner.setMainPage(this);
+    }
 }

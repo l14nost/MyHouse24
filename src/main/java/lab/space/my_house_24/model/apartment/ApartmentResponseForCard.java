@@ -1,5 +1,6 @@
 package lab.space.my_house_24.model.apartment;
 
+import lab.space.my_house_24.model.bankBook.BankBookResponseForApartmentCard;
 import lab.space.my_house_24.model.bankBook.BankBookResponseForTable;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.rate.RateResponseForTable;
@@ -10,7 +11,7 @@ import lombok.Builder;
 public record ApartmentResponseForCard(
         Long id,
         String title,
-        BankBookResponseForTable bankBook,
+        BankBookResponseForApartmentCard bankBook,
         Integer number,
         Double area,
 

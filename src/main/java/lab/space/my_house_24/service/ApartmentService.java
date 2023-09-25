@@ -37,8 +37,6 @@ public interface ApartmentService {
     List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor,Boolean duty);
 
     List<Apartment> findAllApartmentByHouse(Long house);
-    List<Apartment> findAllApartmentByFloor(Long floor);
-    List<Apartment> findAllApartmentBySection(Long section);
 
     List<ApartmentResponseForTable> apartmentListForSelect();
 

@@ -24,7 +24,7 @@ public class StatisticController {
     private final StatisticService statisticService;
 
     @GetMapping({"/", ""})
-    public String showMastersApplicationPage(Model model) {
+    public String showStatisticPage(Model model) {
         model.addAttribute("owner", userService.countByStatus(UserStatus.ACTIVE));
         model.addAttribute("apartment", apartmentService.count());
         model.addAttribute("house", houseService.count());

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/admin/fragments/layout}">
+      layout:decorate="~{admin/fragments/layout}">
 
 <head>
     <meta charset="UTF-8">
@@ -83,7 +83,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" th:text = "#{apartment.add.bank.book}"></label>
-                                <input type="text" class="form-control" id="bankBook"  name="bankBook" th:value = "${apartment.bankBook().number()}" >
+                                <input type="text" class="form-control" id="bankBook"  name="bankBook" th:value = "${apartment.bankBook().number()}" oninput="applyMask(this);">
                                 <div style="margin-top: 10px">
                                     <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" style=" width: 160px">
                                         <option selected=""></option>
@@ -95,7 +95,6 @@
                         <div style="display: flex; justify-content: right;  margin-bottom: 10px; margin-right: 20px">
                             <button onclick="cancelApartment()" type="button" class="btn btn-gray" th:text="#{global.button.cancel}" style="width: 150px"></button>
                             <button onclick="editApartment()" type="button" class="btn btn-success" th:text="#{global.button.save}" style="width: 150px; margin-left: 10px"></button>
-<!--                            <button onclick="editAndAddApartment()" type="button" class="btn btn-success" th:text="#{global.button.save.and.add}" style="width: 250px; margin-left: 10px"></button>-->
                         </div>
                     </div>
                 </form>

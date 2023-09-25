@@ -50,4 +50,11 @@ class RequisitesServiceImplTest {
 
         verify(requisitesRepository, times(1)).save(Requisites.builder().id(1L).name("name1").info("info1").build());
     }
+
+    @Test
+    void save() {
+        Requisites requisites = Requisites.builder().id(1L).build();
+        requisitesService.save(requisites);
+        verify(requisitesRepository, times(1)).save(requisites);
+    }
 }

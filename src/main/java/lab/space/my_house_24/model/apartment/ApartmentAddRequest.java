@@ -3,8 +3,9 @@ package lab.space.my_house_24.model.apartment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
-
+@Builder
 public record ApartmentAddRequest(
         @NotNull(message = "{not.blank.message}")
         Integer number,

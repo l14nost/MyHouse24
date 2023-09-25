@@ -23,7 +23,7 @@ public class RequisitesController {
     @GetMapping({"/", ""})
     public String requisitesPage(Model model) {
         model.addAttribute("requisites", requisitesService.findByIdResponse(1L));
-        return "/admin/pages/requisites/requisites-page";
+        return "admin/pages/requisites/requisites-page";
     }
 
     @PutMapping("/payment-details-save")

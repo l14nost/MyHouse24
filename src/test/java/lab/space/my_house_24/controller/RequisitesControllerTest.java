@@ -37,7 +37,7 @@ class RequisitesControllerTest {
         when(requisitesService.findByIdResponse(1L)).thenReturn(RequisitesResponse.builder().build());
         mockMvc.perform(MockMvcRequestBuilders.get("/payment-details"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/requisites/requisites-page"));
+                .andExpect(view().name("admin/pages/requisites/requisites-page"));
     }
 
     @Test

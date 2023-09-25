@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/admin/fragments/layout}">
+      layout:decorate="~{admin/fragments/layout}">
 
 <head>
     <meta charset="UTF-8">
@@ -80,7 +80,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" th:text = "#{apartment.add.bank.book}"></label>
-                                <input type="text" class="form-control" id="bankBook"  name="bankBook" >
+                                <input type="text" class="form-control" id="bankBook"  name="bankBook" oninput="applyMask(this);">
                                 <div style="margin-top: 10px">
                                     <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" name="bankBookSelect" style=" width: 160px">
                                         <option selected=""></option>

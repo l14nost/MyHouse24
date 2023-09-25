@@ -43,7 +43,7 @@ class ContactPageControllerTest {
         when(contactService.findByIdResponse(1L)).thenReturn(ContactResponse.builder().build());
         mockMvc.perform(MockMvcRequestBuilders.get("/site/contact-page"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/settingsPage/contact/contact-page"));
+                .andExpect(view().name("admin/pages/settingsPage/contact/contact-page"));
     }
 
     @Test

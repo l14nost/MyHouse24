@@ -77,7 +77,7 @@ public class BankBookServiceImpl implements BankBookService {
 
     @Override
     public List<BankBookResponseForTable> bankBookListForTable() {
-        return bankBookRepository.findAllByApartmentIsNull().stream().map(BankBookMapper::entityToDtoForTable).toList();
+        return bankBookRepository.findAllByApartmentIsNullAndBankBookStatus(BankBookStatus.ACTIVE).stream().map(BankBookMapper::entityToDtoForTable).toList();
     }
 
     @Override

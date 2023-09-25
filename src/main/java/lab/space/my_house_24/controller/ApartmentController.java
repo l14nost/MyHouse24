@@ -53,8 +53,7 @@ public class ApartmentController {
 
 
     @GetMapping("/apartment-card/{id}")
-    public String apartmentCard(@PathVariable Long id, Model model) {
-        model.addAttribute("apartment", apartmentService.findByIdForCard(id));
+    public String apartmentCard(@PathVariable Long id, Model model){
         model.addAttribute("id", id);
         return "admin/pages/apartment/apartment-card";
     }
@@ -70,7 +69,7 @@ public class ApartmentController {
         model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
-        return "/admin/pages/apartment/apartment-add";
+        return "admin/pages/apartment/apartment-add";
     }
 
 
@@ -97,7 +96,7 @@ public class ApartmentController {
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
         model.addAttribute("id", id);
-        return "/admin/pages/apartment/apartment-edit";
+        return "admin/pages/apartment/apartment-edit";
     }
 
     @PostMapping("/edit-apartment/{id}")
@@ -114,27 +113,6 @@ public class ApartmentController {
         apartmentService.updateApartment(id, apartmentAddRequest);
 
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/edit-add-apartment/{id}")
-    public String editAddApartmentPage(@PathVariable Long id, Model model) {
-        ApartmentResponseForEdit apartmentResponseForEdit = apartmentService.findByIdApartment(id);
-        ApartmentResponseForEdit apartmentResponseForEdit1 = ApartmentResponseForEdit.builder()
-                .number(apartmentResponseForEdit.number() + 1)
-                .rate(apartmentResponseForEdit.rate())
-                .floor(apartmentResponseForEdit.floor())
-                .area(apartmentResponseForEdit.area())
-                .section(apartmentResponseForEdit.section())
-                .bankBook(apartmentResponseForEdit.bankBook())
-                .section(apartmentResponseForEdit.section())
-                .house(apartmentResponseForEdit.house())
-                .build();
-        model.addAttribute("apartment", apartmentResponseForEdit1);
-        model.addAttribute("houseList", houseService.houseListForTable());
-        model.addAttribute("rateList", rateService.rateListForTable());
-        model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
-        model.addAttribute("id", 0);
-        return "/admin/pages/apartment/apartment-edit";
     }
 
     @GetMapping("/get-apartment")

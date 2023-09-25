@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/admin/fragments/layout}">
+      layout:decorate="~{admin/fragments/layout}">
 
 <head>
     <meta charset="UTF-8">
@@ -72,11 +72,9 @@
                         </select></th>
                         <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
                             <option selected=""></option>
-<!--                            <option th:each="section:${sectionList}" th:text="${section.name()}"></option>-->
                         </select></th>
                         <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="floor" id="floor">
                             <option selected=""></option>
-<!--                            <option th:each="floor:${floorList}" th:text="${floor.name()}"></option>-->
                         </select></th>
                         <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="owner" id="owner" style="width: 150px">
                             <option selected=""></option>
@@ -570,7 +568,7 @@
                 url: "/admin/apartments/delete-apartment/"+apartmentId,
                 contentType: 'application/json'
             }).done(
-                function (){
+                function(){
                     $('#confirmDeleteApartment').modal('hide');
                     apartmentId = undefined;
                     var form = document.getElementById("filter");

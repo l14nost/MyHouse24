@@ -55,6 +55,11 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
+    public List<lab.space.my_house_24.entity.Service> getAllService() {
+        return serviceRepository.findAll();
+    }
+
+    @Override
     public void saveService(lab.space.my_house_24.entity.Service service) {
         log.info("Try to save Service");
         serviceRepository.save(service);

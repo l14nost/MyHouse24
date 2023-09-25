@@ -26,4 +26,9 @@ public class ServicePage {
     @OneToMany(mappedBy = "servicePage", cascade = CascadeType.ALL)
     List<Banner> bannerList = new ArrayList<>();
 
+    public void addBanner(Banner banner){
+        bannerList.add(banner);
+        banner.setServicePage(this);
+    }
+
 }

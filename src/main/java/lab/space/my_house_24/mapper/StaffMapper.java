@@ -143,6 +143,7 @@ public interface StaffMapper {
 
     static  StaffResponseForHeader entityToDtoForHeader(Staff staff){
         return StaffResponseForHeader.builder()
+                .id(staff.getId())
                 .fullName(staff.getLastname()+" "+staff.getFirstname())
                 .email(staff.getEmail())
                 .build();

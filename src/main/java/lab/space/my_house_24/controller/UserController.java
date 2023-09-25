@@ -40,7 +40,6 @@ public class UserController {
 
     @GetMapping("/user-card/{id}")
     public String userCard(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
         model.addAttribute("id", id);
         return "admin/pages/users/user-card";
     }
@@ -125,14 +124,14 @@ public class UserController {
 
     @GetMapping("/get-users/apartment-table")
     @ResponseBody
-    public Page<UserResponseForTable> userForApartmentTable(@RequestParam Integer page, @RequestParam String search) {
-        return userService.userResponseForTables(page, search);
+    public Page<UserResponseForTable> userForApartmentTable(@RequestParam Integer page, @RequestParam String search){
+        return userService.userResponseForSelect(page, search);
     }
 
     @PostMapping("/invite-send")
-    public ResponseEntity sendForgot(@RequestParam String email) {
-        if (email.isBlank()) {
-            if (!userValidator.existByEmail(email, "email")) {
+    public ResponseEntity sendForgot(@RequestParam String email){
+        if (!email.isBlank()) {
+            if (!userValidator.existByEmail(email)){
                 return ResponseEntity.badRequest().build();
             }
         }
@@ -147,17 +146,19 @@ public class UserController {
                 token,
                 email,
                 userService.getUserByEmail(email))) {
-            return "/admin/pages/users/activate-error";
+            return "admin/pages/users/activate-error";
         } else {
             model.addAttribute("token", token);
-            return "/admin/pages/users/activate";
+            return "admin/pages/users/activate";
         }
     }
 
     @PutMapping("/activate/{token}")
     public ResponseEntity<?> active(@PathVariable String token, @Valid @RequestBody ForgotPassRequest forgotPassRequest,
-                                    BindingResult bindingResult) {
-        userValidator.passwordMatch(forgotPassRequest.password(), forgotPassRequest.confirmPassword(), bindingResult, "ForgotPassRequest");
+                                                 BindingResult bindingResult) {
+        if (forgotPassRequest.password()!=null && forgotPassRequest.confirmPassword()!=null) {
+            userValidator.passwordMatch(forgotPassRequest.password(), forgotPassRequest.confirmPassword(), bindingResult, "ForgotPassRequest");
+        }
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
