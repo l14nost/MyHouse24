@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.message.MessageMainPageRequest;
 import lab.space.my_house_24.model.message.MessageRequestForSend;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -22,8 +24,8 @@ public class MessageController {
 
 
     @GetMapping({"/",""})
-    public String messageMainPage(){
-        return "admin/pages/message/message-main";
+    public ModelAndView messageMainPage(){
+        return new ModelAndView("admin/pages/message/message-main");
     }
 
     @PostMapping("/get-all-message")
@@ -33,9 +35,10 @@ public class MessageController {
 
 
     @GetMapping("/message-card/{id}")
-    public String messageCardPage(@PathVariable Long id, Model model) {
-        model.addAttribute("id", id);
-        return "admin/pages/message/message-card";
+    public ModelAndView messageCardPage(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/message/message-card");
+        modelAndView.addObject("id", id);
+        return modelAndView;
     }
 
     @GetMapping("/get-message-by-id/{id}")
@@ -55,8 +58,8 @@ public class MessageController {
     }
 
     @GetMapping("/add-message")
-    public String addMessagePage() {
-        return "admin/pages/message/message-add";
+    public ModelAndView addMessagePage() {
+        return new ModelAndView("admin/pages/message/message-add");
     }
 
 
@@ -78,7 +81,7 @@ public class MessageController {
     }
 
     @GetMapping("/add-message-debt")
-    public String addMessageDebtPage(){
-        return "admin/pages/message/message-add";
+    public ModelAndView addMessageDebtPage(){
+        return new ModelAndView("admin/pages/message/message-add");
     }
 }

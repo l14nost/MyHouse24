@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 @Controller
 @RequestMapping("meter-readings")
@@ -25,8 +27,8 @@ public class MeterReadingController {
     private final ServiceService serviceService;
 
     @GetMapping({"/", ""})
-    public String meterReadingPage(){
-        return "admin/pages/meterReading/meter-reading-main";
+    public ModelAndView meterReadingPage(){
+        return new ModelAndView("admin/pages/meterReading/meter-reading-main");
     }
 
     @PostMapping("/get-all-meter-reading")
@@ -35,9 +37,10 @@ public class MeterReadingController {
     }
 
     @GetMapping("/add-meter-reading")
-    public String addMeterReadingPage(Model model) {
-        model.addAttribute("number", String.format("%09d", meterReadingService.count() + 1));
-        return "/admin/pages/meterReading/meter-reading-add";
+    public ModelAndView addMeterReadingPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/meterReading/meter-reading-add");
+        modelAndView.addObject("number", String.format("%09d", meterReadingService.count() + 1));
+        return modelAndView;
     }
 
     @PostMapping("/add-meter-reading")
@@ -51,15 +54,15 @@ public class MeterReadingController {
 
 
     @GetMapping("/edit-meter-reading/{id}")
-    public String editMeterReadingPage(@PathVariable Long id, Model model) {
-        model.addAttribute("meterReading", meterReadingService.findByIdEdit(id));
-        model.addAttribute("houseList", houseService.houseListForTable());
-        model.addAttribute("apartmentList", apartmentService.apartmentListForSelect());
-        model.addAttribute("sectionList", sectionService.sectionListForTable());
-        model.addAttribute("serviceList", serviceService.serviceListForTable());
-        model.addAttribute("id", id);
-
-        return "admin/pages/meterReading/meter-reading-edit";
+    public ModelAndView editMeterReadingPage(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/meterReading/meter-reading-edit");
+        modelAndView.addObject("meterReading", meterReadingService.findByIdEdit(id));
+        modelAndView.addObject("houseList", houseService.houseListForTable());
+        modelAndView.addObject("apartmentList", apartmentService.apartmentListForSelect());
+        modelAndView.addObject("sectionList", sectionService.sectionListForTable());
+        modelAndView.addObject("serviceList", serviceService.serviceListForTable());
+        modelAndView.addObject("id", id);
+        return modelAndView;
     }
 
     @PostMapping("/edit-meter-reading/{id}")
@@ -73,12 +76,13 @@ public class MeterReadingController {
     }
 
     @GetMapping("/meter-readings-by-apartment")
-    public String meterReadingByApartmentPage(@RequestParam Long idApartment, @RequestParam Long idService, Model model) {
-        model.addAttribute("idApartment", idApartment);
-        model.addAttribute("apartment", apartmentService.findById(idApartment).getNumber());
-        model.addAttribute("idService", idService);
+    public ModelAndView meterReadingByApartmentPage(@RequestParam Long idApartment, @RequestParam Long idService) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/meterReading/meter-reading-apartment");
+        modelAndView.addObject("idApartment", idApartment);
+        modelAndView.addObject("apartment", apartmentService.findById(idApartment).getNumber());
+        modelAndView.addObject("idService", idService);
 
-        return "admin/pages/meterReading/meter-reading-apartment";
+        return modelAndView;
     }
 
     @PostMapping("/get-all-meter-reading-by-apartment")
@@ -95,16 +99,19 @@ public class MeterReadingController {
 
 
     @GetMapping("/add-meter-reading-apartment")
-    public String meterReadingByApartmentAddPage(@RequestParam Long idApartment,@RequestParam Long idService, Model model) {
-        model.addAttribute("number", String.format("%09d", meterReadingService.count()+1));
+    public ModelAndView meterReadingByApartmentAddPage(@RequestParam Long idApartment,@RequestParam Long idService) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("number", String.format("%09d", meterReadingService.count()+1));
         if (meterReadingService.findByIdForApartmentAdd(idApartment, idService)==null){
-            return "admin/pages/meterReading/meter-reading-add";
+            modelAndView.setViewName("admin/pages/meterReading/meter-reading-add");
+            return modelAndView;
         }
-        model.addAttribute("meterReading", meterReadingService.findByIdForApartmentAdd(idApartment, idService));
-        model.addAttribute("houseList", houseService.houseListForTable());
-        model.addAttribute("apartmentList", apartmentService.apartmentListForSelect());
-        model.addAttribute("sectionList", sectionService.sectionListForTable());
-        model.addAttribute("serviceList", serviceService.serviceListForTable());
-        return "admin/pages/meterReading/meter-reading-add-apartment";
+        modelAndView.addObject("meterReading", meterReadingService.findByIdForApartmentAdd(idApartment, idService));
+        modelAndView.addObject("houseList", houseService.houseListForTable());
+        modelAndView.addObject("apartmentList", apartmentService.apartmentListForSelect());
+        modelAndView.addObject("sectionList", sectionService.sectionListForTable());
+        modelAndView.addObject("serviceList", serviceService.serviceListForTable());
+        modelAndView.setViewName("admin/pages/meterReading/meter-reading-add-apartment");
+        return modelAndView;
     }
 }

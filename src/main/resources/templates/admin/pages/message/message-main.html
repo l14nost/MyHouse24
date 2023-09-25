@@ -91,8 +91,6 @@
                     <div class="row" style="display: flex; justify-content: space-between" id="tableInfo">
                         <div class="col-sm-12 col-md-6 pagination-info" id="tableInfoShowing"></div>
                         <div class="col-sm-12 col-md-6" id="pagination">
-<!--                            <ul class="pagination pagination-sm mb-0 justify-content-center justify-content-md-end align-items-center" id="pagination">-->
-<!--                            </ul>-->
                         </div>
                     </div>
                 </div>
@@ -324,6 +322,11 @@
                                 const newUl = document.createElement("ul");
                                 newUl.id = "apartmentPaginationList";
                                 newUl.classList.add("pagination");
+                                newUl.classList.add("pagination-sm")
+                                newUl.classList.add("mb-0")
+                                newUl.classList.add("justify-content-center")
+                                newUl.classList.add("justify-content-md-end")
+                                newUl.classList.add("align-items-center")
                                 addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+'event'+")'> 1 </a></li>\n"
                                 if (page-2<0){
                                     addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+'event'+")'> 2 </a></li>\n"

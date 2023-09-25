@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -34,9 +35,10 @@ public class ApartmentController {
     private final ApartmentValidator apartmentValidator;
 
     @GetMapping({"/", ""})
-    public String apartmentMain(Model model) {
-        model.addAttribute("houseList", houseService.houseListForTable());
-        return "admin/pages/apartment/apartment-main";
+    public ModelAndView apartmentMain() {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/apartment/apartment-main");
+        modelAndView.addObject("houseList", houseService.houseListForTable());
+        return modelAndView;
     }
 
     @PostMapping("/get-all-apartments")

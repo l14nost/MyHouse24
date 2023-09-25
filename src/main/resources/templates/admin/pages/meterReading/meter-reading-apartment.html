@@ -70,14 +70,14 @@
                         <form id="filter">
                             <input type="hidden" th:value="${idApartment}" name="idApartment">
                             <input type="hidden" th:value="${idService}" name="idService">
-                        <td>
+                        <th>
                            <input class="form-control" type="number" name="id" style="width: 70px">
-                        </td>
-                        <td><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status">
+                        </th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status">
                            <option selected=""></option>
                            <option th:each="status:${T(lab.space.my_house_24.enums.MeterReadingStatus).values()}" th:text="${status.getMeterReadingStatus(#locale)}"  th:value="${status.name()}"></option>
-                        </select></td>
-                        <td>
+                        </select></th>
+                        <th>
                                 <div class="input-group">
                                     <input class="form-control custom_range_flatpicker" type="text" data-id="range" readonly="readonly" name="date" id="date">
                                     <button class="input-group-text input-button pointer-event"  disabled>
@@ -86,33 +86,23 @@
                                         </svg>
                                     </button>
                                 </div>
-                        </td>
-                            <td></td>
-                        <td>
-<!--                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">-->
-<!--                            <option selected=""></option>-->
-<!--                        </select>-->
-                        </td>
-                        <td>
-<!--                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">-->
-<!--                            <option selected=""></option>-->
-<!--                        </select>-->
-                        </td>
-                        <td>
-<!--                            <input class="form-control" type="number" name="apartment" style="width: 100px">-->
-                        </td>
-                        <td>
-<!--                            <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="service" id="service">-->
-<!--                            <option selected="">-->
+                        </th>
+                            <th></th>
+                        <th>
 
-<!--                            </option>-->
-<!--                        </select>-->
-                        </td>
-                        <td></td>
-                        <td></td>
+                        </th>
+                        <th>
+
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                        <th></th>
+                        <th></th>
                         </form>
-                        <td>
-                        </td>
+                        <th>
+                        </th>
                     </tr>
                     </thead>
                     <tbody id="table" style="min-height: 55px">
@@ -120,18 +110,13 @@
                     </tbody>
                 </table>
             </div>
-            <div class="card-footer pt-0 pb-0" style="margin-top: 15px" id="card-footer">
-                <div style="display: flex; justify-content: space-between; min-height: 45px" id="tableInfo" >
-                        <div id="tableInfoShowing">
-
-                        </div>
-                        <div style="display: flex; margin-right: 10px" >
-                            <nav aria-label="Page navigation example" id = "pagination">
-                            </nav>
-
-                        </div>
+            <div class="card-footer" id="card-footer">
+                <div class="row" style="display: flex; justify-content: space-between" id="tableInfo">
+                    <div class="col-sm-12 col-md-6 pagination-info" id="tableInfoShowing"></div>
+                    <div class="col-sm-12 col-md-6" id="pagination">
                     </div>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -481,6 +466,11 @@
                                 const newUl = document.createElement("ul");
                                 newUl.id = "apartmentPaginationList";
                                 newUl.classList.add("pagination");
+                                newUl.classList.add("pagination-sm")
+                                newUl.classList.add("mb-0")
+                                newUl.classList.add("justify-content-center")
+                                newUl.classList.add("justify-content-md-end")
+                                newUl.classList.add("align-items-center")
                                 for (var i = 0; i < apartmentResponse.totalPages; i++) {
                                     var currentNum = i + 1;
 
@@ -496,6 +486,11 @@
                                 const newUl = document.createElement("ul");
                                 newUl.id = "apartmentPaginationList";
                                 newUl.classList.add("pagination");
+                                newUl.classList.add("pagination-sm")
+                                newUl.classList.add("mb-0")
+                                newUl.classList.add("justify-content-center")
+                                newUl.classList.add("justify-content-md-end")
+                                newUl.classList.add("align-items-center")
                                 addElements+="<li class=\"page-item " + checkCurrentPage(1) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(0,"+'event'+")'> 1 </a></li>\n"
                                 if (page-2<0){
                                     addElements+="<li class=\"page-item " + checkCurrentPage(2) + "\"><a class=\"page-link \" href=\"#\" onclick='changePage(1,"+'event'+")'> 2 </a></li>\n"

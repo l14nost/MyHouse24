@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("users")
@@ -27,9 +28,10 @@ public class UserController {
     private final JwtServiceForUser jwtServiceForUser;
 
     @GetMapping({"/", ""})
-    public String userMainPage(Model model) {
-        model.addAttribute("houseList", houseService.houseListForTable());
-        return "admin/pages/users/user-main";
+    public ModelAndView userMainPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/users/user-main");
+        modelAndView.addObject("houseList", houseService.houseListForTable());
+        return modelAndView;
     }
 
 
@@ -39,9 +41,10 @@ public class UserController {
     }
 
     @GetMapping("/user-card/{id}")
-    public String userCard(@PathVariable Long id, Model model) {
-        model.addAttribute("id", id);
-        return "admin/pages/users/user-card";
+    public ModelAndView userCard(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/users/user-card");
+        modelAndView.addObject("id", id);
+        return modelAndView;
     }
 
     @DeleteMapping("/delete-user/{id}")
@@ -51,8 +54,8 @@ public class UserController {
     }
 
     @GetMapping("/add-user")
-    public String addUser() {
-        return "admin/pages/users/user-add";
+    public ModelAndView addUser() {
+        return new ModelAndView("admin/pages/users/user-add");
     }
 
     @PostMapping("/add-user")
@@ -75,10 +78,11 @@ public class UserController {
 
 
     @GetMapping("/edit-user/{id}")
-    public String editUser(@PathVariable Long id, Model model) {
+    public ModelAndView editUser(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/users/user-edit");
         UserEditResponse userEditResponse = userService.findByIdEdit(id);
-        model.addAttribute("user", userEditResponse);
-        return "admin/pages/users/user-edit";
+        modelAndView.addObject("user", userEditResponse);
+        return modelAndView;
     }
 
     @PutMapping("/edit-user/{id}")
@@ -100,8 +104,8 @@ public class UserController {
     }
 
     @GetMapping("/invite-user")
-    public String inviteUser() {
-        return "admin/pages/users/user-invite";
+    public ModelAndView inviteUser() {
+        return new ModelAndView("admin/pages/users/user-invite");
     }
 
     @PostMapping("/invite-user")
@@ -140,16 +144,17 @@ public class UserController {
     }
 
     @GetMapping("/activate/{token}")
-    public String activePage(@PathVariable String token, Model model) {
+    public ModelAndView activePage(@PathVariable String token) {
         String email = userService.loadUserByToken(token);
         if (!jwtServiceForUser.isTokenValid(
                 token,
                 email,
                 userService.getUserByEmail(email))) {
-            return "admin/pages/users/activate-error";
+            return new ModelAndView("admin/pages/users/activate-error");
         } else {
-            model.addAttribute("token", token);
-            return "admin/pages/users/activate";
+            ModelAndView modelAndView = new ModelAndView("admin/pages/users/activate");
+            modelAndView.addObject("token", token);
+            return modelAndView;
         }
     }
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("statistics")
@@ -24,16 +25,17 @@ public class StatisticController {
     private final StatisticService statisticService;
 
     @GetMapping({"/", ""})
-    public String showStatisticPage(Model model) {
-        model.addAttribute("owner", userService.countByStatus(UserStatus.ACTIVE));
-        model.addAttribute("apartment", apartmentService.count());
-        model.addAttribute("house", houseService.count());
-        model.addAttribute("bankBook", bankBookService.count());
-        model.addAttribute("masterApplicationAtWork", mastersApplicationService.countByStatus(MastersApplicationStatus.IN_PROCESS));
-        model.addAttribute("masterApplicationNew", mastersApplicationService.countByStatus(MastersApplicationStatus.NEW));
-        model.addAttribute("cashStatement", cashBoxService.statisticCashStatement());
-        model.addAttribute("accountBalance", cashBoxService.statisticAccountBalance());
-        return "admin/pages/statistic/statistic";
+    public ModelAndView showStatisticPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/statistic/statistic");
+        modelAndView.addObject("owner", userService.countByStatus(UserStatus.ACTIVE));
+        modelAndView.addObject("apartment", apartmentService.count());
+        modelAndView.addObject("house", houseService.count());
+        modelAndView.addObject("bankBook", bankBookService.count());
+        modelAndView.addObject("masterApplicationAtWork", mastersApplicationService.countByStatus(MastersApplicationStatus.IN_PROCESS));
+        modelAndView.addObject("masterApplicationNew", mastersApplicationService.countByStatus(MastersApplicationStatus.NEW));
+        modelAndView.addObject("cashStatement", cashBoxService.statisticCashStatement());
+        modelAndView.addObject("accountBalance", cashBoxService.statisticAccountBalance());
+        return modelAndView;
     }
 
     @GetMapping("/get-statistic")

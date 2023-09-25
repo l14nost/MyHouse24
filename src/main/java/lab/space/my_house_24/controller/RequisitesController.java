@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("payment-details")
@@ -21,9 +22,10 @@ public class RequisitesController {
     private final RequisitesService requisitesService;
 
     @GetMapping({"/", ""})
-    public String requisitesPage(Model model) {
-        model.addAttribute("requisites", requisitesService.findByIdResponse(1L));
-        return "admin/pages/requisites/requisites-page";
+    public ModelAndView requisitesPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/requisites/requisites-page");
+        modelAndView.addObject("requisites", requisitesService.findByIdResponse(1L));
+        return modelAndView;
     }
 
     @PutMapping("/payment-details-save")

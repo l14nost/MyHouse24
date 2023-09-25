@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("houses")
@@ -26,8 +27,8 @@ public class HouseController {
     private final HouseValidator houseValidator;
     private final StaffService staffService;
     @GetMapping({"/", ""})
-    public String mainPage(){
-        return "admin/pages/houses/house-main";
+    public ModelAndView mainPage(){
+        return new ModelAndView("admin/pages/houses/house-main");
     }
 
     @PostMapping("/get-all-house")
@@ -42,9 +43,10 @@ public class HouseController {
     }
 
     @GetMapping("/house-card/{id}")
-    public String houseCard(@PathVariable Long id, Model model) {
-        model.addAttribute("id", id);
-        return "admin/pages/houses/house-card";
+    public ModelAndView houseCard(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/houses/house-card");
+        modelAndView.addObject("id", id);
+        return modelAndView;
     }
 
     @GetMapping("/get-house-by-id/{id}")
@@ -53,8 +55,8 @@ public class HouseController {
     }
 
     @GetMapping("/add-house")
-    public String addHousePage(){
-        return "admin/pages/houses/house-add";
+    public ModelAndView addHousePage(){
+        return new ModelAndView("admin/pages/houses/house-add");
     }
 
     @PostMapping("/add-house")
@@ -71,10 +73,11 @@ public class HouseController {
 
 
     @GetMapping("/edit-house/{id}")
-    public String editHousePage(@PathVariable Long id, Model model) {
-        model.addAttribute("house", houseService.findByIdForEdit(id));
-        model.addAttribute("staffList", staffService.getAllStaffDtoForHouse());
-        return "admin/pages/houses/house-edit";
+    public ModelAndView editHousePage(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/pages/houses/house-edit");
+        modelAndView.addObject("house", houseService.findByIdForEdit(id));
+        modelAndView.addObject("staffList", staffService.getAllStaffDtoForHouse());
+        return modelAndView;
     }
 
     @PutMapping("/edit-house/{id}")
