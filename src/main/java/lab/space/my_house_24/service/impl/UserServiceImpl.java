@@ -80,9 +80,9 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .addDate(Instant.now())
                 .date(userAddRequest.date().atStartOfDay(ZoneId.systemDefault()).toInstant())
-                .filename(FileHandler.saveFile(userAddRequest.img()))
                 .email(userAddRequest.email())
                 .firstname(userAddRequest.firstname())
+                .filename("")
                 .lastname(userAddRequest.lastname())
                 .surname(userAddRequest.surname())
                 .number(userAddRequest.number())
@@ -92,6 +92,9 @@ public class UserServiceImpl implements UserService {
                 .userStatus(userAddRequest.status())
                 .notes(userAddRequest.notes())
                 .build();
+        if (!userAddRequest.img().isEmpty()){
+            user.setFilename(FileHandler.saveFile(userAddRequest.img()));
+        }
         userRepository.save(user);
         log.info("User was save");
     }
