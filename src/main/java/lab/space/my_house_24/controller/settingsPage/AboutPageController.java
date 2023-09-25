@@ -22,7 +22,7 @@ public class AboutPageController {
     @GetMapping("/about")
     public String aboutPage(Model model){
         model.addAttribute("about", aboutService.findByIdResponse(1L));
-        return "/admin/pages/settingsPage/about/about-page";
+        return "admin/pages/settingsPage/about/about-page";
     }
     @PutMapping("/about-save")
     public ResponseEntity saveAbout(@ModelAttribute @Valid AboutRequest aboutRequest, BindingResult result){

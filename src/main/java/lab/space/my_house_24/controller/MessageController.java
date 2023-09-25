@@ -26,7 +26,7 @@ public class MessageController {
 
     @GetMapping({"/",""})
     public String messageMainPage(){
-        return "/admin/pages/message/message-main";
+        return "admin/pages/message/message-main";
     }
 
     @PostMapping("/get-all-message")
@@ -38,7 +38,7 @@ public class MessageController {
     @GetMapping("/message-card/{id}")
     public String messageCardPage(@PathVariable Long id, Model model){
         model.addAttribute("id", id);
-        return "/admin/pages/message/message-card";
+        return "admin/pages/message/message-card";
     }
 
     @GetMapping("/get-message-by-id/{id}")
@@ -59,7 +59,7 @@ public class MessageController {
 
     @GetMapping("/add-message")
     public String addMessagePage(){
-        return "/admin/pages/message/message-add";
+        return "admin/pages/message/message-add";
     }
 
 
@@ -82,6 +82,6 @@ public class MessageController {
 
     @GetMapping("/add-message-debt")
     public String addMessageDebtPage(){
-        return "/admin/pages/message/message-add";
+        return "admin/pages/message/message-add";
     }
 }

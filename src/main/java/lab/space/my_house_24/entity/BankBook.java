@@ -37,6 +37,7 @@ public class BankBook {
     private BankBookStatus bankBookStatus;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+
     private Apartment apartment;
 
     @OneToMany(mappedBy = "bankBook", cascade = CascadeType.ALL)

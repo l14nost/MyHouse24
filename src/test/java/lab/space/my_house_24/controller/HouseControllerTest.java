@@ -46,7 +46,7 @@ class HouseControllerTest {
     void mainPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/houses"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/houses/house-main"));
+                .andExpect(view().name("admin/pages/houses/house-main"));
     }
 
     @Test
@@ -71,7 +71,7 @@ class HouseControllerTest {
     void houseCard() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/houses/house-card/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/houses/house-card"));
+                .andExpect(view().name("admin/pages/houses/house-card"));
     }
 
     @Test
@@ -89,7 +89,7 @@ class HouseControllerTest {
     void addHousePage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/houses/add-house"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/houses/house-add"));
+                .andExpect(view().name("admin/pages/houses/house-add"));
     }
 
     @Test
@@ -142,7 +142,7 @@ class HouseControllerTest {
         when(staffService.getAllStaffDtoForHouse()).thenReturn(List.of());
         mockMvc.perform(MockMvcRequestBuilders.get("/houses/edit-house/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/houses/house-edit"));
+                .andExpect(view().name("admin/pages/houses/house-edit"));
     }
 
     @Test

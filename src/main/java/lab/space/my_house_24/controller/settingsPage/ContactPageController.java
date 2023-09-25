@@ -22,7 +22,7 @@ public class ContactPageController {
     @GetMapping("/contact-page")
     public String contactPage(Model model){
         model.addAttribute("contactPage",contactService.findByIdResponse(1L));
-        return "/admin/pages/settingsPage/contact/contact-page";
+        return "admin/pages/settingsPage/contact/contact-page";
     }
 
     @PutMapping("/contact-page-save")

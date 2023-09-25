@@ -33,13 +33,13 @@ public class LoginController {
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User){
             return "redirect:/staff";
         }else {
-            return "/admin/pages/login/login";
+            return "admin/pages/login/login";
         }
     }
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
-        return "/admin/pages/login/forgot-password";
+        return "admin/pages/login/forgot-password";
     }
 
     @PostMapping("/send-forgot-password-staff")
@@ -65,9 +65,9 @@ public class LoginController {
                 staffService.getStaffByEmail(userDetails.getUsername()),
                 "forgot"
         )) {
-            return "/admin/pages/staff/staff-activate-error";
+            return "admin/pages/staff/staff-activate-error";
         } else {
-            return "/admin/pages/staff/staff-activate";
+            return "admin/pages/staff/staff-activate";
         }
     }
 

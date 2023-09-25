@@ -71,7 +71,7 @@ public class ApartmentController {
         model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
-        return "/admin/pages/apartment/apartment-add";
+        return "admin/pages/apartment/apartment-add";
     }
 
 
@@ -98,7 +98,7 @@ public class ApartmentController {
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
         model.addAttribute("id", id);
-        return "/admin/pages/apartment/apartment-edit";
+        return "admin/pages/apartment/apartment-edit";
     }
 
     @PostMapping("/edit-apartment/{id}")

@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE" th:text="#{layout.title}"></title>
-    <th:block th:replace="~{/admin/fragments/style}"></th:block>
+    <th:block th:replace="~{admin/fragments/style}"></th:block>
     <th:block layout:fragment="extra-style"></th:block>
 </head>
 
@@ -25,12 +25,12 @@
     </div>
 </div>
 
-<th:block th:replace="~{/admin/fragments/left-sidebar}"></th:block>
+<th:block th:replace="~{admin/fragments/left-sidebar}"></th:block>
 
 <main class="main-content">
 
-    <th:block th:replace="~{/admin/fragments/toast}"></th:block>
-    <th:block th:replace="~{/admin/fragments/header}"></th:block>
+    <th:block th:replace="~{admin/fragments/toast}"></th:block>
+    <th:block th:replace="~{admin/fragments/header}"></th:block>
 
 
     <div class="conatiner-fluid content-inner mt-n5 py-0">
@@ -40,9 +40,9 @@
     </div>
     <th:block layout:fragment="extra-alert"></th:block>
 
-    <th:block th:replace="~{/admin/fragments/footer}"></th:block>
+    <th:block th:replace="~{admin/fragments/footer}"></th:block>
 
-    <th:block th:replace="~{/admin/fragments/logout-modal}"></th:block>
+    <th:block th:replace="~{admin/fragments/logout-modal}"></th:block>
 
 
     <th:block layout:fragment="extra-modals"></th:block>
@@ -52,7 +52,7 @@
 
 
 
-<th:block th:replace="~{/admin/fragments/script}"></th:block>
+<th:block th:replace="~{admin/fragments/script}"></th:block>
 
 
 <th:block layout:fragment="extra-script"></th:block>

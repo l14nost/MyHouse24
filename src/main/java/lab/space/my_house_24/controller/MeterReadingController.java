@@ -26,7 +26,7 @@ public class MeterReadingController {
 
     @GetMapping({"/",""})
     public String meterReadingPage(){
-        return "/admin/pages/meterReading/meter-reading-main";
+        return "admin/pages/meterReading/meter-reading-main";
     }
 
     @PostMapping("/get-all-meter-reading")
@@ -37,7 +37,7 @@ public class MeterReadingController {
     @GetMapping("/add-meter-reading")
     public String addMeterReadingPage(Model model){
         model.addAttribute("number",  String.format("%09d", meterReadingService.count()+1));
-        return "/admin/pages/meterReading/meter-reading-add";
+        return "admin/pages/meterReading/meter-reading-add";
     }
 
     @PostMapping("/add-meter-reading")
@@ -59,7 +59,7 @@ public class MeterReadingController {
         model.addAttribute("serviceList", serviceService.serviceListForTable());
         model.addAttribute("id", id);
 
-        return "/admin/pages/meterReading/meter-reading-edit";
+        return "admin/pages/meterReading/meter-reading-edit";
     }
     @PostMapping("/edit-meter-reading/{id}")
     public ResponseEntity editMeterReading(@PathVariable Long id, @RequestBody @Valid MeterReadingRequestForEdit meterReadingRequestForEdit, BindingResult bindingResult){
@@ -77,7 +77,7 @@ public class MeterReadingController {
         model.addAttribute("apartment", apartmentService.findById(idApartment).getNumber());
         model.addAttribute("idService", idService);
 
-        return "/admin/pages/meterReading/meter-reading-apartment";
+        return "admin/pages/meterReading/meter-reading-apartment";
     }
 
     @PostMapping("/get-all-meter-reading-by-apartment")
@@ -98,13 +98,13 @@ public class MeterReadingController {
     public String meterReadingByApartmentAddPage(@RequestParam Long idApartment,@RequestParam Long idService, Model model){
         model.addAttribute("number",  String.format("%09d", meterReadingService.count()+1));
         if (meterReadingService.findByIdForApartmentAdd(idApartment, idService)==null){
-            return "/admin/pages/meterReading/meter-reading-add";
+            return "admin/pages/meterReading/meter-reading-add";
         }
         model.addAttribute("meterReading", meterReadingService.findByIdForApartmentAdd(idApartment, idService));
         model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("apartmentList", apartmentService.apartmentListForSelect());
         model.addAttribute("sectionList", sectionService.sectionListForTable());
         model.addAttribute("serviceList", serviceService.serviceListForTable());
-        return "/admin/pages/meterReading/meter-reading-add-apartment";
+        return "admin/pages/meterReading/meter-reading-add-apartment";
     }
 }

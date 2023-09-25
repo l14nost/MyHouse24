@@ -171,6 +171,7 @@ public class Init implements CommandLineRunner {
                             .setTheme(true)
                             .setStaffStatus(UserStatus.ACTIVE)
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
+                            .setHouseList(new HashSet<>())
             );
         } else log.info("Staff found");
 

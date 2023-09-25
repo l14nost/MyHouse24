@@ -54,7 +54,8 @@ public class ApartmentSpecification implements Specification<Apartment> {
                 predicates.add(criteriaBuilder.lessThan(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO));
             }
             else {
-                predicates.add(criteriaBuilder.greaterThan(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO));
+                predicates.add(criteriaBuilder.or(criteriaBuilder.greaterThan(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO),
+                        criteriaBuilder.equal(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO)));
             }
         }
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));

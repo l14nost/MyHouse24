@@ -40,6 +40,7 @@ public record HouseRequestForAddPage(
         @Size(max = 100, message = "{size.less.message}"+" 100")
                 String> floorNameList,
         @Valid
+        @NotEmpty(message = "{not.blank.message}")
         List<@NotNull(message = "{not.blank.message}")
                 Long> userList
 ) {

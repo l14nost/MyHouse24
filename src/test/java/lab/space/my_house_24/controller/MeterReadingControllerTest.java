@@ -52,7 +52,7 @@ class MeterReadingControllerTest {
     void meterReadingPage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/meter-readings"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/meterReading/meter-reading-main"));
+                .andExpect(view().name("admin/pages/meterReading/meter-reading-main"));
     }
 
     @Test
@@ -72,7 +72,7 @@ class MeterReadingControllerTest {
         when(meterReadingService.count()).thenReturn(1L);
         mockMvc.perform(MockMvcRequestBuilders.get("/meter-readings/add-meter-reading"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/meterReading/meter-reading-add"));
+                .andExpect(view().name("admin/pages/meterReading/meter-reading-add"));
 
     }
 
@@ -173,7 +173,7 @@ class MeterReadingControllerTest {
                         .param("idService", "1")
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/meterReading/meter-reading-apartment"));
+                .andExpect(view().name("admin/pages/meterReading/meter-reading-apartment"));
     }
 
     @Test
@@ -218,7 +218,7 @@ class MeterReadingControllerTest {
                         .param("idService", "1")
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/meterReading/meter-reading-add-apartment"));
+                .andExpect(view().name("admin/pages/meterReading/meter-reading-add-apartment"));
 
     }
 
@@ -235,7 +235,7 @@ class MeterReadingControllerTest {
                         .param("idService", "1")
                 )
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/meterReading/meter-reading-add"));
+                .andExpect(view().name("admin/pages/meterReading/meter-reading-add"));
 
     }
 }

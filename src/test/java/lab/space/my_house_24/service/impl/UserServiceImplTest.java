@@ -441,4 +441,19 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).save(User.builder().email("test@gmail.com").userStatus(UserStatus.ACTIVE).tokenUsage(true).password("encodepass").build());
         verify(customMailSender, times(1)).send(anyString(),anyString(),anyString());
     }
+
+    @Test
+    void findAll() {
+        List<User> users = List.of(
+                User.builder().build(),
+                User.builder().build(),
+                User.builder().build(),
+                User.builder().build()
+        );
+
+        when(userRepository.findAll()).thenReturn(users);
+
+
+        assertEquals(4, userService.findAll().size());
+    }
 }

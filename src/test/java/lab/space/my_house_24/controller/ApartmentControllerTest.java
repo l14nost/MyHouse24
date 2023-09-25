@@ -110,7 +110,7 @@ class ApartmentControllerTest {
         when(bankBookService.bankBookListForTable()).thenReturn(List.of());
         mockMvc.perform(MockMvcRequestBuilders.get("/apartments/add-apartment"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/apartment/apartment-add"));
+                .andExpect(view().name("admin/pages/apartment/apartment-add"));
 
     }
 
@@ -163,7 +163,7 @@ class ApartmentControllerTest {
         when(bankBookService.bankBookListForTable()).thenReturn(List.of());
         mockMvc.perform(MockMvcRequestBuilders.get("/apartments/edit-apartment/1"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/apartment/apartment-edit"));
+                .andExpect(view().name("admin/pages/apartment/apartment-edit"));
     }
 
     @Test

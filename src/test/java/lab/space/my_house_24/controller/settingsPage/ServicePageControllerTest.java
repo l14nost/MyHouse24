@@ -35,7 +35,7 @@ class ServicePageControllerTest {
         when(servicePageService.findByIdResponse(1L)).thenReturn(ServicePageResponse.builder().build());
         mockMvc.perform(MockMvcRequestBuilders.get("/site/service-page"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/settingsPage/service/service-page"));
+                .andExpect(view().name("admin/pages/settingsPage/service/service-page"));
     }
 
     @Test

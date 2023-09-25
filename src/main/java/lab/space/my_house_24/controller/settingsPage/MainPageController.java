@@ -23,7 +23,7 @@ public class MainPageController {
     @GetMapping("/main-page")
     public String mainPage(Model model){
         model.addAttribute("mainPage",mainPageService.findByIdResponse(1L));
-        return "/admin/pages/settingsPage/mainPage/main-page";
+        return "admin/pages/settingsPage/mainPage/main-page";
     }
 
     @PutMapping("/main-page-save")

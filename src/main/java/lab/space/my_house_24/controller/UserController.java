@@ -146,10 +146,10 @@ public class UserController {
                 token,
                 email,
                 userService.getUserByEmail(email))) {
-            return "/admin/pages/users/activate-error";
+            return "admin/pages/users/activate-error";
         } else {
             model.addAttribute("token", token);
-            return "/admin/pages/users/activate";
+            return "admin/pages/users/activate";
         }
     }
 

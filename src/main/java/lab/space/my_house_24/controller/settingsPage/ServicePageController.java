@@ -25,7 +25,7 @@ public class ServicePageController {
     @GetMapping("/service-page")
     public String siteServicePage(Model model){
         model.addAttribute("service", servicePageService.findByIdResponse(1L));
-        return "/admin/pages/settingsPage/service/service-page";
+        return "admin/pages/settingsPage/service/service-page";
     }
     @PutMapping("/service-page-save")
     public ResponseEntity saveServicePage(@ModelAttribute @Valid ServicePageRequest servicePageRequest, BindingResult result){

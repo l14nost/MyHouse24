@@ -50,7 +50,7 @@ class MainPageControllerTest {
                 .build());
         mockMvc.perform(MockMvcRequestBuilders.get("/site/main-page"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/settingsPage/mainPage/main-page"));
+                .andExpect(view().name("admin/pages/settingsPage/mainPage/main-page"));
     }
 
     @Test

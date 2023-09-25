@@ -286,7 +286,7 @@ class UserControllerTest {
         when(jwtServiceForUser.isTokenValid("token", "mail@gmail.com", User.builder().build())).thenReturn(true);
         mockMvc.perform(MockMvcRequestBuilders.get("/users/activate/token"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/users/activate"));
+                .andExpect(view().name("admin/pages/users/activate"));
     }
 
     @Test
@@ -296,7 +296,7 @@ class UserControllerTest {
         when(jwtServiceForUser.isTokenValid("token", "mail@gmail.com", User.builder().build())).thenReturn(false);
         mockMvc.perform(MockMvcRequestBuilders.get("/users/activate/token"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/admin/pages/users/activate-error"));
+                .andExpect(view().name("admin/pages/users/activate-error"));
     }
 
     @Test

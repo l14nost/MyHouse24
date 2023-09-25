@@ -12,11 +12,11 @@ public class IndexController {
 
     @GetMapping({"/", ""})
     public String indexPage() {
-        return "/admin/template-pages";
+        return "admin/template-pages";
     }
 
     @GetMapping("/login-index")
     public String loginIndexPage() {
-        return "/admin/template-login";
+        return "admin/template-login";
     }
 }

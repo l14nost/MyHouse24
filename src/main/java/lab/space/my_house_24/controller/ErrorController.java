@@ -9,6 +9,6 @@ public class ErrorController {
 
     @RequestMapping("/error-404")
     public ModelAndView handle404() {
-        return new ModelAndView("/admin/pages/error/404");
+        return new ModelAndView("admin/pages/error/404");
     }
 }

@@ -230,4 +230,19 @@ class HouseServiceImplTest {
         houseService.save(house);
         verify(houseRepository, times(1)).save(house);
     }
+
+    @Test
+    void findAll() {
+        List<House> houses = List.of(
+                House.builder().build(),
+                House.builder().build(),
+                House.builder().build(),
+                House.builder().build()
+        );
+
+        when(houseRepository.findAll()).thenReturn(houses);
+
+
+        assertEquals(4, houseService.findAll().size());
+    }
 }
