@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  myhouse24-db:
+    image: mysql
+    container_name: myhouse24-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=myhouse24
+      - MYSQL_PASSWORD=user
+      - MYSQL_USER=user
+  myhouse24-admin:
+    build: .
+    container_name: myhouse24-admin
+    volumes:
+      - file-volume:/files
+    depends_on:
+      - myhouse24-db
+    ports:
+      - target: 8080
+        published: 8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://myhouse24-db:3306/myhouse24
+      - SPRING_DATASOURCE_USER=user
+      - SPRING_DATASOURCE_PASSWORD=user
+  myhouse24-cabinet:
+    image: myhouse24-user-myhouse24-cabinet
+    container_name: myhouse24-cabinet
+    volumes:
+      - file-volume:/files
+    depends_on:
+      - myhouse24-db
+    ports:
+      - target: 8082
+        published: 8082
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://myhouse24-db:3306/myhouse24
+      - SPRING_DATASOURCE_USER=user
+      - SPRING_DATASOURCE_PASSWORD=user
+volumes:
+  file-volume:
+
+
+
+
