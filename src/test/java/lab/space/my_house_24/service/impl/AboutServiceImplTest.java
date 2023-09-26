@@ -1,5 +1,7 @@
 package lab.space.my_house_24.service.impl;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import lab.space.my_house_24.entity.settingsPage.About;
 import lab.space.my_house_24.entity.settingsPage.Document;
 import lab.space.my_house_24.entity.settingsPage.Photo;
@@ -11,14 +13,21 @@ import lab.space.my_house_24.model.settingsPage.photo.PhotoResponse;
 import lab.space.my_house_24.repository.AboutRepository;
 import lab.space.my_house_24.service.DocumentService;
 import lab.space.my_house_24.service.PhotoService;
+import lab.space.my_house_24.util.FileHandler;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +47,16 @@ class AboutServiceImplTest {
     @InjectMocks
     private AboutServiceImpl aboutService;
 
+    private static MockedStatic<FileHandler> fileHandlerMockedStatic;
+    @BeforeAll
+    public static void setUp() {
+        fileHandlerMockedStatic = Mockito.mockStatic(FileHandler.class);
+    }
 
+    @AfterAll
+    public static void tearDown() {
+        fileHandlerMockedStatic.close();
+    }
     @Test
     void findByIdResponse() {
         when(aboutRepository.findById(1L)).thenReturn(Optional.of(

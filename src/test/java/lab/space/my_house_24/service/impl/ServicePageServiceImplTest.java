@@ -8,10 +8,15 @@ import lab.space.my_house_24.model.settingsPage.service.ServicePageRequest;
 import lab.space.my_house_24.model.settingsPage.service.ServicePageResponse;
 import lab.space.my_house_24.repository.ServicePageRepository;
 import lab.space.my_house_24.service.BannerService;
+import lab.space.my_house_24.util.FileHandler;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mock.web.MockMultipartFile;
@@ -33,6 +38,17 @@ class ServicePageServiceImplTest {
     @InjectMocks
     private ServicePageServiceImpl servicePageService;
 
+
+    private static MockedStatic<FileHandler> fileHandlerMockedStatic;
+    @BeforeAll
+    public static void setUp() {
+        fileHandlerMockedStatic = Mockito.mockStatic(FileHandler.class);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        fileHandlerMockedStatic.close();
+    }
     @Test
     void findById() {
         ServicePage servicePage = ServicePage.builder()

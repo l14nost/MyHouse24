@@ -9,10 +9,15 @@ import lab.space.my_house_24.service.JwtServiceForUser;
 import lab.space.my_house_24.specification.UserSpecification;
 import lab.space.my_house_24.specification.UserSpecificationForTable;
 import lab.space.my_house_24.util.CustomMailSender;
+import lab.space.my_house_24.util.FileHandler;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -44,7 +49,16 @@ class UserServiceImplTest {
     private PasswordEncoder passwordEncoder;
     @InjectMocks
     private UserServiceImpl userService;
+    private static MockedStatic<FileHandler> fileHandlerMockedStatic;
+    @BeforeAll
+    public static void setUp() {
+        fileHandlerMockedStatic = Mockito.mockStatic(FileHandler.class);
+    }
 
+    @AfterAll
+    public static void tearDown() {
+        fileHandlerMockedStatic.close();
+    }
     @Test
     void getUserByEmail() {
         when(userRepository.findUserByEmail("test@gmail.com")).thenReturn(Optional.of(User.builder().build()));
