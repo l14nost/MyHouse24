@@ -10,10 +10,14 @@ import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.specification.HouseSpecification;
 import lab.space.my_house_24.specification.HouseSpecificationForSelect;
 import lab.space.my_house_24.util.FileHandler;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
@@ -37,6 +41,17 @@ class HouseServiceImplTest {
 
     @InjectMocks
     private HouseServiceImpl houseService;
+
+    private static MockedStatic<FileHandler> fileHandlerMockedStatic;
+    @BeforeAll
+    public static void setUp() {
+        fileHandlerMockedStatic = Mockito.mockStatic(FileHandler.class);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        fileHandlerMockedStatic.close();
+    }
 
     @Test
     void houseListForTable() {

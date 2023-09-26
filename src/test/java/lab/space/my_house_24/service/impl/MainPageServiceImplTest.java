@@ -5,10 +5,15 @@ import lab.space.my_house_24.model.settingsPage.banner.BannerResponse;
 import lab.space.my_house_24.model.settingsPage.mainPage.MainPageRequest;
 import lab.space.my_house_24.model.settingsPage.mainPage.MainPageResponse;
 import lab.space.my_house_24.repository.MainPageRepository;
+import lab.space.my_house_24.util.FileHandler;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -25,7 +30,16 @@ class MainPageServiceImplTest {
     private MainPageRepository mainPageRepository;
     @InjectMocks
     private MainPageServiceImpl mainPageService;
+    private static MockedStatic<FileHandler> fileHandlerMockedStatic;
+    @BeforeAll
+    public static void setUp() {
+        fileHandlerMockedStatic = Mockito.mockStatic(FileHandler.class);
+    }
 
+    @AfterAll
+    public static void tearDown() {
+        fileHandlerMockedStatic.close();
+    }
     @Test
     void findByIdResponse() {
         MainPage mainPage = MainPage.builder()
