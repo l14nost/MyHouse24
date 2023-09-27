@@ -11,7 +11,7 @@ services:
       - MYSQL_USER=user
     restart: always
   myhouse24-admin:
-    build: .
+    image: li4nost/my-house-24-admin:latest
     container_name: myhouse24-admin
     volumes:
       - file-volume:/files
@@ -24,7 +24,7 @@ services:
       - myhouse24-db
     restart: always
   myhouse24-cabinet:
-    build: C:/Users/Amir Banov/IdeaProjects/MyHouse24-User
+    image: li4nost/my-house-24-user:latest
     container_name: myhouse24-cabinet
     volumes:
       - file-volume:/files
@@ -37,7 +37,7 @@ services:
       - myhouse24-db
     restart: always
   myhouse24-rest:
-    build: C:/Users/Amir Banov/IdeaProjects/MyHouse24-Rest
+    image: li4nost/my-house-24-rest:latest
     container_name: myhouse24-rest
     volumes:
       - file-volume:/files
@@ -50,7 +50,7 @@ services:
       - myhouse24-db
     restart: always
   myhouse24-site:
-    image: li4nost/my-house-24:site
+    image: li4nost/my-house-24-site:latest
     container_name: myhouse24-site
     volumes:
       - file-volume:/files
