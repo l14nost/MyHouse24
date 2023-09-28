@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy to Server
         run:
-          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua sudo docker pull li4nost/my-house-24-admin:latest
-          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua sudo docker run --name myhouse24-admin -p 9080:8080 -d li4nost/my-house-24-admin:latest
+          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/my-house-24-admin:latest
+          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua sudo docker run --name myhouse24-admin -p 9080:8080 -d ${{ secrets.DOCKER_HUB_USERNAME }}/my-house-24-admin:latest
 
 
