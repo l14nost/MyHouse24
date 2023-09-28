@@ -48,3 +48,14 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/my-house-24-admin:latest
 
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Deploy to Server
+        run: |
+          ssh avada_slj@slj.avada-media-dev1.od.ua "sudo docker pull li4nost/my-house-24-admin:latest"
+          ssh avada_slj@slj.avada-media-dev1.od.ua "sudo docker run --name myhouse24-admin -p 9080:8080 -d li4nost/my-house-24-admin:latest"
+
+
