@@ -32,12 +32,12 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/my-house-24-admin:latest
+          tags: li4nost/my-house-24-admin:latest
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          username: li4nost
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Push to Docker Hub
@@ -46,7 +46,7 @@ jobs:
           context: .
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/my-house-24-admin:latest
+          tags: li4nost/my-house-24-admin:latest
 
       - name: Deploy to Docker
         run:
