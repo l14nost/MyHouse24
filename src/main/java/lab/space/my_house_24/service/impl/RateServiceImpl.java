@@ -14,8 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,69 +58,42 @@ public class RateServiceImpl implements RateService {
 
 
     @Override
-    public ResponseEntity<?> getRateByIdDto(Long id) {
-        try {
-            log.info("Try to get RateResponse");
-            return ResponseEntity.ok(RateMapper.toRateResponse(getRateById(id)));
-        } catch (EntityNotFoundException e) {
-            log.error("Error get RateResponse");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+    public RateResponse getRateByIdDto(Long id) throws EntityNotFoundException {
+        log.info("Try to get RateResponse");
+        return RateMapper.toRateResponse(getRateById(id));
+    }
+
+    @Override
+    public RateResponse getRateByIdResponseForBill(Long id) throws EntityNotFoundException {
+        log.info("Try to get RateResponse");
+        return RateMapper.toRateResponseForBill(getRateById(id));
+    }
+
+    @Override
+    public RateResponse getRateByIdWithUpdateAt(Long id) throws EntityNotFoundException {
+        log.info("Try to get Rate");
+        return RateMapper.toRateResponseWithUpdateAt(getRateById(id));
+    }
+
+    @Override
+    public void updateRateByRequest(RateUpdateRequest rateUpdateRequest) throws EntityNotFoundException {
+        log.info("Try to update Rate by Update Request");
+        Rate rate = saveRate(RateMapper.toRate(rateUpdateRequest, getRateById(rateUpdateRequest.id())));
+        log.info("Success update Rate by Update Request");
+        for (PriceRateRequest priceRate : rateUpdateRequest.priceRate()) {
+            if (nonNull(priceRate.id())) {
+                priceRateService.updatePriceRateByRequest(priceRate, rate);
+            } else priceRateService.savePriceRateByRequest(priceRate, rate);
         }
     }
 
     @Override
-    public ResponseEntity<?> getRateByIdResponseForBill(Long id) {
-        try {
-            log.info("Try to get RateResponse");
-            return ResponseEntity.ok(RateMapper.toRateResponseForBill(getRateById(id)));
-        } catch (EntityNotFoundException e) {
-            log.error("Error get RateResponse");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> getRateByIdWithUpdateAt(Long id) {
-        try {
-            log.info("Try to get Rate");
-            return ResponseEntity.ok(RateMapper.toRateResponseWithUpdateAt(getRateById(id)));
-        } catch (EntityNotFoundException e) {
-            log.error("Error get Rate by Update Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> updateRateByRequest(RateUpdateRequest rateUpdateRequest) {
-        try {
-            log.info("Try to update Rate by Update Request");
-            Rate rate = saveRate(RateMapper.toRate(rateUpdateRequest, getRateById(rateUpdateRequest.id())));
-            log.info("Success update Rate by Update Request");
-            for (PriceRateRequest priceRate : rateUpdateRequest.priceRate()){
-                if (nonNull(priceRate.id())) {
-                    priceRateService.updatePriceRateByRequest(priceRate, rate);
-                } else priceRateService.savePriceRateByRequest(priceRate, rate);
-            }
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error update Rate by Update Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> saveRateByRequest(RateSaveRequest rateSaveRequest) {
-        try {
-            log.info("Try to save Rate by Save Request");
-            Rate rate = saveRate(RateMapper.toRate(rateSaveRequest));
-            log.info("Success save Rate by Save Request");
-            for (PriceRateRequest priceRate : rateSaveRequest.priceRate()){
-                priceRateService.savePriceRateByRequest(priceRate, rate);
-            }
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error save Rate by Save Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+    public void saveRateByRequest(RateSaveRequest rateSaveRequest) {
+        log.info("Try to save Rate by Save Request");
+        Rate rate = saveRate(RateMapper.toRate(rateSaveRequest));
+        log.info("Success save Rate by Save Request");
+        for (PriceRateRequest priceRate : rateSaveRequest.priceRate()) {
+            priceRateService.savePriceRateByRequest(priceRate, rate);
         }
     }
 
@@ -133,28 +104,22 @@ public class RateServiceImpl implements RateService {
     }
 
     @Override
-    public ResponseEntity<?> deleteRateById(Long id) {
-        try {
-            log.info("Try to delete Rate by id " + id);
-            Rate rate = getRateById(id);
-            if (rate.getApartmentList().isEmpty() && rate.getBillList().isEmpty()){
-                rateRepository.delete(rate);
-            }else {
-                String error;
-                if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                    error = "Тарифом користуються. Видалення неможливе.";
-                } else {
-                    error = "The rate is used. Removal is not possible.";
-                }
-                log.warn("Warning delete Rate");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    public void deleteRateById(Long id) throws EntityNotFoundException, IllegalArgumentException {
+        log.info("Try to delete Rate by id " + id);
+        Rate rate = getRateById(id);
+        if (rate.getApartmentList().isEmpty() && rate.getBillList().isEmpty()) {
+            rateRepository.delete(rate);
+        } else {
+            String error;
+            if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
+                error = "Тарифом користуються. Видалення неможливе.";
+            } else {
+                error = "The rate is used. Removal is not possible.";
             }
-            log.info("Success delete Rate by id " + id);
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error delete Rate by id " + id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            log.warn("Warning delete Rate");
+            throw new IllegalArgumentException(error);
         }
+        log.info("Success delete Rate by id " + id);
     }
 
     @Override

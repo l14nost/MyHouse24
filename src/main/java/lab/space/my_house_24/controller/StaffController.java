@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
@@ -119,8 +120,13 @@ public class StaffController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
-        return staffService.updateStaff(staffUpdateRequest);
+        try {
+            staffService.updateStaff(staffUpdateRequest);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
     }
 
     @DeleteMapping("/delete-staff/{id}")
@@ -128,8 +134,13 @@ public class StaffController {
         if (id < 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
         }
-
-        return staffService.deleteStaff(id);
+        try {
+            staffService.deleteStaff(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
     }
 
     @GetMapping("/get-all-staff-for-house")

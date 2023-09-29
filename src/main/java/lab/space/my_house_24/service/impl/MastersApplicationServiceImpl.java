@@ -22,8 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -51,51 +49,34 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
     }
 
     @Override
-    public ResponseEntity<?> getMastersApplicationResponseById(Long id) {
-        try {
-            log.info("Try to get MastersApplicationResponse");
-            return ResponseEntity.ok(MastersApplicationMapper.toMastersApplicationResponse(getMastersApplicationById(id)));
-        } catch (EntityNotFoundException e) {
-            log.error("Error get MastersApplicationResponse");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public MastersApplicationResponse getMastersApplicationResponseById(Long id) throws EntityNotFoundException {
+        log.info("Try to get MastersApplicationResponse");
+        return MastersApplicationMapper.toMastersApplicationResponse(getMastersApplicationById(id));
     }
 
     @Override
-    public ResponseEntity<?> updateMastersApplicationByRequest(MastersApplicationUpdateRequest request) {
-        try {
-            log.info("Try to update MastersApplication by Update Request");
-            saveMastersApplication(MastersApplicationMapper.toMastersApplication(
-                    request,
-                    getMastersApplicationById(request.id()),
-                    nonNull(request.staffId()) ? staffService.getStaffById(request.staffId()) : null,
-                    userService.findEntityById(request.userId()),
-                    apartmentService.findById(request.apartmentId()))
-            );
-            log.info("Success update MastersApplication by Update Request");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error update MastersApplication by Update Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void updateMastersApplicationByRequest(MastersApplicationUpdateRequest request) throws EntityNotFoundException {
+        log.info("Try to update MastersApplication by Update Request");
+        saveMastersApplication(MastersApplicationMapper.toMastersApplication(
+                request,
+                getMastersApplicationById(request.id()),
+                nonNull(request.staffId()) ? staffService.getStaffById(request.staffId()) : null,
+                userService.findEntityById(request.userId()),
+                apartmentService.findById(request.apartmentId()))
+        );
+        log.info("Success update MastersApplication by Update Request");
     }
 
     @Override
-    public ResponseEntity<?> saveMastersApplicationByRequest(MastersApplicationSaveRequest request) {
-        try {
-            log.info("Try to save MastersApplication by Save Request");
-            saveMastersApplication(MastersApplicationMapper.toMastersApplication(
-                    request,
-                    nonNull(request.staffId()) ? staffService.getStaffById(request.staffId()) : null,
-                    userService.findEntityById(request.userId()),
-                    apartmentService.findById(request.apartmentId()))
-            );
-            log.info("Success save MastersApplication by Save Request");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error save MastersApplication by Save Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void saveMastersApplicationByRequest(MastersApplicationSaveRequest request) throws EntityNotFoundException {
+        log.info("Try to save MastersApplication by Save Request");
+        saveMastersApplication(MastersApplicationMapper.toMastersApplication(
+                request,
+                nonNull(request.staffId()) ? staffService.getStaffById(request.staffId()) : null,
+                userService.findEntityById(request.userId()),
+                apartmentService.findById(request.apartmentId()))
+        );
+        log.info("Success save MastersApplication by Save Request");
     }
 
     @Override
@@ -106,16 +87,10 @@ public class MastersApplicationServiceImpl implements MastersApplicationService 
     }
 
     @Override
-    public ResponseEntity<?> deleteMastersApplicationById(Long id) {
-        try {
-            log.info("Try to delete MastersApplication");
-            repository.delete(getMastersApplicationById(id));
-            log.info("Success delete MastersApplication by id " + id);
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error delete MastersApplication by id " + id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void deleteMastersApplicationById(Long id) throws EntityNotFoundException {
+        log.info("Try to delete MastersApplication");
+        repository.delete(getMastersApplicationById(id));
+        log.info("Success delete MastersApplication by id " + id);
     }
 
     @Override

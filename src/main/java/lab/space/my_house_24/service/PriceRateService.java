@@ -3,7 +3,6 @@ package lab.space.my_house_24.service;
 import lab.space.my_house_24.entity.PriceRate;
 import lab.space.my_house_24.entity.Rate;
 import lab.space.my_house_24.model.price_rate.PriceRateRequest;
-import org.springframework.http.ResponseEntity;
 
 public interface PriceRateService {
     PriceRate getPriceRateById(Long id);
@@ -13,5 +12,5 @@ public interface PriceRateService {
     void savePriceRateByRequest(PriceRateRequest priceRate, Rate rate);
 
     void savePriceRate(PriceRate priceRate);
-    ResponseEntity<?> deletePriceRateById(Long id);
+    void deletePriceRateById(Long id);
 }

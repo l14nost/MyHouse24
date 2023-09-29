@@ -102,11 +102,10 @@ public class ServiceBillServiceImpl implements ServiceBillService {
         log.info("Success delete ServiceBillList");
     }
 
-    private void minusTotalPriceFromBill(Long id, BigDecimal price){
+    private void minusTotalPriceFromBill(Long id, BigDecimal price) {
         log.info("Try to find Bill");
         Bill bill = billRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bill not found by id " + id));
-
         bill.setTotalPrice(bill.getTotalPrice().subtract(price));
         log.info("Try to save find Bill");
         billRepository.save(bill);

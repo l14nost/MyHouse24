@@ -150,7 +150,7 @@ public class BillController {
     @GetMapping("/get-rate-{id}")
     public ResponseEntity<?> getRateResponse(@PathVariable Long id) {
         try {
-            return rateService.getRateByIdResponseForBill(id);
+            return ResponseEntity.ok(rateService.getRateByIdResponseForBill(id));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

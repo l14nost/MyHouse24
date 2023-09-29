@@ -16,8 +16,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +29,9 @@ import static java.util.Objects.nonNull;
 public class ServiceServiceImpl implements ServiceService {
     private final ServiceRepository serviceRepository;
     private final UnitService unitService;
+
     @Override
-    public lab.space.my_house_24.entity.Service getServiceById(Long id) throws EntityNotFoundException{
+    public lab.space.my_house_24.entity.Service getServiceById(Long id) throws EntityNotFoundException {
         log.info("Try to search Service by id " + id);
         return serviceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Service not found by id " + id));
@@ -41,7 +40,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public List<ServiceResponse> getAllServicesDto() {
         log.info("Try to get All Service and convert in Dto");
-        return serviceRepository.findAll(Sort.by(Sort.Direction.ASC,"id"))
+        return serviceRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .map(ServiceMapper::toSimpleDto).collect(Collectors.toList());
     }
@@ -67,58 +66,46 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public ResponseEntity<?> saveServiceByRequest(ServiceSaveRequest serviceSaveRequest) {
-        try {
-            log.info("Try to save Service by Request");
-            lab.space.my_house_24.entity.Service service;
-            for (ServiceRequest serviceRequest : serviceSaveRequest.serviceRequestList()) {
-                if (nonNull(serviceRequest.id())) {
-                    service = ServiceMapper.toServiceUpdate(
-                                    serviceRequest,
-                                    getServiceById(serviceRequest.id()));
-                } else {
-                    service = ServiceMapper.toServiceSave(serviceRequest);
-                }
-                service.setUnit(unitService.getUnitById(serviceRequest.unitId()));
-                saveService(service);
+    public void saveServiceByRequest(ServiceSaveRequest serviceSaveRequest) throws EntityNotFoundException {
+        log.info("Try to save Service by Request");
+        lab.space.my_house_24.entity.Service service;
+        for (ServiceRequest serviceRequest : serviceSaveRequest.serviceRequestList()) {
+            if (nonNull(serviceRequest.id())) {
+                service = ServiceMapper.toServiceUpdate(
+                        serviceRequest,
+                        getServiceById(serviceRequest.id()));
+            } else {
+                service = ServiceMapper.toServiceSave(serviceRequest);
             }
-            log.info("Success save Service by Request");
-            return ResponseEntity.ok().build();
-        }catch (EntityNotFoundException e){
-            log.error("Error save Service by Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            service.setUnit(unitService.getUnitById(serviceRequest.unitId()));
+            saveService(service);
         }
+        log.info("Success save Service by Request");
     }
 
     @Override
-    public ResponseEntity<?> deleteServiceById(Long id) {
-        try {
-            log.info("Try to delete Service");
-            lab.space.my_house_24.entity.Service service = getServiceById(id);
-            if (service.getServiceBillList().isEmpty() && service.getMeterReadingList().isEmpty()){
-                serviceRepository.delete(service);
-            }else {
-                String error;
-                if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                    error = "Послугою користуються. Видалення неможливе.";
-                } else {
-                    error = "The service is used. Removal is not possible.";
-                }
-                log.warn("Warning delete Service");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-            }
+    public void deleteServiceById(Long id) throws EntityNotFoundException, IllegalArgumentException {
+        log.info("Try to delete Service");
+        lab.space.my_house_24.entity.Service service = getServiceById(id);
+        if (service.getServiceBillList().isEmpty() && service.getMeterReadingList().isEmpty()) {
+            serviceRepository.delete(service);
             log.info("Success delete Service");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error delete Service");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        } else {
+            String error;
+            if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
+                error = "Послугою користуються. Видалення неможливе.";
+            } else {
+                error = "The service is used. Removal is not possible.";
+            }
+            log.warn("Warning delete Service");
+            throw new IllegalArgumentException(error);
         }
     }
 
     @Override
     public Page<ServiceResponseForSelect> serviceResponseForSelect(Integer page, String search) {
         ServiceSpecificationForSelect serviceSpecificationForSelect = ServiceSpecificationForSelect.builder().search(search).build();
-        return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(page,5)).map(ServiceMapper::entityToDtoForSelect);
+        return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(page, 5)).map(ServiceMapper::entityToDtoForSelect);
     }
 
     @Override

@@ -163,7 +163,7 @@ public class BankBookServiceImpl implements BankBookService {
 
     @Override
     @Transactional
-    public InputStreamResource getExcel(BankBookRequest request)  throws IOException{
+    public InputStreamResource getExcel(BankBookRequest request) throws IOException {
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             List<BankBookResponse> bankBookResponses = getAllBankBookResponse(request).stream().toList();
@@ -315,8 +315,8 @@ public class BankBookServiceImpl implements BankBookService {
                             .build()
             );
         }
-        if (bankBook.getTotalPrice().compareTo(totalPrice) > 0){
-            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+        if (bankBook.getTotalPrice().compareTo(totalPrice) > 0) {
+            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -324,7 +324,7 @@ public class BankBookServiceImpl implements BankBookService {
                                 .bankBookExpense(price)
                                 .build()
                 );
-            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) > 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) > 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -333,8 +333,8 @@ public class BankBookServiceImpl implements BankBookService {
                                 .build()
                 );
             }
-        }else if (bankBook.getTotalPrice().compareTo(totalPrice) < 0){
-            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+        } else if (bankBook.getTotalPrice().compareTo(totalPrice) < 0) {
+            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -342,7 +342,7 @@ public class BankBookServiceImpl implements BankBookService {
                                 .bankBookExpense(BigDecimal.ZERO.subtract(price))
                                 .build()
                 );
-            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) >= 0){
+            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) >= 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
