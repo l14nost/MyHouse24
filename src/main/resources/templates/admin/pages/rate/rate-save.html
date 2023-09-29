@@ -117,7 +117,7 @@
         function getRate(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/rates/get-rate-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/rates/get-rate-" + id,
                 dataType: 'json'
             }).done(function (rateResponse) {
                 console.log(rateResponse)
@@ -290,10 +290,10 @@
                 description: $('#rate-description').val(),
                 priceRate: priceRateList
             };
-            console.log(rateId ? "/admin/rates/update-rate" : "/admin/rates/save-rate")
+            console.log(rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/admin/rates/save-rate")
             $.ajax({
                 method: rateId ? "PUT" : "POST",
-                url: rateId ? "/admin/rates/update-rate" : "/admin/rates/save-rate",
+                url: rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/admin/rates/save-rate",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){
@@ -302,7 +302,7 @@
                 }
             }).done(function () {
                 showToast('success');
-                window.location.href = "/admin/rates";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/rates";
             }).fail(function (response) {
                 console.log(response);
                 const errors = response.responseJSON;
@@ -331,7 +331,7 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/admin/rates/delete-price-rate/" + serviceId ,
+                url: "/myhouse24-amirb-nikitaf/admin/rates/delete-price-rate/" + serviceId ,
                 contentType: 'application/json',
                 beforeSend : function (){
                     clearValidMessages();
@@ -358,7 +358,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/rates/get-all-services',
+                    url: '/myhouse24-amirb-nikitaf/admin/rates/get-all-services',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {

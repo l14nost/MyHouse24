@@ -136,7 +136,7 @@
         function getAllUnit() {
             $.ajax({
                 method: "GET",
-                url: "/admin/system-service/get-all-unit",
+                url: "/myhouse24-amirb-nikitaf/admin/system-service/get-all-unit",
                 dataType: 'json'
             }).done(function (unitResponse) {
                 unitRowContent.empty();
@@ -158,7 +158,7 @@
         function getAllService() {
             $.ajax({
                 method: "GET",
-                url: "/admin/system-service/get-all-services",
+                url: "/myhouse24-amirb-nikitaf/admin/system-service/get-all-services",
                 dataType: 'json'
             }).done(function (serviceResponse) {
                 serviceRowContent.empty();
@@ -345,7 +345,7 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: serviceId ? "/admin/system-service/delete-service/" + serviceId : "/admin/system-service/delete-unit/" + unitId,
+                url: serviceId ? "/myhouse24-amirb-nikitaf/admin/system-service/delete-service/" + serviceId : "/myhouse24-amirb-nikitaf/admin/system-service/delete-unit/" + unitId,
                 contentType: 'application/json',
                 beforeSend : function (){
                     clearValidMessages();
@@ -442,7 +442,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "/admin/system-service/save-unit",
+                url: "/myhouse24-amirb-nikitaf/admin/system-service/save-unit",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){
@@ -481,7 +481,7 @@
             };
             $.ajax({
                 method: "POST",
-                url: "/admin/system-service/save-services",
+                url: "/myhouse24-amirb-nikitaf/admin/system-service/save-services",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){
@@ -518,7 +518,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/system-service/get-all-unit',
+                    url: '/myhouse24-amirb-nikitaf/admin/system-service/get-all-unit',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {

@@ -296,7 +296,7 @@
 
     function addSection(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 if (response === "uk"){
@@ -351,7 +351,7 @@
 
     function addFloor(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 if (response === "uk"){
@@ -406,7 +406,7 @@
 
     function addUser(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 if (response === "uk"){
@@ -458,7 +458,7 @@
 
         container.append(newDiv);
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 select2(response);
@@ -481,7 +481,7 @@
             language: lang,
             cache: true,
             ajax: {
-                url: "/admin/staff/get-all-staff-for-house",
+                url: "/myhouse24-amirb-nikitaf/admin/staff/get-all-staff-for-house",
                 processResults: function (data) {
                     return {
                         results: data.map(function (item) {
@@ -501,7 +501,7 @@
 
     $(document).ready(function(){
        $.ajax({
-           url: "/admin/get-locale"
+           url: "/myhouse24-amirb-nikitaf/admin/get-locale"
        })
            .done(function (response){
                select2(response);
@@ -516,7 +516,7 @@
         var roleInput = document.getElementById("userRole" + id);
         var selectedValue = selectElement.value;
         $.ajax({
-            url: "/admin/staff/get-role-by-staff/"+selectedValue,
+            url: "/myhouse24-amirb-nikitaf/admin/staff/get-role-by-staff/"+selectedValue,
             method: "GET"
         })
             .done(function (response){
@@ -529,13 +529,13 @@
         var formData = new FormData(form);
         $.ajax({
             method:"POST",
-            url: "/admin/houses/add-house",
+            url: "/myhouse24-amirb-nikitaf/admin/houses/add-house",
             contentType: false,
             processData: false,
             data:formData
         }).done(
             function (response){
-                window.location.href = "/admin/houses";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/houses";
             }
         ).fail(
             function(response){
@@ -632,7 +632,7 @@
     }
 
     function cancelHouse(){
-        window.location.href = "/admin/houses";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/houses";
     }
 
 

@@ -171,7 +171,7 @@
     function getExcel(){
       $.ajax({
         method: "GET",
-        url: "/admin/bills/get-excel-bill/" + billId,
+        url: "/myhouse24-amirb-nikitaf/admin/bills/get-excel-bill/" + billId,
         xhrFields: {
           responseType: 'blob'
         },
@@ -186,7 +186,7 @@
     function getBillResponse(id) {
       $.ajax({
         method: "GET",
-        url: "/admin/bills/get-bill-" + id,
+        url: "/myhouse24-amirb-nikitaf/admin/bills/get-bill-" + id,
         dataType: 'json'
       }).done(function (response) {
         console.log(response)
@@ -222,7 +222,7 @@
 
         $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number));
       }).fail(function (){
-        window.location.href = "/admin/error";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
       });
     }
 
@@ -252,27 +252,27 @@
     }
 
     function rateCard(id) {
-      window.location.href = '/admin/rates/card-' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/rates/card-' + id;
     }
 
     function ownerCard(id) {
-      window.location.href = '/admin/users/user-card/' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/users/user-card/' + id;
     }
 
     function apartmentCard(id) {
-      window.location.href = '/admin/apartments/apartment-card/' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/apartments/apartment-card/' + id;
     }
 
     function houseCard(id) {
-      window.location.href = '/admin/houses/house-card/' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/houses/house-card/' + id;
     }
 
     function bankBookCard(id) {
-      window.location.href = '/admin/bank-books/card-' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/bank-books/card-' + id;
     }
 
     function editBill() {
-      window.location.href = '/admin/bills/update-' + billId;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/bills/update-' + billId;
     }
 
     const date_flatpickr = document.querySelectorAll('#date');

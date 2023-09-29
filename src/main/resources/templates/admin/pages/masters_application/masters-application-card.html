@@ -131,7 +131,7 @@
         function getMastersApplicationResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/master-call/get-masters-application-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/master-call/get-masters-application-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -166,7 +166,7 @@
         })
 
         function editMastersApplication() {
-            window.location.href = '/admin/master-call/update-' + masterApplId;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/master-call/update-' + masterApplId;
         }
     </script>
 

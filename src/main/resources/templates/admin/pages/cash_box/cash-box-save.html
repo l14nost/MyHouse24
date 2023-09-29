@@ -169,7 +169,7 @@
     function getCahBoxResponse(id) {
       $.ajax({
         method: "GET",
-        url: "/admin/cash-box/get-cash-box-" + id,
+        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
         dataType: 'json'
       }).done(function (response) {
         console.log(response)
@@ -204,14 +204,14 @@
         $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
         selectArticle();
       }).fail(function () {
-        window.location.href = "/admin/error";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
       });
     }
 
     function getCopyCahBoxResponse(id) {
       $.ajax({
         method: "GET",
-        url: "/admin/cash-box/get-cash-box-" + id,
+        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
         dataType: 'json'
       }).done(function (response) {
         console.log(response)
@@ -244,14 +244,14 @@
         getNewCashBoxResponse();
         selectArticle();
       }).fail(function () {
-        window.location.href = "/admin/error";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
       });
     }
 
     function getNewCashBoxResponse() {
       $.ajax({
         method: "POST",
-        url: "/admin/cash-box/get-new-cash-box",
+        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-new-cash-box",
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(articleType)
@@ -289,14 +289,14 @@
       console.log(cashBoxRequest);
       $.ajax({
         method: cashBoxRequest.id ? 'PUT' : "POST",
-        url: cashBoxRequest.id ? '/admin/cash-box/update-cash-box' : '/admin/cash-box/save-cash-box',
+        url: cashBoxRequest.id ? '/myhouse24-amirb-nikitaf/admin/cash-box/update-cash-box' : '/myhouse24-amirb-nikitaf/admin/cash-box/save-cash-box',
         contentType: 'application/json',
         data: JSON.stringify(cashBoxRequest),
         beforeSend: function () {
           clearValidMessages();
         }
       }).done(function () {
-        window.location.href = "/admin/cash-box";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/cash-box";
       }).fail(function (response) {
         const errors = response.responseJSON;
         console.log(response);
@@ -333,7 +333,7 @@
         minimumResultsForSearch: -1,
         ajax: {
           method: 'GET',
-          url: '/admin/cash-box/get-all-owner',
+          url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-owner',
           cache: true,
           delay: 1000,
           processResults: function (data) {
@@ -353,7 +353,7 @@
       }
     }
     function selectBankBook(bankBook) {
-      let url = '/admin/cash-box/get-all-bank-book';
+      let url = '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-bank-book';
       if (ownerId !== null && ownerId !== undefined) {
         url += '?id=' + ownerId;
       }
@@ -389,7 +389,7 @@
       minimumResultsForSearch: -1,
       ajax: {
         method: 'GET',
-        url: '/admin/cash-box/get-all-staff',
+        url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-staff',
         cache: true,
         delay: 1000,
         processResults: function (data) {
@@ -411,7 +411,7 @@
         minimumResultsForSearch: -1,
         ajax: {
           method: 'GET',
-          url: '/admin/cash-box/get-all-article?type=' + articleType,
+          url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-article?type=' + articleType,
           cache: true,
           delay: 1000,
           processResults: function (data) {

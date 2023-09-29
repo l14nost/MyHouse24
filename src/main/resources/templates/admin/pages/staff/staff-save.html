@@ -141,7 +141,7 @@
         function getStaffDTO(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/staff/get-staff-edit-dto/" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/staff/get-staff-edit-dto/" + id,
                 dataType: 'json'
             }).done(function (staffResponse) {
                 console.log(staffResponse)
@@ -152,7 +152,7 @@
                 $("#role").append('<option selected value="' + staffResponse?.role?.name + '">' + staffResponse?.role?.value + '</option>');
                 $("#status").append('<option selected value="' + staffResponse?.status?.name + '">' + staffResponse?.status?.value + '</option>');
             }).fail(function (){
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
@@ -181,7 +181,7 @@
             console.log(staffRequest);
             $.ajax({
                 method: typeReq ? 'PUT' : "POST",
-                url: typeReq ? '/admin/staff/update-staff' : '/admin/staff/save-staff',
+                url: typeReq ? '/myhouse24-amirb-nikitaf/admin/staff/update-staff' : '/myhouse24-amirb-nikitaf/admin/staff/save-staff',
                 contentType: 'application/json',
                 data: JSON.stringify(staffRequest),
                 beforeSend: function () {
@@ -210,7 +210,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/staff/get-all-status',
+                    url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-status',
                     cache: true,
                     delay: 1500,
                     processResults: function (data) {
@@ -232,7 +232,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/staff/get-all-job-title',
+                url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-job-title',
                 cache: true,
                 delay: 1500,
                 processResults: function (data) {

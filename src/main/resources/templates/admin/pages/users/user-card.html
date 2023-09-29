@@ -129,7 +129,7 @@
     function userMessage(email){
         $.ajax({
             method: "POST",
-            url: "/admin/users/invite-send",
+            url: "/myhouse24-amirb-nikitaf/admin/users/invite-send",
             data:{
                 email: email
             }
@@ -146,7 +146,7 @@
 
     $(document).ready(function () {
         $.ajax({
-            url: "/admin/users/get-user-by-id/"+[[${id}]]
+            url: "/myhouse24-amirb-nikitaf/admin/users/get-user-by-id/"+[[${id}]]
         })
             .done(function (response){
 
@@ -168,7 +168,7 @@
                 $("#viber").text(response.viber);
                 $("#telegram").text(response.telegram);
                 $("#email").text(response.email);
-                $("#personPhoto").attr("src", "/admin/files/"+response.filename);
+                $("#personPhoto").attr("src", "/myhouse24-amirb-nikitaf/admin/files/"+response.filename);
 
 
             })

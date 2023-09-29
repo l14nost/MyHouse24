@@ -146,7 +146,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/system-service/get-services-for-select",
+                    url: "/myhouse24-amirb-nikitaf/admin/system-service/get-services-for-select",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -177,7 +177,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/houses/get-houses-for-select",
+                    url: "/myhouse24-amirb-nikitaf/admin/houses/get-houses-for-select",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -224,7 +224,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-section/"+idHouse,
+                        url: "/myhouse24-amirb-nikitaf/admin/get-section/"+idHouse,
                         data: function (param) {
                             return {
                                 search: param.term || "",
@@ -252,7 +252,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/apartments/get-apartment",
+                        url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse
                         },
@@ -283,7 +283,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/apartments/get-apartment",
+                        url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection
@@ -317,7 +317,7 @@
 
         $(document).ready(function (){
             $.ajax({
-                url: "/admin/get-locale"
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
                 .done(function (response){
                     select2(response);
@@ -337,7 +337,7 @@
 
 
         function cancelApartment(){
-            window.location.href = "/admin/meter-readings";
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/meter-readings";
         }
         function getTrueDate(date){
             let trueDate= '';
@@ -361,12 +361,12 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/meter-readings/add-meter-reading",
+                url: "/myhouse24-amirb-nikitaf/admin/meter-readings/add-meter-reading",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(
                 function (response){
-                    window.location.href = "/admin/meter-readings";
+                    window.location.href = "/myhouse24-amirb-nikitaf/admin/meter-readings";
                 }
             ).fail(
                 function(response){
@@ -417,7 +417,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/meter-readings/add-meter-reading",
+                url: "/myhouse24-amirb-nikitaf/admin/meter-readings/add-meter-reading",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

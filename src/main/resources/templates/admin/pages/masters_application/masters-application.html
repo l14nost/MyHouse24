@@ -168,7 +168,7 @@
         function getAllMastersApplication() {
             $.ajax({
                 method: "POST",
-                url: "/admin/master-call/get-all-master-call",
+                url: "/myhouse24-amirb-nikitaf/admin/master-call/get-all-master-call",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(masterApplRequest)
@@ -253,7 +253,7 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/admin/master-call/delete-master-call/" + masterApplId,
+                url: "/myhouse24-amirb-nikitaf/admin/master-call/delete-master-call/" + masterApplId,
                 contentType: 'application/json'
             }).done(function () {
                 $('#confirmDelete').modal('hide');
@@ -282,7 +282,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/master-call/get-all-type-master',
+                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-type-master',
                 cache: true,
                 delay: 1500,
                 processResults: function (data) {
@@ -303,7 +303,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/master-call/get-all-user',
+                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-user',
                 cache: true,
                 delay: 1500,
                 processResults: function (data) {
@@ -324,7 +324,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'POST',
-                url: '/admin/master-call/get-all-staff',
+                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-staff',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify(staffMasterRequest),
@@ -350,7 +350,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/master-call/get-all-status',
+                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-status',
                 cache: true,
                 delay: 1500,
                 processResults: function (data) {

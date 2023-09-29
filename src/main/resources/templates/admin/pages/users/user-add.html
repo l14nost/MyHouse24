@@ -207,7 +207,7 @@
         }
         $(document).ready(function (){
             $.ajax({
-                url: "/admin/get-locale"
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
                 .done(function (response){
                     select2(response);
@@ -217,20 +217,20 @@
 
         });
         function cancelUser(){
-            window.location.href = "/admin/users";
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/users";
         }
         function saveUser(){
             var form = document.getElementById("userAdd");
             var formData = new FormData(form);
             $.ajax({
                 method:"POST",
-                url: "/admin/users/add-user",
+                url: "/myhouse24-amirb-nikitaf/admin/users/add-user",
                 contentType: false,
                 processData: false,
                 data:formData
             }).done(
                 function (response){
-                    window.location.href = "/admin/users";
+                    window.location.href = "/myhouse24-amirb-nikitaf/admin/users";
                 }
             ).fail(
                 function(response){

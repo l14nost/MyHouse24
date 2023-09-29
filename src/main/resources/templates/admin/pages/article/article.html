@@ -83,7 +83,7 @@
         function getAllArticle() {
             $.ajax({
                 method: "POST",
-                url: "/admin/payment-items/get-all-article",
+                url: "/myhouse24-amirb-nikitaf/admin/payment-items/get-all-article",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(articleRequest)
@@ -161,7 +161,7 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/admin/payment-items/delete-article/" + articleId,
+                url: "/myhouse24-amirb-nikitaf/admin/payment-items/delete-article/" + articleId,
                 contentType: 'application/json'
             }).done(function () {
                 $('#confirmDelete').modal('hide');

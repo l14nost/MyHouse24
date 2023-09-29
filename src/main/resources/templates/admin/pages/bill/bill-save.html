@@ -252,7 +252,7 @@
 
             $.ajax({
                 method: 'GET',
-                url: '/admin/bills/get-all-status',
+                url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
                 dataType: 'json'
             }).done(function (response){
                 payedDataStatus = response;
@@ -306,7 +306,7 @@
         function getBankBookResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/bills/get-bank-book-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/bills/get-bank-book-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -340,7 +340,7 @@
         function getCopyBillResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/bills/get-bill-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/bills/get-bill-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -375,14 +375,14 @@
 
                 serviceSelectCount++;
             }).fail(function () {
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
         function getBillResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/bills/get-bill-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/bills/get-bill-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -425,7 +425,7 @@
                 }
                 serviceSelectCount++;
             }).fail(function () {
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
@@ -587,7 +587,7 @@
         function getNewBillResponse() {
             $.ajax({
                 method: "GET",
-                url: "/admin/bills/get-new-bill",
+                url: "/myhouse24-amirb-nikitaf/admin/bills/get-new-bill",
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -654,7 +654,7 @@
             console.log(billRequest);
             $.ajax({
                 method: billRequest.id ? 'PUT' : "POST",
-                url: billRequest.id ? '/admin/bills/update-bill' : '/admin/bills/save-bill',
+                url: billRequest.id ? '/myhouse24-amirb-nikitaf/admin/bills/update-bill' : '/myhouse24-amirb-nikitaf/admin/bills/save-bill',
                 contentType: 'application/json',
                 data: JSON.stringify(billRequest),
                 beforeSend: function () {
@@ -900,7 +900,7 @@
                 if(rateId !== ''){
                     $.ajax({
                         method: "GET",
-                        url: "/admin/bills/get-rate-" + rateId ,
+                        url: "/myhouse24-amirb-nikitaf/admin/bills/get-rate-" + rateId ,
                         contentType: 'application/json',
                         beforeSend : function (){
                             clearValidMessages();
@@ -926,7 +926,7 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/admin/bills/delete-service-bill/" + serviceBillId ,
+                url: "/myhouse24-amirb-nikitaf/admin/bills/delete-service-bill/" + serviceBillId ,
                 contentType: 'application/json',
                 beforeSend : function (){
                     clearValidMessages();
@@ -983,7 +983,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bills/get-all-services',
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-services',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -1014,7 +1014,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bills/get-all-status',
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -1037,7 +1037,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bills/get-all-rates',
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-rates',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -1061,7 +1061,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bills/get-all-house',
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-house',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -1087,7 +1087,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bills/get-section/' + houseId,
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-section/' + houseId,
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -1112,7 +1112,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/bills/get-all-apartment',
+                url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment',
                 cache: true,
                 delay: 1000,
                 processResults: function (data) {
@@ -1138,7 +1138,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: sectionId ? '/admin/bills/get-all-apartment-' + houseId + '/' + sectionId : '/admin/bills/get-all-apartment-' + houseId,
+                    url: sectionId ? '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment-' + houseId + '/' + sectionId : '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment-' + houseId,
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -1324,7 +1324,7 @@
         function getAllMeterReading() {
             $.ajax({
                 method: "POST",
-                url: "/admin/bills/get-all-meter-reading",
+                url: "/myhouse24-amirb-nikitaf/admin/bills/get-all-meter-reading",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(meterReadingRequest)

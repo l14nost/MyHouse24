@@ -97,7 +97,7 @@
             </div>
             <div class="card-footer pt-0 pb-0" style="margin-bottom: 20px">
                 <div>
-                    <a th:href="'/admin/meter-readings/meter-readings-by-apartment?idApartment='+${id}+'&idService='+${0}" th:text="#{apartment.footer.1}"></a>
+                    <a th:href="'/myhouse24-amirb-nikitaf/admin/meter-readings/meter-readings-by-apartment?idApartment='+${id}+'&idService='+${0}" th:text="#{apartment.footer.1}"></a>
                 </div>
                 <div>
                     <a href="#" th:text="#{apartment.footer.2}" id="footer2"></a>
@@ -131,20 +131,20 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: "/admin/apartments/get-apartment-by-id/"+[[${id}]]
+            url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment-by-id/"+[[${id}]]
         })
             .done(function (response){
                 console.log(response);
-                $("#bankBook").html("<a href=\"/admin/bank-books/card-"+ response.bankBook.id + "\">"+ response.bankBook.number  +"</a>");
+                $("#bankBook").html("<a href=\"/myhouse24-amirb-nikitaf/admin/bank-books/card-"+ response.bankBook.id + "\">"+ response.bankBook.number  +"</a>");
                 $("#number").text(response.number);
                 $("#area").text(response.area);
-                $("#house").html("<a href=\"/admin/houses/house-card/ "+ response.house.id + "\">"+ response.house.name  +"</a>");
+                $("#house").html("<a href=\"/myhouse24-amirb-nikitaf/admin/houses/house-card/ "+ response.house.id + "\">"+ response.house.name  +"</a>");
                 $("#section").text(response.section);
                 $("#floor").text(response.floor);
                 $("#card-title").text(response.title);
                 $("#breadcrumb").text(response.title);
-                $("#owner").html("<a href=\"/admin/users/user-card/ "+ response.owner.id + "\">"+ response.owner.name  +"</a>");
-                $("#rate").html("<a href=\"/admin/rates/rate-card/ "+ response.rate.id + "\">"+ response.rate.name  +"</a>");
+                $("#owner").html("<a href=\"/myhouse24-amirb-nikitaf/admin/users/user-card/ "+ response.owner.id + "\">"+ response.owner.name  +"</a>");
+                $("#rate").html("<a href=\"/myhouse24-amirb-nikitaf/admin/rates/rate-card/ "+ response.rate.id + "\">"+ response.rate.name  +"</a>");
 
                 if (response.bankBook.number === null){
                     var cash = document.getElementById("cashButton");
@@ -162,18 +162,18 @@
                 else {
                     var cash = document.getElementById("cashButton");
                     if (response.bankBook.idCashBox!=0){
-                        cash.href = "/admin/cash-box/add-copy-"+response.bankBook.idCashBox;
+                        cash.href = "/myhouse24-amirb-nikitaf/admin/cash-box/add-copy-"+response.bankBook.idCashBox;
                     }
                     else {
-                        cash.href = "/admin/cash-box/add-income";
+                        cash.href = "/myhouse24-amirb-nikitaf/admin/cash-box/add-income";
                     }
                     var bill = document.getElementById("billButton");
-                    bill.href = "/admin/bills/add-copy-bank-book-"+response.bankBook.id;
+                    bill.href = "/myhouse24-amirb-nikitaf/admin/bills/add-copy-bank-book-"+response.bankBook.id;
 
                     var footer2 = document.getElementById("footer2");
-                    footer2.href = "/admin/cash-box"
+                    footer2.href = "/myhouse24-amirb-nikitaf/admin/cash-box"
                     var footer3 = document.getElementById("footer3");
-                    footer3.href = "/admin/bills"
+                    footer3.href = "/myhouse24-amirb-nikitaf/admin/bills"
 
                 }
 

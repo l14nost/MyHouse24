@@ -182,7 +182,7 @@
         function getMastersApplicationResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/master-call/get-masters-application-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/master-call/get-masters-application-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -211,7 +211,7 @@
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.card.breadcrumb}]] №' + response?.id));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
             }).fail(function (){
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
@@ -248,7 +248,7 @@
                     clearValidMessages();
                 }
             }).done(function () {
-                window.location.href = "/admin/master-call";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/master-call";
             }).fail(function (response) {
                 const errors = response.responseJSON;
                 console.log(response);
@@ -269,7 +269,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/master-call/get-all-status',
+                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-status',
                 cache: true,
                 delay: 1000,
                 processResults: function (data) {
@@ -290,7 +290,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/master-call/get-all-type-master',
+                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-type-master',
                 cache: true,
                 delay: 1000,
                 processResults: function (data) {
@@ -312,7 +312,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'POST',
-                    url: '/admin/master-call/get-all-staff',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-staff',
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify(staffMasterRequest),
@@ -343,7 +343,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/master-call/get-all-user',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-user',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -371,7 +371,7 @@
                 minimumResultsForSearch: Infinity,
                 ajax: {
                     method: 'POST',
-                    url: '/admin/master-call/get-all-apartment',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-apartment',
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify(apartmentMastersApplicationRequest),
@@ -473,11 +473,11 @@
         }
 
         function userCard(id){
-            document.location.href = '/admin/user-card/' + id;
+            document.location.href = '/myhouse24-amirb-nikitaf/admin/user-card/' + id;
         }
 
         function houseCard(id){
-            document.location.href = '/admin/house-card/' + id;
+            document.location.href = '/myhouse24-amirb-nikitaf/admin/house-card/' + id;
         }
 
     </script>

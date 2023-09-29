@@ -168,9 +168,7 @@ class MeterReadingControllerTest {
     @Test
     void meterReadingByApartmentPage() throws Exception {
         when(apartmentService.findById(1L)).thenReturn(Apartment.builder().number(100).build());
-        mockMvc.perform(MockMvcRequestBuilders.get("/meter-readings/meter-readings-by-apartment")
-                        .param("idApartment", "1")
-                        .param("idService", "1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/meter-readings/meter-readings-by-apartment/1/1")
                 )
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/pages/meterReading/meter-reading-apartment"));

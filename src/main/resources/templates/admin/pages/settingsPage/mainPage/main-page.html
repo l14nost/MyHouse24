@@ -54,7 +54,7 @@
                                 <hr class="hr-horizontal">
                                 <div class="col-md-4">
                                     <h5><span th:text="#{settings.page.main.slide}"></span> 1</h5>
-                                    <img th:src="${'/admin/files/'+mainPage.slide1()}"  alt="" class="main-page-slide error-photo" id="slide1">
+                                    <img th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+mainPage.slide1()}"  alt="" class="main-page-slide error-photo" id="slide1">
                                     <div class="form-group mb-30">
                                         <label class="control-label" th:text="#{settings.page.main.size}"></label>
                                         <input type="file" class="form-control form-control-lg" name="slide1" accept=".jpg,.jpeg,.png" id="slideInput1">
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <h5><span th:text="#{settings.page.main.slide}"></span> 2</h5>
-                                    <img th:src="${'/admin/files/'+mainPage.slide2()}"  alt="" class="main-page-slide error-photo" id="slide2">
+                                    <img th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+mainPage.slide2()}"  alt="" class="main-page-slide error-photo" id="slide2">
                                     <div class="form-group mb-30">
                                         <label class="control-label" th:text="#{settings.page.main.size}"></label>
                                         <input type="file" class="form-control form-control-lg" name="slide2"  accept=".jpg,.jpeg,.png"  id="slideInput2">
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <h5><span th:text="#{settings.page.main.slide}"></span> 3</h5>
-                                    <img th:src="${'/admin/files/'+mainPage.slide3()}" alt="" class="main-page-slide error-photo" id="slide3" >
+                                    <img th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+mainPage.slide3()}" alt="" class="main-page-slide error-photo" id="slide3" >
                                     <div class="form-group mb-30">
                                         <label class="control-label" th:text="#{settings.page.main.size}"></label>
                                         <input type="file" class="form-control form-control-lg" name="slide3"  accept=".jpg,.jpeg,.png"  id="slideInput3">
@@ -124,7 +124,7 @@
                                 <hr class="hr-horizontal">
                                 <div class="col-md-4" th:each="block, blockStat:${mainPage.blocks()}">
                                     <h5 th:text="#{settings.page.main.block} +' '+ ${(blockStat.index+1)}"> </h5>
-                                    <img th:src="${'/admin/files/'+block.block()}"  alt="" class="main-page-slide error-photo" th:id="${'block'+(blockStat.index+1)}">
+                                    <img th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+block.block()}"  alt="" class="main-page-slide error-photo" th:id="${'block'+(blockStat.index+1)}">
                                     <div class="form-group mb-30">
                                         <label class="control-label" th:text="#{settings.page.main.size}"></label>
                                         <input type="file" class="form-control form-control-lg" name="block" accept=".jpg,.jpeg,.png" th:id="${'blockInput'+(blockStat.index+1)}" onchange="handleFileChange(event)">
@@ -285,14 +285,14 @@
             formData.append("blockDescription", editorBlock5.root.innerHTML)
             formData.append("blockDescription", editorBlock6.root.innerHTML)
             $.ajax({
-                url: "/admin/site/main-page-save",
+                url: "/myhouse24-amirb-nikitaf/admin/site/main-page-save",
                 method: "PUT",
                 contentType: false,
                 processData: false,
                 data:formData
             })
                 .done(function (response){
-                    window.location.href = "/admin/site/main-page"
+                    window.location.href = "/myhouse24-amirb-nikitaf/admin/site/main-page"
                 })
                 .fail( function(response){
                     clearValidMessages();
@@ -362,7 +362,7 @@
                 })
         }
         function cancelMainPage(){
-            window.location.href = "/admin/site/main-page"
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/site/main-page"
         }
 
 

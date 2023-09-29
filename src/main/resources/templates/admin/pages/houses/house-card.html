@@ -127,7 +127,7 @@
 <script>
     $(document).ready(function () {
         $.ajax({
-            url: "/admin/houses/get-house-by-id/"+[[${id}]]
+            url: "/myhouse24-amirb-nikitaf/admin/houses/get-house-by-id/"+[[${id}]]
         })
             .done(function (response){
                 console.log(response);
@@ -137,11 +137,11 @@
                 $("#address").text(response.address);
                 $("#section").text(response.section);
                 $("#floor").text(response.floor);
-                $("#image1").attr("src","/admin/files/"+response.image1);
-                $("#image2").attr("src","/admin/files/"+response.image2);
-                $("#image3").attr("src","/admin/files/"+response.image3);
-                $("#image4").attr("src","/admin/files/"+response.image4);
-                $("#image5").attr("src","/admin/files/"+response.image5);
+                $("#image1").attr("src","/myhouse24-amirb-nikitaf/admin/files/"+response.image1);
+                $("#image2").attr("src","/myhouse24-amirb-nikitaf/admin/files/"+response.image2);
+                $("#image3").attr("src","/myhouse24-amirb-nikitaf/admin/files/"+response.image3);
+                $("#image4").attr("src","/myhouse24-amirb-nikitaf/admin/files/"+response.image4);
+                $("#image5").attr("src","/myhouse24-amirb-nikitaf/admin/files/"+response.image5);
                 var usersHtml = "";
                 for (let i = 0; i<response.users.length; i++){
                     usersHtml+= "<p>"+response.users[i].role+": <a href=\"/admin/staff/card-"+response.users[i].id+"\">"+response.users[i].fullName+"</a> </p>"

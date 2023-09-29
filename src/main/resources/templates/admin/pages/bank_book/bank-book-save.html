@@ -123,7 +123,7 @@
         function getBankBookResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/bank-books/get-bank-book-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/bank-books/get-bank-book-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -164,14 +164,14 @@
             console.log(bankBookRequest);
             $.ajax({
                 method: bankBookRequest.id ? 'PUT' : "POST",
-                url: bankBookRequest.id ? '/admin/bank-books/update-bank-book' : '/admin/bank-books/save-bank-book',
+                url: bankBookRequest.id ? '/myhouse24-amirb-nikitaf/admin/bank-books/update-bank-book' : '/myhouse24-amirb-nikitaf/admin/bank-books/save-bank-book',
                 contentType: 'application/json',
                 data: JSON.stringify(bankBookRequest),
                 beforeSend: function () {
                     clearValidMessages();
                 }
             }).done(function () {
-                window.location.href = "/admin/bank-books";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/bank-books";
             }).fail(function (response) {
                 const errors = response.responseJSON;
                 console.log(response);
@@ -186,7 +186,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/bank-books/get-all-status',
+                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-status',
                 cache: true,
                 delay: 1000,
                 processResults: function (data) {
@@ -208,7 +208,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bank-books/get-all-house',
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-house',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -234,7 +234,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: '/admin/bank-books/get-section/' + houseId,
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-section/' + houseId,
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
@@ -259,7 +259,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/bank-books/get-all-apartment',
+                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment',
                 cache: true,
                 delay: 1000,
                 processResults: function (data) {
@@ -284,7 +284,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: sectionId ? '/admin/bank-books/get-all-apartment-' + houseId + '/' + sectionId : '/admin/bank-books/get-all-apartment-' + houseId,
+                    url: sectionId ? '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment-' + houseId + '/' + sectionId : '/admin/bank-books/get-all-apartment-' + houseId,
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {

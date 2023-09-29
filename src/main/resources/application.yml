@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /admin
+    context-path: /myhouse24-amirb-nikitaf/admin
   port: 8080
 
 spring:
@@ -8,7 +8,6 @@ spring:
     name: My_House_24
   datasource:
     url: 'jdbc:mysql://localhost:3306/my_house_24'
-#    url: 'jdbc:mysql://myhouse24-db:3306/myhouse24'
     username: 'user'
     password: 'user'
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -40,10 +39,8 @@ spring:
       max-file-size: 20MB
       max-request-size: 50MB
 
-#upload:
-#  path: "C:/Users/Amir Banov/files"
 upload:
-  path: "/files"
+  path: "C:/Users/Amir Banov/files"
 
 app:
   jwt:

@@ -134,7 +134,7 @@
     function getExcel(){
       $.ajax({
         method: "GET",
-        url: "/admin/cash-box/get-excel-cash-box/" + cashBoxId,
+        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-excel-cash-box/" + cashBoxId,
         xhrFields: {
           responseType: 'blob'
         },
@@ -149,7 +149,7 @@
     function getCahBoxResponse(id) {
       $.ajax({
         method: "GET",
-        url: "/admin/cash-box/get-cash-box-" + id,
+        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
         dataType: 'json'
       }).done(function (response) {
         console.log(response)
@@ -181,7 +181,7 @@
         deleteButton.setAttribute("data-id", cashBoxId);
 
       }).fail(function () {
-        window.location.href = "/admin/error";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
       });
     }
 
@@ -196,19 +196,19 @@
     }
 
     function ownerCard(id) {
-      window.location.href = '/admin/users/user-card/' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/users/user-card/' + id;
     }
 
     function bankBookCard(id) {
-      window.location.href = '/admin/bank-books/card-' + id;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/bank-books/card-' + id;
     }
 
     function editCashBox() {
-      window.location.href = '/admin/cash-box/update-' + cashBoxId;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/cash-box/update-' + cashBoxId;
     }
 
     function copyCashBox() {
-      window.location.href = '/admin/cash-box/add-copy-' + cashBoxId;
+      window.location.href = '/myhouse24-amirb-nikitaf/admin/cash-box/add-copy-' + cashBoxId;
     }
 
     const date_flatpickr = document.querySelectorAll('#date');
@@ -224,13 +224,13 @@
     function deleteEntity() {
       $.ajax({
         method: "DELETE",
-        url: "/admin/cash-box/delete-cash-box/" + cashBoxId,
+        url: "/myhouse24-amirb-nikitaf/admin/cash-box/delete-cash-box/" + cashBoxId,
         contentType: 'application/json'
       }).done(function () {
         $('#confirmDelete').modal('hide');
         showToast('success');
         setTimeout(function (){
-          window.location.href = "/admin/cash-box";
+          window.location.href = "/myhouse24-amirb-nikitaf/admin/cash-box";
         },3000);
       }).fail(function (response) {
         console.log(response);

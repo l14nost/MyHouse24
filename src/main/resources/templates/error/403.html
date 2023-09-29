@@ -122,7 +122,7 @@
                 <h1 class="mb-0 mt-4 text-white" >403</h1>
                 <h2 class="mb-0 mt-4 text-white" th:text="#{err.forbidden.title}"></h2>
                 <p class="mt-2 text-white" th:text="#{err.forbidden.description}"></p>
-                <a class="btn bg-white text-primary d-inline-flex align-items-center" href="/admin/payment-items" th:text="#{err.notFound.button}"></a>
+                <a class="btn bg-white text-primary d-inline-flex align-items-center" th:href="@{/payment-items}" th:text="#{err.notFound.button}"></a>
             </div>
             <div class="box">
                 <div class="c xl-circle">
