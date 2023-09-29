@@ -91,7 +91,7 @@ public class BillController {
     }
 
     @PostMapping("/get-all-bills")
-    public ResponseEntity<Page<BillResponse>> getAllMastersApplication(@RequestBody BillRequest request) {
+    public ResponseEntity<Page<BillResponse>> getAllBillResponse(@RequestBody BillRequest request) {
         return ResponseEntity.ok(billService.getAllBillResponse(request));
     }
 
@@ -102,7 +102,7 @@ public class BillController {
 
             String filename = "bills" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(file);
         } catch (IOException e) {
@@ -117,10 +117,12 @@ public class BillController {
 
             String filename = "bill" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(file);
-        } catch (IOException e) {
+        } catch (EntityNotFoundException | IOException e) {
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
         }
     }
@@ -215,12 +217,12 @@ public class BillController {
                 "BillUpdateRequest", LocaleContextHolder.getLocale());
         billValidator.isPayedAndStatusEqualValidation(request.payed(), request.totalPrice(), request.status(), bindingResult,
                 "BillUpdateRequest", LocaleContextHolder.getLocale());
+        billValidator.isPayedCashBoxAndPayedValidationWithId(request.id(), request.payed(), request.totalPrice(), bindingResult,
+                "BillUpdateRequest", LocaleContextHolder.getLocale());
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
         try {
-            billValidator.isPayedCashBoxAndPayedValidationWithId(request.id(), request.payed(), request.totalPrice(), bindingResult,
-                    "BillUpdateRequest", LocaleContextHolder.getLocale());
-            if (bindingResult.hasErrors()) {
-                return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
-            }
             billService.updateBillByRequest(request);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -257,11 +259,7 @@ public class BillController {
     }
 
     @DeleteMapping("/delete-bills")
-    public ResponseEntity<?> deleteBillByRequest(@Valid @RequestBody List<BillDeleteRequest> bills,
-                                                 BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
-        }
+    public ResponseEntity<?> deleteBillByRequest(@RequestBody List<BillDeleteRequest> bills) {
         try {
             billService.deleteBillByRequest(bills);
             return ResponseEntity.ok().build();
@@ -285,11 +283,12 @@ public class BillController {
     }
 
     @GetMapping("/get-sum-of-all-bills")
-    public ResponseEntity getSumOfAllBills(){
+    public ResponseEntity<?> getSumOfAllBills() {
         return ResponseEntity.ok(billService.sumOffAllBillsByMonths());
     }
+
     @GetMapping("/get-sum-of-all-paid-bills")
-    public ResponseEntity getSumOfAllPaidBills(){
+    public ResponseEntity<?> getSumOfAllPaidBills() {
         return ResponseEntity.ok(billService.sumOffAllPaidBillsByMonths());
     }
 }

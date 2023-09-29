@@ -150,20 +150,18 @@ public class StaffController {
     }
 
     @GetMapping("/get-role-by-staff/{id}")
-    public ResponseEntity getRoleByStaff(@PathVariable Long id) {
+    public ResponseEntity<?> getRoleByStaff(@PathVariable Long id) {
         Staff staff = staffService.getStaffById(id);
         return ResponseEntity.ok().body(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()));
     }
 
     @GetMapping("/get-current-staff")
-    public ResponseEntity getCurrentStaff() {
+    public ResponseEntity<?> getCurrentStaff() {
         return ResponseEntity.ok().body(staffService.getCurrentStaff());
     }
 
     @GetMapping("/get-current-staff-for-header")
-    public ResponseEntity getCurrentStaffForHeader() {
+    public ResponseEntity<?> getCurrentStaffForHeader() {
         return ResponseEntity.ok().body(staffService.getCurrentStaffForHeader());
     }
-
-
 }

@@ -2,6 +2,7 @@ package lab.space.my_house_24.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lab.space.my_house_24.model.role.RoleResponse;
 import lab.space.my_house_24.model.role.RoleUpdateRequest;
 import lab.space.my_house_24.service.RoleService;
 import lab.space.my_house_24.util.ErrorMapper;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("role")
 @RequiredArgsConstructor
 public class RoleController {
+
     private final RoleService roleService;
 
     @GetMapping({"/", ""})
@@ -28,14 +30,13 @@ public class RoleController {
     }
 
     @GetMapping("/get-all-roles")
-    public ResponseEntity<?> getAllStaff() {
+    public ResponseEntity<RoleResponse> getAllStaff() {
         return ResponseEntity.ok(roleService.getAllRoleDto());
     }
 
     @PutMapping("/update-all-roles")
     public ResponseEntity<?> updateStaffById(@Valid @RequestBody RoleUpdateRequest roleUpdateRequest,
                                              BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -46,5 +47,4 @@ public class RoleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
     }
-
 }
