@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /admin
+    context-path: /myhouse24-amirb-nikitaf/admin
   port: 8080
 
 spring:
