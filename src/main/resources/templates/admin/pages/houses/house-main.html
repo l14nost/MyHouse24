@@ -113,15 +113,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteEntityLabel">Delete Apartment Owner</h5>
+                    <h5 class="modal-title" id="confirmDeleteEntityLabel" th:text="#{house.modal.title}"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete apartment?</p>
+                    <p th:text="#{house.modal.body}"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-success" onclick="entityDelete()">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{global.modal.cancel}"></button>
+                    <button type="button" class="btn btn-success" onclick="entityDelete()" th:text="#{global.modal.confirm}"></button>
                 </div>
             </div>
         </div>
@@ -210,7 +210,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/houses/get-all-house",
+                url: "/myhouse24-amirb-nikitaf/admin/houses/get-all-house",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -358,13 +358,13 @@
                 )
         }
         function entityCard(id){
-            window.location.href = "/admin/houses/house-card/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/houses/house-card/"+id;
         }
         function entityEdit(id){
-            window.location.href = "/admin/houses/edit-house/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/houses/edit-house/"+id;
         }
         function entityAdd(){
-            window.location.href = "/admin/houses/add-house";
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/houses/add-house";
         }
 
 
@@ -380,7 +380,7 @@
         function entityDelete(){
             $.ajax({
                 method: "DELETE",
-                url: "/admin/houses/delete-house/"+houseId,
+                url: "/myhouse24-amirb-nikitaf/admin/houses/delete-house/"+houseId,
                 contentType: 'application/json'
             }).done(
                 function (){

@@ -81,7 +81,7 @@
                                         <h5 class="mb-0 text-white" th:text="#{header.new.users}"></h5>
                                     </div>
                                 </div>
-                                <div class="p-0 card-body " id="newUsersContainer">
+                                <div class="p-0 card-body table-responsive" style="max-height: 300px" id="newUsersContainer">
 
                                 </div>
                                 <a th:href="@{/users}">
@@ -117,13 +117,12 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="" id="profile-page">Profile</a></li>
+                            <li><a class="dropdown-item" href="" id="profile-page" th:text="#{header.profile}"></a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmLogOut">
-                                    Logout
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmLogOut" th:text="#{header.logout}">
                                 </button>
                             </li>
                         </ul>

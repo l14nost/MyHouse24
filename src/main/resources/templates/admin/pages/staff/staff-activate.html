@@ -208,7 +208,7 @@
 
         $.ajax({
             method: 'PUT' ,
-            url:(url!=='forgot-password') ? '/admin/auth/update-staff':'/admin/login/forgot-password-staff-change' ,
+            url:(url!=='forgot-password') ? '/myhouse24-amirb-nikitaf/admin/auth/update-staff':'/myhouse24-amirb-nikitaf/admin/login/forgot-password-staff-change' ,
             contentType: 'application/json',
             data: JSON.stringify(inviteRequest),
             beforeSend: function () {
@@ -218,7 +218,7 @@
             showToast('success');
             $('#success-button').addClass('disabled');
             setTimeout(function (){
-                window.location.href = "/admin/login";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/login";
             },3000);
         }).fail(function (response) {
             const errors = response.responseJSON;

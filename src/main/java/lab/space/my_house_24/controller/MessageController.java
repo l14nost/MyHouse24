@@ -2,12 +2,17 @@ package lab.space.my_house_24.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lab.space.my_house_24.entity.Message;
 import lab.space.my_house_24.model.message.MessageMainPageRequest;
 import lab.space.my_house_24.model.message.MessageRequestForSend;
+import lab.space.my_house_24.model.message.MessageResponseForMain;
 import lab.space.my_house_24.service.MessageService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -83,5 +88,12 @@ public class MessageController {
     @GetMapping("/add-message-debt")
     public ModelAndView addMessageDebtPage(){
         return new ModelAndView("admin/pages/message/message-add");
+    }
+
+    @MessageMapping("/change")
+    @SendTo("/topic/new")
+    public Page<MessageResponseForMain> change(MessageRequestForSend messageRequestForSend){
+        messageService.sendMessage(messageRequestForSend);
+        return messageService.findAllForMessageMain(new MessageMainPageRequest(0,""));
     }
 }

@@ -216,7 +216,7 @@
     function getExcel(){
       $.ajax({
         method: "POST",
-        url: "/admin/bills/get-excel-bills",
+        url: "/myhouse24-amirb-nikitaf/admin/bills/get-excel-bills",
         contentType: 'application/json',
         data: JSON.stringify(billRequest),
         xhrFields: {
@@ -246,7 +246,7 @@
       const data = collectCheckboxData();
       $.ajax({
         method: "DELETE",
-        url: "/admin/bills/delete-bills",
+        url: "/myhouse24-amirb-nikitaf/admin/bills/delete-bills",
         contentType: 'application/json',
         data: JSON.stringify(data)
       }).done(function () {
@@ -264,7 +264,7 @@
     function getAllBill() {
       $.ajax({
         method: "POST",
-        url: "/admin/bills/get-all-bills",
+        url: "/myhouse24-amirb-nikitaf/admin/bills/get-all-bills",
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(billRequest)
@@ -272,12 +272,12 @@
         console.info(response)
         const TABLE_BODY = createTable('#bills-table', response?.totalElements, response?.totalPages, billRequest?.pageIndex);
         $.each(response?.content, function (index, bill) {
-          const $copy = '<a class="btn btn-sm btn-icon text-gray" data-bs-toggle="tooltip" href="/admin/bills/add-copy-' + bill.id + '" aria-label="Documents" data-bs-original-title="Documents">\n' +
+          const $copy = '<a class="btn btn-sm btn-icon text-gray" data-bs-toggle="tooltip" href="/myhouse24-amirb-nikitaf/admin/bills/add-copy-' + bill.id + '" aria-label="Documents" data-bs-original-title="Documents">\n' +
                   '                        <span class="btn-inner">\n' +
                   '                            <svg class="icon-20" width="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></svg>\n' +
                   '                        </span>\n' +
                   '                    </a>';
-          const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" href="/admin/bills/update-' + bill.id + '" aria-label="Edit User" data-bs-original-title="Edit User">' +
+          const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" href="/myhouse24-amirb-nikitaf/admin/bills/update-' + bill.id + '" aria-label="Edit User" data-bs-original-title="Edit User">' +
                   '<span class="btn-inner">' +
                   '<svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
                   '<path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
@@ -296,7 +296,7 @@
                   '</span>' +
                   '</a>';
           $(TABLE_BODY).append(
-                  '<tr  data-href="/admin/bills/card-' + bill.id + '" data-key="' + bill.id + '">' +
+                  '<tr  data-href="/myhouse24-amirb-nikitaf/admin/bills/card-' + bill.id + '" data-key="' + bill.id + '">' +
                   '    <td data-actions="data-actions"><input type="checkbox" class="form-check-input " id="checkbox-' + bill.id + '" ></td>' +
                   '    <td>' + bill?.number + '</td>' +
                   '    <td class="h5">' + addBadgeBillStatus(bill?.status) + '</td>' +
@@ -355,7 +355,7 @@
     function deleteEntity() {
       $.ajax({
         method: "DELETE",
-        url: "/admin/bills/delete-bill/" + billId,
+        url: "/myhouse24-amirb-nikitaf/admin/bills/delete-bill/" + billId,
         contentType: 'application/json'
       }).done(function () {
         $('#confirmDelete').modal('hide');
@@ -386,7 +386,7 @@
       minimumResultsForSearch: -1,
       ajax: {
         method: 'GET',
-        url: '/admin/bills/get-all-status',
+        url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
         cache: true,
         delay: 1500,
         processResults: function (data) {
@@ -407,7 +407,7 @@
       minimumResultsForSearch: -1,
       ajax: {
         method: 'GET',
-        url: '/admin/bills/get-all-draft',
+        url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-draft',
         cache: true,
         delay: 1500,
         processResults: function (data) {
@@ -429,7 +429,7 @@
       minimumResultsForSearch: -1,
       ajax: {
         method: 'GET',
-        url: '/admin/bills/get-all-owner',
+        url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-owner',
         cache: true,
         delay: 1500,
         processResults: function (data) {

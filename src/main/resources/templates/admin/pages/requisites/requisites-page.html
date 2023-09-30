@@ -79,7 +79,7 @@
 <th:block layout:fragment="extra-script">
     <script>
         function cancelRequisites(){
-            window.location.href = "/admin/payment-details"
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/payment-details"
         }
         function saveRequisites(){
             var form = document.getElementById("requisitesForm");
@@ -91,7 +91,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"PUT",
-                url: "/admin/payment-details/payment-details-save",
+                url: "/myhouse24-amirb-nikitaf/admin/payment-details/payment-details-save",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData),
             }).done(

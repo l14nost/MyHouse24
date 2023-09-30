@@ -107,7 +107,7 @@
 
     function deleteEntity(){
         $.ajax({
-            url: "/admin/messages/delete-message/"+[[${id}]],
+            url: "/myhouse24-amirb-nikitaf/admin/messages/delete-message/"+[[${id}]],
             method: "DELETE"
         })
             .done(function (response){
@@ -122,7 +122,7 @@
 
     $(document).ready(function () {
         $.ajax({
-            url: "/admin/messages/get-message-by-id/"+[[${id}]]
+            url: "/myhouse24-amirb-nikitaf/admin/messages/get-message-by-id/"+[[${id}]]
         })
             .done(function (response){
                 console.log(response);

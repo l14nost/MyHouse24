@@ -339,7 +339,7 @@
         function getAllRoles() {
             $.ajax({
                 method: "GET",
-                url: "/admin/role/get-all-roles",
+                url: "/myhouse24-amirb-nikitaf/admin/role/get-all-roles",
                 dataType: 'json',
                 contentType: 'application/json',
             }).done(function (roleResponse) {
@@ -572,7 +572,7 @@
 
             $.ajax({
                 method: 'PUT',
-                url: '/admin/role/update-all-roles',
+                url: '/myhouse24-amirb-nikitaf/admin/role/update-all-roles',
                 contentType: 'application/json',
                 data: JSON.stringify(roleUpdateRequest),
                 beforeSend: function () {

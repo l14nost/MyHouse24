@@ -161,15 +161,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteUserLabel">Delete Apartment Owner</h5>
+                    <h5 class="modal-title" id="confirmDeleteUserLabel" th:text="#{user.modal.title}"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete apartment owner?</p>
+                    <p th:text="#{user.modal.body}"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-success" onclick="userDelete()">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{global.modal.cancel}"></button>
+                    <button type="button" class="btn btn-success" onclick="userDelete()" th:text="#{global.modal.confirm}"></button>
                 </div>
             </div>
         </div>
@@ -291,7 +291,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/users/get-all-users",
+                url: "/myhouse24-amirb-nikitaf/admin/users/get-all-users",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -354,7 +354,7 @@
                                 $.each(user.houses, function (indexHouse, house) {
                                     const containerHouse = document.getElementById("userHouse" + index);
                                     const newP = document.createElement("a");
-                                    newP.href = "/admin/houses/house-card/" + house.id;
+                                    newP.href = "/myhouse24-amirb-nikitaf/admin/houses/house-card/" + house.id;
                                     newP.innerHTML = house.name;
                                     newP.style.margin = "0";
                                     newP.style.display = "flex";
@@ -366,7 +366,7 @@
                                     const containerHouse = document.getElementById("userApartment" + index);
                                     const newP = document.createElement("a");
                                     newP.innerHTML = "№" + apartment.number;
-                                    newP.href = "/admin/apartments/apartment-card/" + apartment.id;
+                                    newP.href = "/myhouse24-amirb-nikitaf/admin/apartments/apartment-card/" + apartment.id;
                                     newP.style.margin = "0";
                                     newP.style.display = "flex";
                                     newP.style.justifyContent = "center";
@@ -478,15 +478,15 @@
                 )
         }
         function userCard(id){
-            window.location.href = "/admin/users/user-card/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/users/user-card/"+id;
         }
         function userEdit(id){
-            window.location.href = "/admin/users/edit-user/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/users/edit-user/"+id;
         }
         function userMessage(email){
             $.ajax({
                 method: "POST",
-                url: "/admin/users/invite-send",
+                url: "/myhouse24-amirb-nikitaf/admin/users/invite-send",
                 data:{
                     email: email
                 }
@@ -516,7 +516,7 @@
         function userDelete(){
             $.ajax({
                 method: "DELETE",
-                url: "/admin/users/delete-user/"+userId,
+                url: "/myhouse24-amirb-nikitaf/admin/users/delete-user/"+userId,
                 contentType: 'application/json'
             }).done(
                 function (){

@@ -61,17 +61,17 @@
 
                 const newClass = targetElement.className;
                 if (newClass.indexOf('sidebar-mini') === 68 || newClass.indexOf('sidebar-mini') === 78){
-                    logoImg.src = '/admin/assets/images/pages/logo-mini.svg';
+                    logoImg.src = '/myhouse24-amirb-nikitaf/admin/assets/images/pages/logo-mini.svg';
                 }
                 else if (newClass.indexOf('sidebar-mini') === -1){
                     $.ajax({
-                        url: "/admin/get-locale"
+                        url: "/myhouse24-amirb-nikitaf/admin/get-locale"
                     })
                         .done(function (response){
                             if (response === 'en') {
-                                logoImg.src = '/admin/assets/images/pages/logo-en.png';
+                                logoImg.src = '/myhouse24-amirb-nikitaf/admin/assets/images/pages/logo-en.png';
                             } else if (response === 'uk') {
-                                logoImg.src = '/admin/assets/images/pages/logo-ua1.png';
+                                logoImg.src = '/myhouse24-amirb-nikitaf/admin/assets/images/pages/logo-ua1.png';
                             }
                         });
                 }
@@ -91,7 +91,7 @@
     function getStatistic() {
         $.ajax({
             method: "GET",
-            url: "/admin/statistics/get-statistic",
+            url: "/myhouse24-amirb-nikitaf/admin/statistics/get-statistic",
             dataType: 'json',
             contentType: 'application/json'
         }).done(function (response) {
@@ -118,7 +118,7 @@
 
     function getLocale(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 const logoImg = document.getElementById('logoImg');
@@ -132,11 +132,11 @@
                 newImg.alt="lang";
                 newImg.id = "langImg"
                 if (response === 'en') {
-                    newImg.src = '/admin/assets/images/Flag/flag001.png';
-                    logoImg.src = '/admin/assets/images/pages/logo-en.png';
+                    newImg.src = '/myhouse24-amirb-nikitaf/admin/assets/images/Flag/flag001.png';
+                    logoImg.src = '/myhouse24-amirb-nikitaf/admin/assets/images/pages/logo-en.png';
                 } else if (response === 'uk') {
-                    newImg.src  = '/admin/assets/images/Flag/flag002.png';
-                    logoImg.src = '/admin/assets/images/pages/logo-ua1.png';
+                    newImg.src  = '/myhouse24-amirb-nikitaf/admin/assets/images/Flag/flag002.png';
+                    logoImg.src = '/myhouse24-amirb-nikitaf/admin/assets/images/pages/logo-ua1.png';
                 }
                 container.appendChild(newImg);
             });
@@ -326,9 +326,7 @@
             let downloadUrl = URL.createObjectURL(blob);
 
             if (filename) {
-                // use HTML5 a[download] attribute to specify filename
                 let a = document.createElement("a");
-                // safari doesn't support this yet
                 if (typeof a.download === 'undefined') {
                     window.location.href = downloadUrl;
                 } else {
@@ -367,7 +365,7 @@
         var navLinks = document.querySelectorAll(".sidebar-active");
         var pathAndQuery = window.location.pathname + window.location.search;
         var pathSplit = pathAndQuery.split("/");
-        var chapter = pathSplit[2];
+        var chapter = pathSplit[3];
 
         var idsSystem = ["payment-details","payment-items","staf","rol","rates","system-service"]
 
@@ -382,8 +380,8 @@
                         var targetLinks = document.getElementById(ids[i]);
                         targetLinks.classList.add("active")
                     } else {
-                        if (pathSplit.length > 3) {
-                            var chapter1 = pathSplit[3];
+                        if (pathSplit.length > 4) {
+                            var chapter1 = pathSplit[4];
                             if (chapter1.includes(ids[i]) && chapter.includes("site")) {
                                 var targetLinksSite = document.getElementById(ids[i]);
                                 targetLinksSite.classList.add("active")
@@ -449,7 +447,7 @@
     checkbox.addEventListener('change', function() {
         if (this.checked) {
             $.ajax({
-                url: "/admin/change-theme",
+                url: "/myhouse24-amirb-nikitaf/admin/change-theme",
                 method: "POST",
                 data:{
                     theme: true
@@ -458,7 +456,7 @@
             changeTheme(true);
         } else {
             $.ajax({
-                url: "/admin/change-theme",
+                url: "/myhouse24-amirb-nikitaf/admin/change-theme",
                 method: "POST",
                 data:{
                     theme: false
@@ -470,7 +468,7 @@
 
     function newUserCount(){
         $.ajax({
-            url: "/admin/users/get-users-for-header"
+            url: "/myhouse24-amirb-nikitaf/admin/users/get-users-for-header"
         })
             .done(function(response) {
                 let countUsers = document.getElementById("countUsers");
@@ -496,7 +494,7 @@
                     let summaryContainer = document.getElementById("newUsersContainer");
                     let newLi = document.createElement("a");
                     newLi.classList.add("iq-sub-card")
-                    newLi.href = "/admin/users/user-card/"+entity.id
+                    newLi.href = "/myhouse24-amirb-nikitaf/admin/users/user-card/"+entity.id
                     newLi.innerHTML = "<div class=\"d-flex align-items-center\" >\n" +
                         "            <div class=\"ms-3 d-flex justify-content-between\" style='width: 100%'>\n" +
                         "                <h6>"+entity.fullName+"</h6>\n" +
@@ -517,12 +515,12 @@
     }
     $(document).ready ( function(){
         $.ajax({
-            url: "/admin/staff/get-current-staff-for-header"
+            url: "/myhouse24-amirb-nikitaf/admin/staff/get-current-staff-for-header"
         })
             .done(function(response) {
                 $("#fullName-staff").text(response.fullName)
                 $("#email-staff").text(response.email)
-                $("#profile-page").attr("href","/admin/staff/card-"+response.id)
+                $("#profile-page").attr("href","/myhouse24-amirb-nikitaf/admin/staff/card-"+response.id)
             });
 
 
@@ -530,7 +528,7 @@
 
         function getTheme() {
             $.ajax({
-                url: "/admin/get-theme"
+                url: "/myhouse24-amirb-nikitaf/admin/get-theme"
             })
                 .done(function(response) {
                     const checkbox = document.getElementById('switchTheme');
@@ -654,7 +652,7 @@
 
     function changePhotoError(id){
         var photo = document.getElementById(id);
-        photo.src = "/admin/static/assets/images/default.jpg";
+        photo.src = "/myhouse24-amirb-nikitaf/admin/static/assets/images/default.jpg";
     }
     //mask for bank-book number
     function applyMask(input) {
@@ -674,14 +672,14 @@
             var testImage = new Image();
             testImage.src = image.src;
             testImage.addEventListener("error", function() {
-                image.src = "/admin/static/assets/images/default.jpg";
+                image.src = "/myhouse24-amirb-nikitaf/admin/static/assets/images/default.jpg";
             });
         });
 
         $('.error-photo').bind('error', function() {
             var fieldID = $(this).attr('id');
             var photo = document.getElementById(fieldID);
-            photo.src = "/admin/static/assets/images/default.jpg";
+            photo.src = "/myhouse24-amirb-nikitaf/admin/static/assets/images/default.jpg";
         });
     });
 </script>

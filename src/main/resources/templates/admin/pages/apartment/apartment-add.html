@@ -132,7 +132,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/users/get-users/apartment-table",
+                    url: "/myhouse24-amirb-nikitaf/admin/users/get-users/apartment-table",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -183,7 +183,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-section/"+idHouse,
+                        url: "/myhouse24-amirb-nikitaf/admin/get-section/"+idHouse,
                         data: function (param) {
                             return {
                                 search: param.term || "",
@@ -211,7 +211,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-floor/"+idHouse,
+                        url: "/myhouse24-amirb-nikitaf/admin/get-floor/"+idHouse,
                         data: function (param) {
                             return {
                                 search: param.term || "",
@@ -248,7 +248,7 @@
 
         $(document).ready(function (){
             $.ajax({
-                url: "/admin/get-locale"
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
                 .done(function (response){
                     select2(response);
@@ -268,7 +268,7 @@
 
 
         function cancelApartment(){
-            window.location.href = "/admin/apartments";
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/apartments";
         }
 
 
@@ -282,12 +282,12 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/apartments/add-apartment-save",
+                url: "/myhouse24-amirb-nikitaf/admin/apartments/add-apartment-save",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(
                 function (response){
-                    window.location.href = "/admin/apartments";
+                    window.location.href = "/myhouse24-amirb-nikitaf/admin/apartments";
                 }
             ).fail(
                 function(response){
@@ -330,7 +330,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/apartments/add-apartment-save",
+                url: "/myhouse24-amirb-nikitaf/admin/apartments/add-apartment-save",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

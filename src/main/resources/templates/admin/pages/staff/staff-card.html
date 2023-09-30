@@ -92,7 +92,7 @@
         function getStaffDTO(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/staff/get-staff-card-dto/" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/staff/get-staff-card-dto/" + id,
                 dataType: 'json'
             }).done(function (staffResponse) {
                 console.log(staffResponse)
@@ -106,7 +106,7 @@
         }
 
         function editStaff() {
-            window.location.href = '/admin/staff/' + staffId;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/staff/' + staffId;
         }
     </script>
 

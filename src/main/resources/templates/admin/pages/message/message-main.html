@@ -121,15 +121,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteEntityLabel">Delete Messages</h5>
+                    <h5 class="modal-title" id="confirmDeleteEntityLabel" th:text="#{message.modal.title}"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete messages?</p>
+                    <p th:text="#{message.modal.body}"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-success" onclick="entityDelete()">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{global.modal.cancel}"></button>
+                    <button type="button" class="btn btn-success" onclick="entityDelete()" th:text="#{global.modal.confirm}"></button>
                 </div>
             </div>
         </div>
@@ -264,7 +264,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/messages/get-all-message",
+                url: "/myhouse24-amirb-nikitaf/admin/messages/get-all-message",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -393,10 +393,10 @@
                 )
         }
         function entityCard(id){
-            window.location.href = "/admin/messages/message-card/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/messages/message-card/"+id;
         }
         function entityAdd(){
-            window.location.href = "/admin/messages/add-message";
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/messages/add-message";
         }
 
 
@@ -419,7 +419,7 @@
             const idsQueryParam = deleteIds.join(',');
             $.ajax({
                 method: "DELETE",
-                url: "/admin/messages/delete-messages",
+                url: "/myhouse24-amirb-nikitaf/admin/messages/delete-messages",
                 data: {
                     ids: idsQueryParam
                 }

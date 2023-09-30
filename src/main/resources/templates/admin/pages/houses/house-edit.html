@@ -110,24 +110,24 @@
                         </div>
                     </div>
                         <div class="col-md-4">
-                        <img class="error-photo" th:src="${'/admin/files/'+house.image1()}" style="width: 100%; height: 50%" id="img1">
+                        <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image1()}" style="width: 100%; height: 50%" id="img1">
                     </div>
                         <div class="col-md-4">
                         <div class="row" style="height: 50%; align-items: center">
                             <div class="row" style=" height: 45%">
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/admin/files/'+house.image2()}" style="width: 100%; height: 100%" id="img2">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image2()}" style="width: 100%; height: 100%" id="img2">
                                 </div>
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/admin/files/'+house.image3()}" style="width: 100%; height: 100%" id="img3">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image3()}" style="width: 100%; height: 100%" id="img3">
                                 </div>
                             </div>
                             <div class="row " style=" height: 50%; padding-top: 5%">
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/admin/files/'+house.image4()}" style="width: 100%; height: 100%" id="img4">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image4()}" style="width: 100%; height: 100%" id="img4">
                                 </div>
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/admin/files/'+house.image5()}" style="width: 100%; height: 100%" id="img5">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image5()}" style="width: 100%; height: 100%" id="img5">
                                 </div>
                             </div>
                         </div>
@@ -295,12 +295,12 @@
         }
     });
     function cancelHouse(){
-        window.location.href = "/admin/houses";
+        window.location.href = "/myhouse24-amirb-nikitaf/admin/houses";
     }
 
     function addSection(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 if (response === "uk"){
@@ -360,7 +360,7 @@
 
     function addFloor(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 if (response === "uk"){
@@ -420,7 +420,7 @@
 
     function addUser(){
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 if (response === "uk"){
@@ -472,7 +472,7 @@
 
         container.append(newDiv);
         $.ajax({
-            url: "/admin/get-locale"
+            url: "/myhouse24-amirb-nikitaf/admin/get-locale"
         })
             .done(function (response){
                 select2(response);
@@ -500,7 +500,7 @@
             language: lang,
             cache: true,
             ajax: {
-                url: "/admin/staff/get-all-staff-for-house",
+                url: "/myhouse24-amirb-nikitaf/admin/staff/get-all-staff-for-house",
                 processResults: function (data) {
                     return {
                         results: data.map(function (item) {
@@ -520,7 +520,7 @@
 
     $(document).ready(function(){
        $.ajax({
-           url: "/admin/get-locale"
+           url: "/myhouse24-amirb-nikitaf/admin/get-locale"
        })
            .done(function (response){
                select2(response);
@@ -535,7 +535,7 @@
         var roleInput = document.getElementById("userRole" + id);
         var selectedValue = selectElement.value;
         $.ajax({
-            url: "/admin/staff/get-role-by-staff/"+selectedValue,
+            url: "/myhouse24-amirb-nikitaf/admin/staff/get-role-by-staff/"+selectedValue,
             method: "GET"
         })
             .done(function (response){
@@ -548,7 +548,7 @@
         var roleInput = document.getElementById("newUserRole" + id);
         var selectedValue = selectElement.value;
         $.ajax({
-            url: "/admin/staff/get-role-by-staff/"+selectedValue,
+            url: "/myhouse24-amirb-nikitaf/admin/staff/get-role-by-staff/"+selectedValue,
             method: "GET"
         })
             .done(function (response){
@@ -563,7 +563,7 @@
         formData.append("deleteStaffList", deleteIdsUser);
         $.ajax({
             method:"PUT",
-            url: "/admin/houses/edit-house/"+[[${house.id()}]],
+            url: "/myhouse24-amirb-nikitaf/admin/houses/edit-house/"+[[${house.id()}]],
             contentType: false,
             processData: false,
             data:formData

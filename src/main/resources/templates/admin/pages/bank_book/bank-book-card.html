@@ -121,7 +121,7 @@
         function getBankBookResponse(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/bank-books/get-bank-book-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/bank-books/get-bank-book-" + id,
                 dataType: 'json'
             }).done(function (response) {
                 console.log(response)
@@ -140,7 +140,7 @@
                 $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]]');
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));
             }).fail(function (){
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
@@ -160,24 +160,24 @@
         }
 
         function ownerCard(id) {
-            window.location.href = '/admin/users/user-card/' + id;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/users/user-card/' + id;
         }
 
         function apartmentCard(id) {
-            window.location.href = '/admin/apartments/apartment-card/' + id;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/apartments/apartment-card/' + id;
         }
 
         function houseCard(id) {
-            window.location.href = '/admin/houses/house-card/' + id;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/houses/house-card/' + id;
         }
 
         function editBankBook() {
-            window.location.href = '/admin/bank-books/update-' + bankBookId;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/bank-books/update-' + bankBookId;
         }
 
         function createBill() {
-            if (apartmentId) window.location.href = '/admin/bills/add-copy-bank-book-' + bankBookId;
-            else window.location.href = '/admin/bills/add';
+            if (apartmentId) window.location.href = '/myhouse24-amirb-nikitaf/admin/bills/add-copy-bank-book-' + bankBookId;
+            else window.location.href = '/myhouse24-amirb-nikitaf/admin/bills/add';
         }
 
     </script>

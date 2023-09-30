@@ -75,8 +75,8 @@ public class MeterReadingController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/meter-readings-by-apartment")
-    public ModelAndView meterReadingByApartmentPage(@RequestParam Long idApartment, @RequestParam Long idService) {
+    @GetMapping("/meter-readings-by-apartment/{idApartment}/{idService}")
+    public ModelAndView meterReadingByApartmentPage(@PathVariable Long idApartment, @PathVariable Long idService) {
         ModelAndView modelAndView = new ModelAndView("admin/pages/meterReading/meter-reading-apartment");
         modelAndView.addObject("idApartment", idApartment);
         modelAndView.addObject("apartment", apartmentService.findById(idApartment).getNumber());

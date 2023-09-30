@@ -109,7 +109,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/houses/get-houses-for-select",
+                    url: "/myhouse24-amirb-nikitaf/admin/houses/get-houses-for-select",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -168,7 +168,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-section/"+idHouse,
+                        url: "/myhouse24-amirb-nikitaf/admin/get-section/"+idHouse,
                         data: function (param) {
                             return {
                                 search: param.term || "",
@@ -197,7 +197,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-floor/"+idHouse,
+                        url: "/myhouse24-amirb-nikitaf/admin/get-floor/"+idHouse,
                         data: function (param) {
                             return {
                                 search: param.term || "",
@@ -226,7 +226,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/apartments/get-apartment",
+                        url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
                         method: "GET",
                         data:{
                           idHouse: idHouse,
@@ -262,7 +262,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/apartments/get-apartment",
+                        url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
@@ -297,7 +297,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/apartments/get-apartment",
+                        url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
                         data:{
                             idHouse: idHouse,
                             idSection: idSection,
@@ -328,7 +328,7 @@
 
         $(document).ready(function (){
             $.ajax({
-                url: "/admin/staff/get-current-staff"
+                url: "/myhouse24-amirb-nikitaf/admin/staff/get-current-staff"
             })
                 .done(function (response){
                     var staff = document.getElementById("staff");
@@ -394,7 +394,7 @@
             console.log(jsonData);
             $.ajax({
                 method:"POST",
-                url: "/admin/messages/add-message",
+                url: "/myhouse24-amirb-nikitaf/admin/messages/add-message",
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
             }).done(

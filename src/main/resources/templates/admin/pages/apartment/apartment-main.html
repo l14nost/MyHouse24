@@ -128,15 +128,15 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content ">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteApartmentLabel">Delete Apartment Owner</h5>
+                    <h5 class="modal-title" id="confirmDeleteApartmentLabel" th:text="#{apartment.modal.title}"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete apartment?</p>
+                    <p th:text="#{apartment.modal.body}"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="btn btn-success" onclick="apartmentDelete()">Yes</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" th:text="#{global.modal.cancel}"></button>
+                    <button type="button" class="btn btn-success" onclick="apartmentDelete()" th:text="#{global.modal.confirm}"></button>
                 </div>
             </div>
         </div>
@@ -210,7 +210,7 @@
                 theme: 'bootstrap-5',
                 language: lang,
                 ajax: {
-                    url: "/admin/users/get-users/apartment-table",
+                    url: "/myhouse24-amirb-nikitaf/admin/users/get-users/apartment-table",
                     data: function (param) {
                         return {
                             search: param.term || "",
@@ -256,7 +256,7 @@
                             theme: 'bootstrap-5',
                             language: lang,
                             ajax: {
-                                url: "/admin/get-section/"+idHouse,
+                                url: "/myhouse24-amirb-nikitaf/admin/get-section/"+idHouse,
                                 data: function (param) {
                                     return {
                                         search: param.term || "",
@@ -284,7 +284,7 @@
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
-                        url: "/admin/get-floor/"+idHouse,
+                        url: "/myhouse24-amirb-nikitaf/admin/get-floor/"+idHouse,
                         data: function (param) {
                             return {
                                 search: param.term || "",
@@ -354,7 +354,7 @@
                 }
             });
             $.ajax({
-                url: "/admin/get-locale"
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
                 .done(function (response){
                     select2(response);
@@ -387,7 +387,7 @@
             });
             $.ajax({
                 method: "POST",
-                url: "/admin/apartments/get-all-apartments",
+                url: "/myhouse24-amirb-nikitaf/admin/apartments/get-all-apartments",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(jsonData)
@@ -548,13 +548,13 @@
                 )
         }
         function apartmentCard(id){
-            window.location.href = "/admin/apartments/apartment-card/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/apartments/apartment-card/"+id;
         }
         function apartmentEdit(id){
-            window.location.href = "/admin/apartments/edit-apartment/"+id;
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/apartments/edit-apartment/"+id;
         }
         function apartmentAdd(){
-            window.location.href = "/admin/apartments/add-apartment";
+            window.location.href = "/myhouse24-amirb-nikitaf/admin/apartments/add-apartment";
         }
 
 
@@ -570,7 +570,7 @@
         function apartmentDelete(){
             $.ajax({
                 method: "DELETE",
-                url: "/admin/apartments/delete-apartment/"+apartmentId,
+                url: "/myhouse24-amirb-nikitaf/admin/apartments/delete-apartment/"+apartmentId,
                 contentType: 'application/json'
             }).done(
                 function(){

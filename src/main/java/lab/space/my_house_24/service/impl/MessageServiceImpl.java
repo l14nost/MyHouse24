@@ -74,7 +74,6 @@ public class MessageServiceImpl implements MessageService {
         log.info("Message was send");
 
     }
-
     @Override
     public void deleteMessage(Long id) {
         log.info("Try to delete message by id: "+id);

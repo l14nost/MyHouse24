@@ -94,7 +94,7 @@
         function getAllRates() {
             $.ajax({
                 method: "POST",
-                url: "/admin/rates/get-all-rates",
+                url: "/myhouse24-amirb-nikitaf/admin/rates/get-all-rates",
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify(rateRequest)
@@ -178,7 +178,7 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/admin/rates/delete-rate/" + rateId,
+                url: "/myhouse24-amirb-nikitaf/admin/rates/delete-rate/" + rateId,
                 contentType: 'application/json'
             }).done(function () {
                 $('#confirmDelete').modal('hide');

@@ -92,7 +92,7 @@
         function getArticleDTO(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/payment-items/get-article-dto/" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/payment-items/get-article-dto/" + id,
                 dataType: 'json'
             }).done(function (articleResponse) {
                 console.log(articleResponse)
@@ -118,7 +118,7 @@
             console.log(articleRequest)
             $.ajax({
                 method: typeReq ? 'PUT' : "POST",
-                url: typeReq ? '/admin/payment-items/update-article' : '/admin/payment-items/save-article',
+                url: typeReq ? '/myhouse24-amirb-nikitaf/admin/payment-items/update-article' : '/myhouse24-amirb-nikitaf/admin/payment-items/save-article',
                 contentType: 'application/json',
                 data: JSON.stringify(articleRequest),
                 beforeSend: function () {
@@ -140,7 +140,7 @@
             minimumResultsForSearch: -1,
             ajax: {
                 method: 'GET',
-                url: '/admin/payment-items/all-article-type',
+                url: '/myhouse24-amirb-nikitaf/admin/payment-items/all-article-type',
                 cache: true,
                 delay: 1500,
                 processResults: function (data) {

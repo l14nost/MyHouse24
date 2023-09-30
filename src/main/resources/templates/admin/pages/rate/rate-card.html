@@ -99,7 +99,7 @@
         function getRate(id) {
             $.ajax({
                 method: "GET",
-                url: "/admin/rates/get-rate-card-" + id,
+                url: "/myhouse24-amirb-nikitaf/admin/rates/get-rate-card-" + id,
                 dataType: 'json'
             }).done(function (rateResponse) {
                 console.log(rateResponse)
@@ -130,7 +130,7 @@
         }
 
         function editRate() {
-            window.location.href = '/admin/rates/update-' + rateId;
+            window.location.href = '/myhouse24-amirb-nikitaf/admin/rates/update-' + rateId;
         }
     </script>
 
