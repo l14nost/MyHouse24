@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -72,7 +73,7 @@ class MessageServiceImplTest {
                 Message.builder().sendDate(LocalDateTime.of(2023,9,9,10,10).atZone(ZoneId.systemDefault()).toInstant()).build(),
                 Message.builder().sendDate(LocalDateTime.of(2023,9,9,10,10).atZone(ZoneId.systemDefault()).toInstant()).build()
         ));
-        when(messageRepository.findAll(PageRequest.of(0,10))).thenReturn(messagePage);
+        when(messageRepository.findAll(PageRequest.of(0,10, Sort.by(Sort.Direction.DESC,"id")))).thenReturn(messagePage);
         Page<MessageResponseForMain> messageResponseForMains = new PageImpl<>(List.of(
                 MessageResponseForMain.builder().sendDate(LocalDateTime.of(2023,9,9,10,10)).build(),
                 MessageResponseForMain.builder().sendDate(LocalDateTime.of(2023,9,9,10,10)).build(),
