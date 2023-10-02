@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
             log.info("Try to search message by keyword: "+mainPageRequest.keyWord());
             return messageRepository.findAll(messageSpecification, PageRequest.of(mainPageRequest.page(),10)).map(MessageMapper::entityToDtoForMain);
         }
-        return messageRepository.findAll(PageRequest.of(mainPageRequest.page(),10)).map(MessageMapper::entityToDtoForMain);
+        return messageRepository.findAll(PageRequest.of(mainPageRequest.page(),10, Sort.by(Sort.Direction.DESC,"id"))).map(MessageMapper::entityToDtoForMain);
     }
 
     @Override

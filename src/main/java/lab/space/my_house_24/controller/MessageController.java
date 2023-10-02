@@ -90,10 +90,9 @@ public class MessageController {
         return new ModelAndView("admin/pages/message/message-add");
     }
 
-    @MessageMapping("/change")
-    @SendTo("/topic/new")
-    public Page<MessageResponseForMain> change(MessageRequestForSend messageRequestForSend){
-        messageService.sendMessage(messageRequestForSend);
-        return messageService.findAllForMessageMain(new MessageMainPageRequest(0,""));
+    @MessageMapping("/main")
+    @SendTo("/topic/refresh")
+    public Page<MessageResponseForMain> change(MessageMainPageRequest mainPageRequest){
+        return messageService.findAllForMessageMain(mainPageRequest);
     }
 }
