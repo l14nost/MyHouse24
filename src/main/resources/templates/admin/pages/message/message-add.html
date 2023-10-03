@@ -433,7 +433,7 @@
                     stompClient.onConnect = function() {
                         stompClient.publish({
                             destination: "/app/main",
-                            body: JSON.stringify({'page': '0'})
+                            body: JSON.stringify("")
                         });
                     };
                     window.location.href = "/myhouse24-amirb-nikitaf/admin/messages";
