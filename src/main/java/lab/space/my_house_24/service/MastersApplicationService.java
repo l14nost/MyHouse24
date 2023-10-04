@@ -8,22 +8,21 @@ import lab.space.my_house_24.model.masters_application.MastersApplicationRespons
 import lab.space.my_house_24.model.masters_application.MastersApplicationSaveRequest;
 import lab.space.my_house_24.model.masters_application.MastersApplicationUpdateRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface MastersApplicationService {
     MastersApplication getMastersApplicationById(Long id);
 
-    ResponseEntity<?> getMastersApplicationResponseById(Long id);
+    MastersApplicationResponse getMastersApplicationResponseById(Long id);
 
-    ResponseEntity<?> updateMastersApplicationByRequest(MastersApplicationUpdateRequest request);
+    void updateMastersApplicationByRequest(MastersApplicationUpdateRequest request);
 
-    ResponseEntity<?> saveMastersApplicationByRequest(MastersApplicationSaveRequest request);
+    void saveMastersApplicationByRequest(MastersApplicationSaveRequest request);
 
     void saveMastersApplication(MastersApplication mastersApplication);
 
-    ResponseEntity<?> deleteMastersApplicationById(Long id);
+    void deleteMastersApplicationById(Long id);
 
     Page<MastersApplicationResponse> getAllMastersApplication(MastersApplicationRequest request);
 

@@ -4,11 +4,9 @@ import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.staff.*;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
-import java.util.Locale;
 
 public interface StaffService {
 
@@ -16,7 +14,7 @@ public interface StaffService {
 
     void sendForgotPasswordUrl(String email);
 
-    void sendUpdatePasswordWarning(String email, Locale locale);
+    void sendUpdatePasswordWarning(String email);
 
     Staff getStaffById(Long id);
 
@@ -40,17 +38,17 @@ public interface StaffService {
 
     Page<StaffResponse> getAllStaffDto(StaffRequest request);
 
-    ResponseEntity<?> updateStaff(StaffUpdateRequest staffUpdateRequest);
+    void updateStaff(StaffUpdateRequest staffUpdateRequest);
 
     void saveStaff(StaffSaveRequest staffSaveRequest);
 
     void saveStaff(Staff staff);
 
-    ResponseEntity<?> activateStaff(InviteRequest request);
+    void activateStaff(InviteRequest request);
 
-    ResponseEntity<?> forgotPasswordStaff(ForgotPassRequest request);
+    void forgotPasswordStaff(ForgotPassRequest request);
 
-    ResponseEntity<?> deleteStaff(Long id);
+    void deleteStaff(Long id);
 
     UserDetails loadUserByToken(String token);
 

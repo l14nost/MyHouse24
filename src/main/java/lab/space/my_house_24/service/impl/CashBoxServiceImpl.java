@@ -79,8 +79,7 @@ public class CashBoxServiceImpl implements CashBoxService {
     @Override
     public List<CashBox> getAllCashBoxIsActive() {
         log.info("Try to get all CashBox is active ");
-        return cashBoxRepository.findAll(
-                cashBoxSpecification.getCashBoxByRequest(CashBoxRequest.builder().draftQuery(true).build()));
+        return cashBoxRepository.findAll(cashBoxSpecification.getCashBoxByRequest(CashBoxRequest.builder().draftQuery(true).build()));
     }
 
     private CashBoxResponse getCashBoxResponse(CashBox cashBox) {
@@ -188,9 +187,6 @@ public class CashBoxServiceImpl implements CashBoxService {
                                 .build()
                 );
             }
-        } else if (!cashBox.getDraft() && saveCashBox.getDraft()) {
-            cashBox.setBankBook(saveCashBox.getBankBook());
-            CashBoxCalculateStatistic(cashBox, saveCashBox);
         } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
             statisticService.updateStatistic(
                     Statistic.builder()
@@ -248,11 +244,7 @@ public class CashBoxServiceImpl implements CashBoxService {
         } else if (cashBox.getDraft() && !saveCashBox.getDraft()) {
             bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), false, null);
         } else if (saveCashBox.getDraft()) {
-            if (cashBox.getPrice().compareTo(saveCashBox.getPrice()) != 0) {
-                bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), false, null);
-            } else {
-                bankBookService.calculateBankBook(cashBox.getBankBook().getId(), saveCashBox.getPrice(), false, null);
-            }
+            bankBookService.calculateBankBook(cashBox.getBankBook().getId(), cashBox.getPrice(), false, null);
             bankBookService.calculateBankBook(saveCashBox.getBankBook().getId(), saveCashBox.getPrice(), true, null);
         }
         log.info("Success Calculate CashBox by Update");
@@ -279,15 +271,8 @@ public class CashBoxServiceImpl implements CashBoxService {
         log.info("Try to Delete CashBox");
         CashBox cashBox = getCashBoxById(id);
         if (cashBox.getDraft() && cashBox.getIsActive()) {
-            String e;
-            if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                e = "Відомість використовується/використовувалася в розрахунках, її неможливо видалити.(id-" + id + ")";
-            } else {
-                e = "Statement is/was used in calculations, it cannot be deleted.(id-" + id + ")";
-            }
             log.warn("CashBox cannot be deleted");
-            throw new IllegalArgumentException(e);
-
+            throw new IllegalArgumentException(message.getMessage("cash_box.delete.error", null, LocaleContextHolder.getLocale()));
         } else {
             cashBoxRepository.delete(cashBox);
             log.info("Success Delete CashBox");
@@ -302,7 +287,6 @@ public class CashBoxServiceImpl implements CashBoxService {
     @Override
     @Transactional
     public InputStreamResource getExcel(CashBoxRequest request) {
-
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             List<CashBoxResponse> cashBoxResponses = getAllCashBoxResponse(request).stream().toList();
             String[] header = {

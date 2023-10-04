@@ -5,7 +5,6 @@ import lab.space.my_house_24.model.service.ServiceResponse;
 import lab.space.my_house_24.model.service.ServiceResponseForSelect;
 import lab.space.my_house_24.model.service.ServiceSaveRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -16,9 +15,9 @@ public interface ServiceService {
     List<Service> getAllService();
     void saveService(Service service);
 
-    ResponseEntity<?> saveServiceByRequest(ServiceSaveRequest serviceSaveRequest);
+    void saveServiceByRequest(ServiceSaveRequest serviceSaveRequest);
 
-    ResponseEntity<?> deleteServiceById(Long id);
+    void deleteServiceById(Long id);
 
     Page<ServiceResponseForSelect> serviceResponseForSelect(Integer page, String search);
 

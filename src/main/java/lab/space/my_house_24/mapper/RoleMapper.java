@@ -13,13 +13,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public interface RoleMapper {
-
-    static List<RoleSimpleResponse> toSimpleDtoList(List<Role> roles){
-        return roles.stream().map(RoleMapper::toSimpleDto).collect(Collectors.toList());
-    }
 
     static RoleSimpleResponse toSimpleDto(Role roles) {
         return RoleSimpleResponse.builder()

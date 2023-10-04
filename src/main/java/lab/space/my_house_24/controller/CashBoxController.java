@@ -27,6 +27,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -73,7 +74,7 @@ public class CashBoxController {
     }
 
     @PostMapping("/get-all-cash-box")
-    public ResponseEntity<Page<CashBoxResponse>> getAllMastersApplication(@RequestBody CashBoxRequest request) {
+    public ResponseEntity<Page<CashBoxResponse>> getAllCashBox(@RequestBody CashBoxRequest request) {
         return ResponseEntity.ok(cashBoxService.getAllCashBoxResponse(request));
     }
 
@@ -89,7 +90,7 @@ public class CashBoxController {
 
             String filename = "cash-boxes" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(file);
         } catch (IOException e) {
@@ -104,10 +105,12 @@ public class CashBoxController {
 
             String filename = "cash-box" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(file);
-        } catch (IOException e) {
+        } catch (EntityNotFoundException | IOException e) {
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
         }
     }
@@ -128,7 +131,7 @@ public class CashBoxController {
     }
 
     @GetMapping("/get-all-statement-type")
-    public ResponseEntity<List<EnumResponse>> getAllBankBook() {
+    public ResponseEntity<List<EnumResponse>> getAllArticleType() {
         return ResponseEntity.ok(articleService.getAllType());
     }
 
@@ -200,12 +203,12 @@ public class CashBoxController {
     }
 
     @GetMapping("/get-statistics-for-coming")
-    public ResponseEntity getStatisticsForComing() {
+    public ResponseEntity<List<BigDecimal>> getStatisticsForComing() {
         return ResponseEntity.ok(cashBoxService.statisticSumByType(true));
     }
 
     @GetMapping("/get-statistics-for-costs")
-    public ResponseEntity getStatisticsForCosts() {
+    public ResponseEntity<List<BigDecimal>> getStatisticsForCosts() {
         return ResponseEntity.ok(cashBoxService.statisticSumByType(false));
     }
 }

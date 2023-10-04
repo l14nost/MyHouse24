@@ -7,7 +7,6 @@ import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.mapper.RoleMapper;
 import lab.space.my_house_24.model.role.PageResponse;
 import lab.space.my_house_24.model.role.RoleResponse;
-import lab.space.my_house_24.model.role.RoleSimpleResponse;
 import lab.space.my_house_24.model.role.RoleUpdateRequest;
 import lab.space.my_house_24.repository.RoleRepository;
 import lab.space.my_house_24.repository.StaffRepository;
@@ -16,8 +15,6 @@ import lab.space.my_house_24.service.SecurityLevelService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,12 +45,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleSimpleResponse> getAllRoleSimpleDto() {
-        log.info("Try to convert Roles in Dto");
-        return RoleMapper.toSimpleDtoList(getAllRole());
-    }
-
-    @Override
     public RoleResponse getAllRoleDto() {
         log.info("Try to convert Roles in Dto");
         return RoleMapper.toDto(getAllRole());
@@ -73,24 +64,18 @@ public class RoleServiceImpl implements RoleService {
         log.info("Success update Role");
 
         Staff staff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(staff.getEmail(), staff.getPassword(),staff.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(staff.getEmail(), staff.getPassword(), staff.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Override
-    public ResponseEntity<?> updateAllRole(RoleUpdateRequest roleUpdateRequest) {
-        try {
-            log.info("Try to update Roles");
-            updateRole(roleUpdateRequest.accountant(), JobTitle.ACCOUNTANT);
-            updateRole(roleUpdateRequest.manager(), JobTitle.MANAGER);
-            updateRole(roleUpdateRequest.electrician(), JobTitle.ELECTRIC);
-            updateRole(roleUpdateRequest.plumber(), JobTitle.PLUMBER);
-            log.info("Success update Roles");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error update Roles");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void updateAllRole(RoleUpdateRequest roleUpdateRequest) throws EntityNotFoundException {
+        log.info("Try to update Roles");
+        updateRole(roleUpdateRequest.accountant(), JobTitle.ACCOUNTANT);
+        updateRole(roleUpdateRequest.manager(), JobTitle.MANAGER);
+        updateRole(roleUpdateRequest.electrician(), JobTitle.ELECTRIC);
+        updateRole(roleUpdateRequest.plumber(), JobTitle.PLUMBER);
+        log.info("Success update Roles");
     }
 
     private Staff getStaffByEmail(String email) {

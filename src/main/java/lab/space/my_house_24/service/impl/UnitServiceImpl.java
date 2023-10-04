@@ -10,10 +10,9 @@ import lab.space.my_house_24.repository.UnitRepository;
 import lab.space.my_house_24.service.UnitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +26,7 @@ import static java.util.Objects.nonNull;
 public class UnitServiceImpl implements UnitService {
 
     private final UnitRepository unitRepository;
+    private final MessageSource message;
 
     @Override
     public Unit getUnitById(Long id) throws EntityNotFoundException {
@@ -38,7 +38,7 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public List<UnitResponse> getAllUnitDto() {
         log.info("Try to get All Unit and convert in Dto");
-        return unitRepository.findAll(Sort.by(Sort.Direction.ASC,"id"))
+        return unitRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .map(UnitMapper::toSimpleDto).collect(Collectors.toList());
     }
@@ -51,52 +51,34 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public ResponseEntity<?> saveUnitByRequest(UnitSaveRequest request) {
-        try {
-            log.info("Try to save Unit by Request");
-            for (UnitRequest unitRequest : request.unitRequestList()) {
-                if (nonNull(unitRequest.id())) {
-                    saveUnit(
-                            UnitMapper.toUnitUpdate(
-                                    unitRequest,
-                                    getUnitById(unitRequest.id())
-                            )
+    public void saveUnitByRequest(UnitSaveRequest request) throws EntityNotFoundException {
+        log.info("Try to save Unit by Request");
+        for (UnitRequest unitRequest : request.unitRequestList()) {
+            if (nonNull(unitRequest.id())) {
+                saveUnit(
+                        UnitMapper.toUnitUpdate(
+                                unitRequest,
+                                getUnitById(unitRequest.id())
+                        )
 
-                    );
-                } else {
-                    saveUnit(UnitMapper.toUnitSave(unitRequest));
-                }
+                );
+            } else {
+                saveUnit(UnitMapper.toUnitSave(unitRequest));
             }
-            log.info("Success save Unit by Request");
-            return ResponseEntity.ok().build();
-        }catch (EntityNotFoundException e){
-            log.error("Error save Unit by Request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
         }
+        log.info("Success save Unit by Request");
     }
 
     @Override
-    public ResponseEntity<?> deleteUnitById(Long id) {
-        try {
-            log.info("Try to delete Unit");
-            Unit unit = getUnitById(id);
-            if (unit.getServiceList().isEmpty()){
-                unitRepository.delete(unit);
-            }else {
-                String error;
-                if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                    error = "Одиниця виміру використовується. Видалення неможливе.";
-                } else {
-                    error = "The unit of measure is used. Removal is not possible.";
-                }
-                log.warn("Warning delete Unit");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-            }
-            log.info("Success delete Unit");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error delete Unit");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+    public void deleteUnitById(Long id) throws EntityNotFoundException, IllegalArgumentException {
+        log.info("Try to delete Unit");
+        Unit unit = getUnitById(id);
+        if (unit.getServiceList().isEmpty()) {
+            unitRepository.delete(unit);
+        } else {
+            log.warn("Warning delete Unit");
+            throw new IllegalArgumentException(message.getMessage("unit.delete.error", null, LocaleContextHolder.getLocale()));
         }
+        log.info("Success delete Unit");
     }
 }

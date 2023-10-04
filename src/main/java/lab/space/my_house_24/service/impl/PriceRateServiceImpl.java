@@ -10,8 +10,6 @@ import lab.space.my_house_24.service.PriceRateService;
 import lab.space.my_house_24.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -53,15 +51,9 @@ public class PriceRateServiceImpl implements PriceRateService {
     }
 
     @Override
-    public ResponseEntity<?> deletePriceRateById(Long id) {
-        try {
-            log.info("Try to delete PriceRate by id " + id);
-            priceRateRepository.delete(getPriceRateById(id));
-            log.info("Success delete PriceRate by id " + id);
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error delete PriceRate by id " + id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void deletePriceRateById(Long id) throws EntityNotFoundException{
+        log.info("Try to delete PriceRate by id " + id);
+        priceRateRepository.delete(getPriceRateById(id));
+        log.info("Success delete PriceRate by id " + id);
     }
 }

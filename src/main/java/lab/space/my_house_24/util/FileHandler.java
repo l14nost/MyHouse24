@@ -11,7 +11,7 @@ import java.util.UUID;
 public class FileHandler {
 
 //    private static final String upload = "/files";
-    private static final String upload = "C:/Users/Amir Banov/files";
+    private static final String upload = "C:/Users/antar/IdeaProjects/temp/MyHouse24/files";
     public  static  String saveFile(MultipartFile image){
         File uploadDirGallery = new File(upload);
         if (!uploadDirGallery.exists()) {

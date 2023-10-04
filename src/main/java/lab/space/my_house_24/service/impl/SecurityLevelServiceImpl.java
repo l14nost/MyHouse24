@@ -33,12 +33,6 @@ public class SecurityLevelServiceImpl implements SecurityLevelService {
     }
 
     @Override
-    public List<SecurityLevel> getAllSecurityLevelByRole(Long id) {
-        log.info("Try to search SecurityLevels by Role id " + id);
-        return getAllSecurityLevel();
-    }
-
-    @Override
     public void saveSecurityLevel(SecurityLevel securityLevel) {
         log.info("Try to save SecurityLevel");
         securityLevelRepository.save(securityLevel);

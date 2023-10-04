@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.article.ArticleRequest;
 import lab.space.my_house_24.model.article.ArticleResponse;
@@ -55,16 +56,20 @@ public class ArticleController {
     }
 
     @GetMapping("/get-article-dto/{id}")
-    public ResponseEntity<?> getStaffEditDtoById(@PathVariable Long id) {
+    public ResponseEntity<?> getArticleDtoById(@PathVariable Long id) {
         if (id < 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
         }
-        return articleService.getArticleDtoById(id);
+        try {
+            return ResponseEntity.ok(articleService.getArticleDtoById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @PostMapping("/save-article")
-    public ResponseEntity<?> saveStaff(@Valid @RequestBody ArticleSaveRequest articleSaveRequest,
-                                       BindingResult bindingResult) {
+    public ResponseEntity<?> saveArticle(@Valid @RequestBody ArticleSaveRequest articleSaveRequest,
+                                         BindingResult bindingResult) {
         articleValidator.isNameUniqueValidation(articleSaveRequest.name(),
                 bindingResult, "ArticleSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
@@ -76,23 +81,32 @@ public class ArticleController {
     }
 
     @PutMapping("/update-article")
-    public ResponseEntity<?> updateStaffById(@Valid @RequestBody ArticleUpdateRequest articleUpdateRequest,
-                                             BindingResult bindingResult) {
+    public ResponseEntity<?> updateArticleById(@Valid @RequestBody ArticleUpdateRequest articleUpdateRequest,
+                                               BindingResult bindingResult) {
         articleValidator.isNameUniqueValidationWithId(articleUpdateRequest.id(),
                 articleUpdateRequest.name(), bindingResult,
                 "ArticleUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
-        return articleService.updateArticleByRequest(articleUpdateRequest);
+        try {
+            articleService.updateArticleByRequest(articleUpdateRequest);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @DeleteMapping("/delete-article/{id}")
-    public ResponseEntity<?> deleteStaffById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteArticleById(@PathVariable Long id) {
         if (id < 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
         }
-        return articleService.deleteArticleById(id);
+        try {
+            articleService.deleteArticleById(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 }
