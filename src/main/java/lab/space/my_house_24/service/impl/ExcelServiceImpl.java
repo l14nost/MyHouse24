@@ -93,7 +93,7 @@ public class ExcelServiceImpl extends ExcelCustomizeAbstract implements ExcelSer
     @Override
     public void getExcelForBillTable(Workbook workbook, String[] header, List<BillResponse> billResponses) {
         int INITIAL_INDEX_OF_ROW = 0;
-        Sheet sheet = workbook.createSheet("Bank Books Data Table");
+        Sheet sheet = workbook.createSheet("Bills Data Table");
         setWorkbookAuthor(workbook, message.getMessage("layout.title", null, LocaleContextHolder.getLocale()));
         setHeaderRow(workbook, sheet, header, INITIAL_INDEX_OF_ROW);
 

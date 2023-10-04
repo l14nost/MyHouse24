@@ -10,6 +10,7 @@ import lab.space.my_house_24.repository.UnitRepository;
 import lab.space.my_house_24.service.UnitService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import static java.util.Objects.nonNull;
 public class UnitServiceImpl implements UnitService {
 
     private final UnitRepository unitRepository;
+    private final MessageSource message;
 
     @Override
     public Unit getUnitById(Long id) throws EntityNotFoundException {
@@ -74,16 +76,9 @@ public class UnitServiceImpl implements UnitService {
         if (unit.getServiceList().isEmpty()) {
             unitRepository.delete(unit);
         } else {
-            String error;
-            if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                error = "Одиниця виміру використовується. Видалення неможливе.";
-            } else {
-                error = "The unit of measure is used. Removal is not possible.";
-            }
             log.warn("Warning delete Unit");
-            throw new IllegalArgumentException(error);
+            throw new IllegalArgumentException(message.getMessage("unit.delete.error", null, LocaleContextHolder.getLocale()));
         }
         log.info("Success delete Unit");
-
     }
 }

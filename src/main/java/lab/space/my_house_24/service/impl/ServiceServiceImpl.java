@@ -12,6 +12,7 @@ import lab.space.my_house_24.service.UnitService;
 import lab.space.my_house_24.specification.ServiceSpecificationForSelect;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,8 +28,10 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 public class ServiceServiceImpl implements ServiceService {
+
     private final ServiceRepository serviceRepository;
     private final UnitService unitService;
+    private final MessageSource message;
 
     @Override
     public lab.space.my_house_24.entity.Service getServiceById(Long id) throws EntityNotFoundException {
@@ -91,14 +94,8 @@ public class ServiceServiceImpl implements ServiceService {
             serviceRepository.delete(service);
             log.info("Success delete Service");
         } else {
-            String error;
-            if (LocaleContextHolder.getLocale().toLanguageTag().equals("uk")) {
-                error = "Послугою користуються. Видалення неможливе.";
-            } else {
-                error = "The service is used. Removal is not possible.";
-            }
             log.warn("Warning delete Service");
-            throw new IllegalArgumentException(error);
+            throw new IllegalArgumentException(message.getMessage("service.delete.error", null, LocaleContextHolder.getLocale()));
         }
     }
 

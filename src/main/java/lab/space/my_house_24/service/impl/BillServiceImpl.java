@@ -369,9 +369,10 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<BigDecimal> sumOffAllBillsByMonths() {
         List<BigDecimal> bigDecimalList = new ArrayList<>();
+        List<Bill> bills = billRepository.findAll();
         for (int i = 1; i < 13; i++) {
             BigDecimal sum = BigDecimal.ZERO;
-            for (Bill bill : billRepository.findAll()) {
+            for (Bill bill : bills) {
                 if (bill.getCreateAt().atZone(ZoneId.systemDefault()).getMonth().getValue() == i) {
                     sum = sum.add(bill.getTotalPrice());
                 }

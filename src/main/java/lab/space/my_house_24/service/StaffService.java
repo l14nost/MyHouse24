@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
-import java.util.Locale;
 
 public interface StaffService {
 
@@ -15,7 +14,7 @@ public interface StaffService {
 
     void sendForgotPasswordUrl(String email);
 
-    void sendUpdatePasswordWarning(String email, Locale locale);
+    void sendUpdatePasswordWarning(String email);
 
     Staff getStaffById(Long id);
 

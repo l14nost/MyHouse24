@@ -17,10 +17,12 @@ import lab.space.my_house_24.specification.StaffSpecification;
 import lab.space.my_house_24.util.CustomMailSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,7 +35,6 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -49,6 +50,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final CustomMailSender customMailSender;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final MessageSource message;
     private final String url = "http://localhost:7575/admin/";
 
     @Override
@@ -77,18 +79,13 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public void sendUpdatePasswordWarning(String email, Locale locale) {
+    public void sendUpdatePasswordWarning(String email) {
         log.info("Try to send update pass warn by email " + email);
-        String text;
-        String subject;
-        if (locale.toLanguageTag().equals("uk")) {
-            text = "Ваш пароль був змінений.";
-            subject = "Зміна пароля";
-        } else {
-            text = "Your password has been changed.";
-            subject = "Change Password";
-        }
-        customMailSender.send(email, text, subject);
+        customMailSender.send(
+                email,
+                message.getMessage("staff.update.pass.warn.text", null, LocaleContextHolder.getLocale()),
+                message.getMessage("staff.update.pass.warn.subject", null, LocaleContextHolder.getLocale())
+        );
     }
 
     @Override
@@ -187,14 +184,17 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public void updateStaff(StaffUpdateRequest staffUpdateRequest) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to update Staff by id " + staffUpdateRequest.id());
         Staff director = getMainDirector();
+        boolean reloadStaff = false;
         Staff staff = getStaffById(staffUpdateRequest.id());
+        if ((!staff.getEmail().equals(staffUpdateRequest.email())) || (!new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword()))){
+            reloadStaff = true;
+        }
         if (director.getId() != staffUpdateRequest.id().longValue()) {
             if (nonNull(staffUpdateRequest.password()) &&
                     !staffUpdateRequest.password().equals("") &&
                     !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())) {
                 sendUpdatePasswordWarning(
-                        staff.getEmail(),
-                        LocaleContextHolder.getLocale()
+                        staff.getEmail()
                 );
             }
             staffRepository.save(
@@ -211,8 +211,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                     !staffUpdateRequest.password().equals("") &&
                     !passwordEncoder.matches(staffUpdateRequest.password(), staff.getPassword())) {
                 sendUpdatePasswordWarning(
-                        staff.getEmail(),
-                        LocaleContextHolder.getLocale()
+                        staff.getEmail()
                 );
             }
             staffRepository.save(
@@ -222,6 +221,12 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                             roleService
                     )
             );
+            if (reloadStaff){
+                Staff reloadContextStaff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(reloadContextStaff.getEmail(), reloadContextStaff.getPassword(), reloadContextStaff.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Reload security context");
+            }
             log.warn("Success update Main Director. id ->" + staffUpdateRequest.id());
         } else {
             log.error("Error update Staff with id " + staffUpdateRequest.id());
@@ -232,8 +237,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     @Override
     public void saveStaff(StaffSaveRequest staffSaveRequest) {
         log.info("Try to save Staff");
-        staffRepository.save(
-                StaffMapper.saveStaff(staffSaveRequest, roleService));
+        saveStaff(StaffMapper.saveStaff(staffSaveRequest, roleService));
         log.info("Success save Staff");
     }
 
@@ -267,8 +271,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                 )
         );
         sendUpdatePasswordWarning(
-                staff.getEmail(),
-                LocaleContextHolder.getLocale()
+                staff.getEmail()
         );
         log.info("Success Forgot Password Staff");
     }
