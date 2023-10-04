@@ -92,7 +92,7 @@ public class MessageController {
 
     @MessageMapping("/main")
     @SendTo("/topic/refresh")
-    public Page<MessageResponseForMain> change(MessageMainPageRequest mainPageRequest){
-        return messageService.findAllForMessageMain(mainPageRequest);
+    public String change(){
+        return "change";
     }
 }
