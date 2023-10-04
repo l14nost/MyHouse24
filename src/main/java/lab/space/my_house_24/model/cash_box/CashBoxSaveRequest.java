@@ -4,10 +4,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Builder
 public record CashBoxSaveRequest(
         @NotBlank(message = "{not.blank.message}")
         @Size(max = 10, message = "{size.less.message}" + " {max}")

@@ -35,7 +35,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,16 +71,19 @@ public class BankBookServiceImpl implements BankBookService {
 
     @Override
     public Optional<BankBook> findByNumber(String number) {
+        log.info("Try to find BankBook by number");
         return bankBookRepository.findBankBookByNumber(number);
     }
 
     @Override
     public List<BankBookResponseForTable> bankBookListForTable() {
+        log.info("Try to get all BankBookResponseForTable by Active Status");
         return bankBookRepository.findAllByApartmentIsNullAndBankBookStatus(BankBookStatus.ACTIVE).stream().map(BankBookMapper::entityToDtoForTable).toList();
     }
 
     @Override
     public List<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Long userId) {
+        log.info("Try to get all BankBookResponseForCashBox by User Id");
         return bankBookRepository.findAll(bankBookSpecification.getBankBookByUser(userId)).stream().map(BankBookMapper::toBankBookResponseForCashBox).toList();
     }
 
@@ -126,31 +128,27 @@ public class BankBookServiceImpl implements BankBookService {
     @Override
     public void updateBankBookByRequest(BankBookUpdateRequest request) throws EntityNotFoundException {
         log.info("Try to Update BankBook by Request");
-        if (nonNull(request.apartmentId())) {
-            saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateNumber())),
-                    getBankBookById(request.id()),
-                    getApartmentById(request.apartmentId())));
-        } else {
-            saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateNumber())),
-                    getBankBookById(request.id()),
-                    null));
-        }
+        saveBankBook(
+                BankBookMapper.toBankBook(
+                        request,
+                        ((nonNull(request.number()) ? request.number() : generateNumber())),
+                        getBankBookById(request.id()),
+                        (nonNull(request.apartmentId()) ? getApartmentById(request.apartmentId()) : null)
+                )
+        );
         log.info("Success Update BankBook by Request");
     }
 
     @Override
     public void saveBankBookByRequest(BankBookSaveRequest request) throws EntityNotFoundException {
         log.info("Try to Save BankBook by Request");
-        if (nonNull(request.apartmentId())) {
-            saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateNumber())),
-                    getApartmentById(request.apartmentId())));
-        } else {
-            saveBankBook(BankBookMapper.toBankBook(request,
-                    ((nonNull(request.number()) ? request.number() : generateNumber())), null));
-        }
+        saveBankBook(
+                BankBookMapper.toBankBook(
+                        request,
+                        (nonNull(request.number()) ? request.number() : generateNumber()),
+                        (nonNull(request.apartmentId()) ? getApartmentById(request.apartmentId()) : null)
+                )
+        );
         log.info("Success Save BankBook by Request");
     }
 
@@ -163,7 +161,7 @@ public class BankBookServiceImpl implements BankBookService {
 
     @Override
     @Transactional
-    public InputStreamResource getExcel(BankBookRequest request)  throws IOException{
+    public InputStreamResource getExcel(BankBookRequest request) throws IOException {
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             List<BankBookResponse> bankBookResponses = getAllBankBookResponse(request).stream().toList();
@@ -315,8 +313,8 @@ public class BankBookServiceImpl implements BankBookService {
                             .build()
             );
         }
-        if (bankBook.getTotalPrice().compareTo(totalPrice) > 0){
-            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+        if (bankBook.getTotalPrice().compareTo(totalPrice) > 0) {
+            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) <= 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -324,7 +322,7 @@ public class BankBookServiceImpl implements BankBookService {
                                 .bankBookExpense(price)
                                 .build()
                 );
-            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) > 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) > 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -333,8 +331,8 @@ public class BankBookServiceImpl implements BankBookService {
                                 .build()
                 );
             }
-        }else if (bankBook.getTotalPrice().compareTo(totalPrice) < 0){
-            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0){
+        } else if (bankBook.getTotalPrice().compareTo(totalPrice) < 0) {
+            if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) < 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -342,7 +340,7 @@ public class BankBookServiceImpl implements BankBookService {
                                 .bankBookExpense(BigDecimal.ZERO.subtract(price))
                                 .build()
                 );
-            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) >= 0){
+            } else if (bankBook.getTotalPrice().compareTo(BigDecimal.ZERO) < 0 && totalPrice.compareTo(BigDecimal.ZERO) >= 0) {
                 statisticService.updateStatistic(
                         Statistic.builder()
                                 .cashBoxState(BigDecimal.ZERO)
@@ -368,10 +366,6 @@ public class BankBookServiceImpl implements BankBookService {
                 BigDecimal payed = cashBox.getMoneyUsed();
                 BigDecimal totalPrice = cashBox.getPrice();
 
-                if (calculatePrice.compareTo(BigDecimal.ZERO) == 0) {
-                    break;
-                }
-
                 BigDecimal remainingAmount = totalPrice.subtract(payed);
 
                 if (remainingAmount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -388,8 +382,6 @@ public class BankBookServiceImpl implements BankBookService {
                 saveCashBox(cashBox);
             }
         } else if (calculateTotalPrice.compareTo(BigDecimal.ZERO) != 0 && !type) {
-            Collections.reverse(cashBoxes);
-
             for (CashBox cashBox : cashBoxes) {
                 if (isNull(bill) && cashBox.getPrice().compareTo(calculatePrice) == 0) {
                     break;
@@ -400,10 +392,6 @@ public class BankBookServiceImpl implements BankBookService {
 
                 BigDecimal payed = cashBox.getMoneyUsed();
                 BigDecimal totalPrice = BigDecimal.ZERO;
-
-                if (calculatePrice.compareTo(BigDecimal.ZERO) == 0) {
-                    break;
-                }
 
                 BigDecimal remainingAmount = totalPrice.subtract(payed);
 

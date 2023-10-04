@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentMastersApplicationRequest;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForMastersApplication;
@@ -62,7 +63,11 @@ public class MastersApplicationController {
         if (id < 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
         }
-        return mastersApplicationService.getMastersApplicationResponseById(id);
+        try {
+            return ResponseEntity.ok(mastersApplicationService.getMastersApplicationResponseById(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @PostMapping("/get-all-master-call")
@@ -102,8 +107,12 @@ public class MastersApplicationController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
-        return mastersApplicationService.saveMastersApplicationByRequest(request);
+        try {
+            mastersApplicationService.saveMastersApplicationByRequest(request);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @PutMapping("/update-master-call")
@@ -112,8 +121,12 @@ public class MastersApplicationController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
-        return mastersApplicationService.updateMastersApplicationByRequest(request);
+        try {
+            mastersApplicationService.updateMastersApplicationByRequest(request);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @DeleteMapping("/delete-master-call/{id}")
@@ -121,6 +134,11 @@ public class MastersApplicationController {
         if (id < 1) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id must be > 0");
         }
-        return mastersApplicationService.deleteMastersApplicationById(id);
+        try {
+            mastersApplicationService.deleteMastersApplicationById(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 }

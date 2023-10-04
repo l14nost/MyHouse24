@@ -4,11 +4,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lab.space.my_house_24.enums.BillStatus;
 import lab.space.my_house_24.model.service_bill.ServiceBillRequest;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Builder
 public record BillUpdateRequest(
         @NotNull(message = "{not.blank.message}")
         @Min(value = 1, message = "{price.min}" + " {value}")

@@ -11,8 +11,6 @@ public interface SecurityLevelService {
 
     List<SecurityLevel> getAllSecurityLevel();
 
-    List<SecurityLevel> getAllSecurityLevelByRole(Long id);
-
     void saveSecurityLevel(SecurityLevel securityLevel);
 
 }

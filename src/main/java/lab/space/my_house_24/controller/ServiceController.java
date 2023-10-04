@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.service.ServiceRequest;
 import lab.space.my_house_24.model.service.ServiceResponse;
@@ -15,6 +16,7 @@ import lab.space.my_house_24.validator.ServiceValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -61,12 +63,23 @@ public class ServiceController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-        return serviceService.saveServiceByRequest(serviceSaveRequest);
+        try{
+            serviceService.saveServiceByRequest(serviceSaveRequest);
+            return ResponseEntity.ok().build();
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @DeleteMapping("/delete-service/{id}")
     public ResponseEntity<?> deleteServiceById(@PathVariable Long id) {
-        return serviceService.deleteServiceById(id);
+        try{
+            serviceService.deleteServiceById(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
     }
 
     @GetMapping("/get-all-unit")
@@ -91,13 +104,23 @@ public class ServiceController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
-        return unitService.saveUnitByRequest(unitSaveRequest);
+        try {
+            unitService.saveUnitByRequest(unitSaveRequest);
+            return ResponseEntity.ok().build();
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @DeleteMapping("/delete-unit/{id}")
     public ResponseEntity<?> deleteUnitById(@PathVariable Long id) {
-        return unitService.deleteUnitById(id);
+        try{
+            unitService.deleteUnitById(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
     }
 
     @GetMapping("/get-services-for-select")
