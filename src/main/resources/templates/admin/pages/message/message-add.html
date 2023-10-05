@@ -104,7 +104,7 @@
 <th:block layout:fragment="extra-script">
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script>
-        const stompClient = new StompJs.Client({
+        const stompClient1 = new StompJs.Client({
             brokerURL: 'wss://slj.avada-media-dev1.od.ua/myhouse24-amirb-nikitaf/admin/ws'
         });
         function select2(lang){
@@ -429,9 +429,9 @@
                 data: JSON.stringify(jsonData)
             }).done(
                 function (response){
-                    stompClient.activate();
-                    stompClient.onConnect = function() {
-                        stompClient.publish({
+                    stompClient1.activate();
+                    stompClient1.onConnect = function() {
+                        stompClient1.publish({
                             destination: "/app/main",
                             body: JSON.stringify("")
                         });
