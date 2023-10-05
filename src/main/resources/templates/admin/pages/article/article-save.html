@@ -99,7 +99,7 @@
                 $("#title").val(articleResponse?.name);
                 $("#type").append('<option selected value="' + articleResponse?.type?.name + '">' + articleResponse?.type?.value + '</option>');
             }).fail(function (){
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
@@ -125,7 +125,7 @@
                     clearValidMessages();
                 }
             }).done(function () {
-                window.location.href = "/admin/payment-items";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/payment-items";
             }).fail(function (response) {
                 const errors = response.responseJSON;
                 console.log(response);

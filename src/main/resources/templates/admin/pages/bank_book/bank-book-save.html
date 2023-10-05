@@ -146,7 +146,7 @@
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
             }).fail(function () {
-                window.location.href = "/admin/error";
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
             });
         }
 
@@ -284,7 +284,7 @@
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
-                    url: sectionId ? '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment-' + houseId + '/' + sectionId : '/admin/bank-books/get-all-apartment-' + houseId,
+                    url: sectionId ? '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment-' + houseId + '/' + sectionId : '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment-' + houseId,
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {

@@ -241,7 +241,7 @@
             console.log(mastersApplicationRequest);
             $.ajax({
                 method: mastersApplicationRequest.id ? 'PUT' : "POST",
-                url: mastersApplicationRequest.id ? '/admin/master-call/update-master-call' : '/admin/master-call/save-master-call',
+                url: mastersApplicationRequest.id ? '/myhouse24-amirb-nikitaf/admin/master-call/update-master-call' : '/myhouse24-amirb-nikitaf/admin/master-call/save-master-call',
                 contentType: 'application/json',
                 data: JSON.stringify(mastersApplicationRequest),
                 beforeSend: function () {
