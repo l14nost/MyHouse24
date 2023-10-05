@@ -290,10 +290,10 @@
                 description: $('#rate-description').val(),
                 priceRate: priceRateList
             };
-            console.log(rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/admin/rates/save-rate")
+            console.log(rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/myhouse24-amirb-nikitaf/admin/rates/save-rate")
             $.ajax({
                 method: rateId ? "PUT" : "POST",
-                url: rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/admin/rates/save-rate",
+                url: rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/myhouse24-amirb-nikitaf/admin/rates/save-rate",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){

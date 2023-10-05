@@ -335,7 +335,7 @@
                     staff.value = response;
                 })
             $.ajax({
-                url: "/admin/get-locale"
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
                 .done(function (response){
                     select2(response);
@@ -399,7 +399,7 @@
                 data: JSON.stringify(jsonData)
             }).done(
                 function (response){
-                    window.location.href = "/admin/messages";
+                    window.location.href = "/myhouse24-amirb-nikitaf/admin/messages";
                 }
             ).fail(
                 function(response){

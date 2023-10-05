@@ -82,6 +82,14 @@ public class House {
     @ManyToMany(mappedBy = "houseList")
     private Set<Staff> staffList = new HashSet<>();
 
+    @PreRemove
+    public void staffList(){
+        for (Staff staff: staffList){
+            staff.getHouseList().remove(this);
+            staffList.remove(staff);
+        }
+    }
+
     public void removeStaff(Staff staff){
         staffList.remove(staff);
         staff.getHouseList().remove(this);
