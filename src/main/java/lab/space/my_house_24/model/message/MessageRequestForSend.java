@@ -9,7 +9,7 @@ public record MessageRequestForSend(
         @Size(max = 100, message = "{size.less.message}"+" 100")
         String subject,
         @NotBlank(message = "{not.blank.message}")
-        @Size(max = 100, message = "{size.less.message}"+" 1000")
+        @Size(max = 1000, message = "{size.less.message}"+" 1000")
         String message,
         String messageStyle,
         Boolean debt,
