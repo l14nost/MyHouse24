@@ -17,12 +17,12 @@ import lab.space.my_house_24.specification.StaffSpecification;
 import lab.space.my_house_24.util.CustomMailSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +35,6 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -51,6 +50,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final CustomMailSender customMailSender;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final MessageSource message;
     private final String url = "http://localhost:7575/admin/";
 
     @Override
@@ -79,18 +79,13 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public void sendUpdatePasswordWarning(String email, Locale locale) {
+    public void sendUpdatePasswordWarning(String email) {
         log.info("Try to send update pass warn by email " + email);
-        String text;
-        String subject;
-        if (locale.toLanguageTag().equals("uk")) {
-            text = "Ваш пароль був змінений.";
-            subject = "Зміна пароля";
-        } else {
-            text = "Your password has been changed.";
-            subject = "Change Password";
-        }
-        customMailSender.send(email, text, subject);
+        customMailSender.send(
+                email,
+                message.getMessage("staff.update.pass.warn.text", null, LocaleContextHolder.getLocale()),
+                message.getMessage("staff.update.pass.warn.subject", null, LocaleContextHolder.getLocale())
+        );
     }
 
     @Override
@@ -186,66 +181,63 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public ResponseEntity<?> updateStaff(StaffUpdateRequest staffUpdateRequest) {
+    public void updateStaff(StaffUpdateRequest staffUpdateRequest) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to update Staff by id " + staffUpdateRequest.id());
-        try {
-            Staff director = getMainDirector();
-            Staff staff = getStaffById(staffUpdateRequest.id());
-            if (director.getId() != staffUpdateRequest.id().longValue()) {
-                if (nonNull(staffUpdateRequest.password()) &&
-                        !staffUpdateRequest.password().equals("") &&
-                        !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())) {
-                    sendUpdatePasswordWarning(
-                            staff.getEmail(),
-                            LocaleContextHolder.getLocale()
-                    );
-                }
-                staffRepository.save(
-                        StaffMapper.saveStaff(
-                                staffUpdateRequest,
-                                staff,
-                                roleService
-                        )
+        Staff director = getMainDirector();
+        boolean reloadStaff = false;
+        Staff staff = getStaffById(staffUpdateRequest.id());
+        if ((!staff.getEmail().equals(staffUpdateRequest.email())) || (!new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword()))){
+            reloadStaff = true;
+        }
+        if (director.getId() != staffUpdateRequest.id().longValue()) {
+            if (nonNull(staffUpdateRequest.password()) &&
+                    !staffUpdateRequest.password().equals("") &&
+                    !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())) {
+                sendUpdatePasswordWarning(
+                        staff.getEmail()
                 );
-
-                log.info("Success update Staff by id " + staffUpdateRequest.id());
-                return ResponseEntity.ok().build();
-            } else if (director.getId() == staffUpdateRequest.id().longValue()
-                    && director.getRole().getJobTitle().equals(staffUpdateRequest.role())) {
-                if (nonNull(staffUpdateRequest.password()) &&
-                        !staffUpdateRequest.password().equals("") &&
-                        !passwordEncoder.matches(staffUpdateRequest.password(), staff.getPassword())) {
-                    sendUpdatePasswordWarning(
-                            staff.getEmail(),
-                            LocaleContextHolder.getLocale()
-                    );
-                }
-                staffRepository.save(
-                        StaffMapper.saveStaff(
-                                staffUpdateRequest,
-                                staff,
-                                roleService
-                        )
-                );
-                log.warn("Success update Main Director. id ->" + staffUpdateRequest.id());
-                return ResponseEntity.ok().build();
-            } else {
-                log.error("Error update Staff with id " + staffUpdateRequest.id());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("It is not possible for the Director to change");
             }
-
-        } catch (EntityNotFoundException e) {
-            log.error("Staff not found with id " + staffUpdateRequest.id());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            staffRepository.save(
+                    StaffMapper.saveStaff(
+                            staffUpdateRequest,
+                            staff,
+                            roleService
+                    )
+            );
+            log.info("Success update Staff by id " + staffUpdateRequest.id());
+        } else if (director.getId() == staffUpdateRequest.id().longValue()
+                && director.getRole().getJobTitle().equals(staffUpdateRequest.role())) {
+            if (nonNull(staffUpdateRequest.password()) &&
+                    !staffUpdateRequest.password().equals("") &&
+                    !passwordEncoder.matches(staffUpdateRequest.password(), staff.getPassword())) {
+                sendUpdatePasswordWarning(
+                        staff.getEmail()
+                );
+            }
+            staffRepository.save(
+                    StaffMapper.saveStaff(
+                            staffUpdateRequest,
+                            staff,
+                            roleService
+                    )
+            );
+            if (reloadStaff){
+                Staff reloadContextStaff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(reloadContextStaff.getEmail(), reloadContextStaff.getPassword(), reloadContextStaff.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Reload security context");
+            }
+            log.warn("Success update Main Director. id ->" + staffUpdateRequest.id());
+        } else {
+            log.error("Error update Staff with id " + staffUpdateRequest.id());
+            throw new IllegalArgumentException("It is not possible for the Director to change");
         }
     }
 
     @Override
     public void saveStaff(StaffSaveRequest staffSaveRequest) {
         log.info("Try to save Staff");
-        staffRepository.save(
-                StaffMapper.saveStaff(staffSaveRequest, roleService));
+        saveStaff(StaffMapper.saveStaff(staffSaveRequest, roleService));
         log.info("Success save Staff");
     }
 
@@ -257,64 +249,44 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public ResponseEntity<?> activateStaff(InviteRequest request) {
-        try {
-            log.info("Try to activate Staff");
-            saveStaff(
-                    StaffMapper.activateStaff(
-                            request,
-                            getStaffByEmail(loadUserByToken(request.token()).getUsername())
-                    )
-            );
-            log.info("Success activate Staff");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Staff not found with email" + request.email());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void activateStaff(InviteRequest request) throws EntityNotFoundException {
+        log.info("Try to activate Staff");
+        saveStaff(
+                StaffMapper.activateStaff(
+                        request,
+                        getStaffByEmail(loadUserByToken(request.token()).getUsername())
+                )
+        );
+        log.info("Success activate Staff");
     }
 
     @Override
-    public ResponseEntity<?> forgotPasswordStaff(ForgotPassRequest request) {
-        try {
-            log.info("Try to Forgot Password Staff");
-            Staff staff = getStaffByEmail(loadUserByToken(request.token()).getUsername());
-            saveStaff(
-                    StaffMapper.forgotPasswordStaff(
-                            request,
-                            staff
-                    )
-            );
-            sendUpdatePasswordWarning(
-                    staff.getEmail(),
-                    LocaleContextHolder.getLocale()
-            );
-            log.info("Success Forgot Password Staff");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Staff not found with email" + loadUserByToken(request.token()).getUsername());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void forgotPasswordStaff(ForgotPassRequest request) throws EntityNotFoundException {
+        log.info("Try to Forgot Password Staff");
+        Staff staff = getStaffByEmail(loadUserByToken(request.token()).getUsername());
+        saveStaff(
+                StaffMapper.forgotPasswordStaff(
+                        request,
+                        staff
+                )
+        );
+        sendUpdatePasswordWarning(
+                staff.getEmail()
+        );
+        log.info("Success Forgot Password Staff");
     }
 
     @Override
-    public ResponseEntity<?> deleteStaff(Long id) {
-        try {
-            Staff director = getMainDirector();
-            log.info("Try to delete Staff with id " + id);
-            if (director.getId() == id.longValue()
-                    && director.getRole().getJobTitle().equals(JobTitle.DIRECTOR)) {
-                log.warn("Attempt to remove the Main Director with id " + id);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Director cannot be removed");
-            } else {
-                staffRepository.delete(getStaffById(id));
-                log.info("Success delete Staff with id " + id);
-                return ResponseEntity.ok().build();
-            }
-        } catch (EntityNotFoundException e) {
-            log.error("Staff not found with id " + id);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+    public void deleteStaff(Long id) throws EntityNotFoundException, IllegalArgumentException {
+        Staff director = getMainDirector();
+        log.info("Try to delete Staff with id " + id);
+        if (director.getId() == id.longValue()
+                && director.getRole().getJobTitle().equals(JobTitle.DIRECTOR)) {
+            log.warn("Attempt to remove the Main Director with id " + id);
+            throw new IllegalArgumentException("Director cannot be removed");
+        } else {
+            staffRepository.delete(getStaffById(id));
+            log.info("Success delete Staff with id " + id);
         }
     }
 
@@ -337,6 +309,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     public List<StaffResponseForHouseAdd> getAllStaffDtoForHouse() {
         return staffRepository.findAll().stream().map(StaffMapper::entityToDtoForHouseAdd).toList();
     }
+
     @Override
     public Long getCurrentStaff() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

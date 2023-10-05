@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.staff.ForgotPassEmailRequest;
 import lab.space.my_house_24.model.staff.ForgotPassRequest;
@@ -9,6 +10,7 @@ import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.StaffValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,8 +32,8 @@ public class LoginController {
 
     @GetMapping({"/", ""})
     public ModelAndView showLogin() {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             return new ModelAndView("redirect:/statistics");
         } else {
             return new ModelAndView("admin/pages/login/login");
@@ -83,8 +85,11 @@ public class LoginController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-
-        return staffService.forgotPasswordStaff(request);
+        try {
+            staffService.forgotPasswordStaff(request);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
-
 }

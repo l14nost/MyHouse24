@@ -4,7 +4,6 @@ package lab.space.my_house_24.service;
 import lab.space.my_house_24.entity.Unit;
 import lab.space.my_house_24.model.unit.UnitResponse;
 import lab.space.my_house_24.model.unit.UnitSaveRequest;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -16,8 +15,8 @@ public interface UnitService {
 
     void saveUnit(Unit unit);
 
-    ResponseEntity<?> saveUnitByRequest(UnitSaveRequest request);
+    void saveUnitByRequest(UnitSaveRequest request);
 
-    ResponseEntity<?> deleteUnitById(Long id);
+    void deleteUnitById(Long id);
 
 }

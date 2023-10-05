@@ -121,7 +121,7 @@ public class BankBookController {
     }
 
     @PostMapping("/get-all-bank-book")
-    public ResponseEntity<Page<BankBookResponse>> getAllMastersApplication(@RequestBody BankBookRequest request) {
+    public ResponseEntity<Page<BankBookResponse>> getAllBankBookResponse(@RequestBody BankBookRequest request) {
         return ResponseEntity.ok(bankBookService.getAllBankBookResponse(request));
     }
 
@@ -132,7 +132,7 @@ public class BankBookController {
 
             String filename = "bank-books" + new SimpleDateFormat("-dd-MM-yyyy HH:mm").format(new Date()) + ".xlsx";
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=" + filename)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(file);
         } catch (IOException e) {

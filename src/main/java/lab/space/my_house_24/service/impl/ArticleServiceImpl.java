@@ -18,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -42,14 +40,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResponseEntity<?> getArticleDtoById(Long id) {
-        try {
-            log.info("Try to convert Article in dto by id" + id);
-            return ResponseEntity.ok(ArticleMapper.toArticleResponse(getArticleById(id)));
-        } catch (EntityNotFoundException e) {
-            log.error("Error update Article after request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public ArticleResponse getArticleDtoById(Long id) throws EntityNotFoundException {
+        log.info("Try to convert Article in dto by id" + id);
+        return ArticleMapper.toArticleResponse(getArticleById(id));
     }
 
     @Override
@@ -90,21 +83,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResponseEntity<?> updateArticleByRequest(ArticleUpdateRequest article) {
-        try {
-            log.info("Try to update Article after request");
-            saveArticle(
-                    ArticleMapper.toArticleAfterUpdateRequest(
-                            article,
-                            getArticleById(article.id())
-                    )
-            );
-            log.info("Success update Article after request");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            log.error("Error update Article after request");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
+    public void updateArticleByRequest(ArticleUpdateRequest article) throws EntityNotFoundException {
+        log.info("Try to update Article after request");
+        saveArticle(
+                ArticleMapper.toArticleAfterUpdateRequest(
+                        article,
+                        getArticleById(article.id())
+                )
+        );
+        log.info("Success update Article after request");
     }
 
     @Override
@@ -119,15 +106,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ResponseEntity<?> deleteArticleById(Long id) {
-        try {
-            log.info("Try to delete Article");
-            articleRepository.delete(getArticleById(id));
-            log.info("Success delete Article");
-            return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
-        }
-
+    public void deleteArticleById(Long id) throws EntityNotFoundException {
+        log.info("Try to delete Article");
+        articleRepository.delete(getArticleById(id));
+        log.info("Success delete Article");
     }
 }

@@ -144,7 +144,7 @@
                 $("#image5").attr("src","/myhouse24-amirb-nikitaf/admin/files/"+response.image5);
                 var usersHtml = "";
                 for (let i = 0; i<response.users.length; i++){
-                    usersHtml+= "<p>"+response.users[i].role+": <a href=\"/admin/staff/card-"+response.users[i].id+"\">"+response.users[i].fullName+"</a> </p>"
+                    usersHtml+= "<p>"+response.users[i].role+": <a href=\"/myhouse24-amirb-nikitaf/admin/staff/card-"+response.users[i].id+"\">"+response.users[i].fullName+"</a> </p>"
                 }
                 $("#staffList").html(usersHtml);
                })

@@ -54,7 +54,7 @@ public class ServiceBillServiceImpl implements ServiceBillService {
     public void saveServiceBillByRequest(List<ServiceBillRequest> request, Bill bill) throws EntityNotFoundException {
         log.info("Try to save ServiceBill by Request");
         List<ServiceBill> dbServiceBills = getAllServiceBillByBillId(bill.getId());
-        if (request.stream().filter(serviceBill -> nonNull(serviceBill.serviceId())).toList().isEmpty() && !dbServiceBills.isEmpty()) {
+        if (request.stream().filter(serviceBill -> nonNull(serviceBill.id())).toList().isEmpty() && !dbServiceBills.isEmpty()) {
             deleteListServiceBills(dbServiceBills);
         }
         for (ServiceBillRequest serviceBillRequest : request) {
@@ -76,6 +76,7 @@ public class ServiceBillServiceImpl implements ServiceBillService {
                 );
             }
         }
+
         log.info("Success save ServiceBill by Request");
     }
 
@@ -102,11 +103,10 @@ public class ServiceBillServiceImpl implements ServiceBillService {
         log.info("Success delete ServiceBillList");
     }
 
-    private void minusTotalPriceFromBill(Long id, BigDecimal price){
+    private void minusTotalPriceFromBill(Long id, BigDecimal price) {
         log.info("Try to find Bill");
         Bill bill = billRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Bill not found by id " + id));
-
         bill.setTotalPrice(bill.getTotalPrice().subtract(price));
         log.info("Try to save find Bill");
         billRepository.save(bill);

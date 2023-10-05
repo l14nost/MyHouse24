@@ -7,14 +7,13 @@ import lab.space.my_house_24.model.article.ArticleSaveRequest;
 import lab.space.my_house_24.model.article.ArticleUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface ArticleService {
 
     Article getArticleById(Long id);
-    ResponseEntity<?> getArticleDtoById(Long id);
+    ArticleResponse getArticleDtoById(Long id);
 
     Page<ArticleResponse> getAllArticleDto(ArticleRequest request);
 
@@ -24,10 +23,10 @@ public interface ArticleService {
 
     void saveArticle(Article article);
 
-    ResponseEntity<?> updateArticleByRequest(ArticleUpdateRequest article);
+    void updateArticleByRequest(ArticleUpdateRequest article);
 
     void saveArticleByRequest(ArticleSaveRequest article);
 
-    ResponseEntity<?> deleteArticleById(Long id);
+    void deleteArticleById(Long id);
 
 }

@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.rate.RateRequest;
 import lab.space.my_house_24.model.rate.RateResponse;
@@ -14,6 +15,7 @@ import lab.space.my_house_24.validator.RateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -59,12 +61,20 @@ public class RateController {
 
     @GetMapping("/get-rate-{id}")
     public ResponseEntity<?> getRateDto(@PathVariable Long id) {
-        return rateService.getRateByIdDto(id);
+        try {
+            return ResponseEntity.ok(rateService.getRateByIdDto(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @GetMapping("/get-rate-card-{id}")
     public ResponseEntity<?> getRateDtoWithId(@PathVariable Long id) {
-        return rateService.getRateByIdWithUpdateAt(id);
+        try {
+            return ResponseEntity.ok(rateService.getRateByIdWithUpdateAt(id));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @PostMapping("/get-all-rates")
@@ -85,7 +95,12 @@ public class RateController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-        return rateService.updateRateByRequest(rateUpdateRequest);
+        try {
+            rateService.updateRateByRequest(rateUpdateRequest);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @PostMapping("/save-rate")
@@ -96,16 +111,28 @@ public class RateController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
-        return rateService.saveRateByRequest(rateSaveRequest);
+        rateService.saveRateByRequest(rateSaveRequest);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete-price-rate/{id}")
     public ResponseEntity<?> deletePriceRateById(@PathVariable Long id) {
-        return priceRateService.deletePriceRateById(id);
+        try {
+            priceRateService.deletePriceRateById(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        }
     }
 
     @DeleteMapping("/delete-rate/{id}")
     public ResponseEntity<?> deleteRateById(@PathVariable Long id) {
-        return rateService.deleteRateById(id);
+        try {
+            rateService.deleteRateById(id);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+        }
     }
 }
