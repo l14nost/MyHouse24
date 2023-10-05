@@ -47,8 +47,14 @@
 
 <script th:src="@{/assets/js/plugins/prism.mini.js}"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
 
 <script>
+
+    const stompClient = new StompJs.Client({
+        brokerURL: 'ws://localhost:7777/myhouse24-amirb-nikitaf/admin/ws'
+    });
 
     const targetElement = document.getElementById('sidebar');
     const logoImg = document.getElementById('logoImg');

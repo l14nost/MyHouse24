@@ -332,6 +332,13 @@
   }
 
   $(document).ready( async function () {
+    stompClient.activate();
+    stompClient.onConnect = (frame) => {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/statistics', () => {
+        getStatistic();
+      });
+    };
     getStatistic();
     let firstArray = [];
     let secondArray = [];

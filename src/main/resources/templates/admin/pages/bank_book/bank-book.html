@@ -171,6 +171,13 @@
         let filterTimeout;
 
         $(document).ready(function () {
+            stompClient.activate();
+            stompClient.onConnect = (frame) => {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/statistics', () => {
+                    getStatistic();
+                });
+            };
             getStatistic();
             getAllBankBook();
             $(document.body).on("click", "tr", function (e) {

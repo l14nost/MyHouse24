@@ -223,7 +223,10 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
             );
             if (reloadStaff){
                 Staff reloadContextStaff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-                Authentication authentication = new UsernamePasswordAuthenticationToken(reloadContextStaff.getEmail(), reloadContextStaff.getPassword(), reloadContextStaff.getAuthorities());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        new org.springframework.security.core.userdetails.User(reloadContextStaff.getEmail(), reloadContextStaff.getPassword(), reloadContextStaff.getAuthorities()),
+                        reloadContextStaff.getPassword(),
+                        reloadContextStaff.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.info("Reload security context");
             }

@@ -170,6 +170,13 @@
     let filterTimeout;
 
     $(document).ready(function () {
+      stompClient.activate();
+      stompClient.onConnect = (frame) => {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/statistics', () => {
+          getStatistic();
+        });
+      };
       getStatistic();
       getAllBill();
       $(document.body).on("click", "tr", function (e) {
