@@ -2033,8 +2033,6 @@ class BillServiceImplTest {
         when(billRepository.findAll((Specification<Bill>) any(), any(PageRequest.class))).thenReturn(bills);
 //        Workbook workbook = mock(Workbook.class);
 //
-//        ByteArrayOutputStream out = mock(ByteArrayOutputStream.class);
-//        out.close();
 //        doThrow(new IOException("Test IO Exception")).when(workbook).write(any());
         BillRequest request = BillRequest.builder().pageIndex(1).build();
 //        assertThrows(IOException.class, () -> billService.getExcel(request));

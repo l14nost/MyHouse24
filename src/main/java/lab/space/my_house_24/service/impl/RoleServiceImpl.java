@@ -64,7 +64,11 @@ public class RoleServiceImpl implements RoleService {
         log.info("Success update Role");
 
         Staff staff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(staff.getEmail(), staff.getPassword(), staff.getAuthorities());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                new org.springframework.security.core.userdetails.User(staff.getUsername(), staff.getPassword(), staff.getAuthorities()),
+                staff.getPassword(),
+                staff.getAuthorities()
+        );
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

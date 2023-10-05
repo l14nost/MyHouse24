@@ -662,6 +662,12 @@
                     clearErrorMessages();
                 }
             }).done(function () {
+                stompClient.activate();
+                stompClient.onConnect = function() {
+                    stompClient.publish({
+                        destination: "/app/statistics",
+                    });
+                };
                 window.location.href = "/myhouse24-amirb-nikitaf/admin/bills";
             }).fail(function (response) {
                 const errors = response.responseJSON;

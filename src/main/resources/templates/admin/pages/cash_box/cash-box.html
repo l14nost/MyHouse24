@@ -167,6 +167,13 @@
         let filterTimeout;
 
         $(document).ready(function () {
+            stompClient.activate();
+            stompClient.onConnect = (frame) => {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/statistics', () => {
+                    getStatistic();
+                });
+            };
             getAllCashBox();
             getStatistic();
             $(document.body).on("click", "tr", function (e) {

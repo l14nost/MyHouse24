@@ -269,6 +269,7 @@ class StaffServiceImplTest {
         Staff staff = Staff.builder()
                 .id(1L)
                 .email("Test")
+                .password("Test")
                 .role(Role.builder()
                         .id(1L)
                         .jobTitle(JobTitle.DIRECTOR)

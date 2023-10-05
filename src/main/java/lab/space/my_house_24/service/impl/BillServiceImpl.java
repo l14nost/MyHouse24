@@ -161,7 +161,7 @@ public class BillServiceImpl implements BillService {
     public void deleteBillById(Long id) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to delete Bill");
         Bill bill = getBillById(id);
-        if (bill.getAutoPayed() && bill.getIsActive()) {
+        if (bill.getAutoPayed() || bill.getIsActive()) {
             log.warn("Bill cannot be deleted");
             throw new IllegalArgumentException(
                     message.getMessage(
