@@ -296,6 +296,12 @@
           clearValidMessages();
         }
       }).done(function () {
+        stompClient.activate();
+        stompClient.onConnect = function() {
+          stompClient.publish({
+            destination: "/app/statistics"
+          });
+        };
         window.location.href = "/myhouse24-amirb-nikitaf/admin/cash-box";
       }).fail(function (response) {
         const errors = response.responseJSON;

@@ -6,8 +6,9 @@ import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,5 +42,11 @@ public class StatisticController {
     @GetMapping("/get-statistic")
     public ResponseEntity<Statistic> getStatistic() {
         return ResponseEntity.ok(statisticService.getAllStatistics().get(0));
+    }
+
+    @MessageMapping("/statistics")
+    @SendTo("/topic/statistics")
+    public String changeStatistic() {
+        return "change";
     }
 }

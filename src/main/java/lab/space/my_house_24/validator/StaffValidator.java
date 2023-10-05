@@ -7,11 +7,13 @@ import lab.space.my_house_24.model.staff.StaffUpdateRequest;
 import lab.space.my_house_24.repository.StaffRepository;
 import lab.space.my_house_24.service.StaffService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.Locale;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -37,6 +39,14 @@ public class StaffValidator {
                     && !director.getStaffStatus().equals(staffUpdateRequest.status())
             ) {
                 bindingResult.addError(new FieldError(object, "status", directorResponse));
+            }
+            if (director.getId() == staffUpdateRequest.id().longValue()
+                    && !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), director.getPassword())){
+                bindingResult.addError(new FieldError(object, "password", directorResponse));
+            }
+            if (director.getId() == staffUpdateRequest.id().longValue()
+                    && !Objects.equals(director.getEmail(), staffUpdateRequest.email())){
+                bindingResult.addError(new FieldError(object, "email", directorResponse));
             }
         }
 

@@ -1,19 +1,31 @@
 package lab.space.my_house_24.config;
 
+import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.enums.UserStatus;
+import lab.space.my_house_24.repository.StaffRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final StaffRepository staffRepository;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -38,15 +50,38 @@ public class SecurityConfig {
                         .requestMatchers("/assets/css/**", "/assets/img/**",
                                 "/assets/js/**", "/assets/vendor/**",
                                 "/assets/images/**", "/auth/**",
-                                "/files/**", "/login/**").permitAll()
+                                "/files/**", "/login/**","/error/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                .loginPage("/login")
+                                .successHandler((request, response, authentication) -> {
+                                    OAuth2User oauthUser = (OAuth2User) authentication.getPrincipal();
+                                    Optional<Staff> staff = staffRepository.findByEmail(oauthUser.getAttribute("email"));
+                                    if (staff.isPresent() && staff.get().getStaffStatus().equals(UserStatus.ACTIVE)) {
+                                        SecurityContextHolder.getContext().setAuthentication(
+                                                new UsernamePasswordAuthenticationToken(
+                                                        new org.springframework.security.core.userdetails.User(
+                                                                staff.get().getUsername(), staff.get().getPassword(), staff.get().getAuthorities()
+                                                        ),
+                                                        staff.get().getPassword(),
+                                                        staff.get().getAuthorities()
+                                                )
+                                        );
+                                    } else {
+                                        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+                                    }
+
+                                    response.sendRedirect("/myhouse24-amirb-nikitaf/admin/");
+                                })
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
-                .rememberMe((rememberMe) -> rememberMe.alwaysRemember(true))
+                .rememberMe((rememberMe) -> rememberMe.rememberMeParameter("remember-me"))
                 .logout(form -> form
                         .logoutSuccessUrl("/login?logout")
                         .deleteCookies("JSESSIONID")

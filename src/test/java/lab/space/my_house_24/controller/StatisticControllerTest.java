@@ -13,13 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(StatisticController.class)
@@ -57,7 +56,7 @@ class StatisticControllerTest {
         when(cashBoxService.statisticCashStatement()).thenReturn(BigDecimal.ZERO);
         when(cashBoxService.statisticAccountBalance()).thenReturn(BigDecimal.ZERO);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/statistics"))
+        mockMvc.perform(get("/statistics"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/pages/statistic/statistic"));
     }
@@ -66,7 +65,7 @@ class StatisticControllerTest {
     void getStatistic() throws Exception {
         when(statisticService.getAllStatistics()).thenReturn(List.of(Statistic.builder().id(1L).bankBookBalance(BigDecimal.ZERO).bankBookBalance(BigDecimal.TEN).bankBookExpense(BigDecimal.ZERO).cashBoxState(BigDecimal.ZERO).build()));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/statistics/get-statistic"))
+        mockMvc.perform(get("/statistics/get-statistic"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(Statistic.builder().id(1L).bankBookBalance(BigDecimal.ZERO).bankBookBalance(BigDecimal.TEN).bankBookExpense(BigDecimal.ZERO).cashBoxState(BigDecimal.ZERO).build())));
     }
