@@ -186,7 +186,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
         Staff director = getMainDirector();
         boolean reloadStaff = false;
         Staff staff = getStaffById(staffUpdateRequest.id());
-        if ((!staff.getEmail().equals(staffUpdateRequest.email())) || (!new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword()))){
+        if (nonNull(staffUpdateRequest.password()) && ((!staff.getEmail().equals(staffUpdateRequest.email())) || (!new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())))){
             reloadStaff = true;
         }
         if (director.getId() != staffUpdateRequest.id().longValue()) {

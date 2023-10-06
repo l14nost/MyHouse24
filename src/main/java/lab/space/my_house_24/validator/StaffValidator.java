@@ -15,6 +15,8 @@ import org.springframework.validation.FieldError;
 import java.util.Locale;
 import java.util.Objects;
 
+import static java.util.Objects.nonNull;
+
 @Component
 @RequiredArgsConstructor
 public class StaffValidator {
@@ -40,7 +42,7 @@ public class StaffValidator {
             ) {
                 bindingResult.addError(new FieldError(object, "status", directorResponse));
             }
-            if (director.getId() == staffUpdateRequest.id().longValue()
+            if (nonNull(staffUpdateRequest.password()) && director.getId() == staffUpdateRequest.id().longValue()
                     && !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), director.getPassword())){
                 bindingResult.addError(new FieldError(object, "password", directorResponse));
             }
