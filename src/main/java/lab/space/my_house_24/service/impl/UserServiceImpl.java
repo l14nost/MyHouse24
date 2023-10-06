@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     private final CustomMailSender customMailSender;
     private final JwtServiceForUser jwtServiceForUser;
     private final PasswordEncoder passwordEncoder;
-    private final String url = "http://localhost:8080/admin/";
+    private final String url = "https://slj.avada-media-dev1.od.ua/myhouse24-amirb-nikitaf/admin/";
     @Override
     public User getUserByEmail(String email) {
         log.info("Try to get user by email: "+email);

@@ -51,7 +51,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final MessageSource message;
-    private final String url = "http://localhost:7575/admin/";
+    private final String url = "https://slj.avada-media-dev1.od.ua/myhouse24-amirb-nikitaf/admin/";
 
     @Override
     public void sendInvite(InviteRequest inviteRequest) {
