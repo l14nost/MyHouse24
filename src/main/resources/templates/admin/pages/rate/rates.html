@@ -128,7 +128,7 @@
                     $(TABLE_BODY).append(
                         '<tr  data-href="/myhouse24-amirb-nikitaf/admin/rates/card-' + rate.id + '" data-key="' + rate.id + '">' +
                         '    <td>' + rate?.name + '</td>' +
-                        '    <td>' + rate?.description + '</td>' +
+                        '    <td class="text-truncate" style="max-width: 400px">' + rate?.description + '</td>' +
                         '    <td>' + rate?.date + '</td>' +
                         '    <td data-actions="data-actions">' + $copy + $edit + $deleteBtn + '</td>' +
                         '</tr>'
