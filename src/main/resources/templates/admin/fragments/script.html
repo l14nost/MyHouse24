@@ -566,7 +566,7 @@
         if (itemsCount > 0) {
             $(TABLE_PAGINATION_ROW).append(
                 $($(colDiv).addClass('pagination-info'))
-                    .append('[[#{staff.table.footer.shown}]] X-Y [[#{staff.table.footer.of}]] Z [[#{staff.table.footer.records}]]'
+                    .append('[[#{table.show.info.Showing}]] X-Y [[#{table.show.info.of}]] Z [[#{table.show.info.entries}]]'
                         .replace('X', ((pageIndex - 1) * 10 + 1))
                         .replace('Y', Math.min(pageIndex * 10, itemsCount))
                         .replace('Z', itemsCount))
