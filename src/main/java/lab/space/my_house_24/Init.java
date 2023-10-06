@@ -1,36 +1,25 @@
 package lab.space.my_house_24;
 
-import lab.space.my_house_24.entity.*;
 import jakarta.persistence.EntityNotFoundException;
-import lab.space.my_house_24.entity.Role;
-import lab.space.my_house_24.entity.SecurityLevel;
-import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.entity.settingsPage.*;
 import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.Page;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.service.*;
-import lab.space.my_house_24.service.impl.AboutServiceImpl;
-import lab.space.my_house_24.service.*;
-import lab.space.my_house_24.service.impl.HouseServiceImpl;
-import lab.space.my_house_24.service.impl.UnitServiceImpl;
-import lab.space.my_house_24.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -167,7 +156,7 @@ public class Init implements CommandLineRunner {
                             .setPassword("$2a$12$ltMYSFmijVGzBuDXVxVRh.s2Z82aVhyuW4X1Jm9QP.tq0JAPys30K")
                             .setFirstname("Admin")
                             .setLastname("Admin")
-                            .setPhone("123123123")
+                            .setPhone("0123456789")
                             .setTheme(true)
                             .setStaffStatus(UserStatus.ACTIVE)
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
