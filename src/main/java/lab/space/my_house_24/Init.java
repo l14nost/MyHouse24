@@ -1,36 +1,25 @@
 package lab.space.my_house_24;
 
-import lab.space.my_house_24.entity.*;
 import jakarta.persistence.EntityNotFoundException;
-import lab.space.my_house_24.entity.Role;
-import lab.space.my_house_24.entity.SecurityLevel;
-import lab.space.my_house_24.entity.Staff;
+import lab.space.my_house_24.entity.*;
 import lab.space.my_house_24.entity.settingsPage.*;
 import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.enums.Page;
 import lab.space.my_house_24.enums.UserStatus;
 import lab.space.my_house_24.service.*;
-import lab.space.my_house_24.service.impl.AboutServiceImpl;
-import lab.space.my_house_24.service.*;
-import lab.space.my_house_24.service.impl.HouseServiceImpl;
-import lab.space.my_house_24.service.impl.UnitServiceImpl;
-import lab.space.my_house_24.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -167,7 +156,7 @@ public class Init implements CommandLineRunner {
                             .setPassword("$2a$12$ltMYSFmijVGzBuDXVxVRh.s2Z82aVhyuW4X1Jm9QP.tq0JAPys30K")
                             .setFirstname("Admin")
                             .setLastname("Admin")
-                            .setPhone("123123123")
+                            .setPhone("0123456789")
                             .setTheme(true)
                             .setStaffStatus(UserStatus.ACTIVE)
                             .setRole(roleService.getRoleByJobTitle(JobTitle.DIRECTOR))
@@ -185,10 +174,10 @@ public class Init implements CommandLineRunner {
                     .setBankBookBalance(BigDecimal.ZERO)
                     .setBankBookExpense(BigDecimal.ZERO);
 
-            if (!cashBoxes.isEmpty()){
+            if (!cashBoxes.isEmpty()) {
                 statistic.setCashBoxState(cashBoxes.stream().map(CashBox::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
             }
-            if (!bankBooks.isEmpty()){
+            if (!bankBooks.isEmpty()) {
                 statistic.setBankBookBalance(bankBooks.stream().map(BankBook::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
                 statistic.setBankBookExpense(bankBooks.stream().map(BankBook::getTotalPrice).filter(totalPrice -> totalPrice.compareTo(BigDecimal.ZERO) < 0).reduce(BigDecimal.ZERO, BigDecimal::add));
             }
@@ -196,14 +185,12 @@ public class Init implements CommandLineRunner {
         } else log.info("Statistic found");
 
 
-
-        try{
+        try {
             log.info("Try to find main page");
             mainPageService.findById(1L);
-        }
-        catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             log.warn("Create custom main page");
-            MainPage mainPage =  MainPage.builder()
+            MainPage mainPage = MainPage.builder()
                     .id(1L)
                     .title("title")
                     .description("description")
@@ -223,11 +210,10 @@ public class Init implements CommandLineRunner {
             mainPageService.save(mainPage);
         }
 
-        try{
+        try {
             log.info("Try to find about page");
             aboutService.findById(1L);
-        }
-        catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             log.warn("Create custom about page");
             aboutService.save(
                     About.builder()
@@ -244,11 +230,10 @@ public class Init implements CommandLineRunner {
             );
         }
 
-        try{
+        try {
             log.info("Try to find contact page");
             contactService.findById(1L);
-        }
-        catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             log.warn("Create custom contact page");
             contactService.save(
                     Contact.builder()
@@ -267,35 +252,33 @@ public class Init implements CommandLineRunner {
             );
         }
 
-        try{
+        try {
             log.info("Try to find service page");
             servicePageService.findById(1L);
-        }
-        catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             log.warn("Create custom service page");
-            ServicePage servicePage =  ServicePage.builder()
+            ServicePage servicePage = ServicePage.builder()
                     .id(1L)
                     .bannerList(new ArrayList<>())
                     .seo(Seo.builder().description("description").title("title").keyWords("keyWords").build())
                     .build();
             servicePage.addBanner(Banner.builder().name("name1").image("").description("descr1").servicePage(ServicePage.builder().id(1L).build()).build());
             servicePageService.save(
-                   servicePage
+                    servicePage
             );
         }
-        try{
+        try {
             log.info("Try to find requisites");
             requisitesService.findById(1L);
-        }
-        catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             log.warn("Create custom requisites");
-           requisitesService.save(Requisites.builder()
-                  .info("Info")
-                  .name("Name")
-                  .id(1L).build());
+            requisitesService.save(Requisites.builder()
+                    .info("Info")
+                    .name("Name")
+                    .id(1L).build());
         }
         log.info("Try to find user");
-        if (userService.findAll().isEmpty()){
+        if (userService.findAll().isEmpty()) {
             log.info("Create custom user");
             User user = User.builder()
                     .userStatus(UserStatus.ACTIVE)
@@ -307,7 +290,7 @@ public class Init implements CommandLineRunner {
                     .number("0633333333")
                     .telegram("0633333333")
                     .viber("0633333333")
-                    .date(LocalDate.of(2005, 12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                    .date(LocalDate.of(2005, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                     .addDate(Instant.now())
                     .email("testUser@gmail.com")
                     .applicationList(new ArrayList<>())
@@ -317,30 +300,30 @@ public class Init implements CommandLineRunner {
             userService.save(user);
         }
         log.info("Try to find unit");
-        if (unitService.getAllUnitDto().isEmpty()){
+        if (unitService.getAllUnitDto().isEmpty()) {
             log.info("Create custom unit");
             unitService.saveUnit(Unit.builder()
-                            .name("L")
-                            .serviceList(new ArrayList<>())
-                            .id(1L)
+                    .name("L")
+                    .serviceList(new ArrayList<>())
+                    .id(1L)
                     .build());
         }
 
         log.info("Try to find service");
-        if (serviceService.getAllService().isEmpty()){
+        if (serviceService.getAllService().isEmpty()) {
             log.info("Create custom service");
             serviceService.saveService(Service.builder()
-                            .unit(Unit.builder().id(1L).build())
-                            .isActive(true)
-                            .id(1L)
-                            .meterReadingList(new ArrayList<>())
-                            .serviceBillList(new ArrayList<>())
-                            .name("Water")
+                    .unit(Unit.builder().id(1L).build())
+                    .isActive(true)
+                    .id(1L)
+                    .meterReadingList(new ArrayList<>())
+                    .serviceBillList(new ArrayList<>())
+                    .name("Water")
                     .build());
         }
 
         log.info("Try to find rate");
-        if (rateService.getAllRate().isEmpty()){
+        if (rateService.getAllRate().isEmpty()) {
             log.info("Create custom service");
             Rate rate = Rate.builder()
                     .id(1L)
@@ -363,7 +346,7 @@ public class Init implements CommandLineRunner {
 
 
         log.info("Try to find house");
-        if (houseService.findAll().isEmpty()){
+        if (houseService.findAll().isEmpty()) {
             log.info("Create custom house with floor, section && apartment");
             House house = House.builder()
                     .name("The Joinery")
@@ -400,9 +383,9 @@ public class Init implements CommandLineRunner {
                     .area(50.5)
                     .build();
             apartment.setBankBook(BankBook.builder().bankBookStatus(BankBookStatus.ACTIVE).apartment(apartment).cashBoxes(new ArrayList<>())
-                            .totalPrice(BigDecimal.ZERO)
-                            .bill(new ArrayList<>())
-                            .number("00000-00001")
+                    .totalPrice(BigDecimal.ZERO)
+                    .bill(new ArrayList<>())
+                    .number("00000-00001")
                     .build());
             floor.getApartmentList().add(apartment);
             section.getApartmentList().add(apartment);
@@ -413,11 +396,7 @@ public class Init implements CommandLineRunner {
         }
 
 
-
-
-
         log.info("################## FINISH OF INITIALIZATION ##################");
-
 
 
     }
