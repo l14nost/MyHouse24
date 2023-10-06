@@ -102,11 +102,9 @@
 <th:block layout:fragment="extra-modals">
 </th:block>
 <th:block layout:fragment="extra-script">
-    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script>
-        const stompClient1 = new StompJs.Client({
-            brokerURL: 'ws://localhost:8080/myhouse24-amirb-nikitaf/admin/ws'
-        });
+        var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        var stompClient1 = Stomp.over(sockJs1);
         function select2(lang){
             var defaultSelect = " ";
             $("#house").select2({
@@ -429,13 +427,9 @@
                 data: JSON.stringify(jsonData)
             }).done(
                 function (response){
-                    stompClient1.activate();
-                    stompClient1.onConnect = function() {
-                        stompClient1.publish({
-                            destination: "/app/main",
-                            body: JSON.stringify("")
-                        });
-                    };
+                    stompClient1.connect({}, ()  => {
+                    });
+                    stompClient1.send("/app/main", {}, JSON.stringify(""));
                     window.location.href = "/myhouse24-amirb-nikitaf/admin/messages";
                 }
             ).fail(
