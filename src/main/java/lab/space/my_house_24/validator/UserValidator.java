@@ -83,10 +83,7 @@ public class UserValidator {
     }
 
     public boolean existByEmail(String email){
-        if (!userRepository.existsByEmail(email)){
-            return true;
-        }
-        return false;
+        return userRepository.existsByEmail(email);
 
     }
 
