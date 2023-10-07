@@ -21,9 +21,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page"
-                            th:text="#{bills.breadcrumb}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/bills}" th:text="#{bills.breadcrumb}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -422,7 +421,7 @@
 
                 if (breadcrumbCount === 0){
                     $("#breadcrumb-title").append('[[#{bills.card.breadcrumb}]] №' + response?.number);
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number, '/bills/card-' + response?.id));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
                     breadcrumbCount++;
                 }
@@ -599,7 +598,7 @@
                 $("#payed").val('0.00');
 
                 $("#breadcrumb-title").append('[[#{bills.save.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]', '/bills'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
             });
         }
@@ -665,12 +664,9 @@
                     clearErrorMessages();
                 }
             }).done(function () {
-                stompClient.activate();
-                stompClient.onConnect = function() {
-                    stompClient.publish({
-                        destination: "/app/statistics",
-                    });
-                };
+                stompClient.connect({}, () => {
+                });
+                stompClient.send("/app/statistics");
                 window.location.href = "/myhouse24-amirb-nikitaf/admin/bills";
             }).fail(function (response) {
                 const errors = response.responseJSON;

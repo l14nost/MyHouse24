@@ -16,10 +16,9 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{staff.breadcrumb.staff}"></li>
-                        <li class="breadcrumb-item active" aria-current="page"
-                            th:text="#{staff.card.breadcrumb.staff}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/staff}" th:text="#{staff.breadcrumb.staff}"></a></li>
+
                     </ol>
                 </nav>
             </div>
@@ -122,7 +121,6 @@
         $(document).ready(function () {
             typeReq = false;
             if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
                 document.getElementById('status-col').removeAttribute('hidden');
                 document.getElementById('password-col').removeAttribute('hidden');
                 document.getElementById('confirm-password-col').removeAttribute('hidden');
@@ -130,7 +128,11 @@
                 typeReq = true;
                 getStaffDTO(staffId);
                 getStatus();
+
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{staff.card.breadcrumb.staff}]]','/staff/card-' + staffId));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
             }else {
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{staff.card.breadcrumb.staff}]]','/staff'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
             }
 

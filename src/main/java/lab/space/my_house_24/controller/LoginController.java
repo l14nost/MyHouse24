@@ -34,7 +34,7 @@ public class LoginController {
     public ModelAndView showLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
-            return new ModelAndView("redirect:/statistics");
+            return new ModelAndView("redirect:/");
         } else {
             return new ModelAndView("admin/pages/login/login");
         }

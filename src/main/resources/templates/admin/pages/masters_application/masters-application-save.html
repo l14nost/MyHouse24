@@ -16,8 +16,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{masters_call.breadcrumb}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/master-call}" th:text="#{masters_call.breadcrumb}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -165,7 +165,7 @@
                 getMastersApplicationResponse(masterApplId);
             }else {
                 $("#breadcrumb-title").append('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]','/master-call'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
 
                 newFloorContent('-');
@@ -208,7 +208,7 @@
                 selectApartment();
 
                 $("#breadcrumb-title").append('[[#{masters_call.card.breadcrumb}]] №' + response?.id);
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.card.breadcrumb}]] №' + response?.id));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.card.breadcrumb}]] №' + response?.id, '/master-call/card-' + response?.id));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
             }).fail(function (){
                 window.location.href = "/myhouse24-amirb-nikitaf/admin/error";

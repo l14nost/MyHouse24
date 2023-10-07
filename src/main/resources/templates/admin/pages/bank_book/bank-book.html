@@ -16,9 +16,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page"
-                            th:text="#{bank_book.breadcrumb}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page" th:text="#{bank_book.breadcrumb}"></li>
                     </ol>
                 </nav>
             </div>
@@ -173,13 +172,14 @@
         var stompClient = Stomp.over(sockJs1);
 
         $(document).ready(function () {
-            stompClient.activate();
-            stompClient.onConnect = (frame) => {
+
+            stompClient.connect({}, (frame) => {
                 console.log('Connected: ' + frame);
                 stompClient.subscribe('/topic/statistics', () => {
                     getStatistic();
                 });
-            };
+            });
+
             getStatistic();
             getAllBankBook();
             $(document.body).on("click", "tr", function (e) {

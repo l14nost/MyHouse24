@@ -127,25 +127,27 @@ public interface StaffMapper {
                 .setForgotTokenUsage(true);
     }
 
-    static  StaffResponseForHouseCard entityToDtoForHouseCard(Staff staff){
+    static StaffResponseForHouseCard entityToDtoForHouseCard(Staff staff) {
         return StaffResponseForHouseCard.builder()
                 .id(staff.getId())
-                .fullName(staff.getLastname()+" "+staff.getFirstname())
+                .fullName(staff.getLastname() + " " + staff.getFirstname())
                 .role(staff.getRole().getJobTitle().getJobTitle(LocaleContextHolder.getLocale()))
                 .build();
     }
-    static  StaffResponseForHouseAdd entityToDtoForHouseAdd(Staff staff){
+
+    static StaffResponseForHouseAdd entityToDtoForHouseAdd(Staff staff) {
         return StaffResponseForHouseAdd.builder()
                 .id(staff.getId())
-                .fullName(staff.getLastname()+" "+staff.getFirstname())
+                .fullName(staff.getLastname() + " " + staff.getFirstname())
                 .build();
     }
 
-    static  StaffResponseForHeader entityToDtoForHeader(Staff staff){
+    static StaffResponseForHeader entityToDtoForHeader(Staff staff) {
         return StaffResponseForHeader.builder()
                 .id(staff.getId())
-                .fullName(staff.getLastname()+" "+staff.getFirstname())
+                .fullName(staff.getLastname() + " " + staff.getFirstname())
                 .email(staff.getEmail())
+                .permission(staff.getRole().getSecurityLevelList().stream().map(securityLevel -> securityLevel.getPage().name()).toList())
                 .build();
     }
 }
