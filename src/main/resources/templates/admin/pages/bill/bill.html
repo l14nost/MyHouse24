@@ -169,6 +169,9 @@
     billRequest.pageIndex = 0;
     let filterTimeout;
 
+    var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+    var stompClient = Stomp.over(sockJs1);
+
     $(document).ready(function () {
       stompClient.activate();
       stompClient.onConnect = (frame) => {

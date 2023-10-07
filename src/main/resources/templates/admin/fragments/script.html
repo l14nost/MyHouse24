@@ -46,6 +46,8 @@
 <script th:src="@{/assets/js/flatpickr/flatpickr.js}"></script>
 
 <script th:src="@{/assets/js/plugins/prism.mini.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
 
@@ -53,7 +55,7 @@
 <script>
 
     const stompClient = new StompJs.Client({
-        brokerURL: 'ws://localhost:7777/myhouse24-amirb-nikitaf/admin/ws'
+        brokerURL: 'ws://localhost:8080/myhouse24-amirb-nikitaf/admin/ws'
     });
 
     const targetElement = document.getElementById('sidebar');

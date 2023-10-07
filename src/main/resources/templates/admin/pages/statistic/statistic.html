@@ -268,6 +268,10 @@
 
 <th:block layout:fragment="extra-script">
 <script>
+
+  var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+  var stompClient = Stomp.over(sockJs1);
+
   function extraChart1(firstArray, secondArray) {
     if ($('#extrachart1').length) {
       const options = {
@@ -339,6 +343,7 @@
         getStatistic();
       });
     };
+
     getStatistic();
     let firstArray = [];
     let secondArray = [];

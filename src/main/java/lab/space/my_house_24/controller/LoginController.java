@@ -33,9 +33,6 @@ public class LoginController {
     @GetMapping({"/", ""})
     public ModelAndView showLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getPrincipal() instanceof User);
-        System.out.println(authentication.getPrincipal());
-        System.out.println(authentication.isAuthenticated());
         if (authentication.isAuthenticated() && authentication.getPrincipal() instanceof User) {
             return new ModelAndView("redirect:/statistics");
         } else {

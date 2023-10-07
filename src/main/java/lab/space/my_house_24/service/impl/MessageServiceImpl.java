@@ -71,6 +71,9 @@ public class MessageServiceImpl implements MessageService {
         for (Apartment apartment: apartmentList){
             message.addUser(apartment.getUser());
         }
+        if (messageRequestForSend.apartment()!=null && messageRequestForSend.apartment()!=0 && apartmentList.size()==1){
+            message.setApartment(apartmentList.get(0));
+        }
         messageRepository.save(message);
         log.info("Message was send");
 

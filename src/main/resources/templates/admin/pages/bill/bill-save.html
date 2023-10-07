@@ -223,6 +223,9 @@
 
     <script>
 
+        var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        var stompClient = Stomp.over(sockJs1);
+
         let breadcrumbCount = 0;
         let itemsCountServiceTable = 0;
         let SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);

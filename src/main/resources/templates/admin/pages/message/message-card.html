@@ -101,6 +101,9 @@
 </th:block>
 <th:block layout:fragment="extra-script">
 <script>
+    var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+    var stompClient1 = Stomp.over(sockJs1);
+
     $(document).on('click', '.delete-entity', function (event) {
         $('#confirmDeleteEntity').modal('show');
     });
@@ -111,6 +114,9 @@
             method: "DELETE"
         })
             .done(function (response){
+                stompClient1.connect({}, ()  => {
+                });
+                stompClient1.send("/app/main", {}, JSON.stringify(""));
                 window.location.href = "/myhouse24-amirb-nikitaf/admin/messages"
             })
             .fail(function (response){

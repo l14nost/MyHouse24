@@ -61,11 +61,11 @@
                 <table class="table  table-hover table-bordered table-md my-0" id="service-table" style="margin-top: 15px;max-width: 100%">
                     <thead>
                     <tr>
-                        <td>#</td>
-                        <td th:text="#{rate.card.service}"></td>
-                        <td th:text="#{rate.card.unit}"></td>
-                        <td th:text="#{rate.card.price}"></td>
-                        <td th:text="#{rate.card.currency}"></td>
+                        <th>#</th>
+                        <th th:text="#{rate.card.service}"></th>
+                        <th th:text="#{rate.card.unit}"></th>
+                        <th th:text="#{rate.card.price}"></th>
+                        <th th:text="#{rate.card.currency}"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -106,8 +106,8 @@
                 $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name);
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name));
                 $('#rate-name').html(rateResponse?.name);
-                $('#rate-description').html(rateResponse?.description);
-                $('#update-at').html(rateResponse?.date);
+                $('#rate-description').html(rateResponse?.description ? rateResponse?.description : '-');
+                $('#update-at').html(rateResponse?.date ? rateResponse?.date : '-');
                 tableBody.empty();
                 $.each(rateResponse?.priceRate, function (index, priceRate) {
                     tableBody.append(addRowService(priceRate, index + 1));
