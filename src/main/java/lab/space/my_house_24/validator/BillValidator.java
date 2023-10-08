@@ -3,6 +3,7 @@ package lab.space.my_house_24.validator;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Bill;
 import lab.space.my_house_24.enums.BillStatus;
+import lab.space.my_house_24.model.service_bill.ServiceBillRequest;
 import lab.space.my_house_24.repository.BillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -76,8 +78,23 @@ public class BillValidator {
     public void isPayedCashBoxAndPayedValidationWithId(Long id, BigDecimal payed, BigDecimal totalPrice, BindingResult bindingResult, String object, Locale locale) {
         if (!bindingResult.hasErrors()) {
             Bill bill = billRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Bill not found"));
-            if (bill.getPayedCashBox().compareTo(payed) > 0 && bill.getDraft()){
+            if (bill.getPayedCashBox().compareTo(payed) > 0 && bill.getDraft()) {
                 bindingResult.addError(new FieldError(object, "payed", message.getMessage("bills.save.valid.payed_min", null, locale) + " " + bill.getPayedCashBox()));
+            }
+        }
+    }
+
+    public void checkUniqueServiceId(List<ServiceBillRequest> request, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            int i = 0;
+            for (ServiceBillRequest serviceBillRequest : request) {
+                for (int j = 0; j < request.size(); j++) {
+                    if (serviceBillRequest.serviceId().equals(request.get(j).serviceId()) && i != j) {
+                        bindingResult.addError(new FieldError(object, "serviceBillList[" + i + "].serviceId", message.getMessage("rate.save.uniq.service.id.error", null, locale)));
+                        break;
+                    }
+                }
+                i++;
             }
         }
     }

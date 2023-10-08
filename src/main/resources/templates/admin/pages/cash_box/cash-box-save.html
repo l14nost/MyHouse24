@@ -264,6 +264,8 @@
         $('#number').val(response?.number);
         $('#date').val(response?.createAt);
         $('#sum').val('0.00');
+      }).fail(function (response){
+        console.log(response);
       });
     }
 

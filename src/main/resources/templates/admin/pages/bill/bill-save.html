@@ -450,9 +450,11 @@
                     $(SERVICE_BODY).append(
                         '<tr class="service-row">\n' +
                         '                            <th>\n' +
+                        '                            <div>\n' +
                         '                                <select id="service-' + service?.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
                         '                                    <option value=""></option>\n' +
                         '                                </select>\n' +
+                        '                            </div>\n' +
                         '                            </th>\n' +
                         '                            <th>\n' +
                         '                                <input type="text" class="form-control" id="unit-' + service?.id + '" disabled>\n' +
@@ -527,9 +529,11 @@
                     $(SERVICE_BODY).append(
                         '<tr class="service-row">\n' +
                         '                            <th>\n' +
+                        '                            <div>\n' +
                         '                                <select id="service-' + service?.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
                         '                                    <option value=""></option>\n' +
                         '                                </select>\n' +
+                        '                            </div>\n' +
                         '                            </th>\n' +
                         '                            <th>\n' +
                         '                                <input type="text" class="form-control" id="unit-' + service?.id + '" disabled>\n' +
@@ -600,6 +604,8 @@
                 $("#breadcrumb-title").append('[[#{bills.save.breadcrumb}]]');
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]', '/bills'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+            }).fail(function (response){
+                console.log(response);
             });
         }
 
@@ -620,6 +626,17 @@
                 });
             });
             console.log(unitData)
+            return unitData;
+        }
+
+        function collectServiceDataResponse() {
+            let unitData = [];
+            $('.service-row').each(function() {
+                let serviceId = $(this).find('.form-select[id^="service-"]');
+                unitData.push({
+                    serviceId: serviceId || null,
+                });
+            });
             return unitData;
         }
 
@@ -678,6 +695,17 @@
                 if (errors?.rateId) validResponse($('#rate'), errors.rateId, 'div');
                 if (errors?.periodOf) validResponse($('#range'), errors.periodOf, 'div');
                 if (errors?.serviceBillList) errorResponse($('#add-button'), errors.serviceBillList, 'div');
+                let data={
+                    errorData:  collectServiceDataResponse()
+                }
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        const index = parseInt(key.match(/serviceBillList\[(\d+)\]\.(\w+)/)[1]);
+                        const col = key.split('.').pop();
+                        const value = errors[key];
+                        if (col === 'serviceId') validResponse($('#' + data?.errorData[index]?.serviceId[0].id), value, "div");
+                    }
+                }
             })
         }
 
@@ -691,9 +719,11 @@
             $(SERVICE_BODY).append(
                 '<tr class="service-row">\n' +
                 '                            <th>\n' +
+                '                            <div>\n' +
                 '                                <select id="service-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
                 '                                    <option value=""></option>\n' +
                 '                                </select>\n' +
+                '                            </div>\n' +
                 '                            </th>\n' +
                 '                            <th>\n' +
                 '                                <input type="text" class="form-control" id="unit-' + serviceSelectCount + '" disabled>\n' +
@@ -845,9 +875,11 @@
                     $(SERVICE_BODY).append(
                         '<tr class="service-row">\n' +
                         '                            <th>\n' +
+                        '                            <div>\n' +
                         '                                <select id="service-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
                         '                                    <option value=""></option>\n' +
                         '                                </select>\n' +
+                        '                            </div>\n' +
                         '                            </th>\n' +
                         '                            <th>\n' +
                         '                                <input type="text" class="form-control" id="unit-' + serviceSelectCount + '" disabled>\n' +

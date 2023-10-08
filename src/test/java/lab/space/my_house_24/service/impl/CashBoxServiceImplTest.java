@@ -796,14 +796,14 @@ class CashBoxServiceImplTest {
                         .articles(Article.builder().id(1L).name("Test").type(ArticleType.INCOME).build())
                         .build()
         );
-        when(cashBoxRepository.findAll((Specification<CashBox>) any())).thenReturn(cashBoxes);
+        when(cashBoxRepository.findAll()).thenReturn(cashBoxes);
         assertEquals("1231231231", cashBoxService.getNewCashBoxResponse(true).number());
     }
 
     @Test
-    void getNewCashBoxResponseEmtyList() {
+    void getNewCashBoxResponseEmptyList() {
         List<CashBox> cashBoxes = List.of();
-        when(cashBoxRepository.findAll((Specification<CashBox>) any())).thenReturn(cashBoxes);
+        when(cashBoxRepository.findAll()).thenReturn(cashBoxes);
         assertEquals("0000000001", cashBoxService.getNewCashBoxResponse(true).number());
     }
 
