@@ -99,7 +99,7 @@
                     </tr>
                     <tr id="search">
                         <th>
-                            <input class="form-control" type="text" id="number">
+                            <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/[^0-9\s-]/g, '');">
                         </th>
                         <th>
                             <select id="status" class="mb-1 form-select form-select"
@@ -109,7 +109,7 @@
                             </select>
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="apartment">
+                            <input class="form-control" type="text" id="apartment" oninput="this.value = this.value.replace(/\D/g, '');">
                         </th>
                         <th>
                             <select id="house" class="mb-1 form-select form-select" aria-label=".form-select-lg example"

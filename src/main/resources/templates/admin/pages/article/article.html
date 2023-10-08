@@ -36,8 +36,8 @@
                 <table class="table table-striped table-hover table-bordered mb-0" id="article-table" style="max-width: 100%">
                     <thead>
                     <tr>
-                        <th class="col-4" th:text="#{article.save.inp.title}"></th>
-                        <th th:text="#{article.save.inp.type}"></th>
+                        <th class="col-4 no-select" th:text="#{article.save.inp.title}"></th>
+                        <th class="no-select" role="button" id="sort" th:text="#{article.save.inp.type}"></th>
                         <th style="width: 15px"></th>
                     </tr>
                     </thead>
@@ -66,9 +66,12 @@
 
     <script>
 
+        let lastRequestTime = 0;
+        let requestInterval = 1000;
         let articleId;
         let articleRequest ={};
         articleRequest.pageIndex = 0;
+        articleRequest.typeQuery = null;
 
         $(document).ready(function () {
             getAllArticle();
@@ -79,6 +82,23 @@
             $('#confirmDelete').modal('show');
         });
 
+        $(document).on('click', '#sort', function () {
+            let currentTime = new Date().getTime();
+            if (currentTime - lastRequestTime >= requestInterval) {
+                articleRequest.typeQuery = articleRequest.typeQuery === null ? true : !articleRequest.typeQuery;
+                getAllArticle();
+                lastRequestTime = currentTime;
+            }
+        });
+
+        $(document).on('dblclick', '#sort', function () {
+            if (articleRequest.typeQuery !== null) {
+                articleRequest.typeQuery = null;
+                getAllArticle();
+                lastRequestTime = new Date().getTime();
+            }
+        });
+
         function getAllArticle() {
             $.ajax({
                 method: "POST",
@@ -87,7 +107,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify(articleRequest)
             }).done(function (articleResponse) {
-                console.info(articleResponse)
                 const TABLE_BODY = createTable('#article-table', articleResponse?.totalElements, articleResponse?.totalPages, articleRequest?.pageIndex);
                 $.each(articleResponse?.content, function (index, article) {
                     const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" href="/myhouse24-amirb-nikitaf/admin/payment-items/update-' + article.id + '" aria-label="Edit Article" data-bs-original-title="Edit Article">' +
@@ -170,7 +189,8 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                showToast('error');
+                $('#custom-toast').text(response?.responseJSON)
+                showToast('custom');
                 articleId = undefined;
             })
         }

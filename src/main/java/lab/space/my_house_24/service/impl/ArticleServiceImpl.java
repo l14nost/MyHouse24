@@ -15,6 +15,7 @@ import lab.space.my_house_24.service.ArticleService;
 import lab.space.my_house_24.specification.ArticleSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleSpecification articleSpecification;
+    private final MessageSource message;
 
     @Override
     public Article getArticleById(Long id) throws EntityNotFoundException {
@@ -83,12 +85,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticleByRequest(ArticleUpdateRequest article) throws EntityNotFoundException {
+    public void updateArticleByRequest(ArticleUpdateRequest request) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to update Article after request");
+        Article article = getArticleById(request.id());
+        if (!article.getCashBoxList().isEmpty() && !article.getType().equals(request.type())) {
+            throw new IllegalArgumentException(message.getMessage("article.save.valid.update.error", null, LocaleContextHolder.getLocale()));
+        }
         saveArticle(
                 ArticleMapper.toArticleAfterUpdateRequest(
-                        article,
-                        getArticleById(article.id())
+                        request,
+                        article
                 )
         );
         log.info("Success update Article after request");
@@ -106,9 +112,16 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteArticleById(Long id) throws EntityNotFoundException {
+    public void deleteArticleById(Long id) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to delete Article");
-        articleRepository.delete(getArticleById(id));
-        log.info("Success delete Article");
+        Article article = getArticleById(id);
+        System.out.println(article);
+        if (!article.getCashBoxList().isEmpty()) {
+            log.warn("Valid error delete Article");
+            throw new IllegalArgumentException(message.getMessage("article.valid.delete.error", null, LocaleContextHolder.getLocale()));
+        } else {
+            articleRepository.delete(article);
+            log.info("Success delete Article");
+        }
     }
 }

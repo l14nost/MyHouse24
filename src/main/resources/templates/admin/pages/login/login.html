@@ -114,6 +114,17 @@
 </div>
 <!-- loader END -->
 
+<div class="toast-container position-fixed end-0 p-3">
+    <div id="errorCustomToast" class="toast align-items-center text-bg-warning-toast border-0 bg-transparency" role="alert"
+         aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">[[#{global.toast.custom.error}]]: <a id="custom-toast">[[#{login.error}]]</a></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 <div class="wrapper">
     <section class="login-content">
         <div class="row m-0 align-items-center bg-white vh-100" style="display: flex; justify-content: center">
@@ -191,4 +202,30 @@
     </section>
 </div>
 </body>
+<script th:src="@{/assets/js/core/libs.min.js}"></script>
+
+<script>
+
+    const toastCustom = bootstrap.Toast.getOrCreateInstance(document.getElementById('errorCustomToast'));
+
+    function showToast(toast) {
+        switch (toast) {
+            case "custom":
+                toastCustom.show();
+                break;
+            default:
+                console.log("Unknown Toast");
+        }
+    }
+
+    $(document).ready(function (){
+        var currentUrl = window.location.href;
+
+        var urlParams = new URLSearchParams(new URL(currentUrl).search);
+
+        if (urlParams.has("error")) {
+            showToast("custom");
+        }
+    })
+</script>
 </html>

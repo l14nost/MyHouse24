@@ -104,7 +104,7 @@
           <tr id="search">
             <th></th>
             <th>
-              <input class="form-control" type="text" id="number">
+              <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');">
             </th>
             <th>
               <select id="status" class="mb-1 form-select form-select"
@@ -114,10 +114,10 @@
               </select>
             </th>
             <th>
-              <input class="form-control" type="text" id="date">
+              <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
             </th>
             <th>
-              <input class="form-control" type="text" id="month">
+              <input class="form-control" type="text" id="month" oninput="this.value = this.value.replace(/[^a-zA-Z0-9,]/g, '');">
             </th>
             <th>
               <input class="form-control" type="text" id="apartment">

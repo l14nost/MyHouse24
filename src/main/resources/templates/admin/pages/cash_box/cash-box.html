@@ -99,10 +99,10 @@
                     </tr>
                     <tr id="search">
                         <th>
-                            <input class="form-control" type="text" id="number">
+                            <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');">
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="date">
+                            <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
                         </th>
                         <th>
                             <select id="status" class="mb-1 form-select form-select"
@@ -125,7 +125,7 @@
                             </select>
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="bank-book">
+                            <input class="form-control" type="text" id="bank-book" oninput="this.value = this.value.replace(/[^0-9\s-]/g, '');">
                         </th>
                         <th>
                             <select id="type" class="mb-1 form-select form-select"
@@ -332,7 +332,7 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                $('#custom-toast').text(response?.responseText)
+                $('#custom-toast').text(response?.responseText);
                 showToast('custom');
                 cashBoxId = undefined;
             })

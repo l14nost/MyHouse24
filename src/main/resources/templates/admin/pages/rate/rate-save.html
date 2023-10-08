@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="card-footer py-0">
-                <div class="col text-end mb-3">
+                <div class="col text-end my-3">
                     <a th:href="@{/rates}" type="button" class="btn btn-light" th:text="#{global.button.cancel}"></a>
                     <button onclick="saveService()" type="button" class="btn btn-success"
                             style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}">
@@ -88,7 +88,7 @@
 
         $(document).ready(function () {
             if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                if (new URL(window.location.href).pathname.split("-")[1] !== "copy"){
+                if (new URL(window.location.href).pathname.split("-")[3] !== "copy"){
                     rateId = new URL(window.location.href).pathname.split("-").pop();
                     getRate(rateId);
                 }else {
@@ -159,7 +159,7 @@
                 '                            <div class="col-3">\n' +
                 '                                <div class="form-group">\n' +
                 '                                    <label for="price-rate-' + priceRate?.id + '" class="form-label">[[#{rate.save.price}]]</label>\n' +
-                '                                    <input type="text" class="form-control" id="price-rate-' + priceRate?.id + '" value="' + priceRate?.price + '">\n' +
+                '                                    <input type="text" class="form-control" id="price-rate-' + priceRate?.id + '" value="' + priceRate?.price + '" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\');">\n' +
                 '                                </div>\n' +
                 '                            </div>\n' +
                 '                            <div class="col-3">\n' +
@@ -212,7 +212,7 @@
                 '                            <div class="col-3">\n' +
                 '                                <div class="form-group">\n' +
                 '                                    <label for="price-rate-' + serviceSelectCount + '" class="form-label">[[#{rate.save.price}]]</label>\n' +
-                '                                    <input type="text" class="form-control" id="price-rate-' + serviceSelectCount + '">\n' +
+                '                                    <input type="text" class="form-control" id="price-rate-' + serviceSelectCount + '" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\');">\n' +
                 '                                </div>\n' +
                 '                            </div>\n' +
                 '                            <div class="col-3">\n' +

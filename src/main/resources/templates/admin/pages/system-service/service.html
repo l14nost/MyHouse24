@@ -130,7 +130,7 @@
         });
 
         $(document).on('click', '.remove-row', function () {
-            $(this).closest('.row').remove();
+            $(this).closest('.row.pb-3').remove();
         });
 
         function getAllUnit() {
@@ -179,7 +179,7 @@
         }
 
         function addRowUnits(unit) {
-            let row = '<div class="row py-2">\n' +
+            let row = '<div class="row pb-3">\n' +
                 '                            <div class="col-7">\n' +
                 '                                <div class="form-group">\n' +
                 '                                    <label for="unit-name-' + unit.id + '" class="form-label">[[#{service.service.unit}]]</label>\n' +
@@ -260,7 +260,7 @@
         }
 
         function addEmptyRowUnit() {
-            let emptyRow = '<div class="row py-2">\n' +
+            let emptyRow = '<div class="row pb-3">\n' +
                 '    <div class="col-7">\n' +
                 '        <div class="form-group">\n' +
                 '            <label class="form-label">[[#{service.service.unit}]]</label>\n' +
@@ -367,11 +367,11 @@
                 showToast('error');
                 if (unitId){
                     console.log(unitId)
-                    if (response) validResponse($('#unit-name-' + unitId), response.responseText, 'div');
+                    if (response) validResponse($('#unit-name-' + unitId), response?.responseJSON?.message, 'div');
                 }
                 if (serviceId){
                     console.log(serviceId)
-                    if (response) validResponse($('#service-row-' + serviceId), response.responseText);
+                    if (response) validResponse($('#service-row-' + serviceId), response?.responseJSON?.message);
                 }
                 serviceId = undefined;
                 unitId = undefined;
@@ -381,7 +381,7 @@
 
         function collectUnitData() {
             let unitData = [];
-            $('.row.py-2').each(function() {
+            $('.col-7').each(function() {
                 let id = $(this).find('.form-control[id^="unit-id-"]').val();
                 let name = $(this).find('.form-control[id^="unit-name-"]').val();
                 unitData.push({
@@ -394,7 +394,7 @@
 
         function collectUnitDataResponse() {
             let unitData = [];
-            $('.row.py-2').each(function() {
+            $('.col-7').each(function() {
                 let name = $(this).find('.form-control[id^="unit-name-"]');
                 unitData.push({
                     name: name || null,
@@ -485,6 +485,7 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 beforeSend : function (){
+                    console.log(data);
                     clearValidMessages();
                 }
             }).done(function () {
