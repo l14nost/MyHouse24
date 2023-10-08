@@ -68,32 +68,33 @@ public class ArticleController {
     }
 
     @PostMapping("/save-article")
-    public ResponseEntity<?> saveArticle(@Valid @RequestBody ArticleSaveRequest articleSaveRequest,
+    public ResponseEntity<?> saveArticle(@Valid @RequestBody ArticleSaveRequest request,
                                          BindingResult bindingResult) {
-        articleValidator.isNameUniqueValidation(articleSaveRequest.name(),
+        articleValidator.isNameUniqueValidation(request,
                 bindingResult, "ArticleSaveRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
 
-        articleService.saveArticleByRequest(articleSaveRequest);
+        articleService.saveArticleByRequest(request);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update-article")
-    public ResponseEntity<?> updateArticleById(@Valid @RequestBody ArticleUpdateRequest articleUpdateRequest,
+    public ResponseEntity<?> updateArticleById(@Valid @RequestBody ArticleUpdateRequest request,
                                                BindingResult bindingResult) {
-        articleValidator.isNameUniqueValidationWithId(articleUpdateRequest.id(),
-                articleUpdateRequest.name(), bindingResult,
+        articleValidator.isValidationByUpdateRequest(request, bindingResult,
                 "ArticleUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
         try {
-            articleService.updateArticleByRequest(articleUpdateRequest);
+            articleService.updateArticleByRequest(request);
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
@@ -105,8 +106,10 @@ public class ArticleController {
         try {
             articleService.deleteArticleById(id);
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }

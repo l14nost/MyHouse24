@@ -21,8 +21,8 @@
         </div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb" id="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="#{cash_box.breadcrumb}"></li>
+            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/cash-box}" th:text="#{cash_box.breadcrumb}"></a></li>
           </ol>
         </nav>
       </div>

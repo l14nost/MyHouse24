@@ -10,6 +10,9 @@ import java.util.List;
 @Repository
 public interface CashBoxRepository extends JpaRepository<CashBox, Long>, JpaSpecificationExecutor<CashBox> {
     boolean existsByNumberAndType(String number, Boolean type);
+
+    boolean existsByNumber(String number);
+
     List<CashBox> findAllByType(Boolean type);
 
 }

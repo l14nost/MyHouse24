@@ -186,7 +186,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
         Staff director = getMainDirector();
         boolean reloadStaff = false;
         Staff staff = getStaffById(staffUpdateRequest.id());
-        if (nonNull(staffUpdateRequest.password()) && ((!staff.getEmail().equals(staffUpdateRequest.email())) || (!new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())))){
+        if (nonNull(staffUpdateRequest.password()) && ((!staff.getEmail().equals(staffUpdateRequest.email())) || (!new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), staff.getPassword())))) {
             reloadStaff = true;
         }
         if (director.getId() != staffUpdateRequest.id().longValue()) {
@@ -221,7 +221,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
                             roleService
                     )
             );
-            if (reloadStaff){
+            if (reloadStaff) {
                 Staff reloadContextStaff = getStaffByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         new org.springframework.security.core.userdetails.User(reloadContextStaff.getEmail(), reloadContextStaff.getPassword(), reloadContextStaff.getAuthorities()),

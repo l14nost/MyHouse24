@@ -21,8 +21,8 @@
         </div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb" id="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="#{cash_box.breadcrumb}"></li>
+            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/cash-box}" th:text="#{cash_box.breadcrumb}"></a></li>
           </ol>
         </nav>
       </div>
@@ -129,6 +129,10 @@
 
   <script>
 
+    let sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+    let stompClient = Stomp.over(sockJs1);
+
+
 
     let cashBoxId = undefined;
     let ownerId = undefined;
@@ -152,12 +156,12 @@
           selectOwner();
 
           $("#breadcrumb-title").append('[[#{cash_box.save.income.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]'));
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]', '/cash-box'));
         }else {
           articleType = false;
 
           $("#breadcrumb-title").append('[[#{cash_box.save.expense.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]'));
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]', '/cash-box'));
         }
 
         $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
@@ -193,12 +197,12 @@
           selectOwner(response?.bankBook?.apartment?.owner);
 
           $("#breadcrumb-title").append('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number);
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number));
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number, '/cash-box/card-' + response?.id));
         }else {
           articleType = false;
 
           $("#breadcrumb-title").append('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number);
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number));
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number, '/cash-box/card-' + response?.id));
         }
 
         $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
@@ -231,12 +235,12 @@
           selectOwner(response?.bankBook?.apartment?.owner);
 
           $("#breadcrumb-title").append('[[#{cash_box.save.income.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]'));
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]', '/cash-box'));
         }else {
           articleType = false;
 
           $("#breadcrumb-title").append('[[#{cash_box.save.expense.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]'));
+          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]', '/cash-box'));
         }
 
         $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
@@ -260,6 +264,8 @@
         $('#number').val(response?.number);
         $('#date').val(response?.createAt);
         $('#sum').val('0.00');
+      }).fail(function (response){
+        console.log(response);
       });
     }
 
@@ -296,12 +302,9 @@
           clearValidMessages();
         }
       }).done(function () {
-        stompClient.activate();
-        stompClient.onConnect = function() {
-          stompClient.publish({
-            destination: "/app/statistics"
-          });
-        };
+        stompClient.connect({}, () => {
+        });
+        stompClient.send("/app/statistics");
         window.location.href = "/myhouse24-amirb-nikitaf/admin/cash-box";
       }).fail(function (response) {
         const errors = response.responseJSON;

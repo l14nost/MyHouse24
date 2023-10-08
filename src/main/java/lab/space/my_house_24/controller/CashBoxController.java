@@ -150,8 +150,12 @@ public class CashBoxController {
     }
 
     @PostMapping("/get-new-cash-box")
-    public ResponseEntity<CashBoxResponse> getNewCashBox(@RequestBody Boolean type) {
-        return ResponseEntity.ok(cashBoxService.getNewCashBoxResponse(type));
+    public ResponseEntity<?> getNewCashBox(@RequestBody Boolean type) {
+        try {
+            return ResponseEntity.ok(cashBoxService.getNewCashBoxResponse(type));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping("/update-cash-box")

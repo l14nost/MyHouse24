@@ -150,8 +150,10 @@ public class BankBookController {
         }
         try {
             bankBookService.updateBankBookByRequest(request);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }
@@ -166,8 +168,10 @@ public class BankBookController {
         }
         try {
             bankBookService.saveBankBookByRequest(request);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.ok().build();
     }

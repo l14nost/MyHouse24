@@ -16,8 +16,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb"  id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{rate.breadcrumb.rates}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/rates}" th:text="#{rate.breadcrumb.rates}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="card-footer py-0">
-                <div class="col text-end mb-3">
+                <div class="col text-end my-3">
                     <a th:href="@{/rates}" type="button" class="btn btn-light" th:text="#{global.button.cancel}"></a>
                     <button onclick="saveService()" type="button" class="btn btn-success"
                             style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}">
@@ -88,19 +88,19 @@
 
         $(document).ready(function () {
             if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                if (new URL(window.location.href).pathname.split("-")[1] !== "copy"){
+                if (new URL(window.location.href).pathname.split("-")[3] !== "copy"){
                     rateId = new URL(window.location.href).pathname.split("-").pop();
                     getRate(rateId);
                 }else {
                     copyId =new URL(window.location.href).pathname.split("-").pop();
                     $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]'));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates/card-' + rateId));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
                     getRate(copyId);
                 }
             }else {
                 $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
             }
         });
@@ -123,7 +123,7 @@
                 console.log(rateResponse)
                 if(rateId){
                     $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name);
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name, '/rates'));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
                 }
                 $('#rate-name').val(rateResponse.name);
@@ -159,7 +159,7 @@
                 '                            <div class="col-3">\n' +
                 '                                <div class="form-group">\n' +
                 '                                    <label for="price-rate-' + priceRate?.id + '" class="form-label">[[#{rate.save.price}]]</label>\n' +
-                '                                    <input type="text" class="form-control" id="price-rate-' + priceRate?.id + '" value="' + priceRate?.price + '">\n' +
+                '                                    <input type="text" class="form-control" id="price-rate-' + priceRate?.id + '" value="' + priceRate?.price + '" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\');">\n' +
                 '                                </div>\n' +
                 '                            </div>\n' +
                 '                            <div class="col-3">\n' +
@@ -212,7 +212,7 @@
                 '                            <div class="col-3">\n' +
                 '                                <div class="form-group">\n' +
                 '                                    <label for="price-rate-' + serviceSelectCount + '" class="form-label">[[#{rate.save.price}]]</label>\n' +
-                '                                    <input type="text" class="form-control" id="price-rate-' + serviceSelectCount + '">\n' +
+                '                                    <input type="text" class="form-control" id="price-rate-' + serviceSelectCount + '" oninput="this.value = this.value.replace(/[^0-9.]/g, \'\');">\n' +
                 '                                </div>\n' +
                 '                            </div>\n' +
                 '                            <div class="col-3">\n' +
