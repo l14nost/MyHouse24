@@ -53,11 +53,6 @@
 
 
 <script>
-
-    const stompClient = new StompJs.Client({
-        brokerURL: 'ws://localhost:7777/myhouse24-amirb-nikitaf/admin/ws'
-    });
-
     const targetElement = document.getElementById('sidebar');
     const logoImg = document.getElementById('logoImg');
 
@@ -314,8 +309,11 @@
         return '<span class="' + badgeClasses + '">' + badgeText + '</span>';
     }
 
-    function addBreadcrumbTitle(title){
-        return '<li class="breadcrumb-item">' + title + '</li>';
+    function addBreadcrumbTitle(title, url){
+        if (url){
+            return '<li class="breadcrumb-item"><a class="text-color" href="/myhouse24-amirb-nikitaf/admin' + url + '">' + title + '</a></li>';
+        }
+        return '<li class="breadcrumb-item active">' + title + '</li>';
     }
 
     function getFileFromResponse(blob, status, xhr) {
@@ -526,9 +524,10 @@
             url: "/myhouse24-amirb-nikitaf/admin/staff/get-current-staff-for-header"
         })
             .done(function(response) {
-                $("#fullName-staff").text(response.fullName)
-                $("#email-staff").text(response.email)
-                $("#profile-page").attr("href","/myhouse24-amirb-nikitaf/admin/staff/card-"+response.id)
+                $("#fullName-staff").text(response.fullName);
+                $("#email-staff").text(response.email);
+                $("#profile-page").attr("href","/myhouse24-amirb-nikitaf/admin/staff/card-"+response.id);
+                hideRevealSidebarElements(response?.permission);
             });
 
 
@@ -553,6 +552,35 @@
         getTheme();
     });
 
+
+    function hideRevealSidebarElements(permission){
+        var permissionMap = new Map([
+            ["STATISTICS", "statistic"],
+            ["CASH_BOX", "cash-box"],
+            ["BILLS", "bil"],
+            ["BANK_BOOKS", "bank-boo"],
+            ["APARTMENTS", "apartments"],
+            ["APARTMENTS_OWNERS", "users"],
+            ["HOUSES", "houses"],
+            ["MESSAGES", "messages"],
+            ["MASTERS_APPLICATIONS", "master-cal"],
+            ["METER_READING", "meter-readings"],
+            ["SETTINGS_PAGE", "special-a"],
+            ["SERVICES", "system-service"],
+            ["RATES", "rates"],
+            ["STAFF", "staf"],
+            ["ROLES", "rol"],
+            ["REQUISITES", "payment-details"]
+        ]);
+        permissionMap.forEach(function (value, key) {
+            if (permission.includes(key)){
+                document.getElementById(value).parentElement.removeAttribute('hidden')
+            }else {
+                document.getElementById(value).parentElement.setAttribute('hidden', true);
+            }
+        })
+    }
+
     function createPagination(pagesCount, pageIndex, TABLE_PAGINATION_ROW, itemsCount) {
         const colDiv = '<div class="col-sm-12 col-md-6"></div>';
         const paginationList =
@@ -568,7 +596,7 @@
         if (itemsCount > 0) {
             $(TABLE_PAGINATION_ROW).append(
                 $($(colDiv).addClass('pagination-info'))
-                    .append('[[#{staff.table.footer.shown}]] X-Y [[#{staff.table.footer.of}]] Z [[#{staff.table.footer.records}]]'
+                    .append('[[#{table.show.info.Showing}]] X-Y [[#{table.show.info.of}]] Z [[#{table.show.info.entries}]]'
                         .replace('X', ((pageIndex - 1) * 10 + 1))
                         .replace('Y', Math.min(pageIndex * 10, itemsCount))
                         .replace('Z', itemsCount))

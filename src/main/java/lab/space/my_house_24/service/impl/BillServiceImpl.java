@@ -264,7 +264,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public BillResponse getNewBillResponse() {
+    public BillResponse getNewBillResponse() throws IllegalArgumentException {
         return BillMapper.toBillResponse(generateNumber(), getTodayDate());
     }
 
@@ -330,7 +330,7 @@ public class BillServiceImpl implements BillService {
         log.info("Success Calculate Bill by Save");
     }
 
-    private String generateNumber() {
+    private String generateNumber() throws IllegalArgumentException {
         log.info("Try to generate Number");
         List<Bill> bills = billRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         if (bills.isEmpty()) {
@@ -341,10 +341,19 @@ public class BillServiceImpl implements BillService {
 
         String stringNumber = bill.getNumber();
         long number;
+        long i = 0;
 
         do {
+            if (i > 9999999999L) {
+                throw new IllegalArgumentException("The number of valid numbers has expired");
+            }
+
             number = Long.parseLong(stringNumber);
             number++;
+            i++;
+            if (number > 9999999999L) {
+                number = 1;
+            }
             stringNumber = String.format("%010d", number);
         } while (billRepository.existsByNumber(stringNumber));
         log.info("Success generate Number");

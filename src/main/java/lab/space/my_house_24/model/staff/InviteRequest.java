@@ -8,7 +8,6 @@ import lombok.Builder;
 public record InviteRequest(
         @NotBlank
         String token,
-        @NotBlank
         String email,
         @NotBlank(message = "{not.blank.message}")
         @Size(max = 100, message = "{size.less.message} " + " {max}")

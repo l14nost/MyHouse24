@@ -16,7 +16,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text="#{staff.breadcrumb.staff}"></li>
                     </ol>
                 </nav>
@@ -52,10 +52,10 @@
                     </tr>
                     <tr id="search">
                         <th>
-                            <input class="form-control" type="text" id="id">
+                            <input class="form-control" type="text" id="id" oninput="this.value = this.value.replace(/\D/g, '');">
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="fullName">
+                            <input class="form-control" type="text" id="fullName" oninput="this.value = this.value.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐ]/g, '');">
                         </th>
                         <th>
                             <select id="role" class="mb-1 form-select form-select" aria-label=".form-select-lg example" style="width: 160px; height: 40px">
@@ -63,7 +63,7 @@
                             </select>
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="phone">
+                            <input class="form-control" type="text" id="phone" oninput="this.value = this.value.replace(/\D/g, '');">
                         </th>
                         <th><input class="form-control" type="text" id="email"></th>
                         <th>

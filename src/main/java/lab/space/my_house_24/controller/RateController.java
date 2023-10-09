@@ -11,6 +11,7 @@ import lab.space.my_house_24.service.PriceRateService;
 import lab.space.my_house_24.service.RateService;
 import lab.space.my_house_24.service.ServiceService;
 import lab.space.my_house_24.util.ErrorMapper;
+import lab.space.my_house_24.validator.PriceRateValidator;
 import lab.space.my_house_24.validator.RateValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -31,6 +32,7 @@ public class RateController {
 
     private final RateService rateService;
     private final RateValidator rateValidator;
+    private final PriceRateValidator priceRateValidator;
     private final PriceRateService priceRateService;
     private final ServiceService serviceService;
 
@@ -88,15 +90,17 @@ public class RateController {
     }
 
     @PutMapping("/update-rate")
-    public ResponseEntity<?> updateRate(@Valid @RequestBody RateUpdateRequest rateUpdateRequest,
+    public ResponseEntity<?> updateRate(@Valid @RequestBody RateUpdateRequest request,
                                         BindingResult bindingResult) {
-        rateValidator.isNameUniqueValidationWithIdRate(rateUpdateRequest.id(), rateUpdateRequest.name(), bindingResult,
+        rateValidator.isNameUniqueValidationWithIdRate(request.id(), request.name(), bindingResult,
+                "RateUpdateRequest", LocaleContextHolder.getLocale());
+        priceRateValidator.checkUniqueServiceId(request.priceRate(), bindingResult,
                 "RateUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
         try {
-            rateService.updateRateByRequest(rateUpdateRequest);
+            rateService.updateRateByRequest(request);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);

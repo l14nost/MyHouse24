@@ -133,6 +133,7 @@ class ArticleServiceImplTest {
     void updateArticleByRequest() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.of(Article.builder()
                 .id(1L)
+                .cashBoxList(List.of())
                 .build()));
         articleService.updateArticleByRequest(ArticleUpdateRequest.builder().id(1L).name("Test").type(ArticleType.INCOME).build());
         verify(articleRepository, times(1)).save(any());
@@ -150,6 +151,7 @@ class ArticleServiceImplTest {
     void deleteArticleById() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.of(Article.builder()
                 .id(1L)
+                .cashBoxList(List.of())
                 .build()));
         articleService.deleteArticleById(1L);
         verify(articleRepository, times(1)).findById(anyLong());

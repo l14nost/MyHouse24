@@ -3,7 +3,6 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.CashBox;
 import lab.space.my_house_24.entity.Statistic;
-import lab.space.my_house_24.enums.ArticleType;
 import lab.space.my_house_24.mapper.CashBoxMapper;
 import lab.space.my_house_24.mapper.EnumMapper;
 import lab.space.my_house_24.model.cash_box.CashBoxRequest;
@@ -280,8 +279,8 @@ public class CashBoxServiceImpl implements CashBoxService {
     }
 
     @Override
-    public CashBoxResponse getNewCashBoxResponse(Boolean type) {
-        return CashBoxMapper.toCashBoxResponse(generateNumber(type), getTodayDate());
+    public CashBoxResponse getNewCashBoxResponse(Boolean type) throws IllegalArgumentException {
+        return CashBoxMapper.toCashBoxResponse(generateNumber(), getTodayDate());
     }
 
     @Override
@@ -336,11 +335,10 @@ public class CashBoxServiceImpl implements CashBoxService {
         }
     }
 
-    private String generateNumber(Boolean type) {
+    private String generateNumber() throws IllegalArgumentException {
         log.info("Try to generate Number");
 
-        List<CashBox> cashBoxes = cashBoxRepository.findAll(cashBoxSpecification.getCashBoxByRequest(CashBoxRequest.builder()
-                .typeQuery(type ? ArticleType.INCOME : ArticleType.EXPENSE).build()));
+        List<CashBox> cashBoxes = cashBoxRepository.findAll();
 
         if (cashBoxes.isEmpty()) {
             log.warn("CashBoxes not found");
@@ -350,12 +348,21 @@ public class CashBoxServiceImpl implements CashBoxService {
 
         String stringNumber = cashBox.getNumber();
         long number;
+        long i = 0;
 
         do {
+            if (i > 9999999999L) {
+                throw new IllegalArgumentException("The number of valid numbers has expired");
+            }
+
             number = Long.parseLong(stringNumber);
             number++;
+            i++;
+            if (number > 9999999999L) {
+                number = 1;
+            }
             stringNumber = String.format("%010d", number);
-        } while (cashBoxRepository.existsByNumberAndType(stringNumber, type));
+        } while (cashBoxRepository.existsByNumber(stringNumber));
         log.info("Success generate Number");
         return stringNumber;
     }

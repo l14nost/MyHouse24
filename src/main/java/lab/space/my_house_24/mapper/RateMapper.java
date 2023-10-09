@@ -40,6 +40,8 @@ public interface RateMapper {
         return RateResponse.builder()
                 .id(rate.getId())
                 .name(rate.getName())
+                .description(rate.getDescription())
+                .date(rate.getUpdateAt().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .priceRate(rate.getPriceRateList()
                         .stream()
                         .map(PriceRateMapper::toPriceRateResponse)

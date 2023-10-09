@@ -126,7 +126,7 @@ public class BankBookServiceImpl implements BankBookService {
     }
 
     @Override
-    public void updateBankBookByRequest(BankBookUpdateRequest request) throws EntityNotFoundException {
+    public void updateBankBookByRequest(BankBookUpdateRequest request) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to Update BankBook by Request");
         saveBankBook(
                 BankBookMapper.toBankBook(
@@ -140,7 +140,7 @@ public class BankBookServiceImpl implements BankBookService {
     }
 
     @Override
-    public void saveBankBookByRequest(BankBookSaveRequest request) throws EntityNotFoundException {
+    public void saveBankBookByRequest(BankBookSaveRequest request) throws EntityNotFoundException, IllegalArgumentException {
         log.info("Try to Save BankBook by Request");
         saveBankBook(
                 BankBookMapper.toBankBook(
@@ -447,7 +447,7 @@ public class BankBookServiceImpl implements BankBookService {
                 .orElseThrow(() -> new EntityNotFoundException("Apartment not found by id " + id));
     }
 
-    private String generateNumber() {
+    private String generateNumber() throws IllegalArgumentException {
         log.info("Try to generate Number");
         List<BankBook> bankBookList = bankBookRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         if (bankBookList.isEmpty()) {
@@ -461,8 +461,13 @@ public class BankBookServiceImpl implements BankBookService {
 
         int firstPart;
         int secondPart;
+        long i = 0L;
 
         do {
+            if (i > 9999999999L) {
+                throw new IllegalArgumentException("The number of valid numbers has expired");
+            }
+
             parts = number.split("-");
             firstPart = Integer.parseInt(parts[0]);
             secondPart = Integer.parseInt(parts[1]);
@@ -471,7 +476,13 @@ public class BankBookServiceImpl implements BankBookService {
                 firstPart++;
                 secondPart = 1;
             }
+            if (firstPart > 99999) {
+                firstPart = 0;
+                secondPart = 1;
+            }
             number = String.format("%05d-%05d", firstPart, secondPart);
+
+            i += 1L;
         } while (bankBookRepository.existsByNumber(number));
         log.info("Success generate Number");
         return number;

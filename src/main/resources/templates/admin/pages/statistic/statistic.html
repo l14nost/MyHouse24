@@ -256,6 +256,10 @@
 
 <th:block layout:fragment="extra-script">
 <script>
+
+  let sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+  let stompClient = Stomp.over(sockJs1);
+
   function extraChart1(firstArray, secondArray) {
     if ($('#extrachart1').length) {
       const options = {
@@ -320,13 +324,14 @@
   }
 
   $(document).ready( async function () {
-    stompClient.activate();
-    stompClient.onConnect = (frame) => {
+
+    stompClient.connect({}, (frame) => {
       console.log('Connected: ' + frame);
       stompClient.subscribe('/topic/statistics', () => {
         getStatistic();
       });
-    };
+    });
+
     getStatistic();
     let firstArray = [];
     let secondArray = [];

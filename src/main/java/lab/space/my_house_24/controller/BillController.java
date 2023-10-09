@@ -159,8 +159,12 @@ public class BillController {
     }
 
     @GetMapping("/get-new-bill")
-    public ResponseEntity<BillResponse> getNewBill() {
-        return ResponseEntity.ok(billService.getNewBillResponse());
+    public ResponseEntity<?> getNewBill() {
+        try {
+            return ResponseEntity.ok(billService.getNewBillResponse());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/get-all-rates")
@@ -218,6 +222,8 @@ public class BillController {
         billValidator.isPayedAndStatusEqualValidation(request.payed(), request.totalPrice(), request.status(), bindingResult,
                 "BillUpdateRequest", LocaleContextHolder.getLocale());
         billValidator.isPayedCashBoxAndPayedValidationWithId(request.id(), request.payed(), request.totalPrice(), bindingResult,
+                "BillUpdateRequest", LocaleContextHolder.getLocale());
+        billValidator.checkUniqueServiceId(request.serviceBillList(), bindingResult,
                 "BillUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));

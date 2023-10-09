@@ -16,9 +16,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page"
-                            th:text="#{bank_book.breadcrumb}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/bank-books}" th:text="#{bank_book.breadcrumb}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -113,7 +112,7 @@
                 getBankBookResponse(bankBookId);
             }else {
                 $("#breadcrumb-title").append('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]', '/bank-books'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
 
                 selectHouse();
@@ -143,7 +142,7 @@
                     selectHouse();
                 }
                 $("#breadcrumb-title").append('[[#{bank_book.card.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.card.breadcrumb}]] №' + response?.number, '/bank-books/card-' + response?.id));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
             }).fail(function () {
                 window.location.href = "/myhouse24-amirb-nikitaf/admin/error";

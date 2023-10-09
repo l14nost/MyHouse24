@@ -617,7 +617,7 @@ class StaffServiceImplTest {
         );
         SecurityContextHolder.setContext(securityContext);
 
-        when(staffRepository.findByEmail(anyString())).thenReturn(Optional.of(Staff.builder().id(1L).firstname("Test").lastname("Test").email("test").build()));
+        when(staffRepository.findByEmail(anyString())).thenReturn(Optional.of(Staff.builder().id(1L).firstname("Test").lastname("Test").email("test").role(Role.builder().securityLevelList(List.of(SecurityLevel.builder().page(lab.space.my_house_24.enums.Page.ROLES).build())).build()).build()));
         staffService.getCurrentStaffForHeader();
         verify(staffRepository, times(1)).findByEmail(anyString());
     }

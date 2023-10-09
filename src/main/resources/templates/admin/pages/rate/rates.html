@@ -16,7 +16,7 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb"  id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text="#{rate.breadcrumb.rates}"></li>
                     </ol>
                 </nav>
@@ -188,7 +188,8 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                showToast('error');
+                $('#custom-toast').text(response?.responseJSON?.message);
+                showToast('custom');
                 rateId = undefined;
             })
         }

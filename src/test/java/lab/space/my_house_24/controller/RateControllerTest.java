@@ -11,6 +11,7 @@ import lab.space.my_house_24.model.service.ServiceResponse;
 import lab.space.my_house_24.service.PriceRateService;
 import lab.space.my_house_24.service.RateService;
 import lab.space.my_house_24.service.ServiceService;
+import lab.space.my_house_24.validator.PriceRateValidator;
 import lab.space.my_house_24.validator.RateValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,9 @@ class RateControllerTest {
 
     @MockBean
     private RateValidator rateValidator;
+
+    @MockBean
+    private PriceRateValidator priceRateValidator;
 
     @MockBean
     private PriceRateService priceRateService;

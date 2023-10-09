@@ -16,9 +16,8 @@
         </div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb" id="breadcrumb">
-            <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-            <li class="breadcrumb-item active" aria-current="page"
-                th:text="#{bills.breadcrumb}"></li>
+            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{bills.breadcrumb}"></li>
           </ol>
         </nav>
       </div>
@@ -105,7 +104,7 @@
           <tr id="search">
             <th></th>
             <th>
-              <input class="form-control" type="text" id="number">
+              <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');">
             </th>
             <th>
               <select id="status" class="mb-1 form-select form-select"
@@ -115,10 +114,10 @@
               </select>
             </th>
             <th>
-              <input class="form-control" type="text" id="date">
+              <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
             </th>
             <th>
-              <input class="form-control" type="text" id="month">
+              <input class="form-control" type="text" id="month" oninput="this.value = this.value.replace(/[^a-zA-Z0-9,]/g, '');">
             </th>
             <th>
               <input class="form-control" type="text" id="apartment">
@@ -169,14 +168,18 @@
     billRequest.pageIndex = 0;
     let filterTimeout;
 
+    var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+    var stompClient = Stomp.over(sockJs1);
+
     $(document).ready(function () {
-      stompClient.activate();
-      stompClient.onConnect = (frame) => {
+
+      stompClient.connect({}, (frame) => {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/statistics', () => {
           getStatistic();
         });
-      };
+      });
+
       getStatistic();
       getAllBill();
       $(document.body).on("click", "tr", function (e) {

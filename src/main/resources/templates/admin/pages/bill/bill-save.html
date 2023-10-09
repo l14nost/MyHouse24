@@ -21,9 +21,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page" th:text="#{global.breadcrumb.main}"></li>
-                        <li class="breadcrumb-item active" aria-current="page"
-                            th:text="#{bills.breadcrumb}"></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/bills}" th:text="#{bills.breadcrumb}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -223,6 +222,9 @@
 
     <script>
 
+        var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        var stompClient = Stomp.over(sockJs1);
+
         let breadcrumbCount = 0;
         let itemsCountServiceTable = 0;
         let SERVICE_BODY = createTableService('#service-table', itemsCountServiceTable);
@@ -419,7 +421,7 @@
 
                 if (breadcrumbCount === 0){
                     $("#breadcrumb-title").append('[[#{bills.card.breadcrumb}]] №' + response?.number);
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number, '/bills/card-' + response?.id));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
                     breadcrumbCount++;
                 }
@@ -448,9 +450,11 @@
                     $(SERVICE_BODY).append(
                         '<tr class="service-row">\n' +
                         '                            <th>\n' +
+                        '                            <div>\n' +
                         '                                <select id="service-' + service?.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
                         '                                    <option value=""></option>\n' +
                         '                                </select>\n' +
+                        '                            </div>\n' +
                         '                            </th>\n' +
                         '                            <th>\n' +
                         '                                <input type="text" class="form-control" id="unit-' + service?.id + '" disabled>\n' +
@@ -525,9 +529,11 @@
                     $(SERVICE_BODY).append(
                         '<tr class="service-row">\n' +
                         '                            <th>\n' +
+                        '                            <div>\n' +
                         '                                <select id="service-' + service?.id + '" class="form-select" aria-label=".form-select-lg example">\n' +
                         '                                    <option value=""></option>\n' +
                         '                                </select>\n' +
+                        '                            </div>\n' +
                         '                            </th>\n' +
                         '                            <th>\n' +
                         '                                <input type="text" class="form-control" id="unit-' + service?.id + '" disabled>\n' +
@@ -596,8 +602,10 @@
                 $("#payed").val('0.00');
 
                 $("#breadcrumb-title").append('[[#{bills.save.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]'));
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]', '/bills'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+            }).fail(function (response){
+                console.log(response);
             });
         }
 
@@ -618,6 +626,17 @@
                 });
             });
             console.log(unitData)
+            return unitData;
+        }
+
+        function collectServiceDataResponse() {
+            let unitData = [];
+            $('.service-row').each(function() {
+                let serviceId = $(this).find('.form-select[id^="service-"]');
+                unitData.push({
+                    serviceId: serviceId || null,
+                });
+            });
             return unitData;
         }
 
@@ -662,12 +681,9 @@
                     clearErrorMessages();
                 }
             }).done(function () {
-                stompClient.activate();
-                stompClient.onConnect = function() {
-                    stompClient.publish({
-                        destination: "/app/statistics",
-                    });
-                };
+                stompClient.connect({}, () => {
+                });
+                stompClient.send("/app/statistics");
                 window.location.href = "/myhouse24-amirb-nikitaf/admin/bills";
             }).fail(function (response) {
                 const errors = response.responseJSON;
@@ -679,6 +695,17 @@
                 if (errors?.rateId) validResponse($('#rate'), errors.rateId, 'div');
                 if (errors?.periodOf) validResponse($('#range'), errors.periodOf, 'div');
                 if (errors?.serviceBillList) errorResponse($('#add-button'), errors.serviceBillList, 'div');
+                let data={
+                    errorData:  collectServiceDataResponse()
+                }
+                for (const key in errors) {
+                    if (errors.hasOwnProperty(key)) {
+                        const index = parseInt(key.match(/serviceBillList\[(\d+)\]\.(\w+)/)[1]);
+                        const col = key.split('.').pop();
+                        const value = errors[key];
+                        if (col === 'serviceId') validResponse($('#' + data?.errorData[index]?.serviceId[0].id), value, "div");
+                    }
+                }
             })
         }
 
@@ -692,9 +719,11 @@
             $(SERVICE_BODY).append(
                 '<tr class="service-row">\n' +
                 '                            <th>\n' +
+                '                            <div>\n' +
                 '                                <select id="service-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
                 '                                    <option value=""></option>\n' +
                 '                                </select>\n' +
+                '                            </div>\n' +
                 '                            </th>\n' +
                 '                            <th>\n' +
                 '                                <input type="text" class="form-control" id="unit-' + serviceSelectCount + '" disabled>\n' +
@@ -846,9 +875,11 @@
                     $(SERVICE_BODY).append(
                         '<tr class="service-row">\n' +
                         '                            <th>\n' +
+                        '                            <div>\n' +
                         '                                <select id="service-' + serviceSelectCount + '" class="form-select" aria-label=".form-select-lg example">\n' +
                         '                                    <option value=""></option>\n' +
                         '                                </select>\n' +
+                        '                            </div>\n' +
                         '                            </th>\n' +
                         '                            <th>\n' +
                         '                                <input type="text" class="form-control" id="unit-' + serviceSelectCount + '" disabled>\n' +

@@ -18,17 +18,17 @@ public class ArticleSpecification {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (nonNull(request.typeQuery())) {
-                if (request.typeQuery()){
+                if (request.typeQuery()) {
                     predicates.add(criteriaBuilder.or(
                             criteriaBuilder.equal(root.get("type"), ArticleType.INCOME)
                     ));
-                }else {
+                } else {
                     predicates.add(criteriaBuilder.or(
                             criteriaBuilder.equal(root.get("type"), ArticleType.EXPENSE)
                     ));
                 }
             }
-            query.orderBy(criteriaBuilder.asc(root.get("id")));
+            query.orderBy(criteriaBuilder.desc(root.get("id")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
