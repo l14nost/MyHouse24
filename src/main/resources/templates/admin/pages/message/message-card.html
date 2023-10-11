@@ -100,52 +100,46 @@
     </div>
 </th:block>
 <th:block layout:fragment="extra-script">
-    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-<script>
-    const stompClient1 = new StompJs.Client({
-        brokerURL: 'ws://localhost:8080/myhouse24-amirb-nikitaf/admin/ws'
-    });
+    <script>
+        var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        var stompClient1 = Stomp.over(sockJs1);
 
-    $(document).on('click', '.delete-entity', function (event) {
-        $('#confirmDeleteEntity').modal('show');
-    });
+        $(document).on('click', '.delete-entity', function (event) {
+            $('#confirmDeleteEntity').modal('show');
+        });
 
-    function deleteEntity(){
-        $.ajax({
-            url: "/myhouse24-amirb-nikitaf/admin/messages/delete-message/"+[[${id}]],
-            method: "DELETE"
-        })
-            .done(function (response){
-                stompClient1.activate();
-                stompClient1.onConnect = function() {
-                    stompClient1.publish({
-                        destination: "/app/main",
-                        body: JSON.stringify("")
+        function deleteEntity(){
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/messages/delete-message/"+[[${id}]],
+                method: "DELETE"
+            })
+                .done(function (response){
+                    stompClient1.connect({}, ()  => {
                     });
-                };
-                window.location.href = "/myhouse24-amirb-nikitaf/admin/messages"
+                    stompClient1.send("/app/main", {}, JSON.stringify(""));
+                    window.location.href = "/myhouse24-amirb-nikitaf/admin/messages"
+                })
+                .fail(function (response){
+                    console.log(response);
+                    showToast("error");
+                })
+        }
+
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/messages/get-message-by-id/"+[[${id}]]
             })
-            .fail(function (response){
-                console.log(response);
-                showToast("error");
-            })
-    }
+                .done(function (response){
+                    console.log(response);
+                    $("#title").text(response.title);
+                    $("#staffFrom").append(response.staffFullName);
+                    $("#sendDate").text(response.sendDate);
+                    $("#message").html(response.message);
 
 
-    $(document).ready(function () {
-        $.ajax({
-            url: "/myhouse24-amirb-nikitaf/admin/messages/get-message-by-id/"+[[${id}]]
-        })
-            .done(function (response){
-                console.log(response);
-                $("#title").text(response.title);
-                $("#staffFrom").append(response.staffFullName);
-                $("#sendDate").text(response.sendDate);
-                $("#message").html(response.message);
-
-
-               })
-    });
-</script>
+                })
+        });
+    </script>
 </th:block>
 </html>

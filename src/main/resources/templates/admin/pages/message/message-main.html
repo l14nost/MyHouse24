@@ -183,11 +183,9 @@
 
         updateButtonState();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script>
-        const stompClient1 = new StompJs.Client({
-            brokerURL: 'ws://localhost:8080/myhouse24-amirb-nikitaf/admin/ws'
-        });
+        var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        var stompClient1 = Stomp.over(sockJs1);
         let currentPage = 0;
 
 
@@ -246,17 +244,17 @@
 
 
         $(document).ready(function (){
-            stompClient1.activate()
-            stompClient1.onConnect = (frame) => {
+            // stompClient1.activate()
+            stompClient1.connect({}, (frame) => {
                 console.log('Connected: ' + frame);
-                stompClient1.subscribe('/topic/refresh', (greeting) => {
-                    console.log(currentPage);
+                stompClient1.subscribe('/topic/refresh', payload => {
+                    console.log(payload);
                     var form = document.getElementById("filter");
                     var formData = new FormData(form);
                     formData.append("page", currentPage);
                     getAllHouse(formData);
                 });
-            };
+            });
 
             var form = document.getElementById("filter");
             var formData = new FormData(form);
@@ -452,10 +450,7 @@
                     showToast('success');
                     const deleteButton = document.getElementById('deleteButton');
                     deleteButton.setAttribute("disabled", "disabled");
-                    stompClient1.publish({
-                        destination: "/app/main",
-                        body: JSON.stringify("")
-                    });
+                    stompClient1.send("/app/main", {}, JSON.stringify(""));
 
                 }
             ).fail(
