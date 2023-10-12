@@ -11,6 +11,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import static java.util.Objects.nonNull;
 
@@ -40,7 +41,18 @@ public interface BillMapper {
                 .periodOf(bill.getPeriodOf().atZone(ZoneId.systemDefault()).toLocalDate())
                 .periodTo(bill.getPeriodTo().atZone(ZoneId.systemDefault()).toLocalDate())
                 .services(ServiceBillMapper.toServiceBillResponseList(bill.getServiceBillList()))
-                .month(bill.getPeriodOf().atZone(ZoneId.systemDefault()).getMonth() + ", " + bill.getPeriodOf().atZone(ZoneId.systemDefault()).getYear())
+                .month(
+                        bill
+                                .getPeriodOf()
+                                .atZone(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofPattern("MMMM", LocaleContextHolder.getLocale())).substring(0, 1).toUpperCase() +
+                                bill
+                                        .getPeriodOf()
+                                        .atZone(ZoneId.systemDefault())
+                                        .format(DateTimeFormatter.ofPattern("MMMM", LocaleContextHolder.getLocale())).substring(1).toLowerCase() +
+                                ", " +
+                                bill.getPeriodOf().atZone(ZoneId.systemDefault()).getYear()
+                )
                 .build();
     }
 
@@ -77,7 +89,7 @@ public interface BillMapper {
                 .setPeriodOf(request.periodOf().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime())
                 .setPeriodTo(request.periodTo().atStartOfDay(ZoneId.systemDefault()).toLocalDateTime());
 
-        if (!bill.getIsActive() && request.draft()){
+        if (!bill.getIsActive() && request.draft()) {
             bill.setIsActive(true);
         }
         return bill;
