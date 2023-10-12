@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForBankBook;
 import lab.space.my_house_24.model.bankBook.BankBookRequest;
-import lab.space.my_house_24.model.bankBook.BankBookResponse;
 import lab.space.my_house_24.model.bankBook.BankBookSaveRequest;
 import lab.space.my_house_24.model.bankBook.BankBookUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
@@ -17,7 +16,6 @@ import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -121,7 +119,10 @@ public class BankBookController {
     }
 
     @PostMapping("/get-all-bank-book")
-    public ResponseEntity<Page<BankBookResponse>> getAllBankBookResponse(@RequestBody BankBookRequest request) {
+    public ResponseEntity<?> getAllBankBookResponse(@Valid @RequestBody BankBookRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
         return ResponseEntity.ok(bankBookService.getAllBankBookResponse(request));
     }
 

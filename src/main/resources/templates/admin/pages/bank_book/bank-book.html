@@ -286,6 +286,9 @@
                         '</tr>'
                     );
                 });
+            }).fail(function (response){
+                console.log(response)
+                showToast('error');
             });
 
             function createTable(tableSelector, itemsCount, pagesCount, pageIndex) {

@@ -4,7 +4,10 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForBill;
 import lab.space.my_house_24.model.bankBook.BankBookResponse;
-import lab.space.my_house_24.model.bill.*;
+import lab.space.my_house_24.model.bill.BillDeleteRequest;
+import lab.space.my_house_24.model.bill.BillRequest;
+import lab.space.my_house_24.model.bill.BillSaveRequest;
+import lab.space.my_house_24.model.bill.BillUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.meterReading.MeterReadingRequestForBill;
@@ -91,7 +94,10 @@ public class BillController {
     }
 
     @PostMapping("/get-all-bills")
-    public ResponseEntity<Page<BillResponse>> getAllBillResponse(@RequestBody BillRequest request) {
+    public ResponseEntity<?> getAllBillResponse(@Valid @RequestBody BillRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
         return ResponseEntity.ok(billService.getAllBillResponse(request));
     }
 

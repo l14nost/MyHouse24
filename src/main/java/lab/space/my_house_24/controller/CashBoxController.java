@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lab.space.my_house_24.model.article.ArticleResponse;
 import lab.space.my_house_24.model.bankBook.BankBookResponseForCashBox;
 import lab.space.my_house_24.model.cash_box.CashBoxRequest;
-import lab.space.my_house_24.model.cash_box.CashBoxResponse;
 import lab.space.my_house_24.model.cash_box.CashBoxSaveRequest;
 import lab.space.my_house_24.model.cash_box.CashBoxUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
@@ -17,7 +16,6 @@ import lab.space.my_house_24.validator.CashBoxValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -74,7 +72,10 @@ public class CashBoxController {
     }
 
     @PostMapping("/get-all-cash-box")
-    public ResponseEntity<Page<CashBoxResponse>> getAllCashBox(@RequestBody CashBoxRequest request) {
+    public ResponseEntity<?> getAllCashBox(@Valid @RequestBody CashBoxRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
         return ResponseEntity.ok(cashBoxService.getAllCashBoxResponse(request));
     }
 

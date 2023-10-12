@@ -6,7 +6,7 @@ import java.util.Locale;
 
 @RequiredArgsConstructor
 public enum ArticleType {
-    INCOME("Income", "Приход"),
+    INCOME("Income", "Прихід"),
     EXPENSE("Expense", "Витрата");
     private final String nameEn;
     private final String nameUk;

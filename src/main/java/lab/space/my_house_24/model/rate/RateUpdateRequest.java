@@ -13,7 +13,6 @@ public record RateUpdateRequest(
         @Min(1)
         Long id,
         @NotBlank(message = "{not.blank.message}")
-        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z][а-яєіїґёa-z]*$", message = "{pattern.name.message}")
         @Size(max = 100, message = "{size.less.message}" + " {max}")
         String name,
         @NotBlank(message = "{not.blank.message}")
