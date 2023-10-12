@@ -17,7 +17,7 @@ public interface ArticleService {
 
     Page<ArticleResponse> getAllArticleDto(ArticleRequest request);
 
-    List<ArticleResponse> getAllArticleResponseByType(Boolean type);
+    Page<ArticleResponse> getAllArticleResponseByType(Integer pageIndex, Boolean type, String name);
 
     List<EnumResponse> getAllType();
 

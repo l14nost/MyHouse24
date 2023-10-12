@@ -89,7 +89,7 @@ class ArticleServiceImplTest {
 
     @Test
     void getAllArticleResponseByType() {
-        List<Article> articles = List.of(
+        Page<Article> articles = new PageImpl<>(List.of(
                 Article.builder()
                         .id(1L)
                         .name("Test")
@@ -110,10 +110,10 @@ class ArticleServiceImplTest {
                         .name("Test")
                         .type(ArticleType.INCOME)
                         .build()
-        );
-        when(articleRepository.findAll((Specification<Article>) any())).thenReturn(articles);
-        List<ArticleResponse> articleResponses = articleService.getAllArticleResponseByType(true);
-        assertEquals(4, articleResponses.size());
+        ));
+        when(articleRepository.findAll((Specification<Article>) any(), any(PageRequest.class))).thenReturn(articles);
+        Page<ArticleResponse> articleResponses = articleService.getAllArticleResponseByType(1, true, "Test");
+        assertEquals(4, articleResponses.getTotalElements());
         assertEquals(ArticleResponse.class, articleResponses.iterator().next().getClass());
     }
 

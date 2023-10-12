@@ -124,14 +124,15 @@ class CashBoxControllerTest {
 
     @Test
     void getAllUser() throws Exception {
-        List<UserResponseForTable> userResponseForTables = List.of(
+        Page<UserResponseForTable> userResponseForTables = new PageImpl<>(List.of(
                 UserResponseForTable.builder().build(),
                 UserResponseForTable.builder().build(),
                 UserResponseForTable.builder().build(),
                 UserResponseForTable.builder().build()
-        );
-        when(userService.userListForTable()).thenReturn(userResponseForTables);
-        mockMvc.perform(get("/cash-box/get-all-owner"))
+        ));
+        when(userService.userResponseForSelect(anyInt(), anyString())).thenReturn(userResponseForTables);
+        mockMvc.perform(get("/cash-box/get-all-owner")
+                        .param("page", "1").param("search", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(userResponseForTables)));
     }
@@ -195,28 +196,30 @@ class CashBoxControllerTest {
 
     @Test
     void getAllStaff() throws Exception {
-        List<StaffResponse> staffResponses = List.of(
+        Page<StaffResponse> staffResponses = new PageImpl<>(List.of(
                 StaffResponse.builder().build(),
                 StaffResponse.builder().build(),
                 StaffResponse.builder().build(),
                 StaffResponse.builder().build()
-        );
-        when(staffService.getAllStaffManager()).thenReturn(staffResponses);
-        mockMvc.perform(get("/cash-box/get-all-staff"))
+        ));
+        when(staffService.getAllStaffManager(anyInt(), anyString())).thenReturn(staffResponses);
+        mockMvc.perform(get("/cash-box/get-all-staff")
+                        .param("page", "1").param("search", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(staffResponses)));
     }
 
     @Test
     void getAllBankBook() throws Exception {
-        List<BankBookResponseForCashBox> bankBookResponseForCashBoxes = List.of(
+        Page<BankBookResponseForCashBox> bankBookResponseForCashBoxes = new PageImpl<>(List.of(
                 BankBookResponseForCashBox.builder().build(),
                 BankBookResponseForCashBox.builder().build(),
                 BankBookResponseForCashBox.builder().build(),
                 BankBookResponseForCashBox.builder().build()
-        );
-        when(bankBookService.getBankBookListForCashBoxByUserId(anyLong())).thenReturn(bankBookResponseForCashBoxes);
-        mockMvc.perform(get("/cash-box/get-all-bank-book").param("id", "1"))
+        ));
+        when(bankBookService.getBankBookListForCashBoxByUserId(anyInt(),anyLong(), anyString())).thenReturn(bankBookResponseForCashBoxes);
+        mockMvc.perform(get("/cash-box/get-all-bank-book").param("id", "1")
+                        .param("page", "1").param("search", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(bankBookResponseForCashBoxes)));
     }
@@ -252,14 +255,15 @@ class CashBoxControllerTest {
 
     @Test
     void getAllArticle() throws Exception {
-        List<ArticleResponse> articleResponses = List.of(
+        Page<ArticleResponse> articleResponses = new PageImpl<>(List.of(
                 ArticleResponse.builder().build(),
                 ArticleResponse.builder().build(),
                 ArticleResponse.builder().build(),
                 ArticleResponse.builder().build()
-        );
-        when(articleService.getAllArticleResponseByType(anyBoolean())).thenReturn(articleResponses);
-        mockMvc.perform(get("/cash-box/get-all-article").param("type", "true"))
+        ));
+        when(articleService.getAllArticleResponseByType(anyInt(), anyBoolean(), anyString())).thenReturn(articleResponses);
+        mockMvc.perform(get("/cash-box/get-all-article").param("type", "true")
+                        .param("page", "1").param("search", "test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(articleResponses)));
     }

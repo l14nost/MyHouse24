@@ -1,17 +1,13 @@
 package lab.space.my_house_24.specification;
 
-import jakarta.persistence.criteria.*;
-import lab.space.my_house_24.entity.Apartment;
-import lab.space.my_house_24.entity.House;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lab.space.my_house_24.entity.User;
-import lab.space.my_house_24.enums.UserStatus;
-import lab.space.my_house_24.model.user.UserMainPageRequest;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Builder
@@ -34,6 +30,8 @@ public class UserSpecificationForTable implements Specification<User> {
         else {
             predicate = criteriaBuilder.greaterThan(root.get("id"),0);
         }
+
+        query.orderBy(criteriaBuilder.asc(root.get("lastname")));
 
         return predicate;
 

@@ -82,9 +82,9 @@ public class BankBookServiceImpl implements BankBookService {
     }
 
     @Override
-    public List<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Long userId) {
+    public Page<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Integer pageIndex, Long userId, String bankBookNumber) {
         log.info("Try to get all BankBookResponseForCashBox by User Id");
-        return bankBookRepository.findAll(bankBookSpecification.getBankBookByUser(userId)).stream().map(BankBookMapper::toBankBookResponseForCashBox).toList();
+        return bankBookRepository.findAll(bankBookSpecification.getBankBookByUser(userId, bankBookNumber), PageRequest.of(pageIndex, 10)).map(BankBookMapper::toBankBookResponseForCashBox);
     }
 
     @Override

@@ -12,6 +12,7 @@ import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.model.user.UserResponseForTable;
 import lab.space.my_house_24.service.*;
 import lab.space.my_house_24.util.ErrorMapper;
+import lab.space.my_house_24.validator.ApartmentValidator;
 import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 @Controller
 @RequestMapping("bank-books")
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class BankBookController {
 
     private final BankBookService bankBookService;
     private final BankBookValidator bankBookValidator;
+    private final ApartmentValidator apartmentValidator;
     private final ApartmentService apartmentService;
     private final SectionService sectionService;
     private final HouseService houseService;
@@ -146,6 +150,10 @@ public class BankBookController {
                                             BindingResult bindingResult) {
         bankBookValidator.isNumberUniqueValidationWithId(request.id(), request.number(), bindingResult,
                 "BankBookUpdateRequest", LocaleContextHolder.getLocale());
+        if (nonNull(request.apartmentId())){
+            apartmentValidator.isApartmentWithBankBook(request.apartmentId(), bindingResult,
+                    "BankBookSaveRequest", LocaleContextHolder.getLocale());
+        }
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -164,6 +172,10 @@ public class BankBookController {
                                           BindingResult bindingResult) {
         bankBookValidator.isNumberUniqueValidation(request.number(), bindingResult,
                 "BankBookSaveRequest", LocaleContextHolder.getLocale());
+        if (nonNull(request.apartmentId())){
+            apartmentValidator.isApartmentWithBankBook(request.apartmentId(), bindingResult,
+                    "BankBookSaveRequest", LocaleContextHolder.getLocale());
+        }
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }

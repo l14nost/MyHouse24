@@ -184,7 +184,7 @@ class StaffServiceImplTest {
 
     @Test
     void getAllStaffManager() {
-        List<Staff> staffList = List.of(Staff.builder()
+        Page<Staff> staffList = new PageImpl<>(List.of(Staff.builder()
                 .id(1L)
                 .firstname("Test")
                 .lastname("Test")
@@ -192,10 +192,10 @@ class StaffServiceImplTest {
                         .jobTitle(JobTitle.DIRECTOR)
                         .build()
                 )
-                .build());
-        when(staffRepository.findAll((Specification<Staff>) any())).thenReturn(staffList);
-        assertEquals(1, staffService.getAllStaffManager().size());
-        verify(staffRepository, times(1)).findAll((Specification<Staff>) any());
+                .build()));
+        when(staffRepository.findAll((Specification<Staff>) any(), any(PageRequest.class))).thenReturn(staffList);
+        assertEquals(1, staffService.getAllStaffManager(1, "Test").getTotalElements());
+        verify(staffRepository, times(1)).findAll((Specification<Staff>) any(), any(PageRequest.class));
     }
 
     @Test

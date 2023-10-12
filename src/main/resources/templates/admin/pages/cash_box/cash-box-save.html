@@ -3,486 +3,548 @@
       layout:decorate="~{admin/fragments/layout}">
 
 <head>
-  <title th:text="#{cash_box.save.title}"></title>
-  <style>
-    .form-control:disabled {
-      background-color: #fdfdfd;
-    }
-  </style>
+    <title th:text="#{cash_box.save.title}"></title>
+    <style>
+        .form-control:disabled {
+            background-color: #fdfdfd;
+        }
+    </style>
 </head>
 
 <th:block layout:fragment="content">
 
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <div class="header-title">
-          <h4 class="card-title" id="breadcrumb-title"></h4>
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div class="header-title">
+                    <h4 class="card-title" id="breadcrumb-title"></h4>
+                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}"
+                                                                           th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/cash-box}"
+                                                                           th:text="#{cash_box.breadcrumb}"></a></li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body px-0">
+            </div>
         </div>
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb" id="breadcrumb">
-            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
-            <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/cash-box}" th:text="#{cash_box.breadcrumb}"></a></li>
-          </ol>
-        </nav>
-      </div>
-      <div class="card-body px-0">
-      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-3">
-      <div class="form-group">
-        <div class="input-group" id="passwordResponse">
-          <button class="btn btn-gray disabled" type="button">№</button>
-          <input type="text" class="form-control pass" id="number" oninput="applyMask(this);" disabled>
+    <div class="row">
+        <div class="col-3">
+            <div class="form-group">
+                <div class="input-group" id="passwordResponse">
+                    <button class="btn btn-gray disabled" type="button">№</button>
+                    <input type="text" class="form-control pass" id="number" oninput="applyMask(this);" disabled>
+                </div>
+            </div>
         </div>
-      </div>
+        <div class="col-auto mt-2 pe-0" th:text="#{masters_call.card.time.at}"></div>
+        <div class="col-3">
+            <div class="input-group">
+                <input class="form-control" id="date" type="date"
+                       th:placeholder="#{masters_call.save.date.placeholder}">
+                <button class="input-group-text input-button pointer-event" disabled>
+                    <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="col-auto mt-2 pe-0" th:text="#{masters_call.card.time.at}"></div>
-    <div class="col-3">
-      <div class="input-group">
-        <input class="form-control" id="date" type="date"
-               th:placeholder="#{masters_call.save.date.placeholder}">
-        <button class="input-group-text input-button pointer-event" disabled>
-          <svg width="24" class="icon-24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
 
-  <div class="col-sm-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row pb-3">
-          <div class="col-6">
-            <div class="form-group" id="owner-div" hidden>
-              <label class="form-label" th:text="#{cash_box.save.owner}"></label>
-              <select id="owner" class="mb-1 form-select" aria-label=".form-select-lg example">
-                <option value=""></option>
-              </select>
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row pb-3">
+                    <div class="col-6">
+                        <div class="form-group" id="owner-div" hidden>
+                            <label class="form-label" th:text="#{cash_box.save.owner}"></label>
+                            <select id="owner" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="bank-book-div" hidden>
+                            <label class="form-label" th:text="#{cash_box.save.bank_book}"></label>
+                            <select id="bank-book" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{cash_box.save.article}"></label>
+                            <select id="article" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sum" class="form-label" th:text="#{cash_box.save.sum}"></label>
+                            <input type="text" class="form-control" id="sum">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group" style="padding-top: 32px">
+                            <input type="checkbox" class="btn-check" id="draft" autocomplete="off">
+                            <label class="btn btn-outline-success" for="draft" th:text="#{cash_box.save.draft}"></label><br>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" th:text="#{cash_box.save.manager}"></label>
+                            <select id="manager" class="mb-1 form-select" aria-label=".form-select-lg example">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group" id="bank-book-div" hidden>
-              <label class="form-label" th:text="#{cash_box.save.bank_book}"></label>
-              <select id="bank-book" class="mb-1 form-select" aria-label=".form-select-lg example">
-                <option value=""></option>
-              </select>
+            <div class="col text-end m-3">
+                <a th:href="@{/cash-box}" type="button" class="btn btn-light"
+                   th:text="#{global.button.cancel}"></a>
+                <button type="button" class="btn btn-success"
+                        style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}"
+                        onclick="saveCashBox()">
+                </button>
             </div>
-            <div class="form-group">
-              <label class="form-label" th:text="#{cash_box.save.article}"></label>
-              <select id="article" class="mb-1 form-select" aria-label=".form-select-lg example">
-                <option value=""></option>
-              </select>
+            <div class="card-footer py-0">
+                <div class="form-group">
+                    <label for="comment" class="form-label" th:text="#{cash_box.save.comment}"></label>
+                    <textarea type="text" class="form-control" id="comment"
+                              rows="6"></textarea>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="sum" class="form-label" th:text="#{cash_box.save.sum}"></label>
-              <input type="text" class="form-control" id="sum">
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="form-group" style="padding-top: 32px">
-              <input type="checkbox" class="btn-check" id="draft" autocomplete="off">
-              <label class="btn btn-outline-success" for="draft" th:text="#{cash_box.save.draft}"></label><br>
-            </div>
-            <div class="form-group">
-              <label class="form-label" th:text="#{cash_box.save.manager}"></label>
-              <select id="manager" class="mb-1 form-select" aria-label=".form-select-lg example">
-                <option value=""></option>
-              </select>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="col text-end m-3">
-        <a th:href="@{/cash-box}" type="button" class="btn btn-light"
-           th:text="#{global.button.cancel}"></a>
-        <button type="button" class="btn btn-success"
-                style="margin-left: 15px; margin-right: 50px" th:text="#{global.button.accept}"
-                onclick="saveCashBox()">
-        </button>
-      </div>
-      <div class="card-footer py-0">
-        <div class="form-group">
-          <label for="comment" class="form-label" th:text="#{cash_box.save.comment}"></label>
-          <textarea type="text" class="form-control" id="comment"
-                    rows="6"></textarea>
-        </div>
-      </div>
     </div>
-  </div>
 
 </th:block>
 
 <!-- Extra Modals -->
 <th:block layout:fragment="extra-modals">
 
-  <!-- put extra modals here for only this page -->
+    <!-- put extra modals here for only this page -->
 
 </th:block>
 
 <th:block layout:fragment="extra-script">
 
-  <script>
+    <script>
 
-    let sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
-    let stompClient = Stomp.over(sockJs1);
+        let sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        let stompClient = Stomp.over(sockJs1);
 
 
+        let cashBoxId = undefined;
+        let ownerId = undefined;
+        let articleType = undefined;
+        let lang;
 
-    let cashBoxId = undefined;
-    let ownerId = undefined;
-    let articleType = undefined;
+        $(document).ready(function () {
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                const cutUrl = new URL(window.location.href).pathname.split("/").pop().split("-").pop();
+                if (/\d/.test(cutUrl)) {
+                    if (new URL(window.location.href).pathname.split("/").pop().split("-")[1] === 'copy') {
+                        getCopyCahBoxResponse(cutUrl);
+                    } else {
+                        cashBoxId = cutUrl;
+                        getCahBoxResponse(cashBoxId);
+                    }
+                } else {
+                    if (cutUrl === 'income') {
+                        articleType = true;
+                        document.getElementById('bank-book-div').removeAttribute('hidden');
+                        document.getElementById('owner-div').removeAttribute('hidden');
 
-    $(document).ready(function () {
-      const cutUrl = new URL(window.location.href).pathname.split("/").pop().split("-").pop();
-      if(/\d/.test(cutUrl)){
-        if (new URL(window.location.href).pathname.split("/").pop().split("-")[1] === 'copy'){
-          getCopyCahBoxResponse(cutUrl);
-        }else {
-          cashBoxId = cutUrl;
-          getCahBoxResponse(cashBoxId);
-        }
-      }else {
-        if (cutUrl === 'income'){
-          articleType = true;
-          document.getElementById('bank-book-div').removeAttribute('hidden');
-          document.getElementById('owner-div').removeAttribute('hidden');
-          selectBankBook();
-          selectOwner();
 
-          $("#breadcrumb-title").append('[[#{cash_box.save.income.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]', '/cash-box'));
-        }else {
-          articleType = false;
+                        selectBankBook();
+                        selectOwner();
 
-          $("#breadcrumb-title").append('[[#{cash_box.save.expense.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]', '/cash-box'));
-        }
+                        $("#breadcrumb-title").append('[[#{cash_box.save.income.breadcrumb}]]');
+                        $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]', '/cash-box'));
+                    } else {
+                        articleType = false;
 
-        $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
-        getNewCashBoxResponse();
-        selectArticle();
-      }
-    });
+                        $("#breadcrumb-title").append('[[#{cash_box.save.expense.breadcrumb}]]');
+                        $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]', '/cash-box'));
+                    }
 
-    function getCahBoxResponse(id) {
-      $.ajax({
-        method: "GET",
-        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
-        dataType: 'json'
-      }).done(function (response) {
-        console.log(response)
-
-        cashBoxId = response?.id;
-        $("#number").val(response?.number);
-        $("#date").val(response?.createAt);
-        $("#sum").val(response?.price);
-        $("#comment").val(response?.comment);
-        $("#draft").prop('checked', response?.draft?.name === 'true');
-        $("#manager").append('<option selected value="' + response?.staff?.id + '">' + response?.staff?.fullName + '</option>');
-        $("#article").append('<option selected value="' + response?.article?.id + '">' + response?.article?.name + '</option>');
-
-        if (response?.type){
-          articleType = true;
-          document.getElementById('bank-book-div').removeAttribute('hidden');
-          document.getElementById('owner-div').removeAttribute('hidden');
-
-          ownerId = response?.bankBook?.apartment?.owner?.id;
-          selectBankBook(response?.bankBook);
-          selectOwner(response?.bankBook?.apartment?.owner);
-
-          $("#breadcrumb-title").append('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number);
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number, '/cash-box/card-' + response?.id));
-        }else {
-          articleType = false;
-
-          $("#breadcrumb-title").append('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number);
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number, '/cash-box/card-' + response?.id));
-        }
-
-        $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
-        selectArticle();
-      }).fail(function () {
-        window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
-      });
-    }
-
-    function getCopyCahBoxResponse(id) {
-      $.ajax({
-        method: "GET",
-        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
-        dataType: 'json'
-      }).done(function (response) {
-        console.log(response)
-
-        $("#comment").val(response?.comment);
-        $("#draft").prop('checked', false);
-        $("#manager").append('<option selected value="' + response?.staff?.id + '">' + response?.staff?.fullName + '</option>');
-        $("#article").append('<option selected value="' + response?.article?.id + '">' + response?.article?.name + '</option>');
-
-        if (response?.type){
-          articleType = true;
-          document.getElementById('bank-book-div').removeAttribute('hidden');
-          document.getElementById('owner-div').removeAttribute('hidden');
-
-          ownerId = response?.bankBook?.apartment?.owner?.id;
-          selectBankBook(response?.bankBook);
-          selectOwner(response?.bankBook?.apartment?.owner);
-
-          $("#breadcrumb-title").append('[[#{cash_box.save.income.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]', '/cash-box'));
-        }else {
-          articleType = false;
-
-          $("#breadcrumb-title").append('[[#{cash_box.save.expense.breadcrumb}]]');
-          $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]', '/cash-box'));
-        }
-
-        $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
-
-        getNewCashBoxResponse();
-        selectArticle();
-      }).fail(function () {
-        window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
-      });
-    }
-
-    function getNewCashBoxResponse() {
-      $.ajax({
-        method: "POST",
-        url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-new-cash-box",
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(articleType)
-      }).done(function (response) {
-        console.log(response)
-        $('#number').val(response?.number);
-        $('#date').val(response?.createAt);
-        $('#sum').val('0.00');
-      }).fail(function (response){
-        console.log(response);
-      });
-    }
-
-    function saveCashBox() {
-      let cashBoxRequest = {
-        id: undefined,
-        number: undefined,
-        createAt: undefined,
-        draft: undefined,
-        type: undefined,
-        price: undefined,
-        comment: undefined,
-        bankBookId: undefined,
-        articleId: undefined,
-        staffId: undefined
-      };
-      cashBoxRequest.id = cashBoxId;
-      if ($("#number").val() !== '') cashBoxRequest.number = $("#number").val();
-      if ($("#date").val() !== '') cashBoxRequest.createAt = getTrueDate($("#date").val());
-      if ($("#draft").val() !== '') cashBoxRequest.draft = $('#draft').prop('checked');
-      cashBoxRequest.type = articleType;
-      if ($("#sum").val() !== '') cashBoxRequest.price = $('#sum').val();
-      if ($("#comment").val() !== '') cashBoxRequest.comment = $('#comment').val();
-      if ($("#bank-book").val() !== '') cashBoxRequest.bankBookId = $('#bank-book').val();
-      if ($("#article").val() !== '') cashBoxRequest.articleId = $('#article').val();
-      if ($("#manager").val() !== '') cashBoxRequest.staffId = $('#manager').val();
-      console.log(cashBoxRequest);
-      $.ajax({
-        method: cashBoxRequest.id ? 'PUT' : "POST",
-        url: cashBoxRequest.id ? '/myhouse24-amirb-nikitaf/admin/cash-box/update-cash-box' : '/myhouse24-amirb-nikitaf/admin/cash-box/save-cash-box',
-        contentType: 'application/json',
-        data: JSON.stringify(cashBoxRequest),
-        beforeSend: function () {
-          clearValidMessages();
-        }
-      }).done(function () {
-        stompClient.connect({}, () => {
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+                    getNewCashBoxResponse();
+                    selectArticle();
+                    managerSelect();
+                }
+            });
         });
-        stompClient.send("/app/statistics");
-        window.location.href = "/myhouse24-amirb-nikitaf/admin/cash-box";
-      }).fail(function (response) {
-        const errors = response.responseJSON;
-        console.log(response);
-        if (errors?.number) validResponse($('#number'), errors.number, 'div');
-        if (errors?.bankBookId) validResponse($('#bank-book'), errors.bankBookId, 'div');
-        if (errors?.articleId) validResponse($('#article'), errors.articleId, 'div');
-        if (errors?.staffId) validResponse($('#manager'), errors.staffId, 'div');
-        if (errors?.comment) validResponse($('#comment'), errors.comment, 'div');
-        if (errors?.price) validResponse($('#sum'), errors.price, 'div');
-      })
-    }
 
-    $(document).on('input', '#sum', function () {
-      let inputValue = $(this).val();
-      let numericValue = inputValue.replace(/[^\d.,]/g, '');
+        function getCahBoxResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
 
-      if (numericValue === '') {
-        numericValue = '0.00';
-      }
+                cashBoxId = response?.id;
+                $("#number").val(response?.number);
+                $("#date").val(response?.createAt);
+                $("#sum").val(response?.price);
+                $("#comment").val(response?.comment);
+                $("#draft").prop('checked', response?.draft?.name === 'true');
+                $("#manager").append('<option selected value="' + response?.staff?.id + '">' + response?.staff?.fullName + '</option>');
+                $("#article").append('<option selected value="' + response?.article?.id + '">' + response?.article?.name + '</option>');
 
-      $(this).val(numericValue);
-    });
+                if (response?.type) {
+                    articleType = true;
+                    document.getElementById('bank-book-div').removeAttribute('hidden');
+                    document.getElementById('owner-div').removeAttribute('hidden');
 
-    $('#rate').on('select2:select', function (e) {
-      rateId = e.params.data.id;
-      priceRate = e.params.data.priceRate;
-    });
+                    ownerId = response?.bankBook?.apartment?.owner?.id;
+                    selectBankBook(response?.bankBook);
+                    selectOwner(response?.bankBook?.apartment?.owner);
 
+                    $("#breadcrumb-title").append('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number);
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.income.breadcrumb}]]: № ' + response?.number, '/cash-box/card-' + response?.id));
+                } else {
+                    articleType = false;
 
+                    $("#breadcrumb-title").append('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number);
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.card.expense.breadcrumb}]]: № ' + response?.number, '/cash-box/card-' + response?.id));
+                }
 
-    function selectOwner(owner) {
-      $('#owner').select2({
-        theme: 'bootstrap-5',
-        minimumResultsForSearch: -1,
-        ajax: {
-          method: 'GET',
-          url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-owner',
-          cache: true,
-          delay: 1000,
-          processResults: function (data) {
-            return {
-              results: data.map(function (item) {
-                return {
-                  id: item.id,
-                  text: item.name
-                };
-              })
-            };
-          }
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+                selectArticle();
+            }).fail(function () {
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
+            });
         }
-      });
-      if (owner) {
-        $('#owner').append('<option selected value="' + owner?.id + '">' + owner?.fullName + '</option>');
-      }
-    }
-    function selectBankBook(bankBook) {
-      let url = '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-bank-book';
-      if (ownerId !== null && ownerId !== undefined) {
-        url += '?id=' + ownerId;
-      }
-      $('#bank-book').select2({
-        theme: 'bootstrap-5',
-        minimumResultsForSearch: -1,
-        ajax: {
-          method: 'GET',
-          url: url,
-          cache: true,
-          delay: 1000,
-          processResults: function (data) {
-            console.log(data)
-            return {
-              results: data.map(function (item) {
-                return {
-                  id: item.id,
-                  text: item.number,
-                  user: item.user
-                };
-              })
-            };
-          }
-        }
-      });
-      if (bankBook) {
-        $('#bank-book').append('<option selected value="' + bankBook?.id + '">' + bankBook?.number + '</option>');
-      }
-    }
 
-    $('#manager').select2({
-      theme: 'bootstrap-5',
-      minimumResultsForSearch: -1,
-      ajax: {
-        method: 'GET',
-        url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-staff',
-        cache: true,
-        delay: 1000,
-        processResults: function (data) {
-          return {
-            results: data.map(function (item) {
-              return {
-                id: item.id,
-                text: item.fullName,
-                role: item.role
-              };
+        function getCopyCahBoxResponse(id) {
+            $.ajax({
+                method: "GET",
+                url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-cash-box-" + id,
+                dataType: 'json'
+            }).done(function (response) {
+                console.log(response)
+
+                $("#comment").val(response?.comment);
+                $("#draft").prop('checked', false);
+                $("#manager").append('<option selected value="' + response?.staff?.id + '">' + response?.staff?.fullName + '</option>');
+                $("#article").append('<option selected value="' + response?.article?.id + '">' + response?.article?.name + '</option>');
+
+                if (response?.type) {
+                    articleType = true;
+                    document.getElementById('bank-book-div').removeAttribute('hidden');
+                    document.getElementById('owner-div').removeAttribute('hidden');
+
+                    ownerId = response?.bankBook?.apartment?.owner?.id;
+                    selectBankBook(response?.bankBook);
+                    selectOwner(response?.bankBook?.apartment?.owner);
+
+                    $("#breadcrumb-title").append('[[#{cash_box.save.income.breadcrumb}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.income.breadcrumb}]]', '/cash-box'));
+                } else {
+                    articleType = false;
+
+                    $("#breadcrumb-title").append('[[#{cash_box.save.expense.breadcrumb}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{cash_box.save.expense.breadcrumb}]]', '/cash-box'));
+                }
+
+                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+
+                getNewCashBoxResponse();
+                selectArticle();
+            }).fail(function () {
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/error";
+            });
+        }
+
+        function getNewCashBoxResponse() {
+            $.ajax({
+                method: "POST",
+                url: "/myhouse24-amirb-nikitaf/admin/cash-box/get-new-cash-box",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(articleType)
+            }).done(function (response) {
+                console.log(response)
+                $('#number').val(response?.number);
+                $('#date').val(response?.createAt);
+                $('#sum').val('0.00');
+            }).fail(function (response) {
+                console.log(response);
+            });
+        }
+
+        function saveCashBox() {
+            let cashBoxRequest = {
+                id: undefined,
+                number: undefined,
+                createAt: undefined,
+                draft: undefined,
+                type: undefined,
+                price: undefined,
+                comment: undefined,
+                bankBookId: undefined,
+                articleId: undefined,
+                staffId: undefined
+            };
+            cashBoxRequest.id = cashBoxId;
+            if ($("#number").val() !== '') cashBoxRequest.number = $("#number").val();
+            if ($("#date").val() !== '') cashBoxRequest.createAt = getTrueDate($("#date").val());
+            if ($("#draft").val() !== '') cashBoxRequest.draft = $('#draft').prop('checked');
+            cashBoxRequest.type = articleType;
+            if ($("#sum").val() !== '') cashBoxRequest.price = $('#sum').val();
+            if ($("#comment").val() !== '') cashBoxRequest.comment = $('#comment').val();
+            if ($("#bank-book").val() !== '') cashBoxRequest.bankBookId = $('#bank-book').val();
+            if ($("#article").val() !== '') cashBoxRequest.articleId = $('#article').val();
+            if ($("#manager").val() !== '') cashBoxRequest.staffId = $('#manager').val();
+            console.log(cashBoxRequest);
+            $.ajax({
+                method: cashBoxRequest.id ? 'PUT' : "POST",
+                url: cashBoxRequest.id ? '/myhouse24-amirb-nikitaf/admin/cash-box/update-cash-box' : '/myhouse24-amirb-nikitaf/admin/cash-box/save-cash-box',
+                contentType: 'application/json',
+                data: JSON.stringify(cashBoxRequest),
+                beforeSend: function () {
+                    clearValidMessages();
+                }
+            }).done(function () {
+                stompClient.connect({}, () => {
+                });
+                stompClient.send("/app/statistics");
+                window.location.href = "/myhouse24-amirb-nikitaf/admin/cash-box";
+            }).fail(function (response) {
+                const errors = response.responseJSON;
+                console.log(response);
+                if (errors?.number) validResponse($('#number'), errors.number, 'div');
+                if (errors?.bankBookId) validResponse($('#bank-book'), errors.bankBookId, 'div');
+                if (errors?.articleId) validResponse($('#article'), errors.articleId, 'div');
+                if (errors?.staffId) validResponse($('#manager'), errors.staffId, 'div');
+                if (errors?.comment) validResponse($('#comment'), errors.comment, 'div');
+                if (errors?.price) validResponse($('#sum'), errors.price, 'div');
             })
-          };
         }
-      }
-    });
-    function selectArticle() {
-      $('#article').select2({
-        theme: 'bootstrap-5',
-        minimumResultsForSearch: -1,
-        ajax: {
-          method: 'GET',
-          url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-article?type=' + articleType,
-          cache: true,
-          delay: 1000,
-          processResults: function (data) {
-            console.log(data)
-            return {
-              results: data.map(function (item) {
-                return {
-                  id: item.id,
-                  text: item.name
-                };
-              })
-            };
-          }
+
+        $(document).on('input', '#sum', function () {
+            let inputValue = $(this).val();
+            let numericValue = inputValue.replace(/[^\d.,]/g, '');
+
+            if (numericValue === '') {
+                numericValue = '0.00';
+            }
+
+            $(this).val(numericValue);
+        });
+
+        $('#rate').on('select2:select', function (e) {
+            rateId = e.params.data.id;
+            priceRate = e.params.data.priceRate;
+        });
+
+
+        function selectOwner(owner) {
+            $('#owner').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                maximumInputLength: 100,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-owner',
+                    cache: true,
+                    delay: 1000,
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
+                }
+            });
+            if (owner) {
+                $('#owner').append('<option selected value="' + owner?.id + '">' + owner?.fullName + '</option>');
+            }
         }
-      });
-    }
 
-    $('#owner').on('select2:select', function (e) {
-      let selectedUser = e.params.data;
-      ownerId = selectedUser.id;
+        function selectBankBook(bankBook) {
+            let url = '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-bank-book';
+            if (ownerId !== null && ownerId !== undefined) {
+                url += '?id=' + ownerId;
+            }
+            $('#bank-book').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                maximumInputLength: 20,
+                ajax: {
+                    url: url,
+                    cache: true,
+                    delay: 1000,
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.number,
+                                user: item.user
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
+                }
+            });
+            if (bankBook) {
+                $('#bank-book').append('<option selected value="' + bankBook?.id + '">' + bankBook?.number + '</option>');
+            }
+        }
 
-      $('#bank-book').val('');
-      $('#bank-book option').remove();
-      selectBankBook();
-    });
+        function managerSelect(){
+            $('#manager').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                maximumInputLength: 60,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-staff',
+                    cache: true,
+                    delay: 1000,
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.fullName,
+                                role: item.role
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
+                }
+            });
+        }
 
-    $('#bank-book').on('select2:select', function (e) {
-      let selectedBankBook = e.params.data;
-      ownerId = selectedBankBook.user.id;
+        function selectArticle() {
+            $('#article').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                maximumInputLength: 100,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-article?type=' + articleType,
+                    cache: true,
+                    delay: 1000,
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
+                }
+            });
+        }
 
-      selectOwner(selectedBankBook.user);
-      selectBankBook();
-    });
+        $('#owner').on('select2:select', function (e) {
+            let selectedUser = e.params.data;
+            ownerId = selectedUser.id;
 
-    function applyMask(input) {
-      let value = input.value.replace(/\D/g, "");
+            $('#bank-book').val('');
+            $('#bank-book option').remove();
+            selectBankBook();
+        });
 
-      if (value.length > 10) {
-        value = value.substring(0, 10);
-      }
+        $('#bank-book').on('select2:select', function (e) {
+            let selectedBankBook = e.params.data;
+            ownerId = selectedBankBook.user.id;
 
-      input.value = value;
-    }
+            selectOwner(selectedBankBook.user);
+            selectBankBook();
+        });
 
-    const date_flatpickr = document.querySelectorAll('#date');
-    Array.from(date_flatpickr, (elem) => {
-      if (typeof flatpickr !== typeof undefined) {
-        flatpickr(elem, {
-          minDate: "01.01.2014",
-          dateFormat: "d.m.Y"
+        function applyMask(input) {
+            let value = input.value.replace(/\D/g, "");
+
+            if (value.length > 10) {
+                value = value.substring(0, 10);
+            }
+
+            input.value = value;
+        }
+
+        const date_flatpickr = document.querySelectorAll('#date');
+        Array.from(date_flatpickr, (elem) => {
+            if (typeof flatpickr !== typeof undefined) {
+                flatpickr(elem, {
+                    minDate: "01.01.2014",
+                    dateFormat: "d.m.Y"
+                })
+            }
         })
-      }
-    })
 
-    function getTrueDate(date) {
-      let trueDate = '';
-      let split = date.split(".");
-      trueDate = split[2] + '-' + split[1] + '-' + split[0];
-      return trueDate;
-    }
+        function getTrueDate(date) {
+            let trueDate = '';
+            let split = date.split(".");
+            trueDate = split[2] + '-' + split[1] + '-' + split[0];
+            return trueDate;
+        }
 
-  </script>
+    </script>
 
 </th:block>
 

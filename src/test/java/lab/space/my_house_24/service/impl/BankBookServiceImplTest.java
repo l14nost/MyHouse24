@@ -223,7 +223,7 @@ class BankBookServiceImplTest {
 
     @Test
     void getBankBookListForCashBoxByUserId() {
-        List<BankBook> bankBooks = List.of(
+        Page<BankBook> bankBooks = new PageImpl<>(List.of(
                 BankBook.builder()
                         .id(1L)
                         .number("01234-56789")
@@ -324,11 +324,11 @@ class BankBookServiceImplTest {
                                         .build())
                                 .build())
                         .build()
-        );
-        when(bankBookRepository.findAll((Specification<BankBook>) any())).thenReturn(bankBooks);
-        List<BankBookResponseForCashBox> bankBookResponses = bankBookService.getBankBookListForCashBoxByUserId(1L);
-        verify(bankBookRepository, times(1)).findAll((Specification<BankBook>) any());
-        assertEquals(4, bankBookResponses.size());
+        ));
+        when(bankBookRepository.findAll((Specification<BankBook>) any(), any(PageRequest.class))).thenReturn(bankBooks);
+        Page<BankBookResponseForCashBox> bankBookResponses = bankBookService.getBankBookListForCashBoxByUserId(1,1L,"Test");
+        verify(bankBookRepository, times(1)).findAll((Specification<BankBook>) any(), any(PageRequest.class));
+        assertEquals(4, bankBookResponses.getTotalElements());
         assertEquals(BankBookResponseForCashBox.class, bankBookResponses.iterator().next().getClass());
     }
 

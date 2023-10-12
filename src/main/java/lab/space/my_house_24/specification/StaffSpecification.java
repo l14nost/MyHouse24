@@ -86,7 +86,7 @@ public class StaffSpecification {
         };
     }
 
-    public Specification<Staff> getStaffManager() {
+    public Specification<Staff> getStaffManager(String fullName) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
                 predicates.add(criteriaBuilder.or(
@@ -97,7 +97,20 @@ public class StaffSpecification {
             predicates.add(criteriaBuilder.or(
                     criteriaBuilder.equal(root.get("staffStatus"), UserStatus.ACTIVE)
             ));
-            query.orderBy(criteriaBuilder.asc(root.get("id")));
+            if (nonNull(fullName) && !Objects.equals(fullName, "")) {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.like(
+                                criteriaBuilder.concat(
+                                        criteriaBuilder.concat(
+                                                criteriaBuilder.lower(root.get("firstname")),
+                                                " "
+                                        ),
+                                        criteriaBuilder.lower(root.get("lastname"))
+                                ),
+                                "%" + fullName.toLowerCase() + "%")
+                ));
+            }
+            query.orderBy(criteriaBuilder.asc(root.get("lastname")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

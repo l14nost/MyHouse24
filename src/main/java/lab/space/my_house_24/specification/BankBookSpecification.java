@@ -68,7 +68,7 @@ public class BankBookSpecification {
         };
     }
 
-    public Specification<BankBook> getBankBookByUser(Long id) {
+    public Specification<BankBook> getBankBookByUser(Long id, String number) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (nonNull(id)) {
@@ -80,7 +80,12 @@ public class BankBookSpecification {
                         criteriaBuilder.isNotNull(root.get("apartment"))
                 ));
             }
-            query.orderBy(criteriaBuilder.desc(root.get("id")));
+            if (nonNull(number) && !Objects.equals(number, "")) {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.like(root.get("number"), "%" + number + "%")
+                ));
+            }
+            query.orderBy(criteriaBuilder.desc(root.get("number")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

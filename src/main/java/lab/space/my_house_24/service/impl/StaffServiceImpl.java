@@ -52,6 +52,7 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final MessageSource message;
     private final String url = "https://slj.avada-media-dev1.od.ua/myhouse24-amirb-nikitaf/admin/";
+    private final int DEFAULT_PAGE_SIZE = 10;
 
     @Override
     public void sendInvite(InviteRequest inviteRequest) {
@@ -163,18 +164,15 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public List<StaffResponse> getAllStaffManager() {
+    public Page<StaffResponse> getAllStaffManager(Integer pageIndex, String fullNameStaff) {
         log.info("Get all Staff and convert in Response for MastersApplication");
-        return staffRepository.findAll(staffSpecification.getStaffManager())
-                .stream()
-                .map(StaffMapper::toStaffResponse)
-                .collect(Collectors.toList());
+        return staffRepository.findAll(staffSpecification.getStaffManager(fullNameStaff), PageRequest.of(pageIndex, DEFAULT_PAGE_SIZE))
+                .map(StaffMapper::toStaffResponse);
     }
 
     @Override
     public Page<StaffResponse> getAllStaffDto(StaffRequest request) {
         log.info("Search all Staff and convert in DTO");
-        final int DEFAULT_PAGE_SIZE = 10;
         return staffRepository.findAll(
                 staffSpecification.getStaffByRequest(request),
                 PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(StaffMapper::toSimpleDto);

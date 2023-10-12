@@ -1,10 +1,7 @@
 package lab.space.my_house_24.validator;
 
-import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Apartment;
-import lab.space.my_house_24.entity.House;
 import lab.space.my_house_24.repository.ApartmentRepository;
-import lab.space.my_house_24.repository.HouseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -12,6 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.List;
+import java.util.Locale;
+
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -41,6 +41,20 @@ public class ApartmentValidator {
                 }
             }
 
+        }
+    }
+
+    public void isApartmentWithBankBook(Long apartmentId, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            String apartmentResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                apartmentResponse = "Ця квартира вже має особовий рахунок.";
+            } else {
+                apartmentResponse = "This apartment already has a bank book.";
+            }
+            if (nonNull(apartmentRepository.getReferenceById(apartmentId).getBankBook())) {
+                bindingResult.addError(new FieldError(object, "apartmentId", apartmentResponse));
+            }
         }
     }
 }

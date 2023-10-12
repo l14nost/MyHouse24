@@ -23,7 +23,7 @@ public interface BankBookService {
 
     List<BankBookResponseForTable> bankBookListForTable();
 
-    List<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Long userId);
+    Page<BankBookResponseForCashBox> getBankBookListForCashBoxByUserId(Integer pageIndex, Long userId, String bankBookNumber);
 
     Page<BankBookResponse> getAllBankBookResponse(BankBookRequest request);
 

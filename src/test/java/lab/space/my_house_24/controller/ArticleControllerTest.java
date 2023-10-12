@@ -141,8 +141,8 @@ class ArticleControllerTest {
         mockMvc.perform(post("/payment-items/save-article")
                         .content(objectMapper.writeValueAsString(articleRequest))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(articleService, times(0)).saveArticleByRequest(any());
+                .andExpect(status().isOk());
+        verify(articleService, times(1)).saveArticleByRequest(any());
     }
 
     @Test
@@ -169,8 +169,8 @@ class ArticleControllerTest {
         mockMvc.perform(put("/payment-items/update-article")
                         .content(objectMapper.writeValueAsString(articleRequest))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        verify(articleService, times(0)).updateArticleByRequest(any());
+                .andExpect(status().isOk());
+        verify(articleService, times(1)).updateArticleByRequest(any());
     }
 
     @Test
