@@ -101,4 +101,20 @@ public class StaffSpecification {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+
+    public Specification<Staff> getStaffForSelect(String search) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(criteriaBuilder.or(
+                    criteriaBuilder.like(root.get("firstname"), "%"+search+"%"),
+                    criteriaBuilder.like(root.get("lastname"), "%"+search+"%")
+            ));
+            predicates.add(criteriaBuilder.or(
+                    criteriaBuilder.equal(root.get("staffStatus"), UserStatus.ACTIVE)
+            ));
+            query.orderBy(criteriaBuilder.asc(root.get("id")));
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
 }

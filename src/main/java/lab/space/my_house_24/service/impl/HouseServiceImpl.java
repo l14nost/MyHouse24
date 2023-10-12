@@ -167,9 +167,6 @@ public class HouseServiceImpl implements HouseService {
                 }
             }
         }
-        for (int i = 0; i<houseRequestForEditPage.deleteStaffList().size();i++){
-            house.removeStaff(staffService.getStaffById(houseRequestForEditPage.deleteStaffList().get(i)));
-        }
 
         if (!houseRequestForEditPage.image1().isEmpty()){
             house.setImage1(FileHandler.saveFile(houseRequestForEditPage.image1()));
@@ -206,7 +203,7 @@ public class HouseServiceImpl implements HouseService {
                 house.getFloorList().add(Floor.builder().name(houseRequestForEditPage.sectionNameList().get(i)).house(house).build());
             }
         }
-
+        house.removeAllFromStaffList();
         for (Long idStaff: houseRequestForEditPage.userList()){
             house.addStaff(staffService.getStaffById(idStaff));
         }

@@ -334,8 +334,8 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public List<StaffResponseForHouseAdd> getAllStaffDtoForHouse() {
-        return staffRepository.findAll().stream().map(StaffMapper::entityToDtoForHouseAdd).toList();
+    public List<StaffResponseForHouseAdd> getAllStaffDtoForHouse(String search) {
+        return staffRepository.findAll(staffSpecification.getStaffForSelect(search)).stream().map(StaffMapper::entityToDtoForHouseAdd).toList();
     }
     @Override
     public Long getCurrentStaff() {

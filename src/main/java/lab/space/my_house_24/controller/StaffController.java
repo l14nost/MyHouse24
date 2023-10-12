@@ -134,8 +134,8 @@ public class StaffController {
 
     @GetMapping("/get-all-staff-for-house")
     @ResponseBody
-    public List<StaffResponseForHouseAdd> getAllStaffForHousePage() {
-        return staffService.getAllStaffDtoForHouse();
+    public List<StaffResponseForHouseAdd> getAllStaffForHousePage(@RequestParam(required = false, defaultValue = "") String search) {
+        return staffService.getAllStaffDtoForHouse(search);
     }
 
     @GetMapping("/get-role-by-staff/{id}")

@@ -501,6 +501,11 @@
             cache: true,
             ajax: {
                 url: "/myhouse24-amirb-nikitaf/admin/staff/get-all-staff-for-house",
+                data: function (param) {
+                    return {
+                        search: param.term || ""
+                    }
+                },
                 processResults: function (data) {
                     return {
                         results: data.map(function (item) {

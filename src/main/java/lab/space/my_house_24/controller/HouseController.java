@@ -76,7 +76,7 @@ public class HouseController {
     public ModelAndView editHousePage(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("admin/pages/houses/house-edit");
         modelAndView.addObject("house", houseService.findByIdForEdit(id));
-        modelAndView.addObject("staffList", staffService.getAllStaffDtoForHouse());
+        modelAndView.addObject("staffList", staffService.getAllStaffDtoForHouse(""));
         return modelAndView;
     }
 

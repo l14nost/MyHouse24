@@ -186,7 +186,7 @@ class HouseServiceImplTest {
     void update() {
         House house = House.builder()
                 .id(1L)
-                .staffList(new HashSet<>(Set.of(Staff.builder().id(3L).houseList(Set.of()).build())))
+                .staffList(new HashSet<>(Set.of(Staff.builder().id(3L).houseList(new HashSet<>(Set.of())).build())))
                 .sectionList(new ArrayList<>(List.of(Section.builder().id(1L).build(), Section.builder().build())))
                 .floorList(new ArrayList<>(List.of(Floor.builder().id(1L).build(), Floor.builder().build())))
                 .build();
@@ -210,7 +210,7 @@ class HouseServiceImplTest {
                         .build();
         when(staffService.getStaffById(1L)).thenReturn(Staff.builder().houseList(new HashSet<>(Set.of())).build());
         when(staffService.getStaffById(2L)).thenReturn(Staff.builder().houseList(new HashSet<>(Set.of())).build());
-        when(staffService.getStaffById(3L)).thenReturn(Staff.builder().id(3L).houseList(new HashSet<>(Set.of())).build());
+//        when(staffService.getStaffById(3L)).thenReturn(Staff.builder().id(3L).houseList(new HashSet<>(Set.of())).build());
 
         houseService.update(houseRequestForAddPage,1L);
         verify(houseRepository, times(1)).save(any(House.class));

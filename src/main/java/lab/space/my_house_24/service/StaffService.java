@@ -54,7 +54,7 @@ public interface StaffService {
 
     UserDetails loadUserByToken(String token);
 
-    List<StaffResponseForHouseAdd> getAllStaffDtoForHouse();
+    List<StaffResponseForHouseAdd> getAllStaffDtoForHouse(String search);
 
     Long getCurrentStaff();
     StaffResponseForHeader getCurrentStaffForHeader();
