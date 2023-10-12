@@ -15,7 +15,6 @@ public record MastersApplicationRequest(
         Master typeMaster,
         @Size(max = 1500)
         String descriptionQuery,
-        @Size(max = 150)
         String apartmentQuery,
         Long ownerIdQuery,
         @Size(max = 20)
