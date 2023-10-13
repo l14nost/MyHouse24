@@ -571,9 +571,9 @@ class StaffServiceImplTest {
                         .build()
                 )
                 .build());
-        when(staffRepository.findAll()).thenReturn(staffList);
-        assertEquals(1, staffService.getAllStaffDtoForHouse().size());
-        verify(staffRepository, times(1)).findAll();
+        when(staffRepository.findAll((Specification<Staff>) any())).thenReturn(staffList);
+        assertEquals(1, staffService.getAllStaffDtoForHouse("").size());
+        verify(staffRepository, times(1)).findAll((Specification<Staff>) any());
     }
 
     @Test
