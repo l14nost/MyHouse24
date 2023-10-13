@@ -34,7 +34,7 @@ public interface StaffService {
 
     List<StaffResponse> getAllStaffMaster(StaffMasterRequest request);
 
-    List<StaffResponse> getAllStaffManager();
+    Page<StaffResponse> getAllStaffManager(Integer pageIndex, String fullNameStaff);
 
     Page<StaffResponse> getAllStaffDto(StaffRequest request);
 

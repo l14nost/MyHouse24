@@ -10,11 +10,9 @@ public record StaffSaveRequest(
         @Null
         Long id,
         @NotBlank(message = "{not.blank.message}")
-        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z][а-яєіїґёa-z]*$", message = "{pattern.name.message}")
         @Size(max = 25, message = "{size.less.message}" + " {max}")
         String firstname,
         @NotBlank(message = "{not.blank.message}")
-        @Pattern(regexp = "^[А-ЯЄІЇҐЁA-Z][а-яєіїґёa-z]*$", message = "{pattern.name.message}")
         @Size(max = 25, message = "{size.less.message}" + " {max}")
         String lastname,
         @NotBlank(message = "{not.blank.message}")

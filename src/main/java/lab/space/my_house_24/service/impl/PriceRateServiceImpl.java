@@ -10,6 +10,8 @@ import lab.space.my_house_24.service.PriceRateService;
 import lab.space.my_house_24.service.ServiceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +21,7 @@ public class PriceRateServiceImpl implements PriceRateService {
 
     private final PriceRateRepository priceRateRepository;
     private final ServiceService serviceService;
+    private final MessageSource message;
 
     @Override
     public PriceRate getPriceRateById(Long id) throws EntityNotFoundException {
@@ -53,7 +56,12 @@ public class PriceRateServiceImpl implements PriceRateService {
     @Override
     public void deletePriceRateById(Long id) throws EntityNotFoundException{
         log.info("Try to delete PriceRate by id " + id);
-        priceRateRepository.delete(getPriceRateById(id));
+        PriceRate priceRate = getPriceRateById(id);
+        if (priceRate.getRate().getPriceRateList().size() < 2){
+            log.warn("Forbidden delete PriceRate by id " + id);
+            throw new IllegalArgumentException(message.getMessage("rate.save.delete.service.error",null, LocaleContextHolder.getLocale()));
+        }
+        priceRateRepository.delete(priceRate);
         log.info("Success delete PriceRate by id " + id);
     }
 }

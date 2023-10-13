@@ -118,25 +118,35 @@
     <script>
         let staffId;
         let typeReq;
+        let lang;
+
         $(document).ready(function () {
-            typeReq = false;
-            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                document.getElementById('status-col').removeAttribute('hidden');
-                document.getElementById('password-col').removeAttribute('hidden');
-                document.getElementById('confirm-password-col').removeAttribute('hidden');
-                staffId = new URL(window.location.href).pathname.split("/").pop()
-                typeReq = true;
-                getStaffDTO(staffId);
-                getStatus();
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
 
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{staff.card.breadcrumb.staff}]]','/staff/card-' + staffId));
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
-            }else {
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{staff.card.breadcrumb.staff}]]','/staff'));
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
-            }
+                typeReq = false;
+                if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                    document.getElementById('status-col').removeAttribute('hidden');
+                    document.getElementById('password-col').removeAttribute('hidden');
+                    document.getElementById('confirm-password-col').removeAttribute('hidden');
+                    staffId = new URL(window.location.href).pathname.split("/").pop()
+                    typeReq = true;
+                    getStaffDTO(staffId);
+                    getStatus();
 
-            console.log(staffId);
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{staff.card.breadcrumb.staff}]]','/staff/card-' + staffId));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
+                }else {
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{staff.card.breadcrumb.staff}]]','/staff'));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+                }
+            });
         });
 
 
@@ -209,6 +219,7 @@
         function getStatus(){
             $('#status').select2({
                 theme: 'bootstrap-5',
+                language: lang,
                 minimumResultsForSearch: -1,
                 ajax: {
                     method: 'GET',
@@ -229,26 +240,29 @@
             });
         }
 
-        $('#role').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-job-title',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+        function allSelect(){
+            $('#role').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-job-title',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
+        }
 
     </script>
 

@@ -34,6 +34,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleSpecification articleSpecification;
     private final MessageSource message;
 
+    private final int DEFAULT_PAGE_SIZE = 10;
+
     @Override
     public Article getArticleById(Long id) throws EntityNotFoundException {
         log.info("Try to search Article by id" + id);
@@ -50,19 +52,16 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Page<ArticleResponse> getAllArticleDto(ArticleRequest request) {
         log.info("Try to get all ArticleResponse by Request");
-        final int DEFAULT_PAGE_SIZE = 10;
         return articleRepository.findAll(articleSpecification.getArticleByRequest(request),
                 PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(ArticleMapper::toArticleResponse);
     }
 
     @Override
-    public List<ArticleResponse> getAllArticleResponseByType(Boolean type) {
+    public Page<ArticleResponse> getAllArticleResponseByType(Integer pageIndex, Boolean type, String name) {
         log.info("Try to get all ArticleResponse by type");
         return articleRepository
-                .findAll(articleSpecification.getArticleByRequest(ArticleRequest.builder().typeQuery(type).build()))
-                .stream()
-                .map(ArticleMapper::toSimpleDto)
-                .toList();
+                .findAll(articleSpecification.getArticleForSelect(name, type), PageRequest.of(pageIndex, DEFAULT_PAGE_SIZE))
+                .map(ArticleMapper::toSimpleDto);
     }
 
     @Override

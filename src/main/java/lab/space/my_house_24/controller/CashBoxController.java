@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lab.space.my_house_24.model.article.ArticleResponse;
 import lab.space.my_house_24.model.bankBook.BankBookResponseForCashBox;
 import lab.space.my_house_24.model.cash_box.CashBoxRequest;
-import lab.space.my_house_24.model.cash_box.CashBoxResponse;
 import lab.space.my_house_24.model.cash_box.CashBoxSaveRequest;
 import lab.space.my_house_24.model.cash_box.CashBoxUpdateRequest;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
@@ -74,13 +73,16 @@ public class CashBoxController {
     }
 
     @PostMapping("/get-all-cash-box")
-    public ResponseEntity<Page<CashBoxResponse>> getAllCashBox(@RequestBody CashBoxRequest request) {
+    public ResponseEntity<?> getAllCashBox(@Valid @RequestBody CashBoxRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
         return ResponseEntity.ok(cashBoxService.getAllCashBoxResponse(request));
     }
 
     @GetMapping("/get-all-owner")
-    public ResponseEntity<List<UserResponseForTable>> getAllUser() {
-        return ResponseEntity.ok(userService.userListForTable());
+    public ResponseEntity<Page<UserResponseForTable>> getAllUser(@RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(userService.userResponseForSelect(page, search));
     }
 
     @PostMapping("/get-excel-cash-boxes")
@@ -121,13 +123,13 @@ public class CashBoxController {
     }
 
     @GetMapping("/get-all-staff")
-    public ResponseEntity<List<StaffResponse>> getAllStaff() {
-        return ResponseEntity.ok(staffService.getAllStaffManager());
+    public ResponseEntity<Page<StaffResponse>> getAllStaff(@RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(staffService.getAllStaffManager(page, search));
     }
 
     @GetMapping("/get-all-bank-book")
-    public ResponseEntity<List<BankBookResponseForCashBox>> getAllBankBook(@RequestParam(name = "id", required = false) Long id) {
-        return ResponseEntity.ok(bankBookService.getBankBookListForCashBoxByUserId(id));
+    public ResponseEntity<Page<BankBookResponseForCashBox>> getAllBankBook(@RequestParam(name = "id", required = false) Long id, @RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(bankBookService.getBankBookListForCashBoxByUserId(page, id, search));
     }
 
     @GetMapping("/get-all-statement-type")
@@ -145,8 +147,8 @@ public class CashBoxController {
     }
 
     @GetMapping("/get-all-article")
-    public ResponseEntity<List<ArticleResponse>> getAllArticle(@RequestParam(name = "type", required = false) Boolean type) {
-        return ResponseEntity.ok(articleService.getAllArticleResponseByType(type));
+    public ResponseEntity<Page<ArticleResponse>> getAllArticle(@RequestParam(name = "type", required = false) Boolean type, @RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(articleService.getAllArticleResponseByType(page, type, search));
     }
 
     @PostMapping("/get-new-cash-box")

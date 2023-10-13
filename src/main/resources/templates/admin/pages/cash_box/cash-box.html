@@ -99,10 +99,10 @@
                     </tr>
                     <tr id="search">
                         <th>
-                            <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');">
+                            <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');" maxlength="15">
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                            <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" maxlength="30">
                         </th>
                         <th>
                             <select id="status" class="mb-1 form-select form-select"
@@ -125,7 +125,7 @@
                             </select>
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="bank-book" oninput="this.value = this.value.replace(/[^0-9\s-]/g, '');">
+                            <input class="form-control" type="text" id="bank-book" oninput="this.value = this.value.replace(/[^0-9\s-]/g, '');" maxlength="15">
                         </th>
                         <th>
                             <select id="type" class="mb-1 form-select form-select"
@@ -165,11 +165,21 @@
         let cashBoxRequest = {};
         cashBoxRequest.pageIndex = 0;
         let filterTimeout;
+        let lang;
 
         var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
         var stompClient = Stomp.over(sockJs1);
 
         $(document).ready(function () {
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
+            });
 
             stompClient.connect({}, (frame) => {
                 console.log('Connected: ' + frame);
@@ -278,6 +288,9 @@
                         '</tr>'
                     );
                 });
+            }).fail(function (response){
+                console.log(response)
+                showToast('error');
             });
 
             function createTable(tableSelector, itemsCount, pagesCount, pageIndex) {
@@ -347,91 +360,120 @@
             showToast('success');
         }
 
-        $('#article').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-article',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+        function allSelect(){
+
+            $('#article').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                maximumInputLength: 100,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-article',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.name
                             };
                         })
-                    };
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
                 }
-            }
-        });
+            });
 
-        $('#status').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-draft',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    console.log(data)
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+            $('#status').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-draft',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        console.log(data)
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
 
-        $('#owner').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-owner',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+            $('#owner').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                maximumInputLength: 100,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-owner',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.name
                             };
                         })
-                    };
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
                 }
-            }
-        });
+            });
 
-        $('#type').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-statement-type',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    console.log(data)
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+            $('#type').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/cash-box/get-all-statement-type',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        console.log(data)
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
+        }
 
         function updateCashBoxRequestAndSend() {
             cashBoxRequest.numberQuery = $('#number').val();

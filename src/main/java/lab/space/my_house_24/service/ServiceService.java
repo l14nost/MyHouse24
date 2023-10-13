@@ -11,7 +11,9 @@ import java.util.List;
 public interface ServiceService {
     Service getServiceById(Long id);
     List<ServiceResponse> getAllServicesDto();
-    List<ServiceResponse> getAllServicesByIsActiveDto();
+
+    Page<ServiceResponse> getAllServicesByIsActiveDto(Integer pageIndex, String search);
+
     List<Service> getAllService();
     void saveService(Service service);
 

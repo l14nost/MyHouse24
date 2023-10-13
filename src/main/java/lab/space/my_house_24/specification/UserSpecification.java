@@ -9,7 +9,6 @@ import lab.space.my_house_24.model.user.UserMainPageRequest;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.parameters.P;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -79,7 +78,5 @@ public class UserSpecification implements Specification<User> {
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         query.orderBy(criteriaBuilder.desc(root.get("id")));
         return predicate;
-
-
     }
 }

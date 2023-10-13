@@ -5,13 +5,17 @@ import lab.space.my_house_24.entity.Unit;
 import lab.space.my_house_24.model.unit.UnitRequest;
 import lab.space.my_house_24.model.unit.UnitSaveRequest;
 import lab.space.my_house_24.repository.UnitRepository;
+import lab.space.my_house_24.specification.UnitSpecification;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +33,9 @@ class UnitServiceImplTest {
     private UnitRepository unitRepository;
 
     @Mock
+    private UnitSpecification unitSpecification;
+
+    @Mock
     private MessageSource message;
 
     @InjectMocks
@@ -42,14 +49,14 @@ class UnitServiceImplTest {
 
     @Test
     void getAllUnitDto() {
-        List<Unit> response = List.of(
+        Page<Unit> response = new PageImpl<>(List.of(
                 Unit.builder().id(1L).name("Test").build(),
                 Unit.builder().id(2L).name("Test").build(),
                 Unit.builder().id(3L).name("Test").build(),
                 Unit.builder().id(4L).name("Test").build()
-        );
-        when(unitRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))).thenReturn(response);
-        assertEquals(response.size(), unitServiceImpl.getAllUnitDto().size());
+        ));
+        when(unitRepository.findAll((Specification<Unit>) any(), any(PageRequest.class))).thenReturn(response);
+        assertEquals(response.getTotalElements(), unitServiceImpl.getAllUnitDtoForSelect(1,"Test").getTotalElements());
     }
 
     @Test
@@ -84,7 +91,7 @@ class UnitServiceImplTest {
         when(unitRepository.findById(anyLong())).thenReturn(Optional.of(Unit.builder().serviceList(List.of()).build()));
         unitServiceImpl.deleteUnitById(1L);
         verify(unitRepository, times(1)).findById(anyLong());
-        verify(unitRepository, times(1)).delete(any());
+        verify(unitRepository, times(1)).delete((Unit) any());
     }
 
     @Test
@@ -94,6 +101,6 @@ class UnitServiceImplTest {
             unitServiceImpl.deleteUnitById(1L);
         });
         verify(unitRepository, times(1)).findById(anyLong());
-        verify(unitRepository, times(0)).delete(any());
+        verify(unitRepository, times(0)).delete((Unit) any());
     }
 }

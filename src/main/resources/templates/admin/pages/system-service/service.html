@@ -113,10 +113,19 @@
         let serviceId;
         let unitRowContent = $('#unit-content');
         let serviceRowContent = $('#service-content');
+        let lang;
 
         $(document).ready(function () {
-            getAllUnit();
-            getAllService();
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                getAllUnit();
+                getAllService();
+            });
         });
 
         $(document).on('click', '.text-danger.unit', function () {
@@ -513,23 +522,34 @@
             });
         }
 
-        function selectUnit(id,unit){
-            $('#service-unit-'+id).select2({
+        function selectUnit(id, unit){
+            $('#service-unit-' + id).select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                language: lang,
+                maximumInputLength: 20,
                 ajax: {
-                    method: 'GET',
-                    url: '/myhouse24-amirb-nikitaf/admin/system-service/get-all-unit',
+                    url: '/myhouse24-amirb-nikitaf/admin/system-service/get-all-unit-for-select',
                     cache: true,
                     delay: 1000,
-                    processResults: function (data) {
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name
-                                };
-                            })
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }

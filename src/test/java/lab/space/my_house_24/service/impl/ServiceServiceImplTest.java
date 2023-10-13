@@ -83,8 +83,8 @@ class ServiceServiceImplTest {
 
     @Test
     void getAllServicesByIsActiveDto() {
-        when(serviceRepository.findAllByIsActiveOrderById(true)).thenReturn(
-                List.of(
+        when(serviceRepository.findAll((Specification<Service>) any(),any(PageRequest.class))).thenReturn(
+                new PageImpl<>(List.of(
                         Service.builder()
                                 .id(1L)
                                 .isActive(true)
@@ -110,9 +110,9 @@ class ServiceServiceImplTest {
                                 .unit(Unit.builder().id(1L).name("Test").build())
                                 .build()
                 )
-        );
-        serviceService.getAllServicesByIsActiveDto();
-        verify(serviceRepository, times(1)).findAllByIsActiveOrderById(true);
+        ));
+        serviceService.getAllServicesByIsActiveDto(1,"Test");
+        verify(serviceRepository, times(1)).findAll((Specification<Service>) any(),any(PageRequest.class));
     }
 
     @Test

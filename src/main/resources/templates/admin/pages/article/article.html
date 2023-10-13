@@ -189,7 +189,7 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                $('#custom-toast').text(response?.responseJSON)
+                $('#custom-toast').text(response?.responseText)
                 showToast('custom');
                 articleId = undefined;
             })

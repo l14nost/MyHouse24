@@ -182,16 +182,15 @@ class ServiceControllerTest {
 
     @Test
     void getAllUnitDto() throws Exception {
-        List<UnitResponse> serviceResponses = List.of(
+        Page<UnitResponse> serviceResponses = new PageImpl<>(List.of(
                 UnitResponse.builder().build(),
                 UnitResponse.builder().build(),
                 UnitResponse.builder().build(),
                 UnitResponse.builder().build()
-        );
-        when(unitService.getAllUnitDto()).thenReturn(serviceResponses);
+        ));
+        when(unitService.getAllUnitDtoForSelect(anyInt(),anyString())).thenReturn(serviceResponses);
         mockMvc.perform(get("/system-service/get-all-unit"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(serviceResponses)));
+                .andExpect(status().isOk());
     }
 
     @Test

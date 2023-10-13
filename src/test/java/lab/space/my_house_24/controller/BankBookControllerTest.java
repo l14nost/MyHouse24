@@ -13,6 +13,7 @@ import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.section.SectionResponseForTable;
 import lab.space.my_house_24.model.user.UserResponseForTable;
 import lab.space.my_house_24.service.*;
+import lab.space.my_house_24.validator.ApartmentValidator;
 import lab.space.my_house_24.validator.BankBookValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +46,9 @@ class BankBookControllerTest {
 
     @MockBean
     private BankBookValidator bankBookValidator;
+
+    @MockBean
+    private ApartmentValidator apartmentValidator;
 
     @MockBean
     private ApartmentService apartmentService;

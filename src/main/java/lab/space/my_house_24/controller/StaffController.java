@@ -10,7 +10,6 @@ import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.StaffValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -51,7 +50,10 @@ public class StaffController {
 
 
     @PostMapping("/get-all-staff")
-    public ResponseEntity<Page<StaffResponse>> getAllStaff(@RequestBody StaffRequest staffRequest) {
+    public ResponseEntity<?> getAllStaff(@Valid @RequestBody StaffRequest staffRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
+        }
         return ResponseEntity.ok(staffService.getAllStaffDto(staffRequest));
     }
 

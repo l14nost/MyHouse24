@@ -104,7 +104,7 @@
           <tr id="search">
             <th></th>
             <th>
-              <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');">
+              <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');" maxlength="15">
             </th>
             <th>
               <select id="status" class="mb-1 form-select form-select"
@@ -114,13 +114,13 @@
               </select>
             </th>
             <th>
-              <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+              <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" maxlength="30">
             </th>
             <th>
-              <input class="form-control" type="text" id="month" oninput="this.value = this.value.replace(/[^a-zA-Z0-9,]/g, '');">
+              <input class="form-control" type="text" id="month" oninput="this.value = this.value.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9, ]/g, '');" maxlength="30">
             </th>
             <th>
-              <input class="form-control" type="text" id="apartment">
+              <input class="form-control" type="text" id="apartment" maxlength="100">
             </th>
             <th>
               <select id="owner" class="mb-1 form-select form-select"
@@ -321,6 +321,9 @@
                   '</tr>'
           );
         });
+      }).fail(function (response){
+        console.log(response)
+        showToast('error');
       });
 
       function createTable(tableSelector, itemsCount, pagesCount, pageIndex) {
