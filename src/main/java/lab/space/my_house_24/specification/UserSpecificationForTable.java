@@ -32,8 +32,6 @@ public class UserSpecificationForTable implements Specification<User> {
         }
         query.orderBy(criteriaBuilder.asc(root.get("lastname")));
 
-        query.orderBy(criteriaBuilder.asc(root.get("lastname")));
-
         return predicate;
 
 

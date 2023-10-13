@@ -314,7 +314,7 @@ class StaffControllerTest {
                 StaffResponseForHouseAdd.builder().build(),
                 StaffResponseForHouseAdd.builder().build()
         );
-        when(staffService.getAllStaffDtoForHouse()).thenReturn(staffResponseForHouseAdds);
+        when(staffService.getAllStaffDtoForHouse("")).thenReturn(staffResponseForHouseAdds);
         mockMvc.perform(get("/staff/get-all-staff-for-house"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(staffResponseForHouseAdds)));
