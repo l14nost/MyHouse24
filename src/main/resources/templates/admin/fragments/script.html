@@ -521,7 +521,7 @@
     }
     $(document).ready ( function(){
         $.ajax({
-            url: "/myhouse24-amirb-nikitaf/admin/staff/get-current-staff-for-header"
+            url: "/myhouse24-amirb-nikitaf/admin/get-current-staff-for-header"
         })
             .done(function(response) {
                 $("#fullName-staff").text(response.fullName);
