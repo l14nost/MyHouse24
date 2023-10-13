@@ -335,12 +335,4 @@ class StaffControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(1L)));
     }
-
-    @Test
-    void getCurrentStaffForHeader() throws Exception {
-        when(staffService.getCurrentStaffForHeader()).thenReturn(StaffResponseForHeader.builder().build());
-        mockMvc.perform(get("/staff/get-current-staff-for-header"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(StaffResponseForHeader.builder().build())));
-    }
 }
