@@ -43,11 +43,11 @@ public class StaffValidator {
                 bindingResult.addError(new FieldError(object, "status", directorResponse));
             }
             if (nonNull(staffUpdateRequest.password()) && director.getId() == staffUpdateRequest.id().longValue()
-                    && !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), director.getPassword())){
+                    && !new BCryptPasswordEncoder().matches(staffUpdateRequest.password(), director.getPassword())) {
                 bindingResult.addError(new FieldError(object, "password", directorResponse));
             }
             if (director.getId() == staffUpdateRequest.id().longValue()
-                    && !Objects.equals(director.getEmail(), staffUpdateRequest.email())){
+                    && !Objects.equals(director.getEmail(), staffUpdateRequest.email())) {
                 bindingResult.addError(new FieldError(object, "email", directorResponse));
             }
         }
