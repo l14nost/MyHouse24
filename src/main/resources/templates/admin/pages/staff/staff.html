@@ -102,8 +102,19 @@
         staffRequest.pageIndex = 0;
         let filterTimeout;
         let inviteRequest ={};
+        let lang;
 
         $(document).ready(function () {
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
+            });
+
             getAllStaff();
             $(document.body).on("click", "tr", function (e) {
                 if (!($(e.target).attr("data-actions") === "data-actions") && !$(e.target).is("svg") && !$(e.target).is("a") && !$(e.target).is("path")) {
@@ -285,49 +296,53 @@
             })
         }
 
-
-        $('#status').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-status',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+        function allSelect(){
+            $('#status').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-status',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
 
 
-        $('#role').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-job-title',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+            $('#role').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/staff/get-all-job-title',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
+        }
+
         function updateStaffRequestAndSend() {
             staffRequest.idQuery = $('#id').val();
             staffRequest.staffQuery = $('#fullName').val();

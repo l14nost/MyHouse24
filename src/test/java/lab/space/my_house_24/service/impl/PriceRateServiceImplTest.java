@@ -11,8 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +30,9 @@ class PriceRateServiceImplTest {
 
     @Mock
     private ServiceService serviceService;
+
+    @Mock
+    private MessageSource message;
 
     @InjectMocks
     private PriceRateServiceImpl priceRateService;
@@ -79,7 +84,7 @@ class PriceRateServiceImplTest {
 
     @Test
     void deletePriceRateById() {
-        when(priceRateRepository.findById(anyLong())).thenReturn(Optional.of(PriceRate.builder().build()));
+        when(priceRateRepository.findById(anyLong())).thenReturn(Optional.of(PriceRate.builder().rate(Rate.builder().priceRateList(List.of(PriceRate.builder().build(), PriceRate.builder().build())).build()).build()));
         priceRateService.deletePriceRateById(1L);
         verify(priceRateRepository, times(1)).findById(anyLong());
         verify(priceRateRepository, times(1)).delete(any());

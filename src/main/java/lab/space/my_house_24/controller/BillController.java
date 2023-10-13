@@ -179,8 +179,8 @@ public class BillController {
     }
 
     @GetMapping("/get-all-services")
-    public ResponseEntity<List<ServiceResponse>> getAllService() {
-        return ResponseEntity.ok(serviceService.getAllServicesByIsActiveDto());
+    public ResponseEntity<Page<ServiceResponse>> getAllService(@RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(serviceService.getAllServicesByIsActiveDto(page, search));
     }
 
     @GetMapping("/get-all-status")

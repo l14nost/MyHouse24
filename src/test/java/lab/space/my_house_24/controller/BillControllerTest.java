@@ -295,14 +295,14 @@ class BillControllerTest {
 
     @Test
     void getAllService() throws Exception {
-        List<ServiceResponse> serviceResponses = List.of(
+        Page<ServiceResponse> serviceResponses = new PageImpl<>(List.of(
                 ServiceResponse.builder().build(),
                 ServiceResponse.builder().build(),
                 ServiceResponse.builder().build(),
                 ServiceResponse.builder().build()
-        );
-        when(serviceService.getAllServicesByIsActiveDto()).thenReturn(serviceResponses);
-        mockMvc.perform(get("/bills/get-all-services"))
+        ));
+        when(serviceService.getAllServicesByIsActiveDto(anyInt(),anyString())).thenReturn(serviceResponses);
+        mockMvc.perform(get("/bills/get-all-services").param("page","1").param("search", "Test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(serviceResponses)));
     }

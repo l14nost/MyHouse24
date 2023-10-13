@@ -32,6 +32,7 @@ public class ServiceServiceImpl implements ServiceService {
     private final ServiceRepository serviceRepository;
     private final UnitService unitService;
     private final MessageSource message;
+    private final int DEFAULT_PAGE_SIZE = 10;
 
     @Override
     public lab.space.my_house_24.entity.Service getServiceById(Long id) throws EntityNotFoundException {
@@ -49,11 +50,11 @@ public class ServiceServiceImpl implements ServiceService {
     }
 
     @Override
-    public List<ServiceResponse> getAllServicesByIsActiveDto() {
+    public Page<ServiceResponse> getAllServicesByIsActiveDto(Integer pageIndex, String search) {
         log.info("Try to get All Active Service and convert in Dto");
-        return serviceRepository.findAllByIsActiveOrderById(true)
-                .stream()
-                .map(ServiceMapper::toDto).collect(Collectors.toList());
+        ServiceSpecificationForSelect serviceSpecificationForSelect = ServiceSpecificationForSelect.builder().search(search).isActive(true).build();
+        return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(pageIndex, DEFAULT_PAGE_SIZE))
+                .map(ServiceMapper::toDto);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public Page<ServiceResponseForSelect> serviceResponseForSelect(Integer page, String search) {
         ServiceSpecificationForSelect serviceSpecificationForSelect = ServiceSpecificationForSelect.builder().search(search).build();
-        return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(page, 5)).map(ServiceMapper::entityToDtoForSelect);
+        return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(page, DEFAULT_PAGE_SIZE)).map(ServiceMapper::entityToDtoForSelect);
     }
 
     @Override

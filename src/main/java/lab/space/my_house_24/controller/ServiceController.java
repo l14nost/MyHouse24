@@ -82,6 +82,11 @@ public class ServiceController {
         }
     }
 
+    @GetMapping("/get-all-unit-for-select")
+    public ResponseEntity<Page<UnitResponse>> getAllUnitDtoForSelect(@RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(unitService.getAllUnitDtoForSelect(page, search));
+    }
+
     @GetMapping("/get-all-unit")
     public ResponseEntity<List<UnitResponse>> getAllUnitDto() {
         return ResponseEntity.ok(unitService.getAllUnitDto());

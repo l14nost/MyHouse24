@@ -72,7 +72,18 @@
     <script>
         let articleId;
         let typeReq;
+        let lang;
+
         $(document).ready(function () {
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
+            });
             typeReq = false;
             if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
@@ -82,10 +93,6 @@
             }else {
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
             }
-
-
-
-            console.log(articleId);
         });
 
 
@@ -135,26 +142,29 @@
             })
         }
 
-        $('#type').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/payment-items/all-article-type',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+        function allSelect(){
+            $('#type').select2({
+                theme: 'bootstrap-5',
+                language: lang,
+                minimumResultsForSearch: -1,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/payment-items/all-article-type',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
+        }
     </script>
 
 </th:block>

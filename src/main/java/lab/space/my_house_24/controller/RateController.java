@@ -23,8 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("rates")
 @RequiredArgsConstructor
@@ -85,8 +83,8 @@ public class RateController {
     }
 
     @GetMapping("/get-all-services")
-    public ResponseEntity<List<ServiceResponse>> getAllServicesDto() {
-        return ResponseEntity.ok(serviceService.getAllServicesByIsActiveDto());
+    public ResponseEntity<Page<ServiceResponse>> getAllServicesDto(@RequestParam Integer page, @RequestParam String search) {
+        return ResponseEntity.ok(serviceService.getAllServicesByIsActiveDto(page, search));
     }
 
     @PutMapping("/update-rate")
@@ -124,8 +122,9 @@ public class RateController {
         try {
             priceRateService.deletePriceRateById(id);
             return ResponseEntity.ok().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
     }
 

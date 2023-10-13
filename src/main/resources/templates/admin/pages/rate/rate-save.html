@@ -85,24 +85,33 @@
         let serviceSelectCount = 0;
         let serviceId;
         let serviceRowContent = $('#service-row');
+        let lang;
 
         $(document).ready(function () {
-            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                if (new URL(window.location.href).pathname.split("-")[3] !== "copy"){
-                    rateId = new URL(window.location.href).pathname.split("-").pop();
-                    getRate(rateId);
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                    if (new URL(window.location.href).pathname.split("-")[3] !== "copy"){
+                        rateId = new URL(window.location.href).pathname.split("-").pop();
+                        getRate(rateId);
+                    }else {
+                        copyId =new URL(window.location.href).pathname.split("-").pop();
+                        $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
+                        $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates/card-' + rateId));
+                        $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+                        getRate(copyId);
+                    }
                 }else {
-                    copyId =new URL(window.location.href).pathname.split("-").pop();
                     $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates/card-' + rateId));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates'));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
-                    getRate(copyId);
                 }
-            }else {
-                $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates'));
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
-            }
+            });
         });
 
         $(document).on('click', '.text-danger.service', function () {
@@ -344,9 +353,14 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                showToast('error');
-                console.log(serviceId)
+                if (response?.responseJSON?.message){
+                    $('#custom-toast').text(response?.responseJSON?.message);
+                    showToast('custom');
+                }else {
+                    showToast('error');
+                }
                 if (response) validResponse($('#service-row-' + serviceId), response.responseText);
+
                 serviceId = undefined;
             })
         }
@@ -355,21 +369,32 @@
             let select = $('#service-'+id);
             select.select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                language: lang,
+                maximumInputLength: 40,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/rates/get-all-services',
                     cache: true,
                     delay: 1000,
-                    processResults: function (data) {
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name,
-                                    unitName: item.unit.name
-                                };
-                            })
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name,
+                                unitName: item.unit.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
