@@ -32,7 +32,7 @@ public class HouseController {
     }
 
     @PostMapping("/get-all-house")
-    public ResponseEntity getAllHouse(@RequestBody HouseRequestForMainPage houseRequestForMainPage){
+    public ResponseEntity getAllHouse(@RequestBody @Valid HouseRequestForMainPage houseRequestForMainPage){
         return ResponseEntity.ok().body(houseService.findAllForMain(houseRequestForMainPage));
     }
 
@@ -61,7 +61,7 @@ public class HouseController {
 
     @PostMapping("/add-house")
     public ResponseEntity addHouse(@ModelAttribute @Valid HouseRequestForAddPage houseRequestForAddPage, BindingResult result) {
-        if (!houseRequestForAddPage.userList().isEmpty()) {
+        if (houseRequestForAddPage.userList() !=null && !houseRequestForAddPage.userList().isEmpty()) {
             houseValidator.uniqueStaffForHouse(houseRequestForAddPage.userList(), result);
         }
         if (result.hasErrors()) {
@@ -82,10 +82,8 @@ public class HouseController {
 
     @PutMapping("/edit-house/{id}")
     public ResponseEntity editHouse(@PathVariable Long id, @ModelAttribute @Valid HouseRequestForEditPage houseRequestForEditPage, BindingResult result){
-        if (houseRequestForEditPage.userList() != null ){
-            if (!houseRequestForEditPage.userList().isEmpty()) {
-                houseValidator.uniqueStaffForHouse(houseRequestForEditPage.userList(), result);
-            }
+        if (houseRequestForEditPage.userList() != null && !houseRequestForEditPage.userList().isEmpty() ){
+            houseValidator.uniqueStaffForHouse(houseRequestForEditPage.userList(), result);
         }
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));

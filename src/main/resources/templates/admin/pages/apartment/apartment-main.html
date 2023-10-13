@@ -64,11 +64,10 @@
                     <tr id="searchApartmentTable">
                         <form id="filter">
                         <th>
-                            <input class="form-control" type="text" name="number" style="width: 70px;">
+                            <input class="form-control" type="text" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');" name="number" style="width: 70px;" maxlength="10" >
                         </th>
-                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house" style="min-width: 200px">
                             <option selected=""></option>
-                            <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}"></option>
                         </select></th>
                         <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="section" id="section">
                             <option selected=""></option>
@@ -203,8 +202,32 @@
             $("#house").select2({
                 theme: 'bootstrap-5',
                 language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: 7
+                ajax: {
+                    url: "/myhouse24-amirb-nikitaf/admin/houses/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.name,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
             $("#owner").select2({
                 theme: 'bootstrap-5',

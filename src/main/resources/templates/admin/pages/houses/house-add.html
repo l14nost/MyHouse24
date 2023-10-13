@@ -552,8 +552,7 @@
                     if (keys === "floorNameList"){
                         var buttonElement = document.querySelector("#nav-floor-tab");
                         buttonElement.style.color = "red";
-                        var imgs3 = document.querySelectorAll('.for-valid-floor');
-                        validResponse("#"+imgs3[0].id, values);
+                        validResponse("#floorContainer", values);
                     }
                     if (regex.test(keys)){
                         var buttonElement = document.querySelector("#nav-floor-tab");
@@ -572,8 +571,7 @@
                     if (keys === "sectionNameList"){
                         var buttonElement = document.querySelector("#nav-section-tab");
                         buttonElement.style.color = "red";
-                        var imgs3 = document.querySelectorAll('.for-valid-section');
-                        validResponse("#"+imgs3[0].id, values);
+                        validResponse("#sectionContainer", values);
                     }
                     if (regexSection.test(keys)){
                         var buttonElement = document.querySelector("#nav-section-tab");
@@ -592,8 +590,7 @@
                     if (keys === "userList"){
                         var buttonElement = document.querySelector("#nav-users-tab");
                         buttonElement.style.color = "red";
-                        var imgs3 = document.querySelectorAll('.for-valid-user');
-                        validResponse("#"+imgs3[0].id, values);
+                        validResponse("#userContainer", values);
                     }
                     if (regexUser.test(keys)){
                         var buttonElement = document.querySelector("#nav-users-tab");

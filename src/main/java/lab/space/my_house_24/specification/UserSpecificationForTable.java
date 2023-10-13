@@ -34,6 +34,7 @@ public class UserSpecificationForTable implements Specification<User> {
         else {
             predicate = criteriaBuilder.greaterThan(root.get("id"),0);
         }
+        query.orderBy(criteriaBuilder.asc(root.get("lastname")));
 
         return predicate;
 
