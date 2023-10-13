@@ -70,7 +70,7 @@
                                 <option selected=""></option>
                             </select></th>
                             <th>
-                                <input class="form-control" type="number" name="apartment" style="width: 100px">
+                                <input class="form-control" type="text" name="apartment" style="width: 100px" maxlength="10" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');">
                             </th>
                             <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="service" id="service">
                                 <option selected=""></option>

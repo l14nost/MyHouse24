@@ -57,6 +57,9 @@ public class Apartment {
     private List<MastersApplication> mastersApplicationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    private List<Message> messageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private List<MeterReading> meterReadingList = new ArrayList<>();
 
     @PreRemove

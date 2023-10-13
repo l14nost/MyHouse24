@@ -37,17 +37,16 @@
                             <div class="row">
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{apartment.add.number}"></label>
-                                    <input type="number" class="form-control" id="number"  name="number" th:value="${apartment.number()}" >
+                                    <input type="number" class="form-control" id="number"  name="number" th:value="${apartment.number()}" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{apartment.add.area}"></label>
-                                    <input type="number" class="form-control" id="area"  name="area"  th:value="${apartment.area()}">
+                                    <input type="number" class="form-control" id="area"  name="area"  th:value="${apartment.area()}" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 </div>
                                 <div class="form-group" id="houseResponse">
                                     <label class="form-label" th:text="#{apartment.add.house}"></label>
                                     <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
                                         <option selected=""></option>
-                                        <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}" th:selected="${house.id() == apartment.house().id()}"></option>
                                     </select>
                                 </div>
                                 <div class="form-group" id="sectionResponse">
@@ -85,7 +84,7 @@
                                 <label class="form-label" th:text = "#{apartment.add.bank.book}"></label>
                                 <input type="text" class="form-control" id="bankBook"  name="bankBook" th:value = "${apartment.bankBook().number()}" oninput="applyMask(this);">
                                 <div style="margin-top: 10px">
-                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" style=" width: 160px">
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" style=" width: 200px">
                                         <option selected=""></option>
                                         <option th:each="bankBook:${bankBookList}" th:text="${bankBook.number()}" th:value = "${bankBook.number()}" th:selected="${bankBook.id() == apartment.bankBook().id()}"></option>
                                     </select>
@@ -133,8 +132,32 @@
             $("#house").select2({
                 theme: 'bootstrap-5',
                 language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: 7
+                ajax: {
+                    url: "/myhouse24-amirb-nikitaf/admin/houses/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.name,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
             $("#owner").select2({
                 theme: 'bootstrap-5',
@@ -258,6 +281,12 @@
         }
 
         $(document).ready(function (){
+            let check = true;
+            $('#bankBook').on('input', function() {
+                check = false;
+                $('#bankBookSelect').val(0).trigger("change");
+                check = true;
+            });
             $.ajax({
                 url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
@@ -267,8 +296,11 @@
                 select2("en");
             })
             $("#bankBookSelect").on("change", function (){
-                var bankBook = document.getElementById("bankBook");
-                bankBook.value = this.value;
+
+                if (check) {
+                    var bankBook = document.getElementById("bankBook");
+                    bankBook.value = this.value;
+                }
             })
             $("#owner").val([[${apartment.owner().id()}]]).trigger("change");
 

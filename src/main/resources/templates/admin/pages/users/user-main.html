@@ -76,22 +76,21 @@
                     <tr id="searchUserTable">
                         <form id="filter">
                         <th>
-                            <input class="form-control" type="text" name="id" id="id" style="width: 70px;">
+                            <input class="form-control" type="text" name="id" id="id" style="width: 70px;" maxlength="10" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');">
                         </th>
                         <th>
-                            <input class="form-control" type="text" name="fullName" >
+                            <input class="form-control" type="text" name="fullName" maxlength="50">
                         </th>
                         <th>
-                            <input class="form-control" type="text" name="number" style="width: 100px">
+                            <input class="form-control" type="text" name="number" style="width: 100px" maxlength="20" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');">
                         </th>
-                        <th><input class="form-control" type="text" name="email"></th>
-                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="house" name="house" style="width: 100px">
+                        <th><input class="form-control" type="text" name="email" maxlength="200"></th>
+                        <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="house" name="house" style="min-width: 130px">
                             <option value=""></option>
-                            <option th:each="house:${houseList}" th:text="${house.name()}" th:value="${house.name()}"></option>
                         </select></th>
 
                         <th>
-                            <input class="form-control" type="text" name="apartmentNumber">
+                            <input class="form-control" type="text" name="apartmentNumber" maxlength="10" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');">
                         </th>
                         <th>
                             <div class="input-group">
@@ -223,8 +222,32 @@
             $("#house").select2({
                 theme: 'bootstrap-5',
                 language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: 7
+                ajax: {
+                    url: "/myhouse24-amirb-nikitaf/admin/houses/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.name,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
             $("#duty").select2({
                 theme: 'bootstrap-5',

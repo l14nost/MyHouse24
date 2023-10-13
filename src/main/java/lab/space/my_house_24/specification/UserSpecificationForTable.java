@@ -20,16 +20,17 @@ public class UserSpecificationForTable implements Specification<User> {
     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         query.distinct(true);
         Predicate predicate;
-        if (!search.isEmpty()&&search!=null) {
+        if (!search.isEmpty()) {
             predicate = criteriaBuilder.or(
-                    criteriaBuilder.like(root.get("firstname"), search),
-                    criteriaBuilder.like(root.get("lastname"), search),
-                    criteriaBuilder.like(root.get("surname"), search)
+                    criteriaBuilder.like(root.get("firstname"), "%"+search+"%"),
+                    criteriaBuilder.like(root.get("lastname"), "%"+search+"%"),
+                    criteriaBuilder.like(root.get("surname"), "%"+search+"%")
             );
         }
         else {
             predicate = criteriaBuilder.greaterThan(root.get("id"),0);
         }
+        query.orderBy(criteriaBuilder.asc(root.get("lastname")));
 
         query.orderBy(criteriaBuilder.asc(root.get("lastname")));
 

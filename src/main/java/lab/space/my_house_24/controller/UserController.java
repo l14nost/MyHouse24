@@ -30,7 +30,6 @@ public class UserController {
     @GetMapping({"/", ""})
     public ModelAndView userMainPage() {
         ModelAndView modelAndView = new ModelAndView("admin/pages/users/user-main");
-        modelAndView.addObject("houseList", houseService.houseListForTable());
         return modelAndView;
     }
 

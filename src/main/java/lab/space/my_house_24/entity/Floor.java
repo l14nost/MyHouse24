@@ -26,7 +26,7 @@ public class Floor {
     @ManyToOne
     private House house;
 
-    @OneToMany(mappedBy = "floor")
+    @OneToMany(mappedBy = "floor", cascade = CascadeType.ALL)
     private List<Apartment> apartmentList = new ArrayList<>();
 
 }
