@@ -2,11 +2,9 @@ package lab.space.my_house_24.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import lab.space.my_house_24.model.rate.RateRequest;
-import lab.space.my_house_24.model.rate.RateResponse;
-import lab.space.my_house_24.model.rate.RateSaveRequest;
-import lab.space.my_house_24.model.rate.RateUpdateRequest;
+import lab.space.my_house_24.model.rate.*;
 import lab.space.my_house_24.model.service.ServiceResponse;
+import lab.space.my_house_24.model.staff.StaffResponseForHouseAdd;
 import lab.space.my_house_24.service.PriceRateService;
 import lab.space.my_house_24.service.RateService;
 import lab.space.my_house_24.service.ServiceService;
@@ -22,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("rates")
@@ -137,5 +137,12 @@ public class RateController {
             if (e instanceof EntityNotFoundException) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
         }
+    }
+
+
+    @GetMapping("/get-all-rate-for-select")
+    @ResponseBody
+    public Page<RateResponseForTable> getAllStaffForHousePage(@RequestParam(required = false, defaultValue = "0")Integer page, @RequestParam(required = false, defaultValue = "") String search) {
+        return rateService.getAllRateDtoForSelect(search, page);
     }
 }

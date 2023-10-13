@@ -137,7 +137,7 @@
                         params.page = params.page || 0;
                         var mappedResults = data.content.map(function(item) {
                             return {
-                                id: item.name,
+                                id: item.id,
                                 text: item.name
                             };
                         });
@@ -265,8 +265,32 @@
             $("#rate").select2({
                 theme: 'bootstrap-5',
                 language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: Infinity
+                ajax: {
+                    url: "/myhouse24-amirb-nikitaf/admin/rates/get-all-rate-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
         }
 

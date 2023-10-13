@@ -214,7 +214,7 @@
                         params.page = params.page || 0;
                         var mappedResults = data.content.map(function(item) {
                             return {
-                                id: item.name,
+                                id: item.id,
                                 text: item.name
                             };
                         });
@@ -369,6 +369,14 @@
                 }
             });
             $('#balance').on('select2:select', function () {
+                var formData = new FormData(form);
+                for (var pair of formData.entries()){
+                    if (filterData.get(pair[0])!==pair[1]){
+                        filter();
+                    }
+                }
+            });
+            $('#owner').on('select2:select', function () {
                 var formData = new FormData(form);
                 for (var pair of formData.entries()){
                     if (filterData.get(pair[0])!==pair[1]){
