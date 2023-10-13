@@ -30,4 +30,6 @@ public interface RateService {
     void deleteRateById(Long id);
 
     List<Rate> getAllRate();
+
+    Page<RateResponseForTable> getAllRateDtoForSelect(String search, Integer page);
 }

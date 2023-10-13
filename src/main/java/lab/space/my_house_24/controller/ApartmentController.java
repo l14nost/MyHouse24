@@ -36,9 +36,7 @@ public class ApartmentController {
 
     @GetMapping({"/", ""})
     public ModelAndView apartmentMain() {
-        ModelAndView modelAndView = new ModelAndView("admin/pages/apartment/apartment-main");
-        modelAndView.addObject("houseList", houseService.houseListForTable());
-        return modelAndView;
+        return new ModelAndView("admin/pages/apartment/apartment-main");
     }
 
     @PostMapping("/get-all-apartments")
@@ -68,7 +66,6 @@ public class ApartmentController {
 
     @GetMapping("/add-apartment")
     public String addApartmentPage(Model model) {
-        model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
         return "admin/pages/apartment/apartment-add";
@@ -94,7 +91,6 @@ public class ApartmentController {
     @GetMapping("/edit-apartment/{id}")
     public String editApartmentPage(@PathVariable Long id, Model model) {
         model.addAttribute("apartment", apartmentService.findByIdApartment(id));
-        model.addAttribute("houseList", houseService.houseListForTable());
         model.addAttribute("rateList", rateService.rateListForTable());
         model.addAttribute("bankBookList", bankBookService.bankBookListForTable());
         model.addAttribute("id", id);

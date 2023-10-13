@@ -71,7 +71,7 @@
                             <input type="hidden" th:value="${idApartment}" name="idApartment">
                             <input type="hidden" th:value="${idService}" name="idService">
                         <th>
-                           <input class="form-control" type="number" name="id" style="width: 70px">
+                           <input class="form-control" type="text" name="id" style="width: 70px" maxlength="10" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');">
                         </th>
                         <th><select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="status" id="status">
                            <option selected=""></option>

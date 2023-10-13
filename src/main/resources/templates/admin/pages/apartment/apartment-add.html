@@ -37,17 +37,16 @@
                             <div class="row">
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{apartment.add.number}"></label>
-                                    <input type="number" class="form-control" id="number"  name="number">
+                                    <input type="number" class="form-control" id="number"  name="number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" >
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" th:text="#{apartment.add.area}"></label>
-                                    <input type="number" class="form-control" id="area"  name="area">
+                                    <input type="number" class="form-control" id="area"  name="area" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
                                 </div>
                                 <div class="form-group" id="houseResponse">
                                     <label class="form-label" th:text="#{apartment.add.house}"></label>
                                     <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" name="house" id="house">
                                         <option selected=""></option>
-                                        <option th:each="house:${houseList}" th:text="${house.name()}" th:value = "${house.id()}"></option>
                                     </select>
                                 </div>
                                 <div class="form-group" id="sectionResponse">
@@ -82,7 +81,7 @@
                                 <label class="form-label" th:text = "#{apartment.add.bank.book}"></label>
                                 <input type="text" class="form-control" id="bankBook"  name="bankBook" oninput="applyMask(this);">
                                 <div style="margin-top: 10px">
-                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" name="bankBookSelect" style=" width: 160px">
+                                    <select class="mb-1 form-select form-select" aria-label=".form-select-lg example" id="bankBookSelect" name="bankBookSelect" style=" width: 200px">
                                         <option selected=""></option>
                                         <option th:each="bankBook:${bankBookList}" th:text="${bankBook.number()}" th:value = "${bankBook.number()}"></option>
                                     </select>
@@ -120,13 +119,38 @@
 </th:block>
 <th:block layout:fragment="extra-script">
     <script>
+
         function select2(lang){
             var defaultSelect = " ";
             $("#house").select2({
                 theme: 'bootstrap-5',
                 language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: 7
+                ajax: {
+                    url: "/myhouse24-amirb-nikitaf/admin/houses/get-houses-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
             $("#owner").select2({
                 theme: 'bootstrap-5',
@@ -241,12 +265,42 @@
             $("#rate").select2({
                 theme: 'bootstrap-5',
                 language: lang,
-                placeholder: defaultSelect,
-                minimumResultsForSearch: Infinity
+                ajax: {
+                    url: "/myhouse24-amirb-nikitaf/admin/rates/get-all-rate-for-select",
+                    data: function (param) {
+                        return {
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        var mappedResults = data.content.map(function(item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        });
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page<data.totalPages-1
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: defaultSelect
             });
         }
 
         $(document).ready(function (){
+            let check = true;
+            $('#bankBook').on('input', function() {
+                check = false;
+                $('#bankBookSelect').val(0).trigger("change");
+                check = true;
+            });
             $.ajax({
                 url: "/myhouse24-amirb-nikitaf/admin/get-locale"
             })
@@ -256,8 +310,10 @@
                 select2("en");
             })
             $("#bankBookSelect").on("change", function (){
-                var bankBook = document.getElementById("bankBook");
-                bankBook.value = this.value;
+                if (check) {
+                    var bankBook = document.getElementById("bankBook");
+                    bankBook.value = this.value;
+                }
             })
 
         });

@@ -3,6 +3,7 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Rate;
 import lab.space.my_house_24.mapper.RateMapper;
+import lab.space.my_house_24.mapper.StaffMapper;
 import lab.space.my_house_24.model.price_rate.PriceRateRequest;
 import lab.space.my_house_24.model.rate.*;
 import lab.space.my_house_24.repository.RateRepository;
@@ -121,5 +122,10 @@ public class RateServiceImpl implements RateService {
     @Override
     public List<Rate> getAllRate() {
         return rateRepository.findAll();
+    }
+
+    @Override
+    public Page<RateResponseForTable> getAllRateDtoForSelect(String search, Integer page) {
+        return rateRepository.findAll(rateSpecification.getRateForSelect(search), PageRequest.of(page, 7)).map(RateMapper::entityToDtoForTable);
     }
 }

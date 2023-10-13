@@ -110,24 +110,24 @@
                         </div>
                     </div>
                         <div class="col-md-4">
-                        <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image1()}" style="width: 100%; height: 50%" id="img1">
+                        <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image1()}" style="width: 100%; height: 50%" id="img1" alt="img1">
                     </div>
                         <div class="col-md-4">
                         <div class="row" style="height: 50%; align-items: center">
                             <div class="row" style=" height: 45%">
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image2()}" style="width: 100%; height: 100%" id="img2">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image2()}" style="width: 100%; height: 100%" id="img2" alt="img2">
                                 </div>
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image3()}" style="width: 100%; height: 100%" id="img3">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image3()}" style="width: 100%; height: 100%" id="img3" alt="img3">
                                 </div>
                             </div>
                             <div class="row " style=" height: 50%; padding-top: 5%">
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image4()}" style="width: 100%; height: 100%" id="img4">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image4()}" style="width: 100%; height: 100%" id="img4" alt="img4">
                                 </div>
                                 <div class="col-md-6">
-                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image5()}" style="width: 100%; height: 100%" id="img5">
+                                    <img class="error-photo" th:src="${'/myhouse24-amirb-nikitaf/admin/files/'+house.image5()}" style="width: 100%; height: 100%" id="img5" alt="img5">
                                 </div>
                             </div>
                         </div>
@@ -501,6 +501,11 @@
             cache: true,
             ajax: {
                 url: "/myhouse24-amirb-nikitaf/admin/staff/get-all-staff-for-house",
+                data: function (param) {
+                    return {
+                        search: param.term || ""
+                    }
+                },
                 processResults: function (data) {
                     return {
                         results: data.map(function (item) {
@@ -586,8 +591,7 @@
                     if (keys === "floorNameList"){
                         var buttonElement = document.querySelector("#nav-floor-tab");
                         buttonElement.style.color = "red";
-                        var imgs3 = document.querySelectorAll('.for-valid-floor');
-                        validResponse("#"+imgs3[0].id, values);
+                        validResponse("#floorContainer", values);
                     }
                     if (regex.test(keys)){
                         var buttonElement = document.querySelector("#nav-floor-tab");
@@ -606,8 +610,7 @@
                     if (keys === "sectionNameList"){
                         var buttonElement = document.querySelector("#nav-section-tab");
                         buttonElement.style.color = "red";
-                        var imgs3 = document.querySelectorAll('.for-valid-section');
-                        validResponse("#"+imgs3[0].id, values);
+                        validResponse("#sectionContainer", values);
                     }
                     if (regexSection.test(keys)){
                         var buttonElement = document.querySelector("#nav-section-tab");
@@ -626,8 +629,7 @@
                     if (keys === "userList"){
                         var buttonElement = document.querySelector("#nav-users-tab");
                         buttonElement.style.color = "red";
-                        var imgs3 = document.querySelectorAll('.for-valid-user');
-                        validResponse("#"+imgs3[0].id, values);
+                        validResponse("#userContainer", values);
                     }
                     if (regexUser.test(keys)){
                         var buttonElement = document.querySelector("#nav-users-tab");

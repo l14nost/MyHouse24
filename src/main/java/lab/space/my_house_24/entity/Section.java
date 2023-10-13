@@ -26,7 +26,7 @@ public class Section {
     @ManyToOne
     private House house;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(mappedBy = "section", cascade = CascadeType.ALL)
     private List<Apartment> apartmentList = new ArrayList<>();
 
 }

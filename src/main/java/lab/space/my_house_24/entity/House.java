@@ -83,7 +83,7 @@ public class House {
     private Set<Staff> staffList = new HashSet<>();
 
     @PreRemove
-    public void staffList(){
+    public void removeAllFromStaffList(){
         for (Staff staff: staffList){
             staff.getHouseList().remove(this);
             staffList.remove(staff);

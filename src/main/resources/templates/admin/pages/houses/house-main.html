@@ -61,13 +61,13 @@
                     <tr id="searchApartmentTable">
                         <form id="filter">
                             <th style="width: 15%;">
-                                <input class="form-control" type="number" name="id" >
+                                <input class="form-control" type="text" name="id" maxlength="10" oninput="this.value = this.value.replace(/[^0-9\s]/g, '');">
                             </th>
                             <th style="width: 35%;">
-                                <input class="form-control" type="text" name="name" >
+                                <input class="form-control" type="text" name="name" maxlength="100">
                             </th>
                             <th style="width: 35%;">
-                                <input class="form-control" type="text" name="address" >
+                                <input class="form-control" type="text" name="address" maxlength="100">
                             </th>
                         </form>
                         <th style="width: 10%;">

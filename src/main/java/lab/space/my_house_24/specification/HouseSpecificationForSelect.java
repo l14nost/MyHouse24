@@ -25,6 +25,7 @@ public class HouseSpecificationForSelect implements Specification<House> {
         query.distinct(true);
         List<Predicate> predicates = new ArrayList<>();
         Predicate predicate = criteriaBuilder.and(criteriaBuilder.like(root.get("name"), "%"+search+"%"));
+        query.orderBy(criteriaBuilder.asc(root.get("name")));
         return predicate;
 
 

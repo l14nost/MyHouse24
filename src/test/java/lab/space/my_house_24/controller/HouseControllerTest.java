@@ -139,7 +139,7 @@ class HouseControllerTest {
     @Test
     void editHousePage() throws Exception {
         when(houseService.findByIdForEdit(1L)).thenReturn(HouseResponseForEdit.builder().name("").build());
-        when(staffService.getAllStaffDtoForHouse()).thenReturn(List.of());
+        when(staffService.getAllStaffDtoForHouse("")).thenReturn(List.of());
         mockMvc.perform(MockMvcRequestBuilders.get("/houses/edit-house/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/pages/houses/house-edit"));

@@ -32,7 +32,7 @@ public class HouseController {
     }
 
     @PostMapping("/get-all-house")
-    public ResponseEntity getAllHouse(@RequestBody HouseRequestForMainPage houseRequestForMainPage){
+    public ResponseEntity getAllHouse(@RequestBody @Valid HouseRequestForMainPage houseRequestForMainPage){
         return ResponseEntity.ok().body(houseService.findAllForMain(houseRequestForMainPage));
     }
 
@@ -61,7 +61,7 @@ public class HouseController {
 
     @PostMapping("/add-house")
     public ResponseEntity addHouse(@ModelAttribute @Valid HouseRequestForAddPage houseRequestForAddPage, BindingResult result) {
-        if (!houseRequestForAddPage.userList().isEmpty()) {
+        if (houseRequestForAddPage.userList() !=null && !houseRequestForAddPage.userList().isEmpty()) {
             houseValidator.uniqueStaffForHouse(houseRequestForAddPage.userList(), result);
         }
         if (result.hasErrors()) {
@@ -76,16 +76,14 @@ public class HouseController {
     public ModelAndView editHousePage(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("admin/pages/houses/house-edit");
         modelAndView.addObject("house", houseService.findByIdForEdit(id));
-        modelAndView.addObject("staffList", staffService.getAllStaffDtoForHouse());
+        modelAndView.addObject("staffList", staffService.getAllStaffDtoForHouse(""));
         return modelAndView;
     }
 
     @PutMapping("/edit-house/{id}")
     public ResponseEntity editHouse(@PathVariable Long id, @ModelAttribute @Valid HouseRequestForEditPage houseRequestForEditPage, BindingResult result){
-        if (houseRequestForEditPage.userList() != null ){
-            if (!houseRequestForEditPage.userList().isEmpty()) {
-                houseValidator.uniqueStaffForHouse(houseRequestForEditPage.userList(), result);
-            }
+        if (houseRequestForEditPage.userList() != null && !houseRequestForEditPage.userList().isEmpty() ){
+            houseValidator.uniqueStaffForHouse(houseRequestForEditPage.userList(), result);
         }
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(result));
