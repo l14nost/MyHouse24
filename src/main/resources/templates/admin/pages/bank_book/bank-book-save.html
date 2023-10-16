@@ -101,22 +101,33 @@
 
         let houseId = undefined;
         let sectionId = undefined;
-        let bankBookId = undefined
+        let bankBookId = undefined;
+        let lang;
 
         $(document).ready(function () {
-            newOwnerContent('-');
-            newPhoneContent('-');
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
 
-            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                bankBookId = new URL(window.location.href).pathname.split("-").pop()
-                getBankBookResponse(bankBookId);
-            }else {
-                $("#breadcrumb-title").append('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]', '/bank-books'));
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+                if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                    bankBookId = new URL(window.location.href).pathname.split("-").pop()
+                    getBankBookResponse(bankBookId);
+                }else {
+                    $("#breadcrumb-title").append('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]', '/bank-books'));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
 
-                selectHouse();
-            }
+                    newOwnerContent('-');
+                    newPhoneContent('-');
+
+                    selectHouse();
+                }
+            })
         });
 
         function getBankBookResponse(id) {
@@ -181,44 +192,59 @@
             })
         }
 
-        $('#status').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-status',
-                cache: true,
-                delay: 1000,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-        function selectHouse(house) {
-            $('#house').select2({
+        function allSelect(){
+            selectApartment();
+            $('#status').select2({
                 theme: 'bootstrap-5',
                 minimumResultsForSearch: -1,
+                language: lang,
                 ajax: {
                     method: 'GET',
-                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-house',
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-status',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
                         return {
                             results: data.map(function (item) {
                                 return {
-                                    id: item.id,
-                                    text: item.name
+                                    id: item.name,
+                                    text: item.value
                                 };
                             })
+                        };
+                    }
+                }
+            });
+        }
+
+        function selectHouse(house) {
+            $('#house').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 60,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-house',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -231,20 +257,31 @@
         function selectSection(houseId, section) {
             $('#section').select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                maximumInputLength: 15,
+                language: lang,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-section/' + houseId,
                     cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
+                    delay: 1500,
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name
-                                };
-                            })
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -254,17 +291,26 @@
             }
         }
 
-        $('#apartment').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: Infinity,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment',
-                cache: true,
-                delay: 1000,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+        function selectApartment(apartment) {
+            $('#apartment').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 15,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            search : param.term || "",
+                            houseId: houseId,
+                            sectionId: sectionId
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.number,
@@ -273,31 +319,11 @@
                                 section: item.section
                             };
                         })
-                    };
-                }
-            }
-        });
-
-        function selectApartment(apartment) {
-            $('#apartment').select2({
-                theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
-                ajax: {
-                    method: 'GET',
-                    url: sectionId ? '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment-' + houseId + '/' + sectionId : '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-apartment-' + houseId,
-                    cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.number,
-                                    owner: item.owner,
-                                    house: item.house,
-                                    section: item.section
-                                };
-                            })
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }

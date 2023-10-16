@@ -16,14 +16,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +32,10 @@ public class UserServiceImpl implements UserService {
     private final JwtServiceForUser jwtServiceForUser;
     private final PasswordEncoder passwordEncoder;
     private final String url = "http://localhost:8080/admin/";
+
     @Override
     public User getUserByEmail(String email) {
-        log.info("Try to get user by email: "+email);
+        log.info("Try to get user by email: " + email);
         return userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("User by email " + email + " is not found"));
     }
 
@@ -49,19 +48,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserCardResponse findById(Long id) {
-        log.info("Try to find user dto for card by id: "+id);
+        log.info("Try to find user dto for card by id: " + id);
         return UserMapper.entityToCardDto(findEntityById(id));
     }
 
     @Override
     public UserEditResponse findByIdEdit(Long id) {
-        log.info("Try to find user dto for edit page by id: "+id);
+        log.info("Try to find user dto for edit page by id: " + id);
         return UserMapper.entityToEditDto(findEntityById(id));
     }
 
     @Override
     public void deleteById(Long id) {
-        log.info("Try to delete user by id: "+id);
+        log.info("Try to delete user by id: " + id);
         User user = findEntityById(id);
         FileHandler.deleteFile(user.getFilename());
         userRepository.deleteById(id);
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findEntityById(Long id) {
-        log.info("Try to find user by id: "+id);
+        log.info("Try to find user by id: " + id);
         return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User by id " + id + " is not found"));
     }
 
@@ -92,7 +91,7 @@ public class UserServiceImpl implements UserService {
                 .userStatus(userAddRequest.status())
                 .notes(userAddRequest.notes())
                 .build();
-        if (!userAddRequest.img().isEmpty()){
+        if (!userAddRequest.img().isEmpty()) {
             user.setFilename(FileHandler.saveFile(userAddRequest.img()));
         }
         userRepository.save(user);
@@ -106,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(UserEditRequest userEditRequest, Long id) {
-        log.info("Try to update user by id: "+id);
+        log.info("Try to update user by id: " + id);
         boolean changePassword = false;
         User user = findEntityById(id);
         String filenameDelete = user.getFilename();
@@ -125,7 +124,7 @@ public class UserServiceImpl implements UserService {
             user.setFilename(FileHandler.saveFile(userEditRequest.img()));
             FileHandler.deleteFile(filenameDelete);
         }
-        if (!userEditRequest.password().isEmpty()){
+        if (!userEditRequest.password().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userEditRequest.password()));
             changePassword = true;
         }
@@ -163,23 +162,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseForMastersApplication> getAllUsersForMastersApplication() {
+    public Page<UserResponseForMastersApplication> getAllUsersForMastersApplication(Integer pageIndex, String search) {
         log.info("Get all User and convert in Response For MastersApplication");
-        return userRepository.findAll()
-                .stream()
-                .map(UserMapper::entityToResponseForMastersApplication)
-                .collect(Collectors.toList());
+        return userRepository.findAll(UserSpecificationForTable.builder().search(search).build(), PageRequest.of(pageIndex, 10))
+                .map(UserMapper::entityToResponseForMastersApplication);
     }
 
     @Override
     public Long countByStatus(UserStatus userStatus) {
-        log.info("Try to get count users by status: "+userStatus);
+        log.info("Try to get count users by status: " + userStatus);
         return userRepository.countByUserStatus(userStatus);
     }
 
     @Override
     public List<UserResponseForHeader> usersByStatus(UserStatus userStatus) {
-        log.info("Try to get user dto list by status: "+userStatus);
+        log.info("Try to get user dto list by status: " + userStatus);
         return userRepository.findAllByUserStatus(userStatus).stream().map(UserMapper::entityToHeaderDto).toList();
     }
 
@@ -190,7 +187,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendActivateLetter(String email) {
-        log.info("Try to send activate letter to: "+email);
+        log.info("Try to send activate letter to: " + email);
         User user = getUserByEmail(email);
         String token = jwtServiceForUser.generateToken(user.getEmail());
         user.setToken(token);

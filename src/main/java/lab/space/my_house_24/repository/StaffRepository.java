@@ -12,4 +12,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long>, JpaSpecific
     Optional<Staff> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    boolean existsByPhone(String phone);
 }

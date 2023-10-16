@@ -12,12 +12,14 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    <h4 class="card-title"  id="breadcrumb-title"></h4>
+                    <h4 class="card-title" id="breadcrumb-title"></h4>
                 </div>
                 <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb"  id="breadcrumb">
-                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/rates}" th:text="#{rate.breadcrumb.rates}"></a></li>
+                    <ol class="breadcrumb" id="breadcrumb">
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}"
+                                                                           th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/rates}"
+                                                                           th:text="#{rate.breadcrumb.rates}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -42,7 +44,8 @@
                         <div class="row">
                             <div class="col-7">
                                 <div class="form-group">
-                                    <label for="rate-description" class="form-label" th:text="#{rate.save.description}"></label>
+                                    <label for="rate-description" class="form-label"
+                                           th:text="#{rate.save.description}"></label>
                                     <textarea type="text" class="form-control" id="rate-description"
                                               rows="8"></textarea>
                                 </div>
@@ -94,21 +97,21 @@
                 lang = response;
             }).fail(function () {
                 lang = "en";
-            }).then(function (){
+            }).then(function () {
                 if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                    if (new URL(window.location.href).pathname.split("-")[3] !== "copy"){
+                    if (new URL(window.location.href).pathname.split("-")[3] !== "copy") {
                         rateId = new URL(window.location.href).pathname.split("-").pop();
                         getRate(rateId);
-                    }else {
-                        copyId =new URL(window.location.href).pathname.split("-").pop();
+                    } else {
+                        copyId = new URL(window.location.href).pathname.split("-").pop();
                         $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
-                        $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates/card-' + rateId));
+                        $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]', '/rates/card-' + rateId));
                         $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
                         getRate(copyId);
                     }
-                }else {
+                } else {
                     $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]');
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]','/rates'));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: [[#{rate.save.rate_title.new}]]', '/rates'));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
                 }
             });
@@ -130,7 +133,7 @@
                 dataType: 'json'
             }).done(function (rateResponse) {
                 console.log(rateResponse)
-                if(rateId){
+                if (rateId) {
                     $("#breadcrumb-title").append('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name);
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{rate.breadcrumb.rate}]]: ' + rateResponse.name, '/rates'));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
@@ -140,11 +143,11 @@
                 serviceRowContent.empty();
                 $.each(rateResponse?.priceRate, function (index, priceRate) {
                     serviceRowContent.append(addRowService(priceRate));
-                    selectService(priceRate?.id,priceRate?.service);
+                    selectService(priceRate?.id, priceRate?.service);
                     serviceSelectCount = priceRate?.id;
                 })
                 serviceSelectCount++;
-                if (loadService>0) {
+                if (loadService > 0) {
                     showToast('success');
                 }
                 loadService++;
@@ -265,7 +268,7 @@
 
         function collectServiceData() {
             let unitData = [];
-            $('.row.service').each(function() {
+            $('.row.service').each(function () {
                 let priceRateId = $(this).find('.form-control[id^="priceRate-id-"]').val();
                 let serviceId = $(this).find('.form-select[id^="service-"]').val();
                 let price = $(this).find('.form-control[id^="price-rate-"]').val();
@@ -280,7 +283,7 @@
 
         function collectServiceDataResponse() {
             let unitData = [];
-            $('.row.service').each(function() {
+            $('.row.service').each(function () {
                 let serviceId = $(this).find('.form-select[id^="service-"]');
                 let price = $(this).find('.form-control[id^="price-rate-"]');
                 unitData.push({
@@ -305,7 +308,7 @@
                 url: rateId ? "/myhouse24-amirb-nikitaf/admin/rates/update-rate" : "/myhouse24-amirb-nikitaf/admin/rates/save-rate",
                 data: JSON.stringify(data),
                 contentType: 'application/json',
-                beforeSend : function (){
+                beforeSend: function () {
                     console.log(data)
                     clearValidMessages();
                 }
@@ -318,20 +321,23 @@
                 if (errors?.name) validResponse($('#rate-name'), errors.name)
                 if (errors?.description) validResponse($('#rate-description'), errors.description)
                 if (errors?.priceRate) errorResponse($('#add-button'), errors.priceRate, 'div')
-                data={
-                    errorData:  collectServiceDataResponse()
+                data = {
+                    errorData: collectServiceDataResponse()
                 }
                 for (const key in errors) {
-                    if (errors.hasOwnProperty(key)) {
-                        const index = parseInt(key.match(/priceRate\[(\d+)\]\.(\w+)/)[1]);
-                        const col = key.split('.').pop();
-                        const value = errors[key];
-                        if (col === 'price') validResponse($('#' + data?.errorData[index]?.price[0].id), value);
-                        if (col === 'serviceId') validResponse($('#' + data?.errorData[index]?.serviceId[0].id), value,'div');
+                    if (key.match(/priceRate/)) {
+                        if (errors.hasOwnProperty(key)) {
+                            const index = parseInt(key.match(/priceRate\[(\d+)\]\.(\w+)/)[1]);
+                            const col = key.split('.').pop();
+                            const value = errors[key];
+                            if (col === 'price') validResponse($('#' + data?.errorData[index]?.price[0].id), value);
+                            if (col === 'serviceId') validResponse($('#' + data?.errorData[index]?.serviceId[0].id), value, 'div');
 
+                        }
                     }
                 }
-                if (response?.status !== 400){
+
+                if (response?.status !== 400) {
                     showToast('error');
                 }
             });
@@ -340,9 +346,9 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/myhouse24-amirb-nikitaf/admin/rates/delete-price-rate/" + serviceId ,
+                url: "/myhouse24-amirb-nikitaf/admin/rates/delete-price-rate/" + serviceId,
                 contentType: 'application/json',
-                beforeSend : function (){
+                beforeSend: function () {
                     clearValidMessages();
                 }
             }).done(function () {
@@ -353,10 +359,10 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                if (response?.responseJSON?.message){
+                if (response?.responseJSON?.message) {
                     $('#custom-toast').text(response?.responseJSON?.message);
                     showToast('custom');
-                }else {
+                } else {
                     showToast('error');
                 }
                 if (response) validResponse($('#service-row-' + serviceId), response.responseText);
@@ -365,8 +371,8 @@
             })
         }
 
-        function selectService(id,service){
-            let select = $('#service-'+id);
+        function selectService(id, service) {
+            let select = $('#service-' + id);
             select.select2({
                 theme: 'bootstrap-5',
                 language: lang,
@@ -400,7 +406,7 @@
                 }
             });
 
-            if (service){
+            if (service) {
                 select.append('<option selected value="' + service?.id + '">' + service?.name + '</option>');
             }
             select.on('select2:select', function (e) {

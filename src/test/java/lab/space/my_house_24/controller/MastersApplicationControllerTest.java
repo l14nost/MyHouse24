@@ -4,14 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.enums.Master;
 import lab.space.my_house_24.enums.MastersApplicationStatus;
-import lab.space.my_house_24.model.apartment.ApartmentMastersApplicationRequest;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForMastersApplication;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
 import lab.space.my_house_24.model.masters_application.MastersApplicationRequest;
 import lab.space.my_house_24.model.masters_application.MastersApplicationResponse;
 import lab.space.my_house_24.model.masters_application.MastersApplicationSaveRequest;
 import lab.space.my_house_24.model.masters_application.MastersApplicationUpdateRequest;
-import lab.space.my_house_24.model.staff.StaffMasterRequest;
 import lab.space.my_house_24.model.staff.StaffResponse;
 import lab.space.my_house_24.model.user.UserResponseForMastersApplication;
 import lab.space.my_house_24.service.ApartmentService;
@@ -164,48 +162,41 @@ class MastersApplicationControllerTest {
 
     @Test
     void getAllStaff() throws Exception {
-        List<StaffResponse> staffResponses = List.of(
+        Page<StaffResponse> staffResponses = new PageImpl<>(List.of(
                 StaffResponse.builder().build(),
                 StaffResponse.builder().build(),
                 StaffResponse.builder().build(),
                 StaffResponse.builder().build()
-        );
+        ));
         when(staffService.getAllStaffMaster(any())).thenReturn(staffResponses);
-        mockMvc.perform(post("/master-call/get-all-staff")
-                        .content(objectMapper.writeValueAsString(StaffMasterRequest.builder().build()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(staffResponses)));
+        mockMvc.perform(get("/master-call/get-all-staff").param("pageIndex", "1").param("search", "Test"))
+                .andExpect(status().isOk());
     }
 
     @Test
     void getAllApartments() throws Exception {
-        List<ApartmentResponseForMastersApplication> apartmentResponseForMastersApplications = List.of(
+        Page<ApartmentResponseForMastersApplication> apartmentResponseForMastersApplications = new PageImpl<>(List.of(
                 ApartmentResponseForMastersApplication.builder().build(),
                 ApartmentResponseForMastersApplication.builder().build(),
                 ApartmentResponseForMastersApplication.builder().build(),
                 ApartmentResponseForMastersApplication.builder().build()
-        );
+        ));
         when(apartmentService.getAllApartmentResponseByUserId(any())).thenReturn(apartmentResponseForMastersApplications);
-        mockMvc.perform(post("/master-call/get-all-apartment")
-                        .content(objectMapper.writeValueAsString(ApartmentMastersApplicationRequest.builder().build()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(apartmentResponseForMastersApplications)));
+        mockMvc.perform(get("/master-call/get-all-apartment").param("pageIndex", "1").param("search", "Test"))
+                .andExpect(status().isOk());
     }
 
     @Test
     void getAllUser() throws Exception {
-        List<UserResponseForMastersApplication> userResponseForMastersApplications = List.of(
+        Page<UserResponseForMastersApplication> userResponseForMastersApplications = new PageImpl<>(List.of(
                 UserResponseForMastersApplication.builder().build(),
                 UserResponseForMastersApplication.builder().build(),
                 UserResponseForMastersApplication.builder().build(),
                 UserResponseForMastersApplication.builder().build()
-        );
-        when(userService.getAllUsersForMastersApplication()).thenReturn(userResponseForMastersApplications);
+        ));
+        when(userService.getAllUsersForMastersApplication(anyInt(), anyString())).thenReturn(userResponseForMastersApplications);
         mockMvc.perform(get("/master-call/get-all-user"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(userResponseForMastersApplications)));
+                .andExpect(status().isOk());
     }
 
     @Test

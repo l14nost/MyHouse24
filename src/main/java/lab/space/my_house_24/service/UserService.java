@@ -13,22 +13,26 @@ public interface UserService {
     Page<UserResponse> getAllUserDto(UserMainPageRequest userMainPageRequest);
 
     UserCardResponse findById(Long id);
+
     UserEditResponse findByIdEdit(Long id);
+
     void deleteById(Long id);
 
     User findEntityById(Long id);
 
     void save(UserAddRequest userAddRequest);
+
     void save(User user);
 
-    void update(UserEditRequest userEditRequest,Long id);
+    void update(UserEditRequest userEditRequest, Long id);
 
     void inviteUser(UserInviteRequest userInviteRequest);
 
     List<UserResponseForTable> userListForTable();
+
     Page<UserResponseForTable> userResponseForSelect(Integer page, String search);
 
-    List<UserResponseForMastersApplication> getAllUsersForMastersApplication();
+    Page<UserResponseForMastersApplication> getAllUsersForMastersApplication(Integer pageIndex, String search);
 
     Long countByStatus(UserStatus userStatus);
 

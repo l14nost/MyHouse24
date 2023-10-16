@@ -48,7 +48,8 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public List<UnitResponse> getAllUnitDto() {
-        return unitRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))
+        log.info("Try to get All Unit and convert in Dto");
+        return unitRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .stream()
                 .map(UnitMapper::toSimpleDto).collect(Collectors.toList());
     }

@@ -11,7 +11,7 @@ public interface RateService {
 
     Page<RateResponse> getAllRatesResponse(RateRequest rateRequest);
 
-    List<RateResponse> getAllRatesForBill();
+    Page<RateResponse> getAllRatesForBill(Integer pageIndex, String search);
 
     Rate getRateById(Long id);
 

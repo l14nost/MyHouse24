@@ -155,12 +155,10 @@ public class StaffServiceImpl implements StaffService, UserDetailsService {
     }
 
     @Override
-    public List<StaffResponse> getAllStaffMaster(StaffMasterRequest request) {
+    public Page<StaffResponse> getAllStaffMaster(StaffMasterRequest request) {
         log.info("Get all Staff and convert in Response for MastersApplication");
-        return staffRepository.findAll(staffSpecification.getStaffMaster(request))
-                .stream()
-                .map(StaffMapper::toStaffResponse)
-                .collect(Collectors.toList());
+        return staffRepository.findAll(staffSpecification.getStaffMaster(request), PageRequest.of(request.pageIndex(), 10))
+                .map(StaffMapper::toStaffResponse);
     }
 
     @Override

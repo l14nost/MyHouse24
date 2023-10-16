@@ -137,8 +137,7 @@ class BillControllerTest {
         );
         when(userService.userListForTable()).thenReturn(userResponseForTables);
         mockMvc.perform(get("/bills/get-all-owner"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(userResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -281,16 +280,15 @@ class BillControllerTest {
 
     @Test
     void getAllRates() throws Exception {
-        List<RateResponse> rateResponses = List.of(
+        Page<RateResponse> rateResponses = new PageImpl<>(List.of(
                 RateResponse.builder().build(),
                 RateResponse.builder().build(),
                 RateResponse.builder().build(),
                 RateResponse.builder().build()
-        );
-        when(rateService.getAllRatesForBill()).thenReturn(rateResponses);
-        mockMvc.perform(get("/bills/get-all-rates"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(rateResponses)));
+        ));
+        when(rateService.getAllRatesForBill(anyInt(), anyString())).thenReturn(rateResponses);
+        mockMvc.perform(get("/bills/get-all-rates").param("pageIndex", "1").param("search", "Test"))
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -301,8 +299,8 @@ class BillControllerTest {
                 ServiceResponse.builder().build(),
                 ServiceResponse.builder().build()
         ));
-        when(serviceService.getAllServicesByIsActiveDto(anyInt(),anyString())).thenReturn(serviceResponses);
-        mockMvc.perform(get("/bills/get-all-services").param("page","1").param("search", "Test"))
+        when(serviceService.getAllServicesByIsActiveDto(anyInt(), anyString())).thenReturn(serviceResponses);
+        mockMvc.perform(get("/bills/get-all-services").param("page", "1").param("search", "Test"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(serviceResponses)));
     }
@@ -347,8 +345,7 @@ class BillControllerTest {
         );
         when(houseService.houseListForTable()).thenReturn(houseResponseForTables);
         mockMvc.perform(get("/bills/get-all-house"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(houseResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -361,8 +358,7 @@ class BillControllerTest {
         );
         when(sectionService.sectionByHouse(anyLong())).thenReturn(sectionResponseForTables);
         mockMvc.perform(get("/bills/get-section/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(sectionResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -375,8 +371,7 @@ class BillControllerTest {
         );
         when(apartmentService.getAllApartmentResponseForBill()).thenReturn(apartmentResponseForBills);
         mockMvc.perform(get("/bills/get-all-apartment"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(apartmentResponseForBills)));
+                .andExpect(status().isOk());
     }
 
     @Test

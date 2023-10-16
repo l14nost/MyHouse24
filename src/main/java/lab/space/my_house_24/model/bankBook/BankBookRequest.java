@@ -8,14 +8,16 @@ import lombok.Builder;
 @Builder
 public record BankBookRequest(
         Integer pageIndex,
+
         @Size(max = 15)
         String numberQuery,
+
         @Size(max = 100)
         String apartmentQuery,
 
         BankBookStatus statusQuery,
 
-        Long sectionIdQuery,
+        String sectionIdQuery,
 
         Long houseIdQuery,
 

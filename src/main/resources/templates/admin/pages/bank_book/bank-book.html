@@ -16,7 +16,8 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}"
+                                                                           th:text="#{global.breadcrumb.main}"></a></li>
                         <li class="breadcrumb-item active" aria-current="page" th:text="#{bank_book.breadcrumb}"></li>
                     </ol>
                 </nav>
@@ -69,8 +70,10 @@
                 <span class="me-2" th:text="#{global.dropdown.button.action}"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{/bank-books/add}" th:text="#{bank_book.dropdown.button.add}"></a></li>
-                <li><a class="dropdown-item" onclick="getExcel()" href="#" th:text="#{global.dropdown.button.excel}"></a></li>
+                <li><a class="dropdown-item" th:href="@{/bank-books/add}"
+                       th:text="#{bank_book.dropdown.button.add}"></a></li>
+                <li><a class="dropdown-item" onclick="getExcel()" href="#"
+                       th:text="#{global.dropdown.button.excel}"></a></li>
             </ul>
         </div>
     </div>
@@ -80,7 +83,13 @@
         <div class="card">
             <div class="card-header d-flex">
                 <div class="col text-end">
-                    <button onclick="clearInput()" type="button" class="btn btn-light" style="height: 40px"><h7 th:text="#{table.clear}"></h7><svg style="margin: auto; margin-left: 5px" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/></svg></button>
+                    <button onclick="clearInput()" type="button" class="btn btn-light" style="height: 40px">
+                        <h7 th:text="#{table.clear}"></h7>
+                        <svg style="margin: auto; margin-left: 5px" xmlns="http://www.w3.org/2000/svg" height="1em"
+                             viewBox="0 0 576 512">
+                            <path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7H288h9.4H512c17.7 0 32-14.3 32-32s-14.3-32-32-32H387.9L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416H288l-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -99,7 +108,8 @@
                     </tr>
                     <tr id="search">
                         <th>
-                            <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/[^0-9\s-]/g, '');" maxlength="15">
+                            <input class="form-control" type="text" id="number"
+                                   oninput="this.value = this.value.replace(/[^0-9\s-]/g, '');" maxlength="15">
                         </th>
                         <th>
                             <select id="status" class="mb-1 form-select form-select"
@@ -109,7 +119,8 @@
                             </select>
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="apartment" oninput="this.value = this.value.replace(/\D/g, '');" maxlength="100">
+                            <input class="form-control" type="text" id="apartment"
+                                   oninput="this.value = this.value.replace(/\D/g, '');" maxlength="100">
                         </th>
                         <th>
                             <select id="house" class="mb-1 form-select form-select" aria-label=".form-select-lg example"
@@ -167,11 +178,21 @@
         let bankBookRequest = {};
         bankBookRequest.pageIndex = 0;
         let filterTimeout;
+        let lang;
 
         var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
         var stompClient = Stomp.over(sockJs1);
 
         $(document).ready(function () {
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function () {
+                allSelect();
+            })
 
             stompClient.connect({}, (frame) => {
                 console.log('Connected: ' + frame);
@@ -190,8 +211,6 @@
                     }
                 }
             });
-
-
         });
 
 
@@ -227,7 +246,7 @@
             $('#confirmDelete').modal('show');
         });
 
-        function getExcel(){
+        function getExcel() {
             $.ajax({
                 method: "POST",
                 url: "/myhouse24-amirb-nikitaf/admin/bank-books/get-excel-bank-books",
@@ -238,7 +257,7 @@
                 },
             }).done(function (blob, status, xhr) {
                 getFileFromResponse(blob, status, xhr)
-            }).fail(function (response){
+            }).fail(function (response) {
                 console.log(response)
                 showToast('error');
             });
@@ -281,12 +300,12 @@
                         '    <td>' + (bankBook?.apartment ? bankBook?.apartment?.house?.name : '-') + '</td>' +
                         '    <td>' + (bankBook?.apartment ? bankBook?.apartment?.section?.name : '-') + '</td>' +
                         '    <td>' + (bankBook?.apartment ? bankBook?.apartment?.owner?.fullName : '-') + '</td>' +
-                        '    <td>' + addColorIncomeExpense(bankBook?.totalPrice.toFixed(2) >= 0 ,bankBook?.totalPrice.toFixed(2)) + '</td>' +
+                        '    <td>' + addColorIncomeExpense(bankBook?.totalPrice.toFixed(2) >= 0, bankBook?.totalPrice.toFixed(2)) + '</td>' +
                         '    <td data-actions="data-actions">' + $edit + $deleteBtn + '</td>' +
                         '</tr>'
                     );
                 });
-            }).fail(function (response){
+            }).fail(function (response) {
                 console.log(response)
                 showToast('error');
             });
@@ -358,112 +377,149 @@
             showToast('success')
         }
 
+        function allSelect() {
+            $('#section').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 15,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-section',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex: param.page || 0,
+                            search: param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        console.log(data)
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item,
+                                text: item
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
+                }
+            });
 
-        $('#section').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-section',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+            $('#balance').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                language: lang,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-balance-status',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+
+            $('#status').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                language: lang,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-status',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+            $('#house').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 60,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-house',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.name
                             };
                         })
-                    };
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
                 }
-            }
-        });
+            });
 
-        $('#balance').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-balance-status',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-
-        $('#status').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-status',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-        $('#house').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-house',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+            $('#owner').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 60,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-owner',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.name
                             };
                         })
-                    };
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
                 }
-            }
-        });
-
-        $('#owner').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bank-books/get-all-owner',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name
-                            };
-                        })
-                    };
-                }
-            }
-        });
+            });
+        }
 
         function updateBankBookRequestAndSend() {
             bankBookRequest.numberQuery = $('#number').val();

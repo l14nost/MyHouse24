@@ -45,6 +45,10 @@
 
 <script th:src="@{/assets/js/flatpickr/flatpickr.js}"></script>
 
+<script th:src="@{/assets/js/flatpickr/uk.js}"></script>
+
+<script th:src="@{/assets/js/flatpickr/monthPicker.js}"></script>
+
 <script th:src="@{/assets/js/plugins/prism.mini.js}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -154,12 +158,18 @@
     function showToast(toast) {
         switch (toast) {
             case "success":
+                toastError.hide();
+                toastCustom.hide();
                 toastSuccess.show();
                 break;
             case "error":
+                toastSuccess.hide();
+                toastCustom.hide();
                 toastError.show();
                 break;
             case "custom":
+                toastSuccess.hide();
+                toastError.hide();
                 toastCustom.show();
                 break;
             default:

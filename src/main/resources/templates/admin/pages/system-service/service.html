@@ -151,7 +151,7 @@
                 unitRowContent.empty();
                 $.each(unitResponse, function (index, unit) {
                     unitRowContent.append(addRowUnits(unit));
-                    unitSelectCount = unit?.id;
+                    unitSelectCount = unitSelectCount < unit?.id ? unit?.id : unitSelectCount;
                 })
                 unitSelectCount++;
                 if (loadUnit>0) {
@@ -174,7 +174,7 @@
                 $.each(serviceResponse, function (index, service) {
                     serviceRowContent.append(addRowService(service));
                     selectUnit(service?.id,service?.unit);
-                    serviceSelectCount = service?.id;
+                    serviceSelectCount = serviceSelectCount < service?.id ? service?.id : serviceSelectCount;
                 })
                 serviceSelectCount++;
                 if (loadService>0) {
@@ -373,15 +373,14 @@
             }).fail(function (response) {
                 console.log(response);
                 $('#confirmDelete').modal('hide');
-                showToast('error');
+
                 if (unitId){
-                    console.log(unitId)
-                    if (response) validResponse($('#unit-name-' + unitId), response?.responseJSON?.message, 'div');
+                    if (response) $('#custom-toast').text(response?.responseJSON?.message);
                 }
                 if (serviceId){
-                    console.log(serviceId)
-                    if (response) validResponse($('#service-row-' + serviceId), response?.responseJSON?.message);
+                    if (response) $('#custom-toast').text(response?.responseJSON?.message);
                 }
+                showToast('custom');
                 serviceId = undefined;
                 unitId = undefined;
             })
@@ -471,9 +470,7 @@
                         const index = parseInt(key.match(/unitRequestList\[(\d+)\]\.(\w+)/)[1]);
                         const col = key.split('.').pop();
                         const value = errors[key];
-                        console.log(index)
                         if (col === 'name') validResponse($('#' + data?.errorData[index]?.name[0]?.id), value, 'div');
-
                     }
                 }
 

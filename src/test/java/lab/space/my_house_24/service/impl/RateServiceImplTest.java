@@ -117,7 +117,7 @@ class RateServiceImplTest {
 
     @Test
     void getAllRatesForBill() {
-        List<Rate> rateResponses = List.of(
+        Page<Rate> rateResponses = new PageImpl<>(List.of(
                 Rate.builder()
                         .id(1L)
                         .name("Test")
@@ -190,10 +190,10 @@ class RateServiceImplTest {
                                         .build())
                                 .build()))
                         .build()
-        );
-        when(rateRepository.findAll()).thenReturn(rateResponses);
-        List<RateResponse> responsePage = rateService.getAllRatesForBill();
-        assertEquals(4, responsePage.size());
+        ));
+        when(rateRepository.findAll((Specification<Rate>) any(), any(PageRequest.class))).thenReturn(rateResponses);
+        Page<RateResponse> responsePage = rateService.getAllRatesForBill(1, "Test");
+        assertEquals(4, responsePage.getTotalElements());
         assertEquals(RateResponse.class, responsePage.iterator().next().getClass());
     }
 

@@ -12,7 +12,6 @@ import lab.space.my_house_24.model.floor.FloorResponseForTable;
 import lab.space.my_house_24.model.house.HouseResponseForTable;
 import lab.space.my_house_24.model.rate.RateResponseForTable;
 import lab.space.my_house_24.model.section.SectionResponseForTable;
-import lab.space.my_house_24.model.user.UserResponseForMastersApplication;
 import lab.space.my_house_24.model.user.UserResponseForTable;
 import lab.space.my_house_24.repository.ApartmentRepository;
 import lab.space.my_house_24.service.BankBookService;
@@ -37,7 +36,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -290,7 +289,7 @@ class ApartmentServiceImplTest {
 
     @Test
     void getAllApartmentResponseByUserId() {
-        when(apartmentSpecificationForMasterApplication.getApartmentByUserId(new ApartmentMastersApplicationRequest(1L))).thenReturn(new Specification<Apartment>() {
+        when(apartmentSpecificationForMasterApplication.getApartmentByUserId(new ApartmentMastersApplicationRequest(1L,"Test", 1))).thenReturn(new Specification<Apartment>() {
             @Override
             public Predicate toPredicate(Root<Apartment> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                     List<Predicate> predicates = new ArrayList<>();
@@ -303,19 +302,15 @@ class ApartmentServiceImplTest {
                     return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
         });
-        when(apartmentRepository.findAll(any(Specification.class))).thenReturn(List.of(
+        when(apartmentRepository.findAll((Specification<Apartment>) any(), any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(
                 Apartment.builder().house(House.builder().build()).floor(Floor.builder().build()).section(Section.builder().build()).user(User.builder().build()).build(),
                 Apartment.builder().house(House.builder().build()).floor(Floor.builder().build()).section(Section.builder().build()).user(User.builder().build()).build(),
                 Apartment.builder().house(House.builder().build()).floor(Floor.builder().build()).section(Section.builder().build()).user(User.builder().build()).build(),
-                Apartment.builder().house(House.builder().build()).floor(Floor.builder().build()).section(Section.builder().build()).user(User.builder().build()).build()
+                Apartment.builder().house(House.builder().build()).floor(Floor.builder().build()).section(Section.builder().build()).user(User.builder().build()).build())
         ));
 
-        List<ApartmentResponseForMastersApplication> apartmentResponseForMastersApplications = apartmentService.getAllApartmentResponseByUserId(new ApartmentMastersApplicationRequest(1L));
-        assertEquals(4, apartmentResponseForMastersApplications.size());
-        assertEquals(ApartmentResponseForMastersApplication.builder()
-                .name("null, null")
-                .owner(UserResponseForMastersApplication.builder().fullName("null null null").build())
-                .build(),apartmentResponseForMastersApplications.get(0));
+        Page<ApartmentResponseForMastersApplication> apartmentResponseForMastersApplications = apartmentService.getAllApartmentResponseByUserId(new ApartmentMastersApplicationRequest(1L,"Test", 1));
+        assertEquals(4, apartmentResponseForMastersApplications.getTotalElements());
     }
 
     @Test
@@ -381,14 +376,14 @@ class ApartmentServiceImplTest {
 
     @Test
     void getAllApartmentResponse() {
-        when(apartmentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"))).thenReturn(List.of(
+        when(apartmentRepository.findAll((Specification<Apartment>) any(), any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(
                 Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
                 Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
                 Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
                 Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build()
-        ));
+        )));
 
-        assertEquals(4, apartmentService.getAllApartmentResponse().size());
+        assertEquals(4, apartmentService.getAllApartmentResponse(1,"Test",1L,1L).getTotalElements());
 
     }
 

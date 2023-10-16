@@ -17,7 +17,7 @@ public record StaffSaveRequest(
         String lastname,
         @NotBlank(message = "{not.blank.message}")
         @Pattern(regexp = "^[0-9]*$", message = "{pattern.number.message}")
-        @Size(max = 20, min = 10, message = "{size.between.message}" + " {min} && {max}")
+        @Size(max = 20, min = 10, message = "{size.between.message}" + " {min}" + "{size.mess.or}" + "{max}")
         String phone,
         @NotBlank(message = "{not.blank.message}")
         @Size(max = 100, message = "{size.less.message} " + " {max}")

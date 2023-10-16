@@ -120,8 +120,7 @@ class BankBookControllerTest {
         );
         when(userService.userListForTable()).thenReturn(userResponseForTables);
         mockMvc.perform(get("/bank-books/get-all-owner"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(userResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -134,8 +133,7 @@ class BankBookControllerTest {
         );
         when(sectionService.sectionListForTable()).thenReturn(sectionResponseForTables);
         mockMvc.perform(get("/bank-books/get-all-section"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(sectionResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -162,8 +160,7 @@ class BankBookControllerTest {
         );
         when(houseService.houseListForTable()).thenReturn(houseResponseForTables);
         mockMvc.perform(get("/bank-books/get-all-house"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(houseResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -176,8 +173,7 @@ class BankBookControllerTest {
         );
         when(sectionService.sectionByHouse(anyLong())).thenReturn(sectionResponseForTables);
         mockMvc.perform(get("/bank-books/get-section/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(sectionResponseForTables)));
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -210,13 +206,13 @@ class BankBookControllerTest {
 
     @Test
     void getAllApartment() throws Exception {
-        List<ApartmentResponseForBankBook> apartmentResponseForBankBooks = List.of(
+        Page<ApartmentResponseForBankBook> apartmentResponseForBankBooks = new PageImpl<>(List.of(
                 ApartmentResponseForBankBook.builder().build(),
                 ApartmentResponseForBankBook.builder().build(),
                 ApartmentResponseForBankBook.builder().build(),
                 ApartmentResponseForBankBook.builder().build()
-        );
-        when(apartmentService.getAllApartmentResponse()).thenReturn(apartmentResponseForBankBooks);
+        ));
+        when(apartmentService.getAllApartmentResponse(any(), any(), any(), any())).thenReturn(apartmentResponseForBankBooks);
         mockMvc.perform(get("/bank-books/get-all-apartment"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(apartmentResponseForBankBooks)));

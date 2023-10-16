@@ -102,7 +102,7 @@
                             <input class="form-control" type="text" id="number" oninput="this.value = this.value.replace(/\D/g, '');" maxlength="15">
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" maxlength="30">
+                             <input class="form-control" id="date" type="date" style="width: 120px">
                         </th>
                         <th>
                             <select id="status" class="mb-1 form-select form-select"
@@ -179,6 +179,16 @@
                 lang = "en";
             }).then(function (){
                 allSelect();
+                const date_flatpickr = document.querySelectorAll('#date');
+                Array.from(date_flatpickr, (elem) => {
+                    if (typeof flatpickr !== typeof undefined) {
+                        flatpickr(elem, {
+                            minDate: "01.01.2014",
+                            dateFormat: "d.m.Y",
+                            locale: lang
+                        })
+                    }
+                })
             });
 
             stompClient.connect({}, (frame) => {
@@ -495,6 +505,8 @@
             cashBoxRequest.pageIndex = 0;
             getAllCashBox();
         }
+
+
     </script>
 
 </th:block>
