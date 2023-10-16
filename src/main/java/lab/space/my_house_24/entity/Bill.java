@@ -38,6 +38,7 @@ public class Bill {
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
+    @Column(nullable = false)
     private Boolean isActive;
 
     @Column(nullable = false)

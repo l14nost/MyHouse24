@@ -34,6 +34,9 @@ public class MastersApplication {
     @Column(length = 1000)
     private String comment;
 
+    @Column(nullable = false)
+    private Boolean isActive;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = false)
     private Master master;

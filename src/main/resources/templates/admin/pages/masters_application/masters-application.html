@@ -226,7 +226,7 @@
                         '    <td>' + mastersAppl?.apartment?.name + '</td>' +
                         '    <td>' + mastersAppl?.apartment?.owner?.fullName + '</td>' +
                         '    <td>' + mastersAppl?.apartment?.owner?.phone + '</td>' +
-                        '    <td>' + mastersAppl?.staff?.fullName + '</td>' +
+                        '    <td>' + (mastersAppl?.staff ? mastersAppl?.staff?.fullName : '-') + '</td>' +
                         '    <td class="h5">' + addBadgeApplicationStatus(mastersAppl?.mastersApplicationStatus) + '</td>' +
                         '    <td data-actions="data-actions">' + $edit + $deleteBtn + '</td>' +
                         '</tr>'
