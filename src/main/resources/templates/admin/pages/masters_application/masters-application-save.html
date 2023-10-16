@@ -42,7 +42,7 @@
         <div class="col-auto mt-2" th:text="#{masters_call.card.time.at}"></div>
         <div class="col-3">
             <div class="input-group">
-                <input class="form-control time_flatpicker" id="time" type="time" th:placeholder="#{masters_call.save.time.placeholder}">
+                <input class="form-control" id="time" type="time" th:placeholder="#{masters_call.save.time.placeholder}">
                 <button class="input-group-text input-button pointer-event" disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 512 512">
                         <path d="M464 256A208 208 0 1 1 48 256a208 208 0 1 1 416 0zM0 256a256 256 0 1 0 512 0A256 256 0 1 0 0 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/>
@@ -158,25 +158,46 @@
         staffMasterRequest.role = undefined;
         let apartmentMastersApplicationRequest = {};
         apartmentMastersApplicationRequest.id = undefined;
+        let lang;
 
         $(document).ready(function () {
-            if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
-                masterApplId = new URL(window.location.href).pathname.split("-").pop()
-                getMastersApplicationResponse(masterApplId);
-            }else {
-                $("#breadcrumb-title").append('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]');
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]','/master-call'));
-                $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
+                const date_flatpickr = document.querySelectorAll('#date');
+                Array.from(date_flatpickr, (elem) => {
+                    if (typeof flatpickr !== typeof undefined) {
+                        flatpickr(elem, {
+                            minDate: "01.01.2014",
+                            dateFormat: "d.m.Y",
+                            locale: lang
+                        })
+                    }
+                })
 
-                newFloorContent('-');
-                newHouseContent('-');
-                newSectionContent('-');
-                newPhoneContent('-');
+                if (new URL(window.location.href).pathname.split("/").pop() !== "add") {
+                    masterApplId = new URL(window.location.href).pathname.split("-").pop()
+                    getMastersApplicationResponse(masterApplId);
+                }else {
+                    $("#breadcrumb-title").append('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]','/master-call'));
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
 
-                selectMaster();
-                selectApartment();
-            }
-            selectApartmentOwner();
+                    newFloorContent('-');
+                    newHouseContent('-');
+                    newSectionContent('-');
+                    newPhoneContent('-');
+
+                    selectMaster();
+                    selectApartment();
+                }
+                selectApartmentOwner();
+            });
         });
 
         function getMastersApplicationResponse(id) {
@@ -264,69 +285,82 @@
             })
         }
 
-        $('#status').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-status',
-                cache: true,
-                delay: 1000,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-        $('#type-master').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-type-master',
-                cache: true,
-                delay: 1000,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-        function selectMaster(master) {
-            $('#master').select2({
+        function allSelect(){
+            $('#status').select2({
                 theme: 'bootstrap-5',
                 minimumResultsForSearch: -1,
+                language: lang,
                 ajax: {
-                    method: 'POST',
-                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-staff',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(staffMasterRequest),
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-status',
                     cache: true,
                     delay: 1000,
                     processResults: function (data) {
                         return {
                             results: data.map(function (item) {
                                 return {
-                                    id: item.id,
-                                    text: item.fullName,
-                                    role: item.role
+                                    id: item.name,
+                                    text: item.value
                                 };
                             })
+                        };
+                    }
+                }
+            });
+
+            $('#type-master').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                language: lang,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-type-master',
+                    cache: true,
+                    delay: 1000,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        }
+
+        function selectMaster(master) {
+            $('#master').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 60,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-staff',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            staffQuery : param.term || "",
+                            role : staffMasterRequest.role
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.fullName,
+                                role: item.role
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -340,21 +374,32 @@
         function selectApartmentOwner(owner){
             $('#apartment-owner').select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                maximumInputLength: 60,
+                language: lang,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-user',
                     cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
+                    delay: 1500,
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.fullName,
-                                    phone: item.phone
-                                };
-                            })
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.fullName,
+                                phone: item.phone
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -368,28 +413,36 @@
         function selectApartment(){
             $('#apartment').select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: Infinity,
+                maximumInputLength: 60,
+                language: lang,
                 ajax: {
-                    method: 'POST',
                     url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-apartment',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify(apartmentMastersApplicationRequest),
                     cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
-                        console.log(data)
+                    delay: 1500,
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name,
-                                    owner: item.owner,
-                                    floor: item.floor,
-                                    house: item.house,
-                                    section: item.section
-                                };
-                            })
+                            pageIndex : param.page || 0,
+                            apartmentQuery : param.term || "",
+                            id : apartmentMastersApplicationRequest.id
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name,
+                                owner: item.owner,
+                                floor: item.floor,
+                                house: item.house,
+                                section: item.section
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -449,18 +502,19 @@
             modules: {
                 toolbar: true
             },
-            placeholder: 'Piwi cuda',
+            placeholder: '',
             theme: 'snow'
         };
         let editor = new Quill('#editor', options);
 
-
-        const date_flatpickr = document.querySelectorAll('#date');
-        Array.from(date_flatpickr, (elem) => {
+        const time_flatpickr = document.querySelectorAll('#time')
+        Array.from(time_flatpickr, (elem) => {
             if (typeof flatpickr !== typeof undefined) {
                 flatpickr(elem, {
-                    minDate: "today",
-                    dateFormat: "d.m.Y",
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true
                 })
             }
         })

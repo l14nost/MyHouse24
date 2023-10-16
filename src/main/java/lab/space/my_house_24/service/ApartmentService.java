@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ApartmentService {
+
     Page<ApartmentResponse> findAllForMainPage(ApartmentRequestForMainPage apartmentRequestForMainPage);
+
     void deleteApartment(Long id);
 
     ApartmentResponseForCard findByIdForCard(Long id);
@@ -17,10 +19,11 @@ public interface ApartmentService {
 
     ApartmentResponseForEdit findByIdApartment(Long id);
 
-    void updateApartment(Long id,ApartmentAddRequest apartmentAddRequest);
+    void updateApartment(Long id, ApartmentAddRequest apartmentAddRequest);
+
     Apartment findById(Long id);
 
-    List<ApartmentResponseForMastersApplication> getAllApartmentResponseByUserId(ApartmentMastersApplicationRequest request);
+    Page<ApartmentResponseForMastersApplication> getAllApartmentResponseByUserId(ApartmentMastersApplicationRequest request);
 
     List<ApartmentResponseForBankBook> getAllApartmentResponseByHouseId(Long id);
 
@@ -32,9 +35,9 @@ public interface ApartmentService {
 
     List<ApartmentResponseForBill> getAllApartmentResponseForBill();
 
-    List<ApartmentResponseForBankBook> getAllApartmentResponse();
+    Page<ApartmentResponseForBankBook> getAllApartmentResponse(Integer pageIndex, String search, Long houseId, Long sectionId);
 
-    List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor,Boolean duty);
+    List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor, Boolean duty);
 
     List<Apartment> findAllApartmentByHouse(Long house);
 

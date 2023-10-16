@@ -134,6 +134,35 @@ public class StaffValidator {
         }
     }
 
+    public void isPhoneNumberUniqueValidation(String number, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            String phoneResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                phoneResponse = "Такий номер телефона вже існує";
+            } else {
+                phoneResponse = "Such phone number already exists";
+            }
+            if (staffRepository.existsByPhone(number)) {
+                bindingResult.addError(new FieldError(object, "phone", phoneResponse));
+            }
+        }
+    }
+
+    public void isPhoneNumberUniqueValidationWithId(Long id, String number, BindingResult bindingResult, String object, Locale locale) {
+        if (!bindingResult.hasErrors()) {
+            String phoneResponse;
+            if (locale.toLanguageTag().equals("uk")) {
+                phoneResponse = "Такий номер телефона вже існує";
+            } else {
+                phoneResponse = "Such phone number already exists";
+            }
+            if (staffRepository.existsByPhone(number)
+                    && !staffRepository.getReferenceById(id).getEmail().equalsIgnoreCase(number)) {
+                bindingResult.addError(new FieldError(object, "phone", phoneResponse));
+            }
+        }
+    }
+
     public void passwordEqualsValidation(String password, String confirmPassword, BindingResult bindingResult, String object, Locale locale) {
         if (!bindingResult.hasErrors()) {
             String passwordResponse;

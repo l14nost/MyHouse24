@@ -3,7 +3,6 @@ package lab.space.my_house_24.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.entity.Rate;
 import lab.space.my_house_24.mapper.RateMapper;
-import lab.space.my_house_24.mapper.StaffMapper;
 import lab.space.my_house_24.model.price_rate.PriceRateRequest;
 import lab.space.my_house_24.model.rate.*;
 import lab.space.my_house_24.repository.RateRepository;
@@ -31,25 +30,26 @@ public class RateServiceImpl implements RateService {
     private final PriceRateService priceRateService;
     private final RateSpecification rateSpecification;
     private final MessageSource message;
+    private final int DEFAULT_PAGE_SIZE = 10;
 
     @Override
     public List<RateResponseForTable> rateListForTable() {
+        log.info("Try to get all RatesResponse");
         return rateRepository.findAll().stream().map(RateMapper::entityToDtoForTable).toList();
     }
 
     @Override
     public Page<RateResponse> getAllRatesResponse(RateRequest request) {
         log.info("Try to get all RatesResponse by Request");
-        final int DEFAULT_PAGE_SIZE = 10;
         return rateRepository.findAll(
                 rateSpecification.getRateByRequest(request),
                 PageRequest.of(request.pageIndex(), DEFAULT_PAGE_SIZE)).map(RateMapper::toPageRateResponse);
     }
 
     @Override
-    public List<RateResponse> getAllRatesForBill() {
+    public Page<RateResponse> getAllRatesForBill(Integer pageIndex, String search) {
         log.info("Try to get all RatesResponse");
-        return rateRepository.findAll().stream().map(RateMapper::toRateResponseForBill).toList();
+        return rateRepository.findAll(rateSpecification.getRateForSelect(search), PageRequest.of(pageIndex, DEFAULT_PAGE_SIZE)).map(RateMapper::toRateResponseForBill);
     }
 
     @Override
@@ -126,6 +126,6 @@ public class RateServiceImpl implements RateService {
 
     @Override
     public Page<RateResponseForTable> getAllRateDtoForSelect(String search, Integer page) {
-        return rateRepository.findAll(rateSpecification.getRateForSelect(search), PageRequest.of(page, 7)).map(RateMapper::entityToDtoForTable);
+        return rateRepository.findAll(rateSpecification.getRateForSelect(search), PageRequest.of(page, DEFAULT_PAGE_SIZE)).map(RateMapper::entityToDtoForTable);
     }
 }

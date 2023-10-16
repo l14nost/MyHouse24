@@ -2,6 +2,7 @@ package lab.space.my_house_24.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForBankBook;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForBill;
 import lab.space.my_house_24.model.bankBook.BankBookResponse;
 import lab.space.my_house_24.model.bill.BillDeleteRequest;
@@ -84,8 +85,11 @@ public class BillController {
     }
 
     @GetMapping("/get-all-owner")
-    public ResponseEntity<List<UserResponseForTable>> getAllUser() {
-        return ResponseEntity.ok(userService.userListForTable());
+    public ResponseEntity<Page<UserResponseForTable>> getAllUser(
+            @RequestParam(required = false) Integer pageIndex,
+            @RequestParam(required = false) String search
+    ) {
+        return ResponseEntity.ok(userService.userResponseForSelect(pageIndex, search));
     }
 
     @GetMapping("/get-all-draft")
@@ -174,8 +178,8 @@ public class BillController {
     }
 
     @GetMapping("/get-all-rates")
-    public ResponseEntity<List<RateResponse>> getAllRates() {
-        return ResponseEntity.ok(rateService.getAllRatesForBill());
+    public ResponseEntity<Page<RateResponse>> getAllRates(@RequestParam Integer pageIndex, @RequestParam String search) {
+        return ResponseEntity.ok(rateService.getAllRatesForBill(pageIndex, search));
     }
 
     @GetMapping("/get-all-services")
@@ -194,19 +198,26 @@ public class BillController {
     }
 
     @GetMapping("/get-all-house")
-    public ResponseEntity<List<HouseResponseForTable>> getAllHouse() {
-        return ResponseEntity.ok(houseService.houseListForTable());
+    public ResponseEntity<Page<HouseResponseForTable>> getAllHouse(@RequestParam(required = false) Integer pageIndex,
+                                                                   @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(houseService.houseListForTable(pageIndex, search));
     }
 
     @GetMapping("/get-section/{houseId}")
-    public ResponseEntity<List<SectionResponseForTable>> getSectionByHouse(@PathVariable Long houseId) {
-        return ResponseEntity.ok(sectionService.sectionByHouse(houseId));
-
+    public ResponseEntity<Page<SectionResponseForTable>> getSectionByHouse(@PathVariable Long houseId,
+                                                                           @RequestParam(required = false) Integer pageIndex,
+                                                                           @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(sectionService.sectionByHouse(houseId, pageIndex, search));
     }
 
     @GetMapping("/get-all-apartment")
-    public ResponseEntity<List<ApartmentResponseForBill>> getAllApartment() {
-        return ResponseEntity.ok(apartmentService.getAllApartmentResponseForBill());
+    public ResponseEntity<Page<ApartmentResponseForBankBook>> getAllApartment(
+            @RequestParam(required = false) Integer pageIndex,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long houseId,
+            @RequestParam(required = false) Long sectionId
+    ) {
+        return ResponseEntity.ok(apartmentService.getAllApartmentResponse(pageIndex, search, houseId, sectionId));
     }
 
     @GetMapping("/get-all-apartment-{houseId}")

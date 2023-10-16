@@ -43,7 +43,7 @@ public class BankBookSpecification {
             }
             if (nonNull(request.sectionIdQuery())) {
                 predicates.add(criteriaBuilder.or(
-                        criteriaBuilder.equal(root.get("apartment").get("section").get("id"), request.sectionIdQuery())
+                        criteriaBuilder.equal(root.get("apartment").get("section").get("name"), request.sectionIdQuery())
                 ));
             }
             if (nonNull(request.ownerIdQuery())) {
@@ -52,11 +52,11 @@ public class BankBookSpecification {
                 ));
             }
             if (nonNull(request.balanceQuery())) {
-                if (request.balanceQuery().equals(NO_DEBT)){
+                if (request.balanceQuery().equals(NO_DEBT)) {
                     predicates.add(criteriaBuilder.or(
                             criteriaBuilder.greaterThanOrEqualTo(root.get("totalPrice"), BigDecimal.ZERO)
                     ));
-                }else {
+                } else {
                     predicates.add(criteriaBuilder.or(
                             criteriaBuilder.lessThan(root.get("totalPrice"), BigDecimal.ZERO)
                     ));

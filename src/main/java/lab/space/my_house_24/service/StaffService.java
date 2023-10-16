@@ -32,7 +32,7 @@ public interface StaffService {
 
     List<Staff> getAllStaff();
 
-    List<StaffResponse> getAllStaffMaster(StaffMasterRequest request);
+    Page<StaffResponse> getAllStaffMaster(StaffMasterRequest request);
 
     Page<StaffResponse> getAllStaffManager(Integer pageIndex, String fullNameStaff);
 
@@ -55,6 +55,7 @@ public interface StaffService {
     List<StaffResponseForHouseAdd> getAllStaffDtoForHouse(String search);
 
     Long getCurrentStaff();
+
     StaffResponseForHeader getCurrentStaffForHeader();
 
     void changeTheme(Boolean theme);

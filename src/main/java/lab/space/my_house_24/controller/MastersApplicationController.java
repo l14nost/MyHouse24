@@ -2,6 +2,7 @@ package lab.space.my_house_24.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lab.space.my_house_24.enums.JobTitle;
 import lab.space.my_house_24.model.apartment.ApartmentMastersApplicationRequest;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForMastersApplication;
 import lab.space.my_house_24.model.enums_response.EnumResponse;
@@ -17,6 +18,7 @@ import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.service.UserService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -86,20 +88,25 @@ public class MastersApplicationController {
         return ResponseEntity.ok(mastersApplicationService.getAllStatus());
     }
 
-    @PostMapping("/get-all-staff")
-    public ResponseEntity<List<StaffResponse>> getAllStaff(@RequestBody StaffMasterRequest request) {
-        return ResponseEntity.ok(staffService.getAllStaffMaster(request));
+    @GetMapping("/get-all-staff")
+    public ResponseEntity<Page<StaffResponse>> getAllStaff(@RequestParam(required = false) Integer pageIndex,
+                                                           @RequestParam(required = false) String staffQuery,
+                                                           @RequestParam(required = false) JobTitle role) {
+        return ResponseEntity.ok(staffService.getAllStaffMaster(StaffMasterRequest.builder().staffQuery(staffQuery).pageIndex(pageIndex).role(role).build()));
     }
 
-    @PostMapping("/get-all-apartment")
-    public ResponseEntity<List<ApartmentResponseForMastersApplication>> getAllApartments(
-            @RequestBody ApartmentMastersApplicationRequest request) {
-        return ResponseEntity.ok(apartmentService.getAllApartmentResponseByUserId(request));
+    @GetMapping("/get-all-apartment")
+    public ResponseEntity<Page<ApartmentResponseForMastersApplication>> getAllApartments(
+            @RequestParam(required = false) Integer pageIndex,
+            @RequestParam(required = false) String apartmentQuery,
+            @RequestParam(required = false) Long id) {
+        return ResponseEntity.ok(apartmentService.getAllApartmentResponseByUserId(ApartmentMastersApplicationRequest.builder().id(id).apartmentQuery(apartmentQuery).pageIndex(pageIndex).build()));
     }
 
     @GetMapping("/get-all-user")
-    public ResponseEntity<List<UserResponseForMastersApplication>> getAllUser() {
-        return ResponseEntity.ok(userService.getAllUsersForMastersApplication());
+    public ResponseEntity<Page<UserResponseForMastersApplication>> getAllUser(@RequestParam(required = false) Integer pageIndex,
+                                                                              @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(userService.getAllUsersForMastersApplication(pageIndex, search));
     }
 
     @PostMapping("/save-master-call")

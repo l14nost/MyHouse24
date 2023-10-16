@@ -52,13 +52,14 @@ public class ServiceServiceImpl implements ServiceService {
     @Override
     public Page<ServiceResponse> getAllServicesByIsActiveDto(Integer pageIndex, String search) {
         log.info("Try to get All Active Service and convert in Dto");
-        ServiceSpecificationForSelect serviceSpecificationForSelect = ServiceSpecificationForSelect.builder().search(search).isActive(true).build();
+        ServiceSpecificationForSelect serviceSpecificationForSelect = ServiceSpecificationForSelect.builder().search(search).build();
         return serviceRepository.findAll(serviceSpecificationForSelect, PageRequest.of(pageIndex, DEFAULT_PAGE_SIZE))
                 .map(ServiceMapper::toDto);
     }
 
     @Override
     public List<lab.space.my_house_24.entity.Service> getAllService() {
+        log.info("Try to get All Service");
         return serviceRepository.findAll();
     }
 

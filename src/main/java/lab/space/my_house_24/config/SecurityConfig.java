@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/assets/css/**", "/assets/img/**",
                                 "/assets/js/**", "/assets/vendor/**",
                                 "/assets/images/**", "/auth/**",
-                                "/files/**", "/login/**","/error/**").permitAll()
+                                "/files/**", "/login/**", "/error/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 ->
@@ -81,7 +81,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
-                .rememberMe((rememberMe) -> rememberMe.rememberMeParameter("remember-me"))
+                .rememberMe((rememberMe) -> rememberMe.rememberMeParameter("remember-me").tokenValiditySeconds(86400))
                 .logout(form -> form
                         .logoutSuccessUrl("/login?logout")
                         .deleteCookies("JSESSIONID")

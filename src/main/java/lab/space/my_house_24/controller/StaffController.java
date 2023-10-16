@@ -94,6 +94,8 @@ public class StaffController {
                                        BindingResult bindingResult) {
         staffValidator.isEmailUniqueValidation(staffSaveRequest.email(), bindingResult,
                 "StaffSaveRequest", LocaleContextHolder.getLocale());
+        staffValidator.isPhoneNumberUniqueValidation(staffSaveRequest.phone(), bindingResult,
+                "StaffUpdateRequest", LocaleContextHolder.getLocale());
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ErrorMapper.mapErrors(bindingResult));
         }
@@ -107,6 +109,9 @@ public class StaffController {
                                              BindingResult bindingResult) {
         staffValidator.isEmailUniqueValidationWithId(staffUpdateRequest.id(),
                 staffUpdateRequest.email(), bindingResult,
+                "StaffUpdateRequest", LocaleContextHolder.getLocale());
+        staffValidator.isPhoneNumberUniqueValidationWithId(staffUpdateRequest.id(),
+                staffUpdateRequest.phone(), bindingResult,
                 "StaffUpdateRequest", LocaleContextHolder.getLocale());
         staffValidator.isStaffMainDirectorValidation(
                 staffUpdateRequest, bindingResult,

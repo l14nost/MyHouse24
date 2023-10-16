@@ -21,8 +21,10 @@
                 </div>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb" id="breadcrumb">
-                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}" th:text="#{global.breadcrumb.main}"></a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/bills}" th:text="#{bills.breadcrumb}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/}"
+                                                                           th:text="#{global.breadcrumb.main}"></a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a class="text-color" th:href="@{/bills}"
+                                                                           th:text="#{bills.breadcrumb}"></a></li>
                     </ol>
                 </nav>
             </div>
@@ -93,13 +95,14 @@
                             <div class="col-8">
                                 <div class="form-group">
                                     <label for="bank-book" class="form-label">Payed</label>
-                                    <input type="text" class="form-control" id="payed" >
+                                    <input type="text" class="form-control" id="payed">
                                 </div>
                             </div>
                             <div class="col d-flex">
                                 <div class="form-group flex-fill" style="padding-top: 32px">
                                     <input type="checkbox" class="btn-check" id="draft" autocomplete="off">
-                                    <label class="btn btn-outline-success" for="draft" th:text="#{bills.save.inp.draft}"></label><br>
+                                    <label class="btn btn-outline-success" for="draft"
+                                           th:text="#{bills.save.inp.draft}"></label><br>
                                 </div>
                             </div>
                         </div>
@@ -148,11 +151,14 @@
                         <tr>
                             <td colspan="4">
                                 <button id="add-button" type="button" class="btn btn-light"
-                                        onclick="addEmptyServiceRow()" th:text="#{bills.save.service.table.button.add_service}">
+                                        onclick="addEmptyServiceRow()"
+                                        th:text="#{bills.save.service.table.button.add_service}">
                                 </button>
-                                <button type="button" class="btn btn-light" onclick="addRateServices()" th:text="#{bills.save.service.table.button.add_rate}">
+                                <button type="button" class="btn btn-light" onclick="addRateServices()"
+                                        th:text="#{bills.save.service.table.button.add_rate}">
                                 </button>
-                                <button type="button" class="btn btn-light" onclick="addMeterReading()" th:text="#{bills.save.service.table.button.add_meter_reading}">
+                                <button type="button" class="btn btn-light" onclick="addMeterReading()"
+                                        th:text="#{bills.save.service.table.button.add_meter_reading}">
                                 </button>
                             </td>
                             <td colspan="2">[[#{bills.save.service.table.total}]]: <a id="total-price">0.00</a></td>
@@ -222,8 +228,12 @@
 
     <script>
 
-        var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
-        var stompClient = Stomp.over(sockJs1);
+        const phoneTranslate = '[[#{bills.save.label.phone}]]';
+        const ownerTranslate = '[[#{bills.save.label.owner}]]';
+        const tableEmptyTranslate = '[[#{table.empty}]]';
+
+        const sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
+        const stompClient = Stomp.over(sockJs1);
 
         let breadcrumbCount = 0;
         let itemsCountServiceTable = 0;
@@ -239,6 +249,7 @@
         let billId = undefined
         let serviceBillId = undefined;
         let payedDataStatus = undefined;
+        let lang;
 
         let meterReadingRequest = {};
 
@@ -248,47 +259,52 @@
         meterReadingRequest.houseId = undefined;
 
         $(document).ready(function () {
-
-            selectStatus();
-            selectRates();
-
             $.ajax({
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
-                dataType: 'json'
-            }).done(function (response){
-                payedDataStatus = response;
-                console.log(payedDataStatus);
-            })
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                selectStatus();
+                selectRates();
+                selectApartment();
 
+                $.ajax({
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
+                    dataType: 'json'
+                }).done(function (response) {
+                    payedDataStatus = response;
+                    console.log(payedDataStatus);
+                })
 
-
-            if (new URL(window.location.href).pathname.split("/").pop() === "add") {
-                getNewBillResponse();
-                getAllMeterReading();
-
-                newOwnerContent('-');
-                newPhoneContent('-');
-                selectHouse();
-            } else {
-                const url = new URL(window.location.href).pathname.split("-");
-                console.log(url)
-                const id = url.pop();
-                console.log(url)
-                const splitUrl = url.pop().split("/").pop()
-                console.log(splitUrl)
-                if (splitUrl === 'update') {
-                    billId = id;
-                    getBillResponse(billId);
-                }else if(splitUrl === 'copy'){
-                    getCopyBillResponse(id);
+                if (new URL(window.location.href).pathname.split("/").pop() === "add") {
                     getNewBillResponse();
+                    getAllMeterReading();
+
+                    newOwnerContent('-');
+                    newPhoneContent('-');
+                    selectHouse();
                 } else {
-                    getNewBillResponse();
-                    getBankBookResponse(id);
+                    const url = new URL(window.location.href).pathname.split("-");
+                    console.log(url)
+                    const id = url.pop();
+                    console.log(url)
+                    const splitUrl = url.pop().split("/").pop()
+                    console.log(splitUrl)
+                    if (splitUrl === 'update') {
+                        billId = id;
+                        getBillResponse(billId);
+                    } else if (splitUrl === 'copy') {
+                        getCopyBillResponse(id);
+                        getNewBillResponse();
+                    } else {
+                        getNewBillResponse();
+                        getBankBookResponse(id);
+                    }
                 }
-
-            }
+            });
         });
 
         $(document).on('click', '.text-danger.service', function () {
@@ -355,7 +371,7 @@
                 const foundElement = payedDataStatus.find(item => item.name === 'UNPAID');
                 $("#status").append('<option selected value="' + foundElement?.name + '">' + foundElement?.value + '</option>');
 
-                if (response?.rate){
+                if (response?.rate) {
                     priceRate = response?.rate?.priceRate;
                     $("#rate").append('<option selected value="' + response?.rate?.id + '">' + response?.rate?.name + '</option>');
                 }
@@ -399,7 +415,7 @@
                 $("#status").append('<option selected value="' + response?.status?.name + '">' + response?.status?.value + '</option>');
                 $("#draft").prop('checked', response?.draft);
 
-                if (response?.rate){
+                if (response?.rate) {
                     priceRate = response?.rate?.priceRate;
                     $("#rate").append('<option selected value="' + response?.rate?.id + '">' + response?.rate?.name + '</option>');
                 }
@@ -419,7 +435,7 @@
                 meterReadingRequest.apartmentId = response?.bankBook?.apartment?.id;
                 getAllMeterReading();
 
-                if (breadcrumbCount === 0){
+                if (breadcrumbCount === 0) {
                     $("#breadcrumb-title").append('[[#{bills.card.breadcrumb}]] №' + response?.number);
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.card.breadcrumb}]] №' + response?.number, '/bills/card-' + response?.id));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.editing}]]'));
@@ -502,7 +518,7 @@
                     $('#serviceBillId-' + serviceSelectCount).val(service.id);
                     $('#count-' + serviceSelectCount).val(service.count);
                     $('#price-' + serviceSelectCount).val(service.totalPrice.toFixed(2));
-                    if (index !== 0){
+                    if (index !== 0) {
                         itemsCountServiceTable++;
                     }
                 });
@@ -582,7 +598,7 @@
                     $('#serviceBillId-' + serviceSelectCount).val(service.id);
                     $('#count-' + serviceSelectCount).val(service.count);
                     $('#price-' + serviceSelectCount).val(service.totalPrice.toFixed(2));
-                    if (index !== 0){
+                    if (index !== 0) {
                         itemsCountServiceTable++;
                     }
                 });
@@ -604,7 +620,7 @@
                 $("#breadcrumb-title").append('[[#{bills.save.breadcrumb}]]');
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{bills.save.breadcrumb}]]', '/bills'));
                 $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
-            }).fail(function (response){
+            }).fail(function (response) {
                 console.log(response);
             });
         }
@@ -631,7 +647,7 @@
 
         function collectServiceDataResponse() {
             let unitData = [];
-            $('.service-row').each(function() {
+            $('.service-row').each(function () {
                 let serviceId = $(this).find('.form-select[id^="service-"]');
                 unitData.push({
                     serviceId: serviceId || null,
@@ -639,6 +655,7 @@
             });
             return unitData;
         }
+
 
         function saveBill() {
             let billRequest = {
@@ -677,7 +694,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify(billRequest),
                 beforeSend: function () {
-                    clearValidMessages();
                     clearErrorMessages();
                 }
             }).done(function () {
@@ -695,8 +711,8 @@
                 if (errors?.rateId) validResponse($('#rate'), errors.rateId, 'div');
                 if (errors?.periodOf) validResponse($('#range'), errors.periodOf, 'div');
                 if (errors?.serviceBillList) errorResponse($('#add-button'), errors.serviceBillList, 'div');
-                let data={
-                    errorData:  collectServiceDataResponse()
+                let data = {
+                    errorData: collectServiceDataResponse()
                 }
                 for (const key in errors) {
                     if (errors.hasOwnProperty(key)) {
@@ -706,7 +722,7 @@
                         if (col === 'serviceId') validResponse($('#' + data?.errorData[index]?.serviceId[0].id), value, "div");
                     }
                 }
-            })
+            });
         }
 
         function addEmptyServiceRow() {
@@ -786,21 +802,21 @@
                 numericValue = '0.00';
             }
 
-            if (numericValue > parseFloat(totalPrice)){
+            if (numericValue > parseFloat(totalPrice)) {
                 numericValue = totalPrice;
-                if ($('#status').val()!=='PAID'){
+                if ($('#status').val() !== 'PAID') {
                     const foundElement = payedDataStatus.find(item => item.name === 'PAID');
                     $("#status").append('<option selected value="' + foundElement?.name + '">' + foundElement?.value + '</option>');
                 }
             }
-            if (parseFloat(numericValue) > 0 && numericValue < parseFloat(totalPrice)){
-                if ($('#status').val()!=='PARTLY_PAID'){
+            if (parseFloat(numericValue) > 0 && numericValue < parseFloat(totalPrice)) {
+                if ($('#status').val() !== 'PARTLY_PAID') {
                     const foundElement = payedDataStatus.find(item => item.name === 'PARTLY_PAID');
                     $("#status").append('<option selected value="' + foundElement?.name + '">' + foundElement?.value + '</option>');
                 }
             }
-            if (parseFloat(numericValue) === 0){
-                if ($('#status').val()!=='UNPAID'){
+            if (parseFloat(numericValue) === 0) {
+                if ($('#status').val() !== 'UNPAID') {
                     const foundElement = payedDataStatus.find(item => item.name === 'UNPAID');
                     $("#status").append('<option selected value="' + foundElement?.name + '">' + foundElement?.value + '</option>');
                 }
@@ -843,7 +859,7 @@
             calculateTotalPrice();
         }
 
-        function calculateTotalPrice(){
+        function calculateTotalPrice() {
             let totalSum = 0;
             $('input[id^="price-"]').each(function () {
                 let price = parseFloat($(this).val().replace(',', '.'));
@@ -931,15 +947,15 @@
                 });
             }
 
-            if (priceRate === undefined && rateId !== rateVal){
+            if (priceRate === undefined && rateId !== rateVal) {
                 console.warn("Rate !== RateId")
-                rateId =  rateVal ;
-                if(rateId !== ''){
+                rateId = rateVal;
+                if (rateId !== '') {
                     $.ajax({
                         method: "GET",
-                        url: "/myhouse24-amirb-nikitaf/admin/bills/get-rate-" + rateId ,
+                        url: "/myhouse24-amirb-nikitaf/admin/bills/get-rate-" + rateId,
                         contentType: 'application/json',
-                        beforeSend : function (){
+                        beforeSend: function () {
                             clearValidMessages();
                         }
                     }).done(function (response) {
@@ -963,9 +979,9 @@
         function deleteEntity() {
             $.ajax({
                 method: "DELETE",
-                url: "/myhouse24-amirb-nikitaf/admin/bills/delete-service-bill/" + serviceBillId ,
+                url: "/myhouse24-amirb-nikitaf/admin/bills/delete-service-bill/" + serviceBillId,
                 contentType: 'application/json',
-                beforeSend : function (){
+                beforeSend: function () {
                     clearValidMessages();
                 }
             }).done(function () {
@@ -1017,22 +1033,32 @@
         function selectService(id, service, unit) {
             $('#service-' + id).select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                language: lang,
+                maximumInputLength: 40,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-services',
                     cache: true,
                     delay: 1000,
-                    processResults: function (data) {
-                        console.log(data)
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name,
-                                    unit: item.unit
-                                };
-                            })
+                            search: param.term || "",
+                            page: param.page || 0
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name,
+                                unitName: item.unit.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -1049,6 +1075,7 @@
             $('#status').select2({
                 theme: 'bootstrap-5',
                 minimumResultsForSearch: -1,
+                language: lang,
                 ajax: {
                     method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
@@ -1071,21 +1098,32 @@
         function selectRates() {
             $('#rate').select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                maximumInputLength: 100,
+                language: lang,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-rates',
                     cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
+                    delay: 1500,
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name,
-                                    priceRate: item.priceRate
-                                };
-                            })
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name,
+                                priceRate: item.priceRate
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -1095,20 +1133,31 @@
         function selectHouse(house) {
             $('#house').select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                maximumInputLength: 60,
+                language: lang,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-house',
                     cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
+                    delay: 1500,
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name
-                                };
-                            })
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -1121,20 +1170,31 @@
         function selectSection(houseId, section) {
             $('#section').select2({
                 theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
+                maximumInputLength: 15,
+                language: lang,
                 ajax: {
-                    method: 'GET',
                     url: '/myhouse24-amirb-nikitaf/admin/bills/get-section/' + houseId,
                     cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
+                    delay: 1500,
+                    data: function (param) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.name
-                                };
-                            })
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -1144,52 +1204,39 @@
             }
         }
 
-        $('#apartment').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment',
-                cache: true,
-                delay: 1000,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+        function selectApartment(apartment) {
+            $('#apartment').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 15,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            search : param.term || "",
+                            houseId: houseId,
+                            sectionId: sectionId
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.number,
                                 owner: item.owner,
                                 house: item.house,
-                                section: item.section,
-                                bankBook: item.bankBook
+                                section: item.section
                             };
                         })
-                    };
-                }
-            }
-        });
-
-        function selectApartment(apartment) {
-            $('#apartment').select2({
-                theme: 'bootstrap-5',
-                minimumResultsForSearch: -1,
-                ajax: {
-                    method: 'GET',
-                    url: sectionId ? '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment-' + houseId + '/' + sectionId : '/myhouse24-amirb-nikitaf/admin/bills/get-all-apartment-' + houseId,
-                    cache: true,
-                    delay: 1000,
-                    processResults: function (data) {
                         return {
-                            results: data.map(function (item) {
-                                return {
-                                    id: item.id,
-                                    text: item.number,
-                                    owner: item.owner,
-                                    house: item.house,
-                                    section: item.section,
-                                    bankBook: item.bankBook
-                                };
-                            })
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
                         };
                     }
                 }
@@ -1268,27 +1315,27 @@
             let totalPrice = $('#total-price').text();
             let payed = $('#payed').val();
             console.log(selectedStatus);
-            if (selectedStatus?.id === "PAID"){
-                if (parseFloat(payed) !== parseFloat(totalPrice)){
+            if (selectedStatus?.id === "PAID") {
+                if (parseFloat(payed) !== parseFloat(totalPrice)) {
                     $('#payed').val(totalPrice);
                 }
-            }else if (selectedStatus?.id === "PARTLY_PAID"){
-                if (!(parseFloat(payed) > 0 && parseFloat(payed) < parseFloat(totalPrice))){
+            } else if (selectedStatus?.id === "PARTLY_PAID") {
+                if (!(parseFloat(payed) > 0 && parseFloat(payed) < parseFloat(totalPrice))) {
                     $('#payed').val('0.01');
                 }
-            }else if (selectedStatus?.id === "UNPAID"){
-                if (parseFloat(payed) !== 0){
+            } else if (selectedStatus?.id === "UNPAID") {
+                if (parseFloat(payed) !== 0) {
                     $('#payed').val('0.00');
                 }
             }
         });
 
         function newPhoneContent(phone) {
-            document.getElementById('phone').innerHTML = '<label class="form-label">[[#{bills.save.label.phone}]]: <a>' + phone + '</a></label>';
+            document.getElementById('phone').innerHTML = '<label class="form-label">' + phoneTranslate + ': <a>' + phone + '</a></label>';
         }
 
         function newOwnerContent(house) {
-            document.getElementById('owner').innerHTML = '<label class="form-label">[[#{bills.save.label.owner}]]: <a>' + house + '</a></label>';
+            document.getElementById('owner').innerHTML = '<label class="form-label">' + ownerTranslate + ': <a>' + house + '</a></label>';
         }
 
         function applyMask(input) {
@@ -1349,7 +1396,7 @@
                 $(TABLE_BODY).append(
                     '<tr>' +
                     '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
-                    '[[#{table.empty}]]' +
+                    tableEmptyTranslate +
                     '    </td>' +
                     '</tr>'
                 );
@@ -1401,7 +1448,7 @@
                     $(TABLE_BODY).append(
                         '<tr>' +
                         '    <td colspan="' + TABLE_COLUMNS_COUNT + '" class="align-middle text-center no-data">' +
-                        '[[#{table.empty}]]' +
+                        tableEmptyTranslate +
                         '    </td>' +
                         '</tr>'
                     );

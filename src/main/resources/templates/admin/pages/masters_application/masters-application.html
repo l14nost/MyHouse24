@@ -59,7 +59,7 @@
                             <input class="form-control" type="text" id="number-application" oninput="this.value = this.value.replace(/\D/g, '');" maxlength="150">
                         </th>
                         <th>
-                            <input class="form-control" type="text" id="time" oninput="this.value = this.value.replace(/[^0-9.\s-:]/g, '');" maxlength="30">
+                            <input class="form-control" id="date" type="date" style="width: 120px">
                         </th>
                         <th>
                             <select id="type-master" class="mb-1 form-select form-select" aria-label=".form-select-lg example"
@@ -124,20 +124,42 @@
         let staffMasterRequest = {};
         staffMasterRequest.role = undefined;
         let filterTimeout;
+        let lang;
 
         $(document).ready(function () {
-            getAllMastersApplication();
-            $(document.body).on("click", "tr", function (e) {
-                if (!($(e.target).attr("data-actions") === "data-actions") && !$(e.target).is("svg") && !$(e.target).is("a") && !$(e.target).is("path")) {
-                    const href = $(this).data('href');
-                    if (href) {
-                        window.location.href = href;
+            $.ajax({
+                url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+            }).done(function (response) {
+                lang = response;
+            }).fail(function () {
+                lang = "en";
+            }).then(function (){
+                allSelect();
+                const date_flatpickr = document.querySelectorAll('#date');
+                Array.from(date_flatpickr, (elem) => {
+                    if (typeof flatpickr !== typeof undefined) {
+                        flatpickr(elem, {
+                            minDate: "01.01.2014",
+                            dateFormat: "d.m.Y - H:i",
+                            enableTime: true,
+                            time_24hr: true,
+                            locale: lang
+                        })
                     }
-                }
+                })
+                getAllMastersApplication();
+                $(document.body).on("click", "tr", function (e) {
+                    if (!($(e.target).attr("data-actions") === "data-actions") && !$(e.target).is("svg") && !$(e.target).is("a") && !$(e.target).is("path")) {
+                        const href = $(this).data('href');
+                        if (href) {
+                            window.location.href = href;
+                        }
+                    }
+                });
             });
         });
 
-        $('#number-application, #time, #description, #apartment, #phone').on('input', function () {
+        $('#number-application, #date, #description, #apartment, #phone').on('input', function () {
             clearTimeout(filterTimeout);
             filterTimeout = setTimeout(function () {
                 updateMastersApplicationsRequestAndSend();
@@ -174,6 +196,7 @@
                 data: JSON.stringify(masterApplRequest)
             }).done(function (response) {
                 console.info(response)
+                console.info(masterApplRequest)
                 const TABLE_BODY = createTable('#masters-appl-table', response?.totalElements, response?.totalPages , masterApplRequest?.pageIndex);
                 $.each(response?.content, function (index, mastersAppl) {
                     const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" href="/myhouse24-amirb-nikitaf/admin/master-call/update-' + mastersAppl.id + '" aria-label="Edit User" data-bs-original-title="Edit User">' +
@@ -275,102 +298,124 @@
         function clearInput(){
             $('#search th select').val('').trigger('change');
             $('#search th select option').remove();
-            $('#search input').val('');
+            $('#search th input').val('');
             updateMastersApplicationsRequestAndSend();
             showToast('success')
         }
 
-        $('#type-master').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-type-master',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.name,
-                                text: item.value
-                            };
-                        })
-                    };
+        function allSelect(){
+            $('#type-master').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                language: lang,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-type-master',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
                 }
-            }
-        });
+            });
 
-        $('#apartment-owner').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-user',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
-                            return {
-                                id: item.id,
-                                text: item.fullName
-                            };
-                        })
-                    };
-                }
-            }
-        });
-
-        $('#master').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'POST',
-                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-staff',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: JSON.stringify(staffMasterRequest),
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    console.log(data)
-                    return {
-                        results: data.map(function (item) {
+            $('#apartment-owner').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 60,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-user',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            search : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
                             return {
                                 id: item.id,
                                 text: item.fullName
                             };
                         })
-                    };
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
                 }
-            }
-        });
+            });
 
-
-        $('#status').select2({
-            theme: 'bootstrap-5',
-            minimumResultsForSearch: -1,
-            ajax: {
-                method: 'GET',
-                url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-status',
-                cache: true,
-                delay: 1500,
-                processResults: function (data) {
-                    return {
-                        results: data.map(function (item) {
+            $('#master').select2({
+                theme: 'bootstrap-5',
+                maximumInputLength: 60,
+                language: lang,
+                ajax: {
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-staff',
+                    cache: true,
+                    delay: 1500,
+                    data: function (param) {
+                        return {
+                            pageIndex : param.page || 0,
+                            staffQuery : param.term || ""
+                        }
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 0;
+                        let mappedResults = data.content.map(function (item) {
                             return {
-                                id: item.name,
-                                text: item.value
+                                id: item.id,
+                                text: item.fullName
                             };
                         })
-                    };
+                        return {
+                            results: mappedResults,
+                            pagination: {
+                                more: params.page < data.totalPages - 1
+                            }
+                        };
+                    }
                 }
-            }
-        });
+            });
+
+
+            $('#status').select2({
+                theme: 'bootstrap-5',
+                minimumResultsForSearch: -1,
+                language: lang,
+                ajax: {
+                    method: 'GET',
+                    url: '/myhouse24-amirb-nikitaf/admin/master-call/get-all-status',
+                    cache: true,
+                    delay: 1500,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function (item) {
+                                return {
+                                    id: item.name,
+                                    text: item.value
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+        }
         function updateMastersApplicationsRequestAndSend() {
             masterApplRequest.idQuery = $('#number-application').val();
-            masterApplRequest.dateTime = $('#time').val();
+            masterApplRequest.dateTime = $('#date').val();
             if ($('#type-master').val()!==''){
                 masterApplRequest.typeMaster = $('#type-master').val();
             }

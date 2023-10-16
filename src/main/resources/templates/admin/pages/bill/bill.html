@@ -114,10 +114,10 @@
               </select>
             </th>
             <th>
-              <input class="form-control" type="text" id="date" oninput="this.value = this.value.replace(/[^0-9.]/g, '');" maxlength="30">
+              <input class="form-control" id="date" type="date" style="width: 120px">
             </th>
             <th>
-              <input class="form-control" type="text" id="month" oninput="this.value = this.value.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9, ]/g, '');" maxlength="30">
+              <input class="form-control" id="month" type="date" style="width: 120px">
             </th>
             <th>
               <input class="form-control" type="text" id="apartment" maxlength="100">
@@ -167,11 +167,45 @@
     let billRequest = {};
     billRequest.pageIndex = 0;
     let filterTimeout;
+    let lang;
 
     var sockJs1 = new SockJS("/myhouse24-amirb-nikitaf/admin/ws");
     var stompClient = Stomp.over(sockJs1);
 
     $(document).ready(function () {
+      $.ajax({
+        url: "/myhouse24-amirb-nikitaf/admin/get-locale"
+      }).done(function (response) {
+        lang = response;
+      }).fail(function () {
+        lang = "en";
+      }).then(function (){
+        allSelect();
+        const date_flatpickr = document.querySelectorAll('#date');
+        Array.from(date_flatpickr, (elem) => {
+          if (typeof flatpickr !== typeof undefined) {
+            flatpickr(elem, {
+              minDate: "01.01.2014",
+              dateFormat: "d.m.Y",
+              locale: lang
+            })
+          }
+        })
+
+        const month_flatpickr = document.querySelectorAll('#month');
+        Array.from(month_flatpickr, (elem) => {
+          if (typeof flatpickr !== typeof undefined) {
+            flatpickr(elem, {
+              minDate: "01.01.2014",
+              dateFormat: "M, Y",
+              mode: "single",
+              shorthand: true,
+              locale: lang
+            })
+          }
+        })
+      });
+
 
       stompClient.connect({}, (frame) => {
         console.log('Connected: ' + frame);
@@ -394,69 +428,84 @@
       showToast('success');
     }
 
-    $('#status').select2({
-      theme: 'bootstrap-5',
-      minimumResultsForSearch: -1,
-      ajax: {
-        method: 'GET',
-        url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
-        cache: true,
-        delay: 1500,
-        processResults: function (data) {
-          return {
-            results: data.map(function (item) {
-              return {
-                id: item.name,
-                text: item.value
-              };
-            })
-          };
+    function allSelect() {
+      $('#status').select2({
+        theme: 'bootstrap-5',
+        minimumResultsForSearch: -1,
+        language: lang,
+        ajax: {
+          method: 'GET',
+          url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-status',
+          cache: true,
+          delay: 1500,
+          processResults: function (data) {
+            return {
+              results: data.map(function (item) {
+                return {
+                  id: item.name,
+                  text: item.value
+                };
+              })
+            };
+          }
         }
-      }
-    });
+      });
 
-    $('#draft').select2({
-      theme: 'bootstrap-5',
-      minimumResultsForSearch: -1,
-      ajax: {
-        method: 'GET',
-        url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-draft',
-        cache: true,
-        delay: 1500,
-        processResults: function (data) {
-          console.log(data)
-          return {
-            results: data.map(function (item) {
-              return {
-                id: item.name,
-                text: item.value
-              };
-            })
-          };
+      $('#draft').select2({
+        theme: 'bootstrap-5',
+        minimumResultsForSearch: -1,
+        language: lang,
+        ajax: {
+          method: 'GET',
+          url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-draft',
+          cache: true,
+          delay: 1500,
+          processResults: function (data) {
+            console.log(data)
+            return {
+              results: data.map(function (item) {
+                return {
+                  id: item.name,
+                  text: item.value
+                };
+              })
+            };
+          }
         }
-      }
-    });
+      });
 
-    $('#owner').select2({
-      theme: 'bootstrap-5',
-      minimumResultsForSearch: -1,
-      ajax: {
-        method: 'GET',
-        url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-owner',
-        cache: true,
-        delay: 1500,
-        processResults: function (data) {
-          return {
-            results: data.map(function (item) {
+      $('#owner').select2({
+        theme: 'bootstrap-5',
+        maximumInputLength: 60,
+        language: lang,
+        ajax: {
+          url: '/myhouse24-amirb-nikitaf/admin/bills/get-all-owner',
+          cache: true,
+          delay: 1500,
+          data: function (param) {
+            return {
+              pageIndex : param.page || 0,
+              search : param.term || ""
+            }
+          },
+          processResults: function (data, params) {
+            params.page = params.page || 0;
+            let mappedResults = data.content.map(function (item) {
               return {
                 id: item.id,
                 text: item.name
               };
             })
-          };
+            return {
+              results: mappedResults,
+              pagination: {
+                more: params.page < data.totalPages - 1
+              }
+            };
+          }
         }
-      }
-    });
+      });
+    }
 
     function updateBillRequestAndSend() {
       billRequest.numberQuery = $('#number').val();
@@ -476,6 +525,7 @@
       billRequest.pageIndex = 0;
       getAllBill();
     }
+
   </script>
 
 </th:block>

@@ -23,6 +23,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,6 +51,7 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
     private static MockedStatic<FileHandler> fileHandlerMockedStatic;
+
     @BeforeAll
     public static void setUp() {
         fileHandlerMockedStatic = Mockito.mockStatic(FileHandler.class);
@@ -59,6 +61,7 @@ class UserServiceImplTest {
     public static void tearDown() {
         fileHandlerMockedStatic.close();
     }
+
     @Test
     void getUserByEmail() {
         when(userRepository.findUserByEmail("test@gmail.com")).thenReturn(Optional.of(User.builder().build()));
@@ -77,7 +80,7 @@ class UserServiceImplTest {
         );
         UserMainPageRequest userMainPageRequest = UserMainPageRequest.builder().page(1).build();
         UserSpecification userSpecification = UserSpecification.builder().userMainPageRequest(userMainPageRequest).build();
-        when(userRepository.findAll(userSpecification, PageRequest.of(1,10))).thenReturn(userPage);
+        when(userRepository.findAll(userSpecification, PageRequest.of(1, 10))).thenReturn(userPage);
         Page<UserResponse> userResponsePage = userService.getAllUserDto(userMainPageRequest);
         assertEquals(4, userResponsePage.getTotalElements());
         assertEquals(UserResponse.class, userResponsePage.iterator().next().getClass());
@@ -87,7 +90,7 @@ class UserServiceImplTest {
     void findById() {
         User user = User.builder()
                 .id(1L)
-                .addDate(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .addDate(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .surname("s")
                 .lastname("l")
                 .firstname("f")
@@ -109,7 +112,7 @@ class UserServiceImplTest {
                 .userStatus(UserStatus.ACTIVE)
                 .token("token")
                 .tokenUsage(true)
-                .date(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .date(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .messageList(new ArrayList<>(List.of(
                         Message.builder().build()
                 )))
@@ -130,7 +133,7 @@ class UserServiceImplTest {
                 .email("test@gmail.com")
                 .filename("filename")
                 .notes("notes")
-                .date(LocalDate.of(2021,12,12))
+                .date(LocalDate.of(2021, 12, 12))
                 .status(EnumResponse.builder().name(UserStatus.ACTIVE.name()).value(UserStatus.ACTIVE.getUserStatus(LocaleContextHolder.getLocale())).build())
                 .build(), userService.findById(1L));
     }
@@ -139,7 +142,7 @@ class UserServiceImplTest {
     void findByIdEdit() {
         User user = User.builder()
                 .id(1L)
-                .addDate(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .addDate(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .surname("s")
                 .lastname("l")
                 .firstname("f")
@@ -161,7 +164,7 @@ class UserServiceImplTest {
                 .userStatus(UserStatus.ACTIVE)
                 .token("token")
                 .tokenUsage(true)
-                .date(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .date(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .messageList(new ArrayList<>(List.of(
                         Message.builder().build()
                 )))
@@ -182,7 +185,7 @@ class UserServiceImplTest {
                 .email("test@gmail.com")
                 .filename("filename")
                 .notes("notes")
-                .date(LocalDate.of(2021,12,12))
+                .date(LocalDate.of(2021, 12, 12))
                 .status(UserStatus.ACTIVE)
                 .build(), userService.findByIdEdit(1L));
     }
@@ -191,7 +194,7 @@ class UserServiceImplTest {
     void deleteById() {
         User user = User.builder()
                 .id(1L)
-                .addDate(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .addDate(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .surname("s")
                 .lastname("l")
                 .firstname("f")
@@ -213,7 +216,7 @@ class UserServiceImplTest {
                 .userStatus(UserStatus.ACTIVE)
                 .token("token")
                 .tokenUsage(true)
-                .date(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .date(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .messageList(new ArrayList<>(List.of(
                         Message.builder().build()
                 )))
@@ -230,7 +233,7 @@ class UserServiceImplTest {
     void findEntityById() {
         User user = User.builder()
                 .id(1L)
-                .addDate(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .addDate(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .surname("s")
                 .lastname("l")
                 .firstname("f")
@@ -252,7 +255,7 @@ class UserServiceImplTest {
                 .userStatus(UserStatus.ACTIVE)
                 .token("token")
                 .tokenUsage(true)
-                .date(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .date(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .messageList(new ArrayList<>(List.of(
                         Message.builder().build()
                 )))
@@ -271,7 +274,7 @@ class UserServiceImplTest {
     void save() {
         UserAddRequest userAddRequest = UserAddRequest.builder()
                 .status(UserStatus.ACTIVE)
-                .img(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+                .img(new MockMultipartFile("file", "example.txt", "text/plain", "Hello World".getBytes()))
                 .date(LocalDate.now())
                 .email("test@gmail.com")
                 .surname("s")
@@ -286,7 +289,7 @@ class UserServiceImplTest {
                 .build();
         when(passwordEncoder.encode("pass")).thenReturn("encodepass");
         userService.save(userAddRequest);
-        verify(userRepository,times(1)).save(any(User.class));
+        verify(userRepository, times(1)).save(any(User.class));
         verify(passwordEncoder, times(1)).encode("pass");
     }
 
@@ -294,14 +297,14 @@ class UserServiceImplTest {
     void save_SimpleEntity() {
         User user = User.builder().id(1L).build();
         userService.save(user);
-        verify(userRepository,times(1)).save(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
     void update() {
         UserEditRequest userEditRequest = UserEditRequest.builder()
                 .status(UserStatus.ACTIVE)
-                .img(new MockMultipartFile("file","example.txt","text/plain","Hello World".getBytes()))
+                .img(new MockMultipartFile("file", "example.txt", "text/plain", "Hello World".getBytes()))
                 .date(LocalDate.now())
                 .email("test@gmail.com")
                 .surname("s")
@@ -317,7 +320,7 @@ class UserServiceImplTest {
         when(passwordEncoder.encode("pass")).thenReturn("encodepass");
         User user = User.builder()
                 .id(1L)
-                .addDate(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .addDate(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .surname("s")
                 .lastname("l")
                 .firstname("f")
@@ -339,7 +342,7 @@ class UserServiceImplTest {
                 .userStatus(UserStatus.ACTIVE)
                 .token("token")
                 .tokenUsage(true)
-                .date(LocalDate.of(2021,12,12).atStartOfDay(ZoneId.systemDefault()).toInstant())
+                .date(LocalDate.of(2021, 12, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())
                 .messageList(new ArrayList<>(List.of(
                         Message.builder().build()
                 )))
@@ -391,23 +394,22 @@ class UserServiceImplTest {
                 )
         );
         UserSpecificationForTable userSpecification = UserSpecificationForTable.builder().search("search").build();
-        when(userRepository.findAll(userSpecification, PageRequest.of(1,5))).thenReturn(userPage);
-        Page<UserResponseForTable> userResponsePage = userService.userResponseForSelect(1,"search");
+        when(userRepository.findAll(userSpecification, PageRequest.of(1, 5))).thenReturn(userPage);
+        Page<UserResponseForTable> userResponsePage = userService.userResponseForSelect(1, "search");
         assertEquals(4, userResponsePage.getTotalElements());
         assertEquals(UserResponseForTable.class, userResponsePage.iterator().next().getClass());
     }
 
     @Test
     void getAllUsersForMastersApplication() {
-        when(userRepository.findAll()).thenReturn(List.of(
+        when(userRepository.findAll((Specification<User>) any(), any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(
                 User.builder().build(),
                 User.builder().build(),
                 User.builder().build(),
                 User.builder().build()
-        ));
+        )));
 
-        assertEquals(4, userService.getAllUsersForMastersApplication().size());
-        assertEquals(UserResponseForMastersApplication.class, userService.getAllUsersForMastersApplication().get(0).getClass());
+        assertEquals(4, userService.getAllUsersForMastersApplication(anyInt(), anyString()).getTotalElements());
     }
 
     @Test
@@ -443,7 +445,7 @@ class UserServiceImplTest {
     @Test
     void loadUserByToken() {
         when(jwtServiceForUser.extractUsername("token")).thenReturn("mail@gmail.com");
-        assertEquals("mail@gmail.com",userService.loadUserByToken("token"));
+        assertEquals("mail@gmail.com", userService.loadUserByToken("token"));
     }
 
     @Test
@@ -453,7 +455,7 @@ class UserServiceImplTest {
         when(passwordEncoder.encode("pass")).thenReturn("encodepass");
         userService.activate(ForgotPassRequest.builder().password("pass").build(), "token");
         verify(userRepository, times(1)).save(User.builder().email("test@gmail.com").userStatus(UserStatus.ACTIVE).tokenUsage(true).password("encodepass").build());
-        verify(customMailSender, times(1)).send(anyString(),anyString(),anyString());
+        verify(customMailSender, times(1)).send(anyString(), anyString(), anyString());
     }
 
     @Test

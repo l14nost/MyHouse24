@@ -17,6 +17,7 @@ import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -72,13 +73,19 @@ public class BankBookController {
     }
 
     @GetMapping("/get-all-owner")
-    public ResponseEntity<List<UserResponseForTable>> getAllUser() {
-        return ResponseEntity.ok(userService.userListForTable());
+    public ResponseEntity<Page<UserResponseForTable>> getAllUser(
+            @RequestParam(required = false) Integer pageIndex,
+            @RequestParam(required = false) String search
+    ) {
+        return ResponseEntity.ok(userService.userResponseForSelect(pageIndex, search));
     }
 
     @GetMapping("/get-all-section")
-    public ResponseEntity<List<SectionResponseForTable>> getAllSection() {
-        return ResponseEntity.ok(sectionService.sectionListForTable());
+    public ResponseEntity<?> getAllSection(
+            @RequestParam(required = false) Integer pageIndex,
+            @RequestParam(required = false) String search
+    ) {
+        return ResponseEntity.ok(sectionService.sectionListForTable(pageIndex, search));
     }
 
     @GetMapping("/get-all-status")
@@ -87,14 +94,16 @@ public class BankBookController {
     }
 
     @GetMapping("/get-all-house")
-    public ResponseEntity<List<HouseResponseForTable>> getAllHouse() {
-        return ResponseEntity.ok(houseService.houseListForTable());
+    public ResponseEntity<Page<HouseResponseForTable>> getAllHouse(@RequestParam(required = false) Integer pageIndex,
+                                                                   @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(houseService.houseListForTable(pageIndex, search));
     }
 
     @GetMapping("/get-section/{houseId}")
-    public ResponseEntity<List<SectionResponseForTable>> getSectionByHouse(@PathVariable Long houseId) {
-        return ResponseEntity.ok(sectionService.sectionByHouse(houseId));
-
+    public ResponseEntity<Page<SectionResponseForTable>> getSectionByHouse(@PathVariable Long houseId,
+                                                                           @RequestParam(required = false) Integer pageIndex,
+                                                                           @RequestParam(required = false) String search) {
+        return ResponseEntity.ok(sectionService.sectionByHouse(houseId, pageIndex, search));
     }
 
     @GetMapping("/get-all-apartment-{houseId}")
@@ -109,8 +118,13 @@ public class BankBookController {
     }
 
     @GetMapping("/get-all-apartment")
-    public ResponseEntity<List<ApartmentResponseForBankBook>> getAllApartment() {
-        return ResponseEntity.ok(apartmentService.getAllApartmentResponse());
+    public ResponseEntity<Page<ApartmentResponseForBankBook>> getAllApartment(
+            @RequestParam(required = false) Integer pageIndex,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long houseId,
+            @RequestParam(required = false) Long sectionId
+    ) {
+        return ResponseEntity.ok(apartmentService.getAllApartmentResponse(pageIndex, search, houseId, sectionId));
     }
 
     @GetMapping("/get-bank-book-{id}")
@@ -150,7 +164,7 @@ public class BankBookController {
                                             BindingResult bindingResult) {
         bankBookValidator.isNumberUniqueValidationWithId(request.id(), request.number(), bindingResult,
                 "BankBookUpdateRequest", LocaleContextHolder.getLocale());
-        if (nonNull(request.apartmentId())){
+        if (nonNull(request.apartmentId())) {
             apartmentValidator.isApartmentWithBankBook(request.apartmentId(), bindingResult,
                     "BankBookSaveRequest", LocaleContextHolder.getLocale());
         }
@@ -172,7 +186,7 @@ public class BankBookController {
                                           BindingResult bindingResult) {
         bankBookValidator.isNumberUniqueValidation(request.number(), bindingResult,
                 "BankBookSaveRequest", LocaleContextHolder.getLocale());
-        if (nonNull(request.apartmentId())){
+        if (nonNull(request.apartmentId())) {
             apartmentValidator.isApartmentWithBankBook(request.apartmentId(), bindingResult,
                     "BankBookSaveRequest", LocaleContextHolder.getLocale());
         }
