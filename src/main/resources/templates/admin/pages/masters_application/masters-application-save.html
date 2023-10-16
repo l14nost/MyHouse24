@@ -184,8 +184,8 @@
                     masterApplId = new URL(window.location.href).pathname.split("-").pop()
                     getMastersApplicationResponse(masterApplId);
                 }else {
-                    $("#breadcrumb-title").append('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]');
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]] [[#{masters_call.card.breadcrumb}]]','/master-call'));
+                    $("#breadcrumb-title").append('[[#{masters_call.save.breadcrumb}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{masters_call.save.breadcrumb}]]','/master-call'));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
 
                     newFloorContent('-');
