@@ -216,7 +216,7 @@
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
-                            var mappedResults = data.map(function(item) {
+                            var mappedResults = data.content.map(function(item) {
                                 return {
                                     id: item.id,
                                     text: item.name
@@ -229,7 +229,7 @@
                         cache: true
                     },
                     placeholder: defaultSelect,
-                    minimumResultsForSearch: 7
+                    minimumResultsForSearch: 10
                 });
                 $("#floor").select2({
                     theme: 'bootstrap-5',
@@ -244,7 +244,7 @@
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
-                            var mappedResults = data.map(function(item) {
+                            var mappedResults = data.content.map(function(item) {
                                 return {
                                     id: item.id,
                                     text: item.name
@@ -252,12 +252,15 @@
                             });
                             return {
                                 results: mappedResults,
+                                pagination: {
+                                    more: params.page<data.totalPages-1
+                                }
                             }
                         },
                         cache: true
                     },
                     placeholder: defaultSelect,
-                    minimumResultsForSearch: 7
+                    minimumResultsForSearch: 10
                 });
 
 

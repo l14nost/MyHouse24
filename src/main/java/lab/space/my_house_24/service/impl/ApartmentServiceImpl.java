@@ -226,5 +226,18 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentRepository.findAll(apartmentSpecification);
     }
 
+    @Override
+    public Page<ApartmentResponseForTable> apartmentForSelectPagination(Long idHouse, Long idSection, Long idFloor, Boolean duty, Integer page) {
+        log.info("Try to get apartments dto for select");
+        ApartmentSpecificationForSelect apartmentSpecificationForSelect = ApartmentSpecificationForSelect.builder()
+                .idFloor(idFloor)
+                .idHouse(idHouse)
+                .idSection(idSection)
+                .duty(duty)
+                .build();
+        return apartmentRepository.findAll(apartmentSpecificationForSelect, PageRequest.of(page, 10)).map(ApartmentMapper::entityToDtoForTable);
+
+    }
+
 
 }

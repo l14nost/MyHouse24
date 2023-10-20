@@ -35,7 +35,7 @@ public class UserController {
 
 
     @PostMapping("/get-all-users")
-    public ResponseEntity getAllUserSpecification(@RequestBody UserMainPageRequest userMainPageRequest) {
+    public ResponseEntity getAllUserSpecification(@RequestBody @Valid UserMainPageRequest userMainPageRequest) {
         return ResponseEntity.ok(userService.getAllUserDto(userMainPageRequest));
     }
 

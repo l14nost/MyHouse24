@@ -41,6 +41,7 @@ public class ApartmentSpecificationForSelect implements Specification<Apartment>
         if (duty != null && duty) {
             predicates.add(criteriaBuilder.lessThan(root.get("bankBook").get("totalPrice"), BigDecimal.ZERO));
         }
+        query.orderBy(criteriaBuilder.asc(root.get("number")));
         Predicate predicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         return predicate;
     }

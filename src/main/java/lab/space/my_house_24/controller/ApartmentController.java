@@ -13,6 +13,7 @@ import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.ApartmentValidator;
 import lab.space.my_house_24.validator.BankBookValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +41,7 @@ public class ApartmentController {
     }
 
     @PostMapping("/get-all-apartments")
-    public ResponseEntity allApartment(@RequestBody ApartmentRequestForMainPage apartmentRequestForMainPage) {
+    public ResponseEntity allApartment(@RequestBody @Valid ApartmentRequestForMainPage apartmentRequestForMainPage) {
         return ResponseEntity.ok().body(apartmentService.findAllForMainPage(apartmentRequestForMainPage));
     }
 
@@ -115,8 +116,8 @@ public class ApartmentController {
 
     @GetMapping("/get-apartment")
     @ResponseBody
-    public List<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse,@RequestParam(required = false) Long idSection,@RequestParam(required = false) Long idFloor,@RequestParam(required = false) Boolean duty){
-        return apartmentService.apartmentForSelect(idHouse,idSection,idFloor,duty);
+    public Page<ApartmentResponseForTable> getApartmentByHouse(@RequestParam Long idHouse, @RequestParam(required = false) Long idSection, @RequestParam(required = false) Long idFloor, @RequestParam(required = false) Boolean duty, @RequestParam Integer page){
+        return apartmentService.apartmentForSelectPagination(idHouse,idSection,idFloor,duty, page);
 
     }
 }

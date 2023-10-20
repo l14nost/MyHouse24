@@ -34,7 +34,7 @@ public class MessageController {
     }
 
     @PostMapping("/get-all-message")
-    public ResponseEntity getAllMessage(@RequestBody MessageMainPageRequest mainPageRequest) {
+    public ResponseEntity getAllMessage(@RequestBody @Valid MessageMainPageRequest mainPageRequest) {
         return ResponseEntity.ok().body(messageService.findAllForMessageMain(mainPageRequest));
     }
 
