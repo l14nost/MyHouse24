@@ -237,6 +237,9 @@
                             });
                             return {
                                 results: mappedResults,
+                                pagination: {
+                                    more: params.page<data.totalPages-1
+                                }
                             }
                         },
                         cache: true
