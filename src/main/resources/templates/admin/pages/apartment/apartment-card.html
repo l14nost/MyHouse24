@@ -144,7 +144,7 @@
                 $("#card-title").text(response.title);
                 $("#breadcrumb").text(response.title);
                 $("#owner").html("<a href=\"/myhouse24-amirb-nikitaf/admin/users/user-card/ "+ response.owner.id + "\">"+ response.owner.name  +"</a>");
-                $("#rate").html("<a href=\"/myhouse24-amirb-nikitaf/admin/rates/rate-card/ "+ response.rate.id + "\">"+ response.rate.name  +"</a>");
+                $("#rate").html("<a href=\"/myhouse24-amirb-nikitaf/admin/rates/card-"+ response.rate.id + "\">"+ response.rate.name  +"</a>");
 
                 if (response.bankBook.number === null){
                     var cash = document.getElementById("cashButton");
