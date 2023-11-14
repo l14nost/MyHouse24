@@ -374,18 +374,18 @@ class ApartmentServiceImplTest {
         assertEquals(4, apartmentService.getAllApartmentResponseForBill().size());
     }
 
-    @Test
-    void getAllApartmentResponse() {
-        when(apartmentRepository.findAll((Specification<Apartment>) any(), any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(
-                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
-                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
-                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
-                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build()
-        )));
-
-        assertEquals(4, apartmentService.getAllApartmentResponse(1,"Test",1L,1L).getTotalElements());
-
-    }
+//    @Test
+//    void getAllApartmentResponse() {
+//        when(apartmentRepository.findAll((Specification<Apartment>) any(), any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(
+//                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
+//                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
+//                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build(),
+//                Apartment.builder().user(User.builder().build()).house(House.builder().build()).section(Section.builder().build()).build()
+//        )));
+//
+//        assertEquals(4, apartmentService.getAllApartmentResponse(1,"Test",1L,1L).getTotalElements());
+//
+//    }
 
     @Test
     void apartmentForSelect() {

@@ -181,10 +181,10 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
-    public Page<ApartmentResponseForBankBook> getAllApartmentResponse(Integer pageIndex, String search, Long houseId, Long sectionId) {
+    public Page<ApartmentResponseForBill> getAllApartmentResponse(Integer pageIndex, String search, Long houseId, Long sectionId) {
         log.info("Get all Apartment and convert in Response for BankBook");
         return apartmentRepository.findAll(ApartmentSpecificationForBankBook.builder().sectionId(sectionId).houseId(houseId).search(search).build(), PageRequest.of(pageIndex, 10))
-                .map(ApartmentMapper::entityToResponseForBankBook);
+                .map(ApartmentMapper::entityToResponseForBill);
     }
 
 

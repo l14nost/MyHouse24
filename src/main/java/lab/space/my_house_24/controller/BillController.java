@@ -211,7 +211,7 @@ public class BillController {
     }
 
     @GetMapping("/get-all-apartment")
-    public ResponseEntity<Page<ApartmentResponseForBankBook>> getAllApartment(
+    public ResponseEntity<Page<ApartmentResponseForBill>> getAllApartment(
             @RequestParam(required = false) Integer pageIndex,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Long houseId,

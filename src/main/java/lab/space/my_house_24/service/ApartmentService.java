@@ -35,7 +35,7 @@ public interface ApartmentService {
 
     List<ApartmentResponseForBill> getAllApartmentResponseForBill();
 
-    Page<ApartmentResponseForBankBook> getAllApartmentResponse(Integer pageIndex, String search, Long houseId, Long sectionId);
+    Page<ApartmentResponseForBill> getAllApartmentResponse(Integer pageIndex, String search, Long houseId, Long sectionId);
 
     List<ApartmentResponseForTable> apartmentForSelect(Long idHouse, Long idSection, Long idFloor, Boolean duty);
 

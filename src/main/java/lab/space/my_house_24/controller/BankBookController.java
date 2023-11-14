@@ -3,6 +3,7 @@ package lab.space.my_house_24.controller;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForBankBook;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForBill;
 import lab.space.my_house_24.model.bankBook.BankBookRequest;
 import lab.space.my_house_24.model.bankBook.BankBookSaveRequest;
 import lab.space.my_house_24.model.bankBook.BankBookUpdateRequest;
@@ -118,7 +119,7 @@ public class BankBookController {
     }
 
     @GetMapping("/get-all-apartment")
-    public ResponseEntity<Page<ApartmentResponseForBankBook>> getAllApartment(
+    public ResponseEntity<Page<ApartmentResponseForBill>> getAllApartment(
             @RequestParam(required = false) Integer pageIndex,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Long houseId,

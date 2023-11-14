@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lab.space.my_house_24.enums.BankBookStatus;
 import lab.space.my_house_24.model.apartment.ApartmentResponseForBankBook;
+import lab.space.my_house_24.model.apartment.ApartmentResponseForBill;
 import lab.space.my_house_24.model.bankBook.BankBookRequest;
 import lab.space.my_house_24.model.bankBook.BankBookResponse;
 import lab.space.my_house_24.model.bankBook.BankBookSaveRequest;
@@ -206,16 +207,16 @@ class BankBookControllerTest {
 
     @Test
     void getAllApartment() throws Exception {
-        Page<ApartmentResponseForBankBook> apartmentResponseForBankBooks = new PageImpl<>(List.of(
-                ApartmentResponseForBankBook.builder().build(),
-                ApartmentResponseForBankBook.builder().build(),
-                ApartmentResponseForBankBook.builder().build(),
-                ApartmentResponseForBankBook.builder().build()
+        Page<ApartmentResponseForBill> responseForBills = new PageImpl<>(List.of(
+                ApartmentResponseForBill.builder().build(),
+                ApartmentResponseForBill.builder().build(),
+                ApartmentResponseForBill.builder().build(),
+                ApartmentResponseForBill.builder().build()
         ));
-        when(apartmentService.getAllApartmentResponse(any(), any(), any(), any())).thenReturn(apartmentResponseForBankBooks);
+        when(apartmentService.getAllApartmentResponse(any(), any(), any(), any())).thenReturn(responseForBills);
         mockMvc.perform(get("/bank-books/get-all-apartment"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(apartmentResponseForBankBooks)));
+                .andExpect(content().string(objectMapper.writeValueAsString(responseForBills)));
     }
 
     @Test

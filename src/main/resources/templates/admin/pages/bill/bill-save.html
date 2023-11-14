@@ -512,7 +512,7 @@
                     selectService(serviceSelectCount, service.service, service.service.unit);
                     $('#service-' + serviceSelectCount).on('select2:select', function (e) {
                         let selectedService = e.params.data;
-                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unitName);
                     });
                     $('#pricePerUnit-' + serviceSelectCount).val(service.price.toFixed(2));
                     $('#serviceBillId-' + serviceSelectCount).val(service.id);
@@ -592,7 +592,7 @@
                     selectService(serviceSelectCount, service.service, service.service.unit);
                     $('#service-' + serviceSelectCount).on('select2:select', function (e) {
                         let selectedService = e.params.data;
-                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unitName);
                     });
                     $('#pricePerUnit-' + serviceSelectCount).val(service.price.toFixed(2));
                     $('#serviceBillId-' + serviceSelectCount).val(service.id);
@@ -780,7 +780,7 @@
             selectService(serviceSelectCount);
             $('#service-' + serviceSelectCount).on('select2:select', function (e) {
                 let selectedService = e.params.data;
-                $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unitName);
             });
             $('#pricePerUnit-' + serviceSelectCount).val('0.00');
             $('#count-' + serviceSelectCount).val('0.00');
@@ -936,7 +936,7 @@
                     selectService(serviceSelectCount, priceRate.service, priceRate.service.unit);
                     $('#service-' + serviceSelectCount).on('select2:select', function (e) {
                         let selectedService = e.params.data;
-                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unit.name);
+                        $('#unit-' + e.target.id.split('-').pop()).val(selectedService.unitName);
                     });
                     $('#pricePerUnit-' + serviceSelectCount).val(priceRate.price);
                     $('#count-' + serviceSelectCount).val('0.00');
@@ -1229,7 +1229,8 @@
                                 text: item.number,
                                 owner: item.owner,
                                 house: item.house,
-                                section: item.section
+                                section: item.section,
+                                bankBook: item.bankBook
                             };
                         })
                         return {
