@@ -117,9 +117,10 @@ public class RateController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete-price-rate/{id}")
-    public ResponseEntity<?> deletePriceRateById(@PathVariable Long id) {
+    @DeleteMapping("/delete-price-rate/{id}/{rateId}")
+    public ResponseEntity<?> deletePriceRateById(@PathVariable Long id, @PathVariable Long rateId) {
         try {
+            priceRateValidator.checkSizeRatePriceRate(id, rateId);
             priceRateService.deletePriceRateById(id);
             return ResponseEntity.ok().build();
         } catch (EntityNotFoundException | IllegalArgumentException e) {

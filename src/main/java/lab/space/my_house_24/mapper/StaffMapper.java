@@ -96,6 +96,8 @@ public interface StaffMapper {
                 .password(new BCryptPasswordEncoder().encode(String.valueOf(UUID.randomUUID())))
                 .role(roleService.getRoleByJobTitle(staffSaveRequest.role()))
                 .staffStatus(UserStatus.NEW)
+                .token("token")
+                .forgotToken("forgot-token")
                 .build();
     }
 

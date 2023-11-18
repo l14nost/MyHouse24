@@ -41,7 +41,7 @@ public class ExcelServiceImpl extends ExcelCustomizeAbstract implements ExcelSer
             row.getCell(1).setCellValue(cashBoxResponse.createAt().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
             row.getCell(2).setCellValue(cashBoxResponse.draft().value());
             row.getCell(3).setCellValue(cashBoxResponse.article().name());
-            row.getCell(4).setCellValue(nonNull(cashBoxResponse.bankBook()) ? cashBoxResponse.bankBook().apartment().owner().fullName() : "-");
+            row.getCell(4).setCellValue(nonNull(cashBoxResponse.bankBook()) ? (nonNull(cashBoxResponse.bankBook().apartment()) ? cashBoxResponse.bankBook().apartment().owner().fullName() : "-") : "-");
             row.getCell(5).setCellValue(nonNull(cashBoxResponse.bankBook()) ? cashBoxResponse.bankBook().number() : "-");
             row.getCell(6).setCellValue(cashBoxResponse.type() ? ArticleType.INCOME.getArticleType(LocaleContextHolder.getLocale()) : ArticleType.EXPENSE.getArticleType(LocaleContextHolder.getLocale()));
             row.getCell(7).setCellValue(cashBoxResponse.price().toString());

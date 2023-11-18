@@ -347,7 +347,7 @@
                   '    <td>' + bill?.createAt + '</td>' +
                   '    <td>' + bill?.month + '</td>' +
                   '    <td>' + (bill?.bankBook?.apartment?.number + ', ' + bill?.bankBook?.apartment?.house?.name) + '</td>' +
-                  '    <td>' + bill?.bankBook?.apartment?.owner?.fullName + '</td>' +
+                  '    <td>' + (bill?.bankBook?.apartment ? bill?.bankBook?.apartment?.owner?.fullName : '-') + '</td>' +
                   '    <td class="h5">' + addBadgeBillDraft(bill?.draft) + '</td>' +
                   '    <td>' + bill?.payed.toFixed(2) + '</td>' +
                   '    <td>' + bill?.totalPrice.toFixed(2) + '</td>' +

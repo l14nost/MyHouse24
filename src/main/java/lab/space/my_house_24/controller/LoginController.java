@@ -1,5 +1,6 @@
 package lab.space.my_house_24.controller;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.staff.ForgotPassEmailRequest;
@@ -9,6 +10,7 @@ import lab.space.my_house_24.service.StaffService;
 import lab.space.my_house_24.util.ErrorMapper;
 import lab.space.my_house_24.validator.StaffValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("login")
 @RequiredArgsConstructor
+@Slf4j
 public class LoginController {
 
     private final StaffService staffService;
@@ -47,7 +50,13 @@ public class LoginController {
 
     @GetMapping("/forgot-password/{token}")
     public ModelAndView showForgotPasswordChangePage(@PathVariable String token) {
-        UserDetails userDetails = staffService.loadUserByToken(token);
+        UserDetails userDetails;
+        try {
+            userDetails = staffService.loadUserByToken(token);
+        }catch (JWTDecodeException | EntityNotFoundException e) {
+            log.warn(e.getMessage());
+            return new ModelAndView("/admin/pages/staff/staff-activate-error");
+        }
         if (!jwtService.isTokenValid(
                 token,
                 userDetails,

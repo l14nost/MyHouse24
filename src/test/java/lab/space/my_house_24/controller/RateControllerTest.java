@@ -240,7 +240,7 @@ class RateControllerTest {
 
     @Test
     void deletePriceRateById() throws Exception {
-        mockMvc.perform(delete("/rates/delete-price-rate/1"))
+        mockMvc.perform(delete("/rates/delete-price-rate/1/1"))
                 .andExpect(status().isOk());
         verify(priceRateService, times(1)).deletePriceRateById(anyLong());
     }
@@ -250,7 +250,7 @@ class RateControllerTest {
         doThrow(new EntityNotFoundException("Not Found"))
                 .when(priceRateService)
                 .deletePriceRateById(anyLong());
-        mockMvc.perform(delete("/rates/delete-price-rate/1"))
+        mockMvc.perform(delete("/rates/delete-price-rate/1/1"))
                 .andExpect(status().isNotFound());
         verify(priceRateService, times(1)).deletePriceRateById(anyLong());
     }

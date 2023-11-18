@@ -25,9 +25,20 @@ public class PriceRate {
     private BigDecimal price;
 
     @ManyToOne
+    @JoinColumn(name = "rate_id", nullable = false)
     private Rate rate;
 
     @ManyToOne
+    @JoinColumn(name = "service_id", nullable = false)
     private Service service;
 
+    @Override
+    public String toString() {
+        return "PriceRate{" +
+                "id=" + id +
+                ", price=" + price +
+                ", rate=" + rate.getId() +
+                ", service=" + service.getId() +
+                '}';
+    }
 }

@@ -1,5 +1,7 @@
 package lab.space.my_house_24.controller;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lab.space.my_house_24.model.staff.InviteRequest;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("auth")
@@ -30,7 +33,13 @@ public class AuthController {
 
     @GetMapping("/activate-staff/{token}")
     public ModelAndView showActivateStaffPage(@PathVariable String token) {
-        UserDetails userDetails = staffService.loadUserByToken(token);
+        UserDetails userDetails;
+        try {
+            userDetails = staffService.loadUserByToken(token);
+        }catch (JWTDecodeException | EntityNotFoundException e) {
+            log.warn(e.getMessage());
+            return new ModelAndView("/admin/pages/staff/staff-activate-error");
+        }
         if (!jwtService.isTokenValid(
                 token,
                 userDetails,

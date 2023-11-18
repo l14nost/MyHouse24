@@ -2,6 +2,7 @@ package lab.space.my_house_24.service.impl;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lab.space.my_house_24.entity.Staff;
 import lab.space.my_house_24.service.JwtService;
