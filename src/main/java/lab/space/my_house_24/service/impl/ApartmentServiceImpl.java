@@ -113,11 +113,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             BankBook bankBook = bankBookOptional.get();
             if (!bankBook.getId().equals(apartment.getBankBook().getId())) {
                 apartment.getBankBook().setApartment(null);
+                bankBookService.saveBankBook(apartment.getBankBook());
             }
             bankBook.setApartment(apartment);
             apartment.setBankBook(bankBook);
 
         }
+
         apartmentRepository.save(apartment);
         log.info("Apartment was update");
     }
