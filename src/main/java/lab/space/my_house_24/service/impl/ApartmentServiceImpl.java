@@ -113,11 +113,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             BankBook bankBook = bankBookOptional.get();
             if (!bankBook.getId().equals(apartment.getBankBook().getId())) {
                 apartment.getBankBook().setApartment(null);
+                bankBookService.saveBankBook(apartment.getBankBook());
             }
             bankBook.setApartment(apartment);
             apartment.setBankBook(bankBook);
 
         }
+
         apartmentRepository.save(apartment);
         log.info("Apartment was update");
     }
@@ -224,6 +226,19 @@ public class ApartmentServiceImpl implements ApartmentService {
         log.info("Try to get apartment list");
         ApartmentSpecificationForMailing apartmentSpecification = ApartmentSpecificationForMailing.builder().idApartment(apartment).idFloor(floor).idHouse(house).idSection(section).debt(debt).build();
         return apartmentRepository.findAll(apartmentSpecification);
+    }
+
+    @Override
+    public Page<ApartmentResponseForTable> apartmentForSelectPagination(Long idHouse, Long idSection, Long idFloor, Boolean duty, Integer page) {
+        log.info("Try to get apartments dto for select");
+        ApartmentSpecificationForSelect apartmentSpecificationForSelect = ApartmentSpecificationForSelect.builder()
+                .idFloor(idFloor)
+                .idHouse(idHouse)
+                .idSection(idSection)
+                .duty(duty)
+                .build();
+        return apartmentRepository.findAll(apartmentSpecificationForSelect, PageRequest.of(page, 10)).map(ApartmentMapper::entityToDtoForTable);
+
     }
 
 

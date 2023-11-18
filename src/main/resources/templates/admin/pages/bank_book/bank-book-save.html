@@ -118,8 +118,8 @@
                     bankBookId = new URL(window.location.href).pathname.split("-").pop()
                     getBankBookResponse(bankBookId);
                 }else {
-                    $("#breadcrumb-title").append('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]');
-                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]] [[#{bank_book.card.breadcrumb}]]', '/bank-books'));
+                    $("#breadcrumb-title").append('[[#{bank_book.save.breadcrumb}]]');
+                    $("#breadcrumb").append(addBreadcrumbTitle('[[#{bank_book.save.breadcrumb}]]', '/bank-books'));
                     $("#breadcrumb").append(addBreadcrumbTitle('[[#{global.breadcrumb.save}]]'));
 
                     newOwnerContent('-');

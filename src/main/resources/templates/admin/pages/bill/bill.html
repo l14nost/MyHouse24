@@ -316,12 +316,12 @@
         console.info(response)
         const TABLE_BODY = createTable('#bills-table', response?.totalElements, response?.totalPages, billRequest?.pageIndex);
         $.each(response?.content, function (index, bill) {
-          const $copy = '<a class="btn btn-sm btn-icon text-gray" data-bs-toggle="tooltip" href="/myhouse24-amirb-nikitaf/admin/bills/add-copy-' + bill.id + '" aria-label="Documents" data-bs-original-title="Documents">\n' +
+          const $copy = '<a class="btn btn-sm btn-icon text-gray" href="/myhouse24-amirb-nikitaf/admin/bills/add-copy-' + bill.id + '" type="link" title="[[#{bill.button.title.copy}]]">\n' +
                   '                        <span class="btn-inner">\n' +
                   '                            <svg class="icon-20" width="15" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path d="M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z"/></svg>\n' +
                   '                        </span>\n' +
                   '                    </a>';
-          const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" data-bs-toggle="tooltip" href="/myhouse24-amirb-nikitaf/admin/bills/update-' + bill.id + '" aria-label="Edit User" data-bs-original-title="Edit User">' +
+          const $edit = '<a class="btn btn-sm btn-icon text-primary flex-end" href="/myhouse24-amirb-nikitaf/admin/bills/update-' + bill.id + '" type="link" title="[[#{bill.button.title.edit}]]">' +
                   '<span class="btn-inner">' +
                   '<svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
                   '<path d="M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +
@@ -330,7 +330,7 @@
                   '</svg>' +
                   '</span>' +
                   '</a>';
-          const $deleteBtn = '<a class="btn btn-sm btn-icon text-danger" type="button" data-bs-toggle="tooltip" aria-label="Delete Staff" data-bs-original-title="Delete Staff" data-toggle="modal" data-target="#confirmDelete" data-id="' + bill.id + '">' +
+          const $deleteBtn = '<a class="btn btn-sm btn-icon text-danger" type="link" title="[[#{bill.button.title.delete}]]" data-toggle="modal" data-target="#confirmDelete" data-id="' + bill.id + '">' +
                   '<span class="btn-inner">' +
                   '<svg class="icon-20" width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">' +
                   '<path d="M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>' +

@@ -233,7 +233,7 @@
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
-                            var mappedResults = data.map(function(item) {
+                            var mappedResults = data.content.map(function(item) {
                                 return {
                                     id: item.id,
                                     text: item.name
@@ -241,24 +241,31 @@
                             });
                             return {
                                 results: mappedResults,
+                                pagination: {
+                                    more: params.page<data.totalPages-1
+                                }
                             }
                         },
                         cache: true
                     },
                     placeholder: defaultSelect,
-                    minimumResultsForSearch: 7
+                    minimumResultsForSearch: 10
                 });
                 $("#apartment").select2({
                     theme: 'bootstrap-5',
                     language: lang,
                     ajax: {
                         url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
-                        data:{
-                            idHouse: idHouse
+                        method: "GET",
+                        data: function (param) {
+                            return {
+                                idHouse: idHouse,
+                                page: param.page || 0
+                            }
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
-                            var mappedResults = data.map(function(item) {
+                            var mappedResults = data.content.map(function(item) {
                                 return {
                                     id: item.id,
                                     text: item.number
@@ -271,7 +278,8 @@
                         cache: true
                     },
                     placeholder: defaultSelect,
-                    minimumResultsForSearch: 7
+                    minimumResultsForSearch: 7,
+                    allowClear: true
                 });
 
             })
@@ -284,13 +292,17 @@
                     language: lang,
                     ajax: {
                         url: "/myhouse24-amirb-nikitaf/admin/apartments/get-apartment",
-                        data:{
-                            idHouse: idHouse,
-                            idSection: idSection
+                        method: "GET",
+                        data: function (param) {
+                            return {
+                                idHouse: idHouse,
+                                idSection: idSection,
+                                page: param.page || 0
+                            }
                         },
                         processResults: function (data, params) {
                             params.page = params.page || 0;
-                            var mappedResults = data.map(function(item) {
+                            var mappedResults = data.content.map(function(item) {
                                 return {
                                     id: item.id,
                                     text: item.number
@@ -303,7 +315,8 @@
                         cache: true
                     },
                     placeholder: defaultSelect,
-                    minimumResultsForSearch: 7
+                    minimumResultsForSearch: 7,
+                    allowClear: true
                 });
 
             })

@@ -46,4 +46,6 @@ public interface ApartmentService {
     Long count();
 
     List<Apartment> apartmentListForMessage(Long house, Long section, Long floor, Long apartment, Boolean debt);
+
+    Page<ApartmentResponseForTable> apartmentForSelectPagination(Long idHouse, Long idSection, Long idFloor, Boolean duty, Integer page);
 }

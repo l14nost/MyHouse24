@@ -348,12 +348,12 @@
                                     "          <td onclick='userCard("+user.id+")' class=\"h5\">" + addBadgeUserStatus(user.status) + "</td>\n" +
                                     "          <td onclick='userCard("+user.id+")'>" + user.duty + "</td>\n" +
                                     "          <td style=\"\" >\n" +
-                                    " <button class=\"btn btn-sm btn-icon text-gray "+checkDisableMessage(user.status.name)+"\" data-bs-toggle=\"tooltip\" aria-label=\"Message\" type='button' data-bs-original-title=\"Message\" onclick='userMessage(\"" + user.email + "\")'>\n" +
+                                    " <button class=\"btn btn-sm btn-icon text-gray "+checkDisableMessage(user.status.name)+"\" title=\"[[#{button.title.send.activate.letter}]]\" onclick='userMessage(\"" + user.email + "\")'>\n" +
                                     "                        <span class=\"btn-inner\">\n" +
                                     "                            <svg class=\"icon-20\" width=\"15\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M64 112c-8.8 0-16 7.2-16 16v22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1V128c0-8.8-7.2-16-16-16H64zM48 212.2V384c0 8.8 7.2 16 16 16H448c8.8 0 16-7.2 16-16V212.2L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64H448c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128z\"/></svg><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d=\"M320 464c8.8 0 16-7.2 16-16V160H256c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320zM0 64C0 28.7 28.7 0 64 0H229.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V64z\"/></svg>\n" +
                                     "                        </span>\n" +
                                     "                    </button>" +
-                                    "             <a class=\"btn btn-sm btn-icon text-primary flex-end\" data-bs-toggle=\"tooltip\" href=\"#\" aria-label=\"Edit User\" data-bs-original-title=\"Edit User\" onclick='userEdit(" + user.id + ")'>\n" +
+                                    "             <button class=\"btn btn-sm btn-icon text-primary flex-end\" title=\"[[#{button.title.edit}]]\" onclick='userEdit(" + user.id + ")'>\n" +
                                     "                                        <span class=\"btn-inner\">\n" +
                                     "                                            <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
                                     "                                                <path d=\"M11.4925 2.78906H7.75349C4.67849 2.78906 2.75049 4.96606 2.75049 8.04806V16.3621C2.75049 19.4441 4.66949 21.6211 7.75349 21.6211H16.5775C19.6625 21.6211 21.5815 19.4441 21.5815 16.3621V12.3341\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
@@ -361,8 +361,8 @@
                                     "                                                <path d=\"M15.1655 4.60254L19.7315 9.16854\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
                                     "                                            </svg>\n" +
                                     "                                        </span>\n" +
-                                    "               </a>" +
-                                    "<a class=\"btn btn-sm btn-icon text-danger delete-user\" data-bs-toggle=\"tooltip\" href=\"#\" aria-label=\"Delete User\" data-bs-original-title=\"Delete User\" data-target=\"#confirmDeleteUser\" data-id=\" "+ user.id +" \">\n" +
+                                    "               </button>" +
+                                    "<button class=\"btn btn-sm btn-icon text-danger delete-user\" title=\"[[#{button.title.delete}]]\" data-target=\"#confirmDeleteUser\" data-id=\" "+ user.id +" \">\n" +
                                     "                                        <span class=\"btn-inner\">\n" +
                                     "                                            <svg class=\"icon-20\" width=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\">\n" +
                                     "                                                <path d=\"M19.3248 9.46826C19.3248 9.46826 18.7818 16.2033 18.4668 19.0403C18.3168 20.3953 17.4798 21.1893 16.1088 21.2143C13.4998 21.2613 10.8878 21.2643 8.27979 21.2093C6.96079 21.1823 6.13779 20.3783 5.99079 19.0473C5.67379 16.1853 5.13379 9.46826 5.13379 9.46826\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
@@ -370,7 +370,7 @@
                                     "                                                <path d=\"M17.4406 6.23973C16.6556 6.23973 15.9796 5.68473 15.8256 4.91573L15.5826 3.69973C15.4326 3.13873 14.9246 2.75073 14.3456 2.75073H10.1126C9.53358 2.75073 9.02558 3.13873 8.87558 3.69973L8.63258 4.91573C8.47858 5.68473 7.80258 6.23973 7.01758 6.23973\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n" +
                                     "                                            </svg>\n" +
                                     "                                        </span>\n" +
-                                    "                    </a>" +
+                                    "                    </button>" +
                                     "           " +
                                     "          </td>"
                                 container.appendChild(newTr);
@@ -499,6 +499,11 @@
 
                     }
                 )
+                .fail(
+                    function (response) {
+                        showToast("error")
+                    }
+                )
         }
         function userCard(id){
             window.location.href = "/myhouse24-amirb-nikitaf/admin/users/user-card/"+id;
@@ -560,6 +565,10 @@
                 }
             )
         }
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+        });
     </script>
 </th:block>
 </html>

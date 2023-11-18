@@ -416,8 +416,9 @@
     outline: 0;
 }
 
-
-
+.nav-link .item-name {
+    text-transform: none;
+}
 
 
 

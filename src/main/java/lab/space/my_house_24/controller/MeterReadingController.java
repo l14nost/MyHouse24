@@ -32,7 +32,7 @@ public class MeterReadingController {
     }
 
     @PostMapping("/get-all-meter-reading")
-    public ResponseEntity getAllMeterReading(@RequestBody MeterReadingRequestForMainPage meterReadingRequestForMainPage) {
+    public ResponseEntity getAllMeterReading(@RequestBody @Valid MeterReadingRequestForMainPage meterReadingRequestForMainPage) {
         return ResponseEntity.ok().body(meterReadingService.findAllForMain(meterReadingRequestForMainPage));
     }
 
@@ -86,7 +86,7 @@ public class MeterReadingController {
     }
 
     @PostMapping("/get-all-meter-reading-by-apartment")
-    public ResponseEntity getAllMeterReadingByApartment(@RequestBody MeterReadingRequestForApartmentPage meterReadingRequestForApartmentPage) {
+    public ResponseEntity getAllMeterReadingByApartment(@RequestBody @Valid MeterReadingRequestForApartmentPage meterReadingRequestForApartmentPage) {
         return ResponseEntity.ok().body(meterReadingService.findAllForApartment(meterReadingRequestForApartmentPage));
     }
 
