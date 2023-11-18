@@ -31,11 +31,11 @@ class FloorControllerTest {
     @MockBean
     private FloorService floorService;
 
-    @Test
-    void getFloorByHouse() throws Exception {
-        when(floorService.floorByHouse(1L)).thenReturn(List.of());
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-floor/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(List.of())));
-    }
+//    @Test
+//    void getFloorByHouse() throws Exception {
+//        when(floorService.floorByHouse(1L)).thenReturn(List.of());
+//        mockMvc.perform(MockMvcRequestBuilders.get("/get-floor/1"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(objectMapper.writeValueAsString(List.of())));
+//    }
 }

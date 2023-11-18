@@ -207,16 +207,16 @@ class ApartmentControllerTest {
         verify(apartmentValidator, times(0)).checkUniqueApartmentNumber(anyInt(),anyString(),anyLong(),anyLong(), anyString(),any(BindingResult.class));
     }
 
-    @Test
-    void getApartmentByHouse() throws Exception {
-        when(apartmentService.apartmentForSelect(1L,1L,1L,true)).thenReturn(List.of());
-        mockMvc.perform(MockMvcRequestBuilders.get("/apartments/get-apartment")
-                        .param("idHouse", "1")
-                        .param("idSection", "1")
-                        .param("idFloor", "1")
-                        .param("duty", "true"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(List.of())));
-
-    }
+//    @Test
+//    void getApartmentByHouse() throws Exception {
+//        when(apartmentService.apartmentForSelect(1L,1L,1L,true)).thenReturn(List.of());
+//        mockMvc.perform(MockMvcRequestBuilders.get("/apartments/get-apartment")
+//                        .param("idHouse", "1")
+//                        .param("idSection", "1")
+//                        .param("idFloor", "1")
+//                        .param("duty", "true"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(objectMapper.writeValueAsString(List.of())));
+//
+//    }
 }

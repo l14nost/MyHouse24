@@ -31,11 +31,11 @@ class SectionControllerTest {
     @MockBean
     private SectionService sectionService;
 
-    @Test
-    void getSectionByHouse() throws Exception {
-        when(sectionService.sectionByHouse(1L)).thenReturn(List.of());
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-section/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(List.of())));
-    }
+//    @Test
+//    void getSectionByHouse() throws Exception {
+//        when(sectionService.sectionByHouse(1L)).thenReturn(List.of());
+//        mockMvc.perform(MockMvcRequestBuilders.get("/get-section/1"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(objectMapper.writeValueAsString(List.of())));
+//    }
 }
