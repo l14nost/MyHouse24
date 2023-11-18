@@ -38,7 +38,7 @@ public class AuthController {
             userDetails = staffService.loadUserByToken(token);
         }catch (JWTDecodeException | EntityNotFoundException e) {
             log.warn(e.getMessage());
-            return new ModelAndView("/admin/pages/staff/staff-activate-error");
+            return new ModelAndView("admin/pages/staff/staff-activate-error");
         }
         if (!jwtService.isTokenValid(
                 token,

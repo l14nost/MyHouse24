@@ -36,7 +36,7 @@ public class Rate {
     @OneToMany(mappedBy = "rate")
     private List<Bill> billList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "rate", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "rate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PriceRate> priceRateList = new ArrayList<>();
 
     @OneToMany(mappedBy = "rate")
