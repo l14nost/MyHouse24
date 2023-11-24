@@ -207,21 +207,21 @@ if (window.counterUp !== undefined) {
 /*---------------------------------------------------------------------
               SliderTab
 -----------------------------------------------------------------------*/
-Array.from(document.querySelectorAll('[data-toggle="slider-tab"]'), (elem) => {
-  if (typeof SliderTab !== typeof undefined) {
-    new SliderTab(elem)
-  }
-})
+// Array.from(document.querySelectorAll('[data-toggle="slider-tab"]'), (elem) => {
+//   if (typeof SliderTab !== typeof undefined) {
+//     new SliderTab(elem)
+//   }
+// })
 
-let Scrollbar
-if (typeof Scrollbar !== typeof null) {
-  if (document.querySelectorAll(".data-scrollbar").length) {
-    Scrollbar = window.Scrollbar
-    Scrollbar.init(document.querySelector('.data-scrollbar'), {
-      continuousScrolling: false,
-    })
-  }
-}
+// let Scrollbar
+// if (typeof Scrollbar !== typeof null) {
+//   if (document.querySelectorAll(".data-scrollbar").length) {
+//     Scrollbar = window.Scrollbar
+//     Scrollbar.init(document.querySelector('.data-scrollbar'), {
+//       continuousScrolling: false,
+//     })
+//   }
+// }
 
 /*---------------------------------------------------------------------
   Data tables

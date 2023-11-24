@@ -50,9 +50,9 @@ jobs:
 
       - name: Deploy to Docker
         run:
-#          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker stop myhouse24-admin" &&
-#          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker rm myhouse24-admin" &&
-#          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker rmi li4nost/my-house-24-admin" &&
+          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker stop myhouse24-admin" &&
+          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker rm myhouse24-admin" &&
+          sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker rmi li4nost/my-house-24-admin" &&
           sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker pull li4nost/my-house-24-admin:latest" &&
           sshpass -p ${{ secrets.DEPLOY_SSH_KEY }} ssh -o StrictHostKeyChecking=no avada_slj@slj.avada-media-dev1.od.ua "sudo docker run -v myhouse24an:/files --network=myhouse24an --name myhouse24-admin -p 9080:8080 -d li4nost/my-house-24-admin:latest"
 
