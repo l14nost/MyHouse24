@@ -15,7 +15,6 @@ import java.util.Locale;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-
     @Value("${upload.path}")
     private String uploadPath;
 
